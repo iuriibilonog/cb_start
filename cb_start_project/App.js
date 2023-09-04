@@ -1,32 +1,15 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import api from "./src/services/interceptor";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+// import store from "./redux/store";
+// import { Provider } from "react-redux";
+
+import { useRouting } from './routing';
 
 export default function App() {
-  const handlePress = async () => {
-    try {
-      const data = await api.get();
-      console.log("data", data.status);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  const routing = useRouting();
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-      <TouchableOpacity onPress={handlePress}>
-        <Text>Press</Text>
-      </TouchableOpacity>
-    </View>
+    // <Provider store={store}>
+    <NavigationContainer>{routing}</NavigationContainer>
+    // </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
