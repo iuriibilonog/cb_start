@@ -11,10 +11,11 @@ import {
   Image,
   TextInput,
   Button,
+  Platform,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
-// import StyledTextInputBox from 'src/components/molecules/StyledTextInputBox';
-// import StyledButton from 'src/components/atoms/StyledButton/StyledButton';
+import { useHeaderHeight } from '@react-navigation/elements';
 
 const logoBack = require('src/images/logo_back.png');
 const boxEmpty = require('src/images/box_empty.png');
@@ -23,14 +24,14 @@ const eyeOff = require('src/images/eye_off.png');
 const eyeOn = require('src/images/eye_on.png');
 
 const RegistrationScreen = ({ navigation }) => {
+  const [inputValue, setInputValue] = useState('');
+  const [isRememberMe, setIsRememberMe] = useState(false);
+  const [isPassShown, setIsPassShown] = useState(false);
+
   const handleSubmit = (data) => {
     console.log('submit data>>', { ...inputValue, isRememberMe });
     // navigation.navigate('RegistrationScreen');
   };
-
-  const [inputValue, setInputValue] = useState('');
-  const [isRememberMe, setIsRememberMe] = useState(false);
-  const [isPassShown, setIsPassShown] = useState(false);
 
   const handlePassShowBtn = () => {
     setIsPassShown((prev) => !prev);
@@ -43,50 +44,63 @@ const RegistrationScreen = ({ navigation }) => {
   useEffect(() => {
     console.log('InputValues: ', inputValue);
   }, [inputValue]);
-
+  const headerHeight = useHeaderHeight();
   return (
-    <View style={styles.container}>
-      <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
-        <TextInput
-          style={{ ...styles.input, marginBottom: 30 }}
-          placeholder="email"
-          placeholderTextColor={'grey'}
-          value={inputValue?.name}
-          onChangeText={(text) => handleInput({ email: text })}
-        />
-        <View style={styles.passInputWrapper}>
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={headerHeight}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      // behavior="position"
+      style={{ flex: 1 }}
+    >
+      <View style={styles.container}>
+        <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
           <TextInput
-            style={styles.input}
-            placeholder="password"
+            style={{ ...styles.input, marginBottom: 30 }}
+            placeholder="email"
             placeholderTextColor={'grey'}
             value={inputValue?.name}
-            onChangeText={(text) => handleInput({ password: text })}
-            secureTextEntry={!isPassShown}
+            onChangeText={(text) => handleInput({ email: text })}
           />
+          <View style={styles.passInputWrapper}>
+            <TextInput
+              style={styles.input}
+              placeholder="password"
+              placeholderTextColor={'grey'}
+              value={inputValue?.name}
+              onChangeText={(text) => handleInput({ password: text })}
+              secureTextEntry={!isPassShown}
+            />
+            <Pressable
+              onPress={handlePassShowBtn}
+              style={{ position: 'absolute', right: 20, top: 13 }}
+            >
+              <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
+            </Pressable>
+          </View>
+          {/* <View style={styles.rememberWrapper}> */}
           <Pressable
-            onPress={handlePassShowBtn}
-            style={{ position: 'absolute', right: 20, top: 13 }}
+            onPress={() => setIsRememberMe((prev) => !prev)}
+            style={styles.rememberWrapper}
           >
-            <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
+            <Image
+              source={isRememberMe ? boxChecked : boxEmpty}
+              style={{ width: 25, height: 25 }}
+            />
+            <Text style={styles.rememberTxt}>Remember me</Text>
           </Pressable>
-        </View>
-        {/* <View style={styles.rememberWrapper}> */}
-        <Pressable onPress={() => setIsRememberMe((prev) => !prev)} style={styles.rememberWrapper}>
-          <Image source={isRememberMe ? boxChecked : boxEmpty} style={{ width: 25, height: 25 }} />
-          <Text style={styles.rememberTxt}>Remember me</Text>
-        </Pressable>
-        {/* </View> */}
-        <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-          <Text> Sign In </Text>
-        </TouchableOpacity>
-        <Pressable
-          onPress={() => navigation.navigate('RegistrationScreen')}
-          style={styles.registerWrapper}
-        >
-          <Text style={styles.registerTxt}>Don’t have an account ? Sign Up</Text>
-        </Pressable>
-      </ImageBackground>
-    </View>
+          {/* </View> */}
+          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+            <Text> Sign In </Text>
+          </TouchableOpacity>
+          <Pressable
+            onPress={() => navigation.navigate('RegistrationScreen')}
+            style={styles.registerWrapper}
+          >
+            <Text style={styles.registerTxt}>Don’t have an account ? Sign Up</Text>
+          </Pressable>
+        </ImageBackground>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
