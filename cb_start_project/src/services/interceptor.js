@@ -1,13 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 import {
   getDataFromStorage,
   setDataToStorage,
   clearAsyncStorage,
-} from "../helpers/asyncStorageHelpers";
+} from '../helpers/asyncStorageHelpers';
+import navigationHelper from 'src/helpers/navigationHelper';
 // import { useContext } from 'react';
 // import { UIContext } from 'contexts/UIContext';
 
-const url = "https://httpstat.us/404";
+const url = 'https://httpstat.us/401';
 
 const api = axios.create({
   withCredentials: true,
@@ -17,11 +18,11 @@ const api = axios.create({
 export const AxiosInterceptor = ({ children }) => {
   api.interceptors.request.use((config) => {
     config.headers = {
-      "Content-Language": getDataFromStorage("lang") || "en",
-      "X-Requested-With": "XMLHttpRequest",
-      "X-Access-Token": getDataFromStorage("token") || null,
+      'Content-Language': getDataFromStorage('lang') || 'en',
+      // 'X-Requested-With': 'XMLHttpRequest',
+      'X-Access-Token': getDataFromStorage('token') || null,
       // 'X-Client-Version': window.COMMIT_SHA || null,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     };
 
     return config;
@@ -33,10 +34,10 @@ export const AxiosInterceptor = ({ children }) => {
     },
     async (error) => {
       const originalRequest = error.config;
-      const refreshToken = getDataFromStorage("refresh");
+      const refreshToken = getDataFromStorage('refresh');
 
-      if (error?.response?.status === 401 && !refreshToken) {
-        return (window.location = "/session-expired");
+      if (error?.response?.status === 401 && !refreshToken?.length > 0) {
+        return navigationHelper.navigate('Login');
       }
 
       //   if (

@@ -13,6 +13,7 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
+import api from '../services/interceptor';
 // import StyledTextInputBox from 'src/components/molecules/StyledTextInputBox';
 // import StyledButton from 'src/components/atoms/StyledButton/StyledButton';
 
