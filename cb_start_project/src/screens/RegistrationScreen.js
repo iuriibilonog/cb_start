@@ -10,7 +10,9 @@ import {
   ImageBackground,
   Image,
   TextInput,
+  TouchableOpacity,
 } from 'react-native';
+import api from '../services/interceptor';
 // import StyledTextInputBox from 'src/components/molecules/StyledTextInputBox';
 // import StyledButton from 'src/components/atoms/StyledButton/StyledButton';
 // const addPhotoIcon = require('src/assets/images/plus_in_round.png');

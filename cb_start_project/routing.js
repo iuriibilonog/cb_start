@@ -19,20 +19,20 @@ export const useRouting = () => {
     <>
       {!isAuth ? (
         <AuthStack.Navigator>
-          <AuthStack.Screen
+          {/* <AuthStack.Screen
             options={{ headerShown: false }}
             name="SplashScreen"
             component={SplashScreen}
+          /> */}
+          <AuthStack.Screen
+            options={{ headerShown: false }}
+            name="RegistrationScreen"
+            component={RegistrationScreen}
           />
           <AuthStack.Screen
             options={{ headerShown: false }}
             name="LoginScreen"
             component={LoginScreen}
-          />
-          <AuthStack.Screen
-            options={{ headerShown: false }}
-            name="RegistrationScreen"
-            component={RegistrationScreen}
           />
         </AuthStack.Navigator>
       ) : (
