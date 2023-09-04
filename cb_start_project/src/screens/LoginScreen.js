@@ -9,29 +9,157 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
   Image,
+  TextInput,
+  Button,
+  Platform,
+  TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
-// const addPhotoIcon = require('src/assets/images/plus_in_round.png');
+import { useHeaderHeight } from '@react-navigation/elements';
 
-const LoginScreen = ({ navigation }) => {
-  const handleNextScreen = () => {
-    console.log('nextScreen>>');
-    navigation.navigate('RegistrationScreen');
+const logoBack = require('src/images/logo_back.png');
+const boxEmpty = require('src/images/box_empty.png');
+const boxChecked = require('src/images/box_checked.png');
+const eyeOff = require('src/images/eye_off.png');
+const eyeOn = require('src/images/eye_on.png');
+
+const RegistrationScreen = ({ navigation }) => {
+  const [inputValue, setInputValue] = useState('');
+  const [isRememberMe, setIsRememberMe] = useState(false);
+  const [isPassShown, setIsPassShown] = useState(false);
+
+  const handleSubmit = (data) => {
+    console.log('submit data>>', { ...inputValue, isRememberMe });
+    // navigation.navigate('RegistrationScreen');
   };
 
+  const handlePassShowBtn = () => {
+    setIsPassShown((prev) => !prev);
+  };
+
+  const handleInput = (data) => {
+    setInputValue((prev) => ({ ...prev, ...data }));
+  };
+
+  useEffect(() => {
+    console.log('InputValues: ', inputValue);
+  }, [inputValue]);
+  const headerHeight = useHeaderHeight();
   return (
-    <View style={styles.wrapper}>
-      <Text>REGISTRATION</Text>
-    </View>
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={headerHeight}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      // behavior="position"
+      style={{ flex: 1 }}
+    >
+      <View style={styles.container}>
+        <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
+          <TextInput
+            style={{ ...styles.input, marginBottom: 30 }}
+            placeholder="email"
+            placeholderTextColor={'grey'}
+            value={inputValue?.name}
+            onChangeText={(text) => handleInput({ email: text })}
+          />
+          <View style={styles.passInputWrapper}>
+            <TextInput
+              style={styles.input}
+              placeholder="password"
+              placeholderTextColor={'grey'}
+              value={inputValue?.name}
+              onChangeText={(text) => handleInput({ password: text })}
+              secureTextEntry={!isPassShown}
+            />
+            <Pressable
+              onPress={handlePassShowBtn}
+              style={{ position: 'absolute', right: 20, top: 13 }}
+            >
+              <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
+            </Pressable>
+          </View>
+          {/* <View style={styles.rememberWrapper}> */}
+          <Pressable
+            onPress={() => setIsRememberMe((prev) => !prev)}
+            style={styles.rememberWrapper}
+          >
+            <Image
+              source={isRememberMe ? boxChecked : boxEmpty}
+              style={{ width: 25, height: 25 }}
+            />
+            <Text style={styles.rememberTxt}>Remember me</Text>
+          </Pressable>
+          {/* </View> */}
+          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+            <Text> Sign In </Text>
+          </TouchableOpacity>
+          <Pressable
+            onPress={() => navigation.navigate('RegistrationScreen')}
+            style={styles.registerWrapper}
+          >
+            <Text style={styles.registerTxt}>Don’t have an account ? Sign Up</Text>
+          </Pressable>
+        </ImageBackground>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#242834',
+    // paddingHorizontal: 54,
   },
+  background: {
+    flex: 1,
+    justifyContent: 'center',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    paddingHorizontal: 54,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  input: {
+    width: '100%',
+    height: 50,
+    color: '#36D0BB',
+    borderWidth: 1,
+    borderColor: 'rgba(54, 208, 187, 0.20)',
+    borderRadius: 2,
+    textAlign: 'center',
+  },
+  passInputWrapper: { width: '100%', position: 'relative' },
+  rememberWrapper: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    marginBottom: 30,
+    opacity: 0.5,
+  },
+  rememberTxt: {
+    marginLeft: 12,
+    color: '#fff',
+  },
+  registerWrapper: {
+    width: '100%',
+    marginTop: 12,
+  },
+
+  registerTxt: { opacity: 0.5, color: '#fff' },
+  submitBtn: {
+    width: '100%',
+    height: 50,
+    borderRadius: 2,
+    backgroundColor: '#36D0BB',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  submitTxt: { fontSize: 20, fontWeight: '600', letterSpacing: 1 },
 });
 
-export default LoginScreen;
+export default RegistrationScreen;

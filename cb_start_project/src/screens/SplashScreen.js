@@ -16,7 +16,7 @@ const logo = require('src/images/logo.png');
 const SplashScreen = ({ navigation }) => {
   const handleNextScreen = () => {
     console.log('nextScreen>>');
-    navigation.navigate('RegistrationScreen');
+    navigation.navigate('LoginScreen');
   };
 
   return (
