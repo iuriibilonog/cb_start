@@ -16,6 +16,8 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
+import { useDispatch } from 'react-redux';
+import { authLoginUser } from '../redux/auth/authOperations';
 
 const logoBack = require('src/images/logo_back.png');
 const boxEmpty = require('src/images/box_empty.png');
@@ -28,8 +30,11 @@ const RegistrationScreen = ({ navigation }) => {
   const [isRememberMe, setIsRememberMe] = useState(false);
   const [isPassShown, setIsPassShown] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (data) => {
     console.log('submit data>>', { ...inputValue, isRememberMe });
+    dispatch(authLoginUser({ ...inputValue, isRememberMe }));
     // navigation.navigate('RegistrationScreen');
   };
 
@@ -46,6 +51,10 @@ const RegistrationScreen = ({ navigation }) => {
   }, [inputValue]);
   const headerHeight = useHeaderHeight();
   return (
+    <TouchableWithoutFeedback
+    onPress={() => {
+      Keyboard.dismiss();
+    }}>
     <KeyboardAvoidingView
       keyboardVerticalOffset={headerHeight}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -63,7 +72,7 @@ const RegistrationScreen = ({ navigation }) => {
           />
           <View style={styles.passInputWrapper}>
             <TextInput
-              style={styles.input}
+              style={{ ...styles.input, marginBottom: 60 }}
               placeholder="password"
               placeholderTextColor={'grey'}
               value={inputValue?.name}
@@ -77,8 +86,7 @@ const RegistrationScreen = ({ navigation }) => {
               <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
             </Pressable>
           </View>
-          {/* <View style={styles.rememberWrapper}> */}
-          <Pressable
+          {/* <Pressable
             onPress={() => setIsRememberMe((prev) => !prev)}
             style={styles.rememberWrapper}
           >
@@ -87,20 +95,20 @@ const RegistrationScreen = ({ navigation }) => {
               style={{ width: 25, height: 25 }}
             />
             <Text style={styles.rememberTxt}>Remember me</Text>
-          </Pressable>
-          {/* </View> */}
+          </Pressable> */}
           <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
             <Text> Sign In </Text>
           </TouchableOpacity>
-          <Pressable
+          {/* <Pressable
             onPress={() => navigation.navigate('RegistrationScreen')}
             style={styles.registerWrapper}
           >
             <Text style={styles.registerTxt}>Don’t have an account ? Sign Up</Text>
-          </Pressable>
+          </Pressable> */}
         </ImageBackground>
       </View>
     </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
