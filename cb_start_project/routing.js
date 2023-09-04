@@ -26,13 +26,13 @@ export const useRouting = () => {
           /> */}
           <AuthStack.Screen
             options={{ headerShown: false }}
-            name="RegistrationScreen"
-            component={RegistrationScreen}
+            name="LoginScreen"
+            component={LoginScreen}
           />
           <AuthStack.Screen
             options={{ headerShown: false }}
-            name="LoginScreen"
-            component={LoginScreen}
+            name="RegistrationScreen"
+            component={RegistrationScreen}
           />
         </AuthStack.Navigator>
       ) : (
