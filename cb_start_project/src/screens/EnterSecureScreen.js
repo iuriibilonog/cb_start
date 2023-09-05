@@ -15,7 +15,7 @@ import {
   Platform,
   TouchableOpacity,
   Animated,
-  Easing,
+  Vibration,
 } from 'react-native';
 
 import { useDispatch } from 'react-redux';
@@ -44,6 +44,57 @@ const EnterSecureScreen = ({ navigation }) => {
     { id: '4', value: '' },
     { id: '5', value: '' },
   ]);
+  const [isPassWrong, setIsPassWrong] = useState(false);
+
+  const [animation, setAnimation] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    if (passcode[4].value !== '') setIsPassWrong(true);
+  }, [passcode]);
+
+  const makeVibration = () => {
+    Vibration.vibrate(500);
+  };
+
+  useEffect(() => {
+    if (isPassWrong) {
+      startAnimation();
+      makeVibration();
+      setTimeout(() => {
+        setIsPassWrong(false);
+        setPassCode([
+          { id: '1', value: '' },
+          { id: '2', value: '' },
+          { id: '3', value: '' },
+          { id: '4', value: '' },
+          { id: '5', value: '' },
+        ]);
+      }, 1000);
+    }
+  }, [isPassWrong]);
+
+  const startAnimation = () => {
+    animation.setValue(0);
+    Animated.timing(animation, {
+      toValue: 1,
+      duration: 1500,
+      //   easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => {
+      animation.setValue(0);
+    });
+  };
+
+  const animatedStyles = {
+    transform: [
+      {
+        translateX: animation.interpolate({
+          inputRange: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+          outputRange: [0, 10, -10, 10, -10, 0, 0, 0, 0, 0, 0],
+        }),
+      },
+    ],
+  };
 
   const handleEnterPass = (num) => {
     let tmpCode = passcode;
@@ -71,6 +122,26 @@ const EnterSecureScreen = ({ navigation }) => {
     setPassCode([...tmpCode]);
   };
 
+  const getCodeStyles = (item) => {
+    switch (item.id) {
+      case '5':
+        if (item.value !== '') {
+          return isPassWrong ? 'codeLastValueWithError' : 'codeLastValue';
+        } else {
+          return 'codeLast';
+        }
+        break;
+
+      default:
+        if (item.value !== '') {
+          return isPassWrong ? 'codeValueWithError' : 'codeValue';
+        } else {
+          return 'code';
+        }
+        break;
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
@@ -78,23 +149,24 @@ const EnterSecureScreen = ({ navigation }) => {
           <Text style={styles.title}>
             <FormattedMessage id={'secure.title_enter'} />
           </Text>
-          <View style={styles.codeContainer}>
+          <Animated.View style={[styles.codeContainer, animatedStyles]}>
             {passcode.map((item) => (
               <View
                 key={item.id}
                 style={
-                  item.id !== '5'
-                    ? item.value !== ''
-                      ? styles.codeValue
-                      : styles.code
-                    : item.value !== ''
-                    ? styles.codeLastValue
-                    : styles.codeLast
+                  //   item.id !== '5'
+                  //     ? item.value !== ''
+                  //       ? styles.codeValue
+                  //       : styles.code
+                  //     : item.value !== ''
+                  //     ? styles.codeLastValue
+                  //     : styles.codeLast
+                  styles[getCodeStyles(item)]
                 }
               ></View>
               //   item.value !== '' ? styles.codeValue : styles.code
             ))}
-          </View>
+          </Animated.View>
           <View style={styles.codeBtnsWrapper}>
             {numbers.map((item) => (
               <Pressable
@@ -159,7 +231,6 @@ const styles = StyleSheet.create({
     height: 14,
     borderRadius: 14,
     backgroundColor: 'rgba(255, 255, 255, 0.10)',
-    blur: 'drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.10))',
   },
   codeValue: {
     marginRight: 26,
@@ -175,12 +246,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 8,
   },
+  codeValueWithError: {
+    marginRight: 26,
+    width: 14,
+    height: 14,
+    borderRadius: 14,
+    backgroundColor: '#FF7875',
+    shadowColor: '#FF7875',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+  },
   codeLast: {
     width: 14,
     height: 14,
     borderRadius: 14,
     backgroundColor: 'rgba(255, 255, 255, 0.10)',
-    blur: 'drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.10))',
   },
   codeLastValue: {
     width: 14,
@@ -188,6 +272,19 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: '#36D0BB',
     shadowColor: '#36D0BB',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+  },
+  codeLastValueWithError: {
+    width: 14,
+    height: 14,
+    borderRadius: 14,
+    backgroundColor: '#FF7875',
+    shadowColor: '#FF7875',
     shadowOffset: {
       width: 0,
       height: 0,
