@@ -8,7 +8,7 @@ import { AxiosInterceptor } from 'src/services/interceptor';
 import { View } from 'react-native';
 import { IntlProvider } from 'react-intl';
 import UA from 'src/lang/ua.json';
-import EN from 'src/lang/en.json';
+import EN from 'src/lang/en.js';
 
 import { useRouting } from './routing';
 
@@ -36,7 +36,7 @@ export default function App() {
   }, []);
   // console.log('language', navigator.language);
   // const locale = navigator.language;
-  const locale = 'uk';
+  const locale = 'en';
   let lang = UA;
   if (locale === 'en') {
     lang = EN;
