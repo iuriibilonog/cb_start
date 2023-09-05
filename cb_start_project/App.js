@@ -6,8 +6,9 @@ import { Provider } from 'react-redux';
 import navigationHelper from 'src/helpers/navigationHelper';
 import { AxiosInterceptor } from 'src/services/interceptor';
 import { View } from 'react-native';
-// import store from "./redux/store";
-// import { Provider } from "react-redux";
+import { IntlProvider } from 'react-intl';
+import UA from 'src/lang/ua.json';
+import EN from 'src/lang/en.json';
 
 import { useRouting } from './routing';
 
@@ -33,6 +34,19 @@ export default function App() {
 
     prepare();
   }, []);
+  // console.log('language', navigator.language);
+  // const locale = navigator.language;
+  const locale = 'uk';
+  let lang = UA;
+  if (locale === 'en') {
+    lang = EN;
+  } else {
+    if (locale === 'uk') {
+      lang = UA;
+    } else {
+      lang = EN;
+    }
+  }
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
@@ -45,14 +59,16 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-      <NavigationContainer
-        onReady={onLayoutRootView}
-        ref={(navigatorRef) => {
-          navigationHelper.setTopLevelNavigator(navigatorRef);
-        }}
-      >
-        <AxiosInterceptor>{routing}</AxiosInterceptor>
-      </NavigationContainer>
+      <IntlProvider locale={locale} messages={lang}>
+        <NavigationContainer
+          onReady={onLayoutRootView}
+          ref={(navigatorRef) => {
+            navigationHelper.setTopLevelNavigator(navigatorRef);
+          }}
+        >
+          <AxiosInterceptor>{routing}</AxiosInterceptor>
+        </NavigationContainer>
+      </IntlProvider>
     </Provider>
   );
 }

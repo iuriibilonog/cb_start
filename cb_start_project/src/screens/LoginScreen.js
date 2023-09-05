@@ -18,6 +18,7 @@ import {
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDispatch } from 'react-redux';
 import { authLoginUser } from '../redux/auth/authOperations';
+import { FormattedMessage } from 'react-intl';
 
 const logoBack = require('src/images/logo_back.png');
 const boxEmpty = require('src/images/box_empty.png');
@@ -36,6 +37,7 @@ const RegistrationScreen = ({ navigation }) => {
     console.log('submit data>>', { ...inputValue, isRememberMe });
     dispatch(authLoginUser({ ...inputValue, isRememberMe }));
     // navigation.navigate('RegistrationScreen');
+    Keyboard.dismiss();
   };
 
   const handlePassShowBtn = () => {
@@ -52,41 +54,61 @@ const RegistrationScreen = ({ navigation }) => {
   const headerHeight = useHeaderHeight();
   return (
     <TouchableWithoutFeedback
-    onPress={() => {
-      Keyboard.dismiss();
-    }}>
-    <KeyboardAvoidingView
-      keyboardVerticalOffset={headerHeight}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      // behavior="position"
-      style={{ flex: 1 }}
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
     >
-      <View style={styles.container}>
-        <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
-          <TextInput
-            style={{ ...styles.input, marginBottom: 30 }}
-            placeholder="email"
-            placeholderTextColor={'grey'}
-            value={inputValue?.name}
-            onChangeText={(text) => handleInput({ email: text })}
-          />
-          <View style={styles.passInputWrapper}>
-            <TextInput
-              style={{ ...styles.input, marginBottom: 60 }}
-              placeholder="password"
-              placeholderTextColor={'grey'}
-              value={inputValue?.name}
-              onChangeText={(text) => handleInput({ password: text })}
-              secureTextEntry={!isPassShown}
-            />
-            <Pressable
-              onPress={handlePassShowBtn}
-              style={{ position: 'absolute', right: 20, top: 13 }}
-            >
-              <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
-            </Pressable>
-          </View>
-          {/* <Pressable
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        // behavior="position"
+        style={{ flex: 1 }}
+      >
+        <View style={styles.container}>
+          <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
+            <FormattedMessage id="common.email">
+              {(msg) => (
+                <TextInput
+                  style={{ ...styles.input, marginBottom: 30 }}
+                  placeholder={msg[0]}
+                  placeholderTextColor={'grey'}
+                  value={inputValue?.name}
+                  onChangeText={(text) => handleInput({ email: text })}
+                />
+              )}
+            </FormattedMessage>
+            <View style={styles.passInputWrapper}>
+              <FormattedMessage id="common.password">
+                {(msg) => {
+                  console.log('msg', msg);
+                  return (
+                    <TextInput
+                      style={{ ...styles.input, marginBottom: 60 }}
+                      placeholder={msg[0]}
+                      placeholderTextColor={'grey'}
+                      value={inputValue?.name}
+                      onChangeText={(text) => handleInput({ password: text })}
+                      secureTextEntry={!isPassShown}
+                    />
+                  );
+                }}
+              </FormattedMessage>
+              {/* <TextInput
+                style={{ ...styles.input, marginBottom: 60 }}
+                // placeholder={<FormattedMessage id={'common.password'} />}
+                placeholderTextColor={'grey'}
+                value={inputValue?.name}
+                onChangeText={(text) => handleInput({ password: text })}
+                secureTextEntry={!isPassShown}
+              /> */}
+              <Pressable
+                onPress={handlePassShowBtn}
+                style={{ position: 'absolute', right: 20, top: 13 }}
+              >
+                <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
+              </Pressable>
+            </View>
+            {/* <Pressable
             onPress={() => setIsRememberMe((prev) => !prev)}
             style={styles.rememberWrapper}
           >
@@ -96,18 +118,20 @@ const RegistrationScreen = ({ navigation }) => {
             />
             <Text style={styles.rememberTxt}>Remember me</Text>
           </Pressable> */}
-          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-            <Text> Sign In </Text>
-          </TouchableOpacity>
-          {/* <Pressable
+            <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+              <Text>
+                <FormattedMessage id="common.sign_in" />
+              </Text>
+            </TouchableOpacity>
+            {/* <Pressable
             onPress={() => navigation.navigate('RegistrationScreen')}
             style={styles.registerWrapper}
           >
             <Text style={styles.registerTxt}>Don’t have an account ? Sign Up</Text>
           </Pressable> */}
-        </ImageBackground>
-      </View>
-    </KeyboardAvoidingView>
+          </ImageBackground>
+        </View>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
