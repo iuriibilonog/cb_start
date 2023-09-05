@@ -6,14 +6,15 @@ import { TouchableOpacity, Text, Image, StyleSheet, View, Pressable } from 'reac
 import SplashScreen from 'src/screens/SplashScreen';
 import LoginScreen from 'src/screens/LoginScreen';
 import RegistrationScreen from 'src/screens/RegistrationScreen';
+import DashboardScreen from 'src/screens/DashboardScreen';
 
 export const useRouting = () => {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
 
   const AuthStack = createNativeStackNavigator();
   const Dashboard = createNativeStackNavigator();
 
-  // const arrowLeft = require('src/assets/images/arrow_left.png');
+  const profileIcon = require('src/images/profile_icon.png');
 
   return (
     <>
@@ -38,9 +39,26 @@ export const useRouting = () => {
       ) : (
         <Dashboard.Navigator>
           <AuthStack.Screen
-            options={{ headerShown: false }}
-            name="SplashScreen"
-            component={SplashScreen}
+            options={{
+              // headerShown: true,
+              // title: 'Dashboard',
+              // headerTitleAlign: 'left',
+              headerTitle: (props) => (
+                <View style={{ flex: 1, flexDirection: 'row', marginLeft: 20 }}>
+                  <Text style={styles.headerTitle}>Dashboard</Text>
+                </View>
+              ),
+              headerlef: () => <Text>Dashboard</Text>,
+              headerRight: ({ size }) => (
+                <Image
+                  source={profileIcon}
+                  style={{ width: 25, height: 25, marginRight: 20 }}
+                  // onPress={() => navigation.navigate("registration")}
+                />
+              ),
+            }}
+            name="DashboardScreen"
+            component={DashboardScreen}
           />
         </Dashboard.Navigator>
       )}
@@ -60,5 +78,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '300',
     fontSize: 28,
+  },
+  headerTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    letterSpacing: 0.7,
   },
 });

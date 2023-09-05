@@ -93,14 +93,6 @@ const RegistrationScreen = ({ navigation }) => {
                   );
                 }}
               </FormattedMessage>
-              {/* <TextInput
-                style={{ ...styles.input, marginBottom: 60 }}
-                // placeholder={<FormattedMessage id={'common.password'} />}
-                placeholderTextColor={'grey'}
-                value={inputValue?.name}
-                onChangeText={(text) => handleInput({ password: text })}
-                secureTextEntry={!isPassShown}
-              /> */}
               <Pressable
                 onPress={handlePassShowBtn}
                 style={{ position: 'absolute', right: 20, top: 13 }}
