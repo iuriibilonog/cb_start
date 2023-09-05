@@ -66,7 +66,7 @@ const RegistrationScreen = ({ navigation }) => {
       >
         <View style={styles.container}>
           <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
-            <FormattedMessage id="common.email">
+            <FormattedMessage id={'common.email'}>
               {(msg) => (
                 <TextInput
                   style={{ ...styles.input, marginBottom: 30 }}
@@ -78,7 +78,7 @@ const RegistrationScreen = ({ navigation }) => {
               )}
             </FormattedMessage>
             <View style={styles.passInputWrapper}>
-              <FormattedMessage id="common.password">
+              <FormattedMessage id={'common.password'}>
                 {(msg) => {
                   console.log('msg', msg);
                   return (
@@ -120,7 +120,7 @@ const RegistrationScreen = ({ navigation }) => {
           </Pressable> */}
             <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
               <Text>
-                <FormattedMessage id="common.sign_in" />
+                <FormattedMessage id={'common.sign_in'} />
               </Text>
             </TouchableOpacity>
             {/* <Pressable

@@ -6,6 +6,7 @@ import { TouchableOpacity, Text, Image, StyleSheet, View, Pressable } from 'reac
 import SplashScreen from 'src/screens/SplashScreen';
 import LoginScreen from 'src/screens/LoginScreen';
 import RegistrationScreen from 'src/screens/RegistrationScreen';
+import EnterSecureScreen from 'src/screens/EnterSecureScreen';
 
 export const useRouting = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -19,11 +20,11 @@ export const useRouting = () => {
     <>
       {!isAuth ? (
         <AuthStack.Navigator>
-          {/* <AuthStack.Screen
+          <AuthStack.Screen
             options={{ headerShown: false }}
-            name="SplashScreen"
-            component={SplashScreen}
-          /> */}
+            name="EnterSecureScreen"
+            component={EnterSecureScreen}
+          />
           <AuthStack.Screen
             options={{ headerShown: false }}
             name="LoginScreen"
