@@ -6,19 +6,47 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, cloneElement } from 'react';
 import Dropdown from 'src/components/molecules/Dropdown';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 
 const DashboardScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
+  const approvedValue = 100;
+  const declinedValue = 23;
+  let approvedPercent, declinedPercent;
+  if (approvedValue <= declinedValue) {
+    approvedPercent = Math.round(100 / (2 * (declinedValue / approvedValue)));
+    declinedPercent = Math.abs(approvedPercent - 100);
+  }
+  if (approvedValue > declinedValue) {
+    declinedPercent = Math.round(100 / (2 * (approvedValue / declinedValue)));
+    approvedPercent = Math.abs(declinedPercent - 100);
+  }
 
   // need for <Dropdown to close pressing out of as onBlur doesn`t work )
   const [isDropdownOpen, setIsDropdownOpen] = useState();
   const [selectedBank, setSelectedBank] = useState('');
   const data = [
-    { value: 50, text: '50%', color: 'rgba(162, 223, 141, 0.60)', textColor: '#262626' },
-    { value: 50, text: '50%', color: '#FF7676E5', textColor: '#262626' },
+    {
+      value: approvedValue,
+      text: `${approvedPercent}%`,
+      color: 'rgba(162, 223, 141, 0.6)',
+      textColor: '#262626',
+    }, //APPROVE
+    {
+      value: declinedValue,
+      color: 'rgba(162, 223, 141, 0)',
+      text: `${declinedPercent}%`,
+    }, //DECLINE
+  ];
+  const data2 = [
+    {
+      value: 1,
+      color: '#FF7676E5',
+      textColor: '#262626',
+      // shiftTextX: -50,
+    },
   ];
   //=======
   useEffect(() => {
@@ -81,13 +109,27 @@ const DashboardScreen = ({ navigation }) => {
         <View style={styles.bankConversionContainer}>
           <Text style={styles.smallTitle}>Bank conversion</Text>
           <View style={styles.pieChartWrapper}>
-            <PieChart
-              data={data}
-              showText={true}
-              labelsPosition={'mid'}
-              focusOnPress={true}
-              radius={100}
-            />
+            <View style={{ justifyContent: 'center' }}>
+              <PieChart
+                data={data2}
+                showText={true}
+                shadow={true}
+                shadowColor={'red'}
+                shadowWidth={10}
+                labelsPosition={'mid'}
+                // focusOnPress={true}
+                radius={100}
+              />
+              <View style={styles.pieChart}>
+                <PieChart
+                  data={data}
+                  showText={true}
+                  labelsPosition={'mid'}
+                  // focusOnPress={true}
+                  radius={110}
+                />
+              </View>
+            </View>
             <View style={styles.chartLegendWrapper}>
               <View style={styles.chartLegendItem}>
                 <View style={{ ...styles.circle, backgroundColor: '#FE8383' }} />
@@ -132,6 +174,11 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
+  },
+  pieChart: {
+    position: 'absolute',
+    left: -10,
+    top: -10,
   },
   pieChartWrapper: {
     flexDirection: 'row',
