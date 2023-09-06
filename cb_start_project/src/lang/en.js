@@ -6,6 +6,8 @@ const lang = {
 
   // ================ Secure Screen ===================
   'secure.title_enter': 'Please enter your PIN code',
+  'secure_create.title_enter': 'Please create your PIN code',
+  'secure_confirm.title_enter': 'Confirm your PIN code',
 };
 
 export default lang;

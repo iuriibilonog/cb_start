@@ -4,15 +4,10 @@ import {
   Text,
   StyleSheet,
   View,
-  Keyboard,
   Dimensions,
   Pressable,
-  TouchableWithoutFeedback,
   ImageBackground,
   Image,
-  TextInput,
-  Button,
-  Platform,
   TouchableOpacity,
   Animated,
   Vibration,
@@ -35,7 +30,7 @@ const numbers = [
   { id: '0', style: 'codeBtnLast' },
 ];
 
-const EnterSecureScreen = ({ navigation }) => {
+const CreateSecurePassScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const [passcode, setPassCode] = useState([
@@ -49,9 +44,37 @@ const EnterSecureScreen = ({ navigation }) => {
 
   const [animation, setAnimation] = useState(new Animated.Value(0));
 
+  const [createdPass, setCreatedPass] = useState('');
+  const [confirmedPass, setConfirmedPass] = useState('');
+
   useEffect(() => {
-    if (passcode[4].value !== '') setIsPassWrong(true);
+    if (passcode[4].value !== '' && !createdPass) {
+      const pass = passcode.map((item) => item.value).join('');
+      setCreatedPass(pass);
+      setPassCode([
+        { id: '1', value: '' },
+        { id: '2', value: '' },
+        { id: '3', value: '' },
+        { id: '4', value: '' },
+        { id: '5', value: '' },
+      ]);
+    } else if (passcode[4].value !== '' && createdPass) {
+      const pass = passcode.map((item) => item.value).join('');
+      setConfirmedPass(pass);
+    }
   }, [passcode]);
+
+  useEffect(() => {
+    if (createdPass && confirmedPass) {
+      if (createdPass !== confirmedPass) {
+        setIsPassWrong(true);
+        setCreatedPass('');
+        setConfirmedPass('');
+      } else {
+        console.log('auth');
+      }
+    }
+  }, [confirmedPass]);
 
   const makeVibration = (sec) => {
     Vibration.vibrate(sec);
@@ -137,6 +160,7 @@ const EnterSecureScreen = ({ navigation }) => {
   };
 
   const getCodeStyles = (item) => {
+    console.log('item', item);
     switch (item.id) {
       case '5':
         if (item.value !== '') {
@@ -161,7 +185,10 @@ const EnterSecureScreen = ({ navigation }) => {
       <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
         <View>
           <Text style={styles.title}>
-            <FormattedMessage id={'secure.title_enter'} />
+            {console.log('createdPass', createdPass)}
+            <FormattedMessage
+              id={createdPass ? 'secure_confirm.title_enter' : 'secure_create.title_enter'}
+            />
           </Text>
           <Animated.View style={[styles.codeContainer, animatedStyles]}>
             {passcode.map((item) => (
@@ -337,4 +364,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnterSecureScreen;
+export default CreateSecurePassScreen;
