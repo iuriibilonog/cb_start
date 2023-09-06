@@ -8,6 +8,7 @@ import LoginScreen from 'src/screens/LoginScreen';
 import RegistrationScreen from 'src/screens/RegistrationScreen';
 import DashboardScreen from 'src/screens/DashboardScreen';
 import EnterSecureScreen from 'src/screens/EnterSecureScreen';
+import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
 
 export const useRouting = () => {
   const [isAuth, setIsAuth] = useState(true);
@@ -39,6 +40,11 @@ export const useRouting = () => {
         </AuthStack.Navigator>
       ) : (
         <Dashboard.Navigator>
+          <AuthStack.Screen
+            options={{ headerShown: false }}
+            name="CreateSecurePassScreen"
+            component={CreateSecurePassScreen}
+          />
           <AuthStack.Screen
             options={{
               // headerShown: true,
