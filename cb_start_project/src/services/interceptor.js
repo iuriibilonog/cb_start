@@ -37,7 +37,7 @@ export const AxiosInterceptor = ({ children }) => {
       const refreshToken = getDataFromStorage('refresh');
 
       if (error?.response?.status === 401 && !refreshToken?.length > 0) {
-        return navigationHelper.navigate('Login');
+        // return navigationHelper.navigate('Login');
       }
 
       //   if (

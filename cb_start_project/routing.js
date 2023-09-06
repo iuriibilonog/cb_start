@@ -7,6 +7,7 @@ import SplashScreen from 'src/screens/SplashScreen';
 import LoginScreen from 'src/screens/LoginScreen';
 import RegistrationScreen from 'src/screens/RegistrationScreen';
 import DashboardScreen from 'src/screens/DashboardScreen';
+import CalendarScreen from 'src/screens/CalendarScreen';
 import EnterSecureScreen from 'src/screens/EnterSecureScreen';
 import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
 
@@ -80,6 +81,31 @@ export const useRouting = () => {
             }}
             name="DashboardScreen"
             component={DashboardScreen}
+          />
+          <Dashboard.Screen
+             options={{
+              headerTitle: 'Calendar',
+              headerTitleAlign: 'left',
+              headerLeft: ({ size }) => (
+                <Image
+                  source={profileIcon}
+                  style={{ width: 25, height: 25, marginRight: 20 }}
+                  // onPress={() => navigation.navigate("registration")}
+                />
+              ),
+              tabBarIcon: ({ tintColor, image, focused }) => {
+                focused
+                  ? (image = require('./src/images/dash_active.png'))
+                  : (image = require('./src/images/dash.png'));
+                return (
+                  <View>
+                    <Image source={image} />
+                  </View>
+                );
+              },
+            }}
+            name="CalendarScreen"
+            component={CalendarScreen}
           />
           <Dashboard.Screen
             options={{

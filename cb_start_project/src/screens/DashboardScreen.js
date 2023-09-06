@@ -86,7 +86,12 @@ const DashboardScreen = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>All Balances</Text>
-            <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => navigation.navigate('CalendarScreen')}
+            >
+              <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
+            </TouchableOpacity>
           </View>
           <View style={styles.bankContainer}>
             <Text style={styles.smallTitle}>Banks</Text>
@@ -151,7 +156,7 @@ const DashboardScreen = ({ navigation }) => {
                   <View
                     style={{
                       ...styles.pieChartCount,
-                      right: selectedDiagram.name === 'decline' ? 0 : -70,
+                      top: selectedDiagram.name === 'decline' ? 40 : 10,
                       borderColor:
                         selectedDiagram.name === 'decline'
                           ? 'rgba(255, 132, 132, 0.50)'
@@ -221,8 +226,7 @@ const styles = StyleSheet.create({
   },
   pieChartCount: {
     position: 'absolute',
-    // right: -70,
-    top: 10,
+    left: 150,
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 2,

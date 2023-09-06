@@ -35,7 +35,7 @@ const Dropdown = (props) => {
     <View>
       <Pressable
         onPress={() => setIsOpen((prev) => !prev)}
-        style={{ ...styles.container, width: WIDTH, height: HEIGHT }}
+        style={{ ...styles.container, width: WIDTH /*, height: HEIGHT*/ }}
       >
         <Text style={{ fontSize: 16, fontWeight: '600' }}>{value.title}</Text>
         <View style={styles.arrows}>
@@ -44,7 +44,7 @@ const Dropdown = (props) => {
       </Pressable>
       {isOpen && (
         <View style={{ ...styles.dropdownMenu, width: WIDTH, maxHeight: 226 }}>
-          <ScrollView style={{ maxHeight: 226 }}>
+          <ScrollView style={{ maxHeight: 226 }} nestedScrollEnabled={true}>
             {data &&
               data.map((item, index) => (
                 <Pressable
