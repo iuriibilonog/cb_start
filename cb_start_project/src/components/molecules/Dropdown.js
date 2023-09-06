@@ -1,13 +1,4 @@
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  TextInput,
-  Pressable,
-  ScrollView,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { Text, View, Image, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
 const arrowDown = require('src/images/arrow_down.png');
