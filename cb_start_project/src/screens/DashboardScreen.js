@@ -14,8 +14,8 @@ import api from '../services/interceptor';
 
 const DashboardScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
-  const approvedValue = 7;
-  const declinedValue = 250;
+  const approvedValue = 250;
+  const declinedValue = 79;
   let approvedPercent, declinedPercent;
   if (approvedValue <= declinedValue) {
     approvedPercent = Math.round(100 / (2 * (declinedValue / approvedValue)));
@@ -38,7 +38,7 @@ const DashboardScreen = ({ navigation }) => {
       text: `${approvedPercent}%`,
       color: 'rgba(162, 223, 141, 0.6)',
       textColor: '#262626',
-      onPress: (e) => {
+      onPress: () => {
         console.log('approve ', approvedValue);
         setSelectedDiagram({ name: 'approve', title: `Approved: count: ${approvedValue}` });
         setIsShowDiagramCount(true);
