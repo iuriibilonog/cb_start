@@ -14,7 +14,7 @@ export const useRouting = () => {
   const [isAuth, setIsAuth] = useState(true);
 
   const AuthStack = createNativeStackNavigator();
-  const Dashboard = createNativeStackNavigator();
+  const Dashboard = createBottomTabNavigator();
 
   const profileIcon = require('src/images/profile_icon.png');
 
@@ -39,23 +39,27 @@ export const useRouting = () => {
           />
         </AuthStack.Navigator>
       ) : (
-        <Dashboard.Navigator>
-          <AuthStack.Screen
+        <Dashboard.Navigator
+          screenOptions={({ route }) => ({
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              paddingHorizontal: 22,
+              paddingTop: 23,
+              paddingBottom: 23,
+              backgroundColor: '#242834',
+              height: 75,
+            },
+          })}
+        >
+          {/* <AuthStack.Screen
             options={{ headerShown: false }}
             name="CreateSecurePassScreen"
             component={CreateSecurePassScreen}
-          />
-          <AuthStack.Screen
+          /> */}
+          <Dashboard.Screen
             options={{
-              // headerShown: true,
-              // title: 'Dashboard',
-              // headerTitleAlign: 'left',
-              headerTitle: (props) => (
-                <View style={{ flex: 1, flexDirection: 'row', marginLeft: 20 }}>
-                  <Text style={styles.headerTitle}>Dashboard</Text>
-                </View>
-              ),
-              headerlef: () => <Text>Dashboard</Text>,
+              headerTitle: 'Dashboard',
+              headerTitleAlign: 'center',
               headerRight: ({ size }) => (
                 <Image
                   source={profileIcon}
@@ -63,8 +67,118 @@ export const useRouting = () => {
                   // onPress={() => navigation.navigate("registration")}
                 />
               ),
+              tabBarIcon: ({ tintColor, image, focused }) => {
+                focused
+                  ? (image = require('./src/images/dash_active.png'))
+                  : (image = require('./src/images/dash.png'));
+                return (
+                  <View>
+                    <Image source={image} />
+                  </View>
+                );
+              },
             }}
             name="DashboardScreen"
+            component={DashboardScreen}
+          />
+          <Dashboard.Screen
+            options={{
+              headerTitle: 'Card',
+              headerTitleAlign: 'center',
+              headerRight: ({ size }) => (
+                <Image
+                  source={profileIcon}
+                  style={{ width: 25, height: 25, marginRight: 20 }}
+                  // onPress={() => navigation.navigate("registration")}
+                />
+              ),
+              tabBarIcon: ({ tintColor, image, focused }) => {
+                focused
+                  ? (image = require('./src/images/card_active.png'))
+                  : (image = require('./src/images/card.png'));
+                return (
+                  <View>
+                    <Image source={image} />
+                  </View>
+                );
+              },
+            }}
+            name="CardScreen"
+            component={DashboardScreen}
+          />
+          <Dashboard.Screen
+            options={{
+              headerTitle: 'Api',
+              headerTitleAlign: 'center',
+              headerRight: ({ size }) => (
+                <Image
+                  source={profileIcon}
+                  style={{ width: 25, height: 25, marginRight: 20 }}
+                  // onPress={() => navigation.navigate("registration")}
+                />
+              ),
+              tabBarIcon: ({ tintColor, image, focused }) => {
+                focused
+                  ? (image = require('./src/images/api_active.png'))
+                  : (image = require('./src/images/api.png'));
+                return (
+                  <View>
+                    <Image source={image} />
+                  </View>
+                );
+              },
+            }}
+            name="ApiScreen"
+            component={DashboardScreen}
+          />
+          <Dashboard.Screen
+            options={{
+              headerTitle: 'Users',
+              headerTitleAlign: 'center',
+              headerRight: ({ size }) => (
+                <Image
+                  source={profileIcon}
+                  style={{ width: 25, height: 25, marginRight: 20 }}
+                  // onPress={() => navigation.navigate("registration")}
+                />
+              ),
+              tabBarIcon: ({ tintColor, image, focused }) => {
+                focused
+                  ? (image = require('./src/images/users_active.png'))
+                  : (image = require('./src/images/users.png'));
+                return (
+                  <View>
+                    <Image source={image} />
+                  </View>
+                );
+              },
+            }}
+            name="UsersScreen"
+            component={DashboardScreen}
+          />
+          <Dashboard.Screen
+            options={{
+              headerTitle: 'Balance',
+              headerTitleAlign: 'center',
+              headerRight: ({ size }) => (
+                <Image
+                  source={profileIcon}
+                  style={{ width: 25, height: 25, marginRight: 20 }}
+                  // onPress={() => navigation.navigate("registration")}
+                />
+              ),
+              tabBarIcon: ({ tintColor, image, focused }) => {
+                focused
+                  ? (image = require('./src/images/balance_active.png'))
+                  : (image = require('./src/images/balance.png'));
+                return (
+                  <View>
+                    <Image source={image} />
+                  </View>
+                );
+              },
+            }}
+            name="BalanceScreen"
             component={DashboardScreen}
           />
         </Dashboard.Navigator>

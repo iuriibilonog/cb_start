@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import React, { useState, useEffect, cloneElement } from 'react';
 import Dropdown from 'src/components/molecules/Dropdown';
@@ -57,99 +58,103 @@ const DashboardScreen = ({ navigation }) => {
     kztCurrency = 332577687.13,
     usdCurrency = 260.2;
   return (
-    <TouchableWithoutFeedback onPress={() => setIsDropdownOpen((prev) => !prev)}>
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>All Balances</Text>
-          <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
-        </View>
-        <View style={styles.bankContainer}>
-          <Text style={styles.smallTitle}>Banks</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-            }}
-          >
-            <View style={{ justifyContent: 'flex-start', width: 167 }}>
-              <Dropdown
-                isOpen={isDropdownOpen}
-                value={setSelectedBank}
-                data={[
-                  { id: 1, title: 'AppexMoney1' },
-                  { id: 2, title: 'Forta2' },
-                  { id: 3, title: 'AppexMoney3' },
-                  { id: 4, title: 'Forta4' },
-                  { id: 5, title: 'AppexMoney5' },
-                  { id: 6, title: 'Forta6' },
-                  { id: 7, title: 'AppexMoney7' },
-                  { id: 8, title: 'Forta8' },
-                  { id: 9, title: 'AppexMoney9' },
-                  { id: 10, title: 'Forta10' },
-                  { id: 11, title: 'AppexMoney11' },
-                  { id: 12, title: 'Forta12' },
-                ]}
-              />
-            </View>
-            <View style={styles.currencyWrapper}>
-              <View style={{ marginRight: 8 }}>
-                <Text style={styles.currency}>EUR</Text>
-                <Text style={styles.currency}>KZT</Text>
-                <Text style={styles.currency}>USD</Text>
-              </View>
-              <View>
-                <Text style={styles.currency}>{euroCurrency}</Text>
-                <Text style={styles.currency}>{kztCurrency}</Text>
-                <Text style={styles.currency}>{usdCurrency}</Text>
-              </View>
-            </View>
+    <ScrollView>
+      <TouchableWithoutFeedback onPress={() => setIsDropdownOpen((prev) => !prev)}>
+        <View style={styles.container}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>All Balances</Text>
+            <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
           </View>
-        </View>
-        <View style={styles.bankConversionContainer}>
-          <Text style={styles.smallTitle}>Bank conversion</Text>
-          <View style={styles.pieChartWrapper}>
-            <View style={{ justifyContent: 'center' }}>
-              <PieChart
-                data={data2}
-                showText={true}
-                shadow={true}
-                shadowColor={'red'}
-                shadowWidth={10}
-                labelsPosition={'mid'}
-                // focusOnPress={true}
-                radius={100}
-              />
-              <View style={styles.pieChart}>
-                <PieChart
-                  data={data}
-                  showText={true}
-                  labelsPosition={'mid'}
-                  // focusOnPress={true}
-                  radius={110}
+          <View style={styles.bankContainer}>
+            <Text style={styles.smallTitle}>Banks</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+              }}
+            >
+              <View style={{ justifyContent: 'flex-start', width: 167 }}>
+                <Dropdown
+                  isOpen={isDropdownOpen}
+                  value={setSelectedBank}
+                  data={[
+                    { id: 1, title: 'AppexMoney1' },
+                    { id: 2, title: 'Forta2' },
+                    { id: 3, title: 'AppexMoney3' },
+                    { id: 4, title: 'Forta4' },
+                    { id: 5, title: 'AppexMoney5' },
+                    { id: 6, title: 'Forta6' },
+                    { id: 7, title: 'AppexMoney7' },
+                    { id: 8, title: 'Forta8' },
+                    { id: 9, title: 'AppexMoney9' },
+                    { id: 10, title: 'Forta10' },
+                    { id: 11, title: 'AppexMoney11' },
+                    { id: 12, title: 'Forta12' },
+                  ]}
                 />
               </View>
-            </View>
-            <View style={styles.chartLegendWrapper}>
-              <View style={styles.chartLegendItem}>
-                <View style={{ ...styles.circle, backgroundColor: '#FE8383' }} />
-                <Text style={styles.legendText}>Declined</Text>
-              </View>
-              <View style={styles.chartLegendItem}>
-                <View style={{ ...styles.circle, backgroundColor: 'rgba(162, 223, 141, 0.60)' }} />
-                <Text style={styles.legendText}>Approved</Text>
+              <View style={styles.currencyWrapper}>
+                <View style={{ marginRight: 8 }}>
+                  <Text style={styles.currency}>EUR</Text>
+                  <Text style={styles.currency}>KZT</Text>
+                  <Text style={styles.currency}>USD</Text>
+                </View>
+                <View>
+                  <Text style={styles.currency}>{euroCurrency}</Text>
+                  <Text style={styles.currency}>{kztCurrency}</Text>
+                  <Text style={styles.currency}>{usdCurrency}</Text>
+                </View>
               </View>
             </View>
           </View>
+          <View style={styles.bankConversionContainer}>
+            <Text style={styles.smallTitle}>Bank conversion</Text>
+            <View style={styles.pieChartWrapper}>
+              <View style={{ justifyContent: 'center' }}>
+                <PieChart
+                  data={data2}
+                  showText={true}
+                  shadow={true}
+                  shadowColor={'red'}
+                  shadowWidth={10}
+                  labelsPosition={'mid'}
+                  // focusOnPress={true}
+                  radius={100}
+                />
+                <View style={styles.pieChart}>
+                  <PieChart
+                    data={data}
+                    showText={true}
+                    labelsPosition={'mid'}
+                    // focusOnPress={true}
+                    radius={110}
+                  />
+                </View>
+              </View>
+              <View style={styles.chartLegendWrapper}>
+                <View style={styles.chartLegendItem}>
+                  <View style={{ ...styles.circle, backgroundColor: '#FE8383' }} />
+                  <Text style={styles.legendText}>Declined</Text>
+                </View>
+                <View style={styles.chartLegendItem}>
+                  <View
+                    style={{ ...styles.circle, backgroundColor: 'rgba(162, 223, 141, 0.60)' }}
+                  />
+                  <Text style={styles.legendText}>Approved</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <Text style={{ ...styles.title, marginTop: 50 }}>Generate report</Text>
+          <TouchableOpacity activeOpacity={0.5}>
+            <View style={styles.submitBtn}>
+              <Text style={styles.submitBtnText}>Report options</Text>
+            </View>
+          </TouchableOpacity>
         </View>
-        <Text style={{ ...styles.title, marginTop: 50 }}>Generate report</Text>
-        <TouchableOpacity activeOpacity={0.5}>
-          <View style={styles.submitBtn}>
-            <Text style={styles.submitBtnText}>Report options</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </ScrollView>
   );
 };
 
