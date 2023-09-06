@@ -9,11 +9,12 @@ import {
 import React, { useState, useEffect, cloneElement } from 'react';
 import Dropdown from 'src/components/molecules/Dropdown';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
+import api from '../services/interceptor';
 
 const DashboardScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
-  const approvedValue = 100;
-  const declinedValue = 23;
+  const approvedValue = 15;
+  const declinedValue = 79;
   let approvedPercent, declinedPercent;
   if (approvedValue <= declinedValue) {
     approvedPercent = Math.round(100 / (2 * (declinedValue / approvedValue)));
@@ -49,6 +50,11 @@ const DashboardScreen = ({ navigation }) => {
     },
   ];
   //=======
+  useEffect(() => {
+api.get()``
+  }, []);
+
+
   useEffect(() => {
     console.log('selectedBank', selectedBank);
   }, [selectedBank]);
@@ -114,8 +120,8 @@ const DashboardScreen = ({ navigation }) => {
                 data={data2}
                 showText={true}
                 shadow={true}
-                shadowColor={'red'}
-                shadowWidth={10}
+                // shadowColor={'red'}
+                // shadowWidth={10}
                 labelsPosition={'mid'}
                 // focusOnPress={true}
                 radius={100}
