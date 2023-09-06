@@ -72,6 +72,10 @@ const DashboardScreen = ({ navigation }) => {
     console.log('selectedBank', selectedBank);
   }, [selectedBank]);
 
+  const handleScrollView = (e) => {
+    if (isDropdownOpen) e.preventDefault();
+  };
+
   let euroCurrency = 19984.38,
     kztCurrency = 332577687.13,
     usdCurrency = 260.2;

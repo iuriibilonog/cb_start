@@ -60,7 +60,7 @@ export const useRouting = () => {
           <Dashboard.Screen
             options={{
               headerTitle: 'Dashboard',
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               headerRight: ({ size }) => (
                 <Image
                   source={profileIcon}
@@ -110,7 +110,7 @@ export const useRouting = () => {
           <Dashboard.Screen
             options={{
               headerTitle: 'Card',
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               headerRight: ({ size }) => (
                 <Image
                   source={profileIcon}
@@ -135,7 +135,7 @@ export const useRouting = () => {
           <Dashboard.Screen
             options={{
               headerTitle: 'Api',
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               headerRight: ({ size }) => (
                 <Image
                   source={profileIcon}
@@ -160,7 +160,7 @@ export const useRouting = () => {
           <Dashboard.Screen
             options={{
               headerTitle: 'Users',
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               headerRight: ({ size }) => (
                 <Image
                   source={profileIcon}
@@ -185,7 +185,7 @@ export const useRouting = () => {
           <Dashboard.Screen
             options={{
               headerTitle: 'Balance',
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               headerRight: ({ size }) => (
                 <Image
                   source={profileIcon}
