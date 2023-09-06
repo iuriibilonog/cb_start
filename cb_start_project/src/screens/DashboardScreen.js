@@ -10,11 +10,12 @@ import {
 import React, { useState, useEffect, cloneElement } from 'react';
 import Dropdown from 'src/components/molecules/Dropdown';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
+import api from '../services/interceptor';
 
 const DashboardScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
-  const approvedValue = 100;
-  const declinedValue = 23;
+  const approvedValue = 15;
+  const declinedValue = 79;
   let approvedPercent, declinedPercent;
   if (approvedValue <= declinedValue) {
     approvedPercent = Math.round(100 / (2 * (declinedValue / approvedValue)));
@@ -51,6 +52,10 @@ const DashboardScreen = ({ navigation }) => {
   ];
   //=======
   useEffect(() => {
+    api.get()``;
+  }, []);
+
+  useEffect(() => {
     console.log('selectedBank', selectedBank);
   }, [selectedBank]);
 
@@ -65,33 +70,28 @@ const DashboardScreen = ({ navigation }) => {
             <Text style={styles.title}>All Balances</Text>
             <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
           </View>
-          <View style={styles.bankContainer}>
-            <Text style={styles.smallTitle}>Banks</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-              }}
-            >
-              <View style={{ justifyContent: 'flex-start', width: 167 }}>
-                <Dropdown
-                  isOpen={isDropdownOpen}
-                  value={setSelectedBank}
-                  data={[
-                    { id: 1, title: 'AppexMoney1' },
-                    { id: 2, title: 'Forta2' },
-                    { id: 3, title: 'AppexMoney3' },
-                    { id: 4, title: 'Forta4' },
-                    { id: 5, title: 'AppexMoney5' },
-                    { id: 6, title: 'Forta6' },
-                    { id: 7, title: 'AppexMoney7' },
-                    { id: 8, title: 'Forta8' },
-                    { id: 9, title: 'AppexMoney9' },
-                    { id: 10, title: 'Forta10' },
-                    { id: 11, title: 'AppexMoney11' },
-                    { id: 12, title: 'Forta12' },
-                  ]}
+        </View>
+        <View style={styles.bankConversionContainer}>
+          <Text style={styles.smallTitle}>Bank conversion</Text>
+          <View style={styles.pieChartWrapper}>
+            <View style={{ justifyContent: 'center' }}>
+              <PieChart
+                data={data2}
+                showText={true}
+                shadow={true}
+                // shadowColor={'red'}
+                // shadowWidth={10}
+                labelsPosition={'mid'}
+                // focusOnPress={true}
+                radius={100}
+              />
+              <View style={styles.pieChart}>
+                <PieChart
+                  data={data}
+                  showText={true}
+                  labelsPosition={'mid'}
+                  // focusOnPress={true}
+                  radius={110}
                 />
               </View>
               <View style={styles.currencyWrapper}>
