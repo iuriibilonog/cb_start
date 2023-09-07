@@ -11,7 +11,7 @@ import {
 import React, { useState, useEffect, cloneElement } from 'react';
 import Dropdown from 'src/components/molecules/Dropdown';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
-import api from '../services/interceptor';
+import api from 'src/services/interceptor';
 import ModalDropdown from 'react-native-modal-dropdown';
 
 const DashboardScreen = ({ navigation }) => {
