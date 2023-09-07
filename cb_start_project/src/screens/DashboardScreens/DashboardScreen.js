@@ -6,11 +6,13 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
 import React, { useState, useEffect, cloneElement } from 'react';
 import Dropdown from 'src/components/molecules/Dropdown';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
-import api from '../../services/interceptor';
+import api from '../services/interceptor';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const DashboardScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
@@ -31,6 +33,16 @@ const DashboardScreen = ({ navigation }) => {
   const [selectedBank, setSelectedBank] = useState('');
   const [selectedDiagram, setSelectedDiagram] = useState();
   const [isShowDiagramCount, setIsShowDiagramCount] = useState(false);
+  const [banks, setBanks] = useState([
+    'Bank 1',
+    'Bank 2',
+    'Bank 3',
+    'Bank 4',
+    'Bank 5',
+    'Bank 6',
+    'Bank 7',
+    'Bank 8',
+  ]);
 
   const data = [
     {
@@ -106,8 +118,52 @@ const DashboardScreen = ({ navigation }) => {
                 alignItems: 'flex-start',
               }}
             >
-              <View style={{ justifyContent: 'flex-start', width: 167 }}>
-                <Dropdown
+              <View style={{ justifyContent: 'flex-start', width: 167, height: 42 }}>
+                <ModalDropdown
+                  options={banks}
+                  defaultIndex={0}
+                  defaultValue={banks[0]}
+                  isFullWidth
+                  animated={false}
+                  onSelect={setSelectedBank}
+                  textStyle={{ fontSize: 16, fontWeight: '600' }}
+                  style={{
+                    backgroundColor: '#F4F4F4',
+                    paddingHorizontal: 16,
+                    paddingVertical: 11,
+                    justifyContent: 'space-between',
+                  }}
+                  dropdownStyle={{
+                    marginLeft: -16,
+                    marginTop: Platform.OS === 'ios' ? 12 : -12,
+                    paddingLeft: 11,
+                    paddingRight: 2,
+                    width: 167,
+                    backgroundColor: '#F4F4F4',
+                    borderWidth: 0,
+                  }}
+                  dropdownTextStyle={{
+                    fontSize: 16,
+                    fontWeight: '600',
+                    backgroundColor: '#F4F4F4',
+                    color: 'rgba(38, 38, 38, 0.50)',
+                  }}
+                  renderRightComponent={() => (
+                    <Image
+                      source={
+                        isDropdownOpen
+                          ? require('src/images/arrow_up.png')
+                          : require('src/images/arrow_down.png')
+                      }
+                      style={{ width: 26, height: 36, marginLeft: 'auto' }}
+                    ></Image>
+                  )}
+                  renderRowProps={{ activeOpacity: 1 }}
+                  renderSeparator={() => <></>}
+                  onDropdownWillShow={() => setIsDropdownOpen(true)}
+                  onDropdownWillHide={() => setIsDropdownOpen(false)}
+                />
+                {/* <Dropdown
                   isOpen={isDropdownOpen}
                   value={setSelectedBank}
                   data={[
@@ -124,7 +180,7 @@ const DashboardScreen = ({ navigation }) => {
                     { id: 11, title: 'AppexMoney11' },
                     { id: 12, title: 'Forta12' },
                   ]}
-                />
+                />*/}
               </View>
               <View style={styles.currencyWrapper}>
                 <View style={{ marginRight: 8 }}>
