@@ -51,11 +51,14 @@ const leftArrow = require('src/images/left.png');
 const rightArrow = require('src/images/right.png');
 
 const StyledCalendar = (props) => {
-  const [selectedDay, setSelectedDay] = useState('');
+  console.log('props', props);
+  const [selectedDay, setSelectedDay] = useState(
+    props.initialDay ? { dateString: props.initialDay } : ''
+  );
 
   useEffect(() => {
-    if (props.selectedDay) {
-      props.selectedDay(selectedDay);
+    if (props.setSelectedDay) {
+      props.setSelectedDay(selectedDay);
     }
   }, [selectedDay]);
   return (

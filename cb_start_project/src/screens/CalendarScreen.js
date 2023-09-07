@@ -69,7 +69,7 @@ const CalendarScreen = ({ navigation }) => {
         style={{ flex: 1 }}
       >
         <View style={styles.container}>
-          <StyledCalendar selectedDay={setSelectedDay} />
+          <StyledCalendar setSelectedDay={setSelectedDay} initialDay={'2023-09-22'} />
           <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 80 }}>
             <View style={styles.submitBtn}>
               <Text style={styles.submitBtnText}>Download</Text>
