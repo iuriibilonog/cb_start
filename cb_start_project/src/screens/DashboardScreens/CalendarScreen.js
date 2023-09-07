@@ -12,8 +12,8 @@ import {
 import React, { useState, useEffect, cloneElement } from 'react';
 import { Calendar } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
-import StyledCalendar from '../components/molecules/StyledCalendar';
-import Datepicker from '../components/atoms/Datepicker';
+import StyledCalendar from '../../components/molecules/StyledCalendar';
+import Datepicker from '../../components/atoms/Datepicker';
 
 const CalendarScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');

@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TouchableOpacity, Text, Image, StyleSheet, View, Pressable } from 'react-native';
 import SplashScreen from 'src/screens/SplashScreen';
 import LoginScreen from 'src/screens/LoginScreen';
 import RegistrationScreen from 'src/screens/RegistrationScreen';
-import DashboardScreen from 'src/screens/DashboardScreen';
-import CalendarScreen from 'src/screens/CalendarScreen';
+import DashboardScreen from 'src/screens/DashboardScreens/DashboardScreen';
 import EnterSecureScreen from 'src/screens/EnterSecureScreen';
 import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
+import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
 
 export const useRouting = () => {
   const [isAuth, setIsAuth] = useState(true);
 
-  const AuthStack = createNativeStackNavigator();
-  const Dashboard = createBottomTabNavigator();
-
-  const profileIcon = require('src/images/profile_icon.png');
-  const headerLeft = require('src/images/header_left.png');
+  const AuthStack = createStackNavigator();
+  const MainStack = createBottomTabNavigator();
 
   return (
     <>
@@ -41,7 +38,7 @@ export const useRouting = () => {
           />
         </AuthStack.Navigator>
       ) : (
-        <Dashboard.Navigator
+        <MainStack.Navigator
           screenOptions={({ route }) => ({
             tabBarShowLabel: false,
             tabBarStyle: {
@@ -58,17 +55,10 @@ export const useRouting = () => {
             name="CreateSecurePassScreen"
             component={CreateSecurePassScreen}
           /> */}
-          <Dashboard.Screen
+          <MainStack.Screen
             options={{
-              headerTitle: 'Dashboard',
-              headerTitleAlign: 'left',
-              headerRight: ({ size }) => (
-                <Image
-                  source={profileIcon}
-                  style={{ width: 25, height: 25, marginRight: 20 }}
-                  // onPress={() => navigation.navigate("registration")}
-                />
-              ),
+              headerShown: false,
+
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
                   ? (image = require('./src/images/dash_active.png'))
@@ -80,26 +70,11 @@ export const useRouting = () => {
                 );
               },
             }}
-            name="DashboardScreen"
-            component={DashboardScreen}
+            name="DashboardRoutes"
+            component={DashboardRoutes}
           />
-          <Dashboard.Screen
-            options={{
-              headerTitle: 'Calendar',
-              headerTitleAlign: 'left',
-              headerLeft: ({ size }) => (
-                <Image
-                  source={headerLeft}
-                  style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-                  // onPress={() => navigation.navigate("registration")}
-                />
-              ),
-              tabBarIconStyle: { display: 'none' },
-            }}
-            name="CalendarScreen"
-            component={CalendarScreen}
-          />
-          <Dashboard.Screen
+
+          <MainStack.Screen
             options={{
               headerTitle: 'Card',
               headerTitleAlign: 'left',
@@ -124,7 +99,7 @@ export const useRouting = () => {
             name="CardScreen"
             component={DashboardScreen}
           />
-          <Dashboard.Screen
+          <MainStack.Screen
             options={{
               headerTitle: 'Api',
               headerTitleAlign: 'left',
@@ -149,7 +124,7 @@ export const useRouting = () => {
             name="ApiScreen"
             component={DashboardScreen}
           />
-          <Dashboard.Screen
+          <MainStack.Screen
             options={{
               headerTitle: 'Users',
               headerTitleAlign: 'left',
@@ -174,7 +149,7 @@ export const useRouting = () => {
             name="UsersScreen"
             component={DashboardScreen}
           />
-          <Dashboard.Screen
+          <MainStack.Screen
             options={{
               headerTitle: 'Balance',
               headerTitleAlign: 'left',
@@ -199,7 +174,7 @@ export const useRouting = () => {
             name="BalanceScreen"
             component={DashboardScreen}
           />
-        </Dashboard.Navigator>
+        </MainStack.Navigator>
       )}
     </>
   );
