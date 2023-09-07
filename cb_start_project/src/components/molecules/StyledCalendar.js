@@ -103,7 +103,7 @@ const StyledCalendar = (props) => {
           theme={{
             'stylesheet.calendar.header': {
               week: {
-                marginTop: 5,
+                marginTop: 50,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginHorizontal: 6,
@@ -151,10 +151,10 @@ const StyledCalendar = (props) => {
             // textDayHeaderFontFamily: 'monospace',
             textDayFontWeight: '300',
             textMonthFontWeight: 'bold',
-            textDayHeaderFontWeight: '600',
+            textDayHeaderFontWeight: '700',
             textDayFontSize: 16,
             textMonthFontSize: 16,
-            textDayHeaderFontSize: 16,
+            textDayHeaderFontSize: 12,
           }}
           // Initially visible month. Default = now
           // initialDate={'2021-01-01'}
