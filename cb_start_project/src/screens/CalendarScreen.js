@@ -28,20 +28,20 @@ LocaleConfig.locales['en'] = {
     'December',
   ],
   monthNamesShort: [
-    'Janv.',
-    'Févr.',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juil.',
-    'Août',
-    'Sept.',
+    'Jan.',
+    'Feb.',
+    'Mar.',
+    'Apr.',
+    'May',
+    'June',
+    'July',
+    'Aug.',
+    'Sep.',
     'Oct.',
     'Nov.',
-    'Déc.',
+    'Dec.',
   ],
-  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+  dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thirsday', 'Friday', 'Satuday'],
   dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
   today: 'Today',
 };
@@ -52,6 +52,7 @@ const rightArrow = require('src/images/right.png');
 
 const CalendarScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
+  const [selectedDay, setSelectedDay] = useState('');
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -65,13 +66,77 @@ const CalendarScreen = ({ navigation }) => {
           <View style={styles.startEndContainer}></View>
           <View style={styles.calendarContainer}>
             <Calendar
+              // dayComponent={({ date, state }) => {
+              //   return (
+              //     <View style={{ paddingHorizontal: 13, paddingVertical: 13 }}>
+              //       <Text
+              //         style={{
+              //           textAlign: 'center',
+              //           color: state === 'disabled' ? 'gray' : 'black',
+              //         }}
+              //       >
+              //         {date.day}
+              //       </Text>
+              //     </View>
+              //   );
+              // }}
+              markingType={'custom'}
+              markedDates={{
+                // '2023-09-20'
+                [selectedDay.dateString]: {
+                  customStyles: {
+                    container: {
+                      width: 50,
+                      height: 50,
+                      borderRadius: 25,
+                      // alignContent:'center',
+                      justifyContent: 'center',
+                      backgroundColor: 'rgba(11, 163, 154, 0.50)',
+                    },
+                    text: {
+                      color: 'black',
+                      // fontWeight: 'bold',
+                    },
+                  },
+                },
+              }}
               theme={{
+                'stylesheet.calendar.header': {
+                  week: {
+                    marginTop: 5,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginHorizontal: 6,
+                    borderBottomWidth: 1,
+                    borderColor: 'rgba(38, 38, 38, 0.10)',
+                  },
+                },
+                'stylesheet.day.basic': {
+                  // selected: {
+                  //   backgroundColor: 'red',
+                  //   borderRadius: 20,
+                  // },
+                  // today: {
+                  //   // backgroundColor: 'green',
+                  //   borderRadius: 20,
+                  // },
+                  base: {
+                    width: 40,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  },
+                  // selectedText: {
+                  //   color: 'red',
+                  // },
+                },
+                weekVerticalMargin: 0,
                 backgroundColor: '#ffffff',
                 calendarBackground: '#ffffff',
                 textSectionTitleColor: '#b6c1cd',
                 textSectionTitleDisabledColor: '#d9e1e8',
                 selectedDayBackgroundColor: 'red',
-                selectedDayTextColor: '#ffffff',
+                selectedDayTextColor: 'green',
                 todayTextColor: '#00adf5',
                 dayTextColor: '#2d4150',
                 textDisabledColor: '#d9e1e8',
@@ -100,6 +165,7 @@ const CalendarScreen = ({ navigation }) => {
               // Handler which gets executed on day press. Default = undefined
               onDayPress={(day) => {
                 console.log('selected day', day);
+                setSelectedDay(day);
               }}
               // Handler which gets executed on day long press. Default = undefined
               onDayLongPress={(day) => {
@@ -180,7 +246,7 @@ const CalendarScreen = ({ navigation }) => {
               }}
             />
           </View>
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 80 }}>
             <View style={styles.submitBtn}>
               <Text style={styles.submitBtnText}>Download</Text>
             </View>

@@ -18,6 +18,7 @@ export const useRouting = () => {
   const Dashboard = createBottomTabNavigator();
 
   const profileIcon = require('src/images/profile_icon.png');
+  const headerLeft = require('src/images/header_left.png');
 
   return (
     <>
@@ -83,26 +84,17 @@ export const useRouting = () => {
             component={DashboardScreen}
           />
           <Dashboard.Screen
-             options={{
+            options={{
               headerTitle: 'Calendar',
               headerTitleAlign: 'left',
               headerLeft: ({ size }) => (
                 <Image
-                  source={profileIcon}
-                  style={{ width: 25, height: 25, marginRight: 20 }}
+                  source={headerLeft}
+                  style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
                   // onPress={() => navigation.navigate("registration")}
                 />
               ),
-              tabBarIcon: ({ tintColor, image, focused }) => {
-                focused
-                  ? (image = require('./src/images/dash_active.png'))
-                  : (image = require('./src/images/dash.png'));
-                return (
-                  <View>
-                    <Image source={image} />
-                  </View>
-                );
-              },
+              tabBarIconStyle: { display: 'none' },
             }}
             name="CalendarScreen"
             component={CalendarScreen}
