@@ -58,7 +58,12 @@ const StyledCalendar = (props) => {
 
   useEffect(() => {
     if (props.setSelectedDay) {
-      props.setSelectedDay(selectedDay);
+      let correctedDateString = '';
+      if (selectedDay.dateString) {
+        correctedDateString = selectedDay.dateString.replace(/-/g, '/');
+        selectedDay.dateString.replace(/-/g, '/');
+      }
+      props.setSelectedDay({ ...selectedDay, dateString: correctedDateString });
     }
   }, [selectedDay]);
   return (

@@ -7,69 +7,74 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Pressable,
 } from 'react-native';
 import React, { useState, useEffect, cloneElement } from 'react';
 import { Calendar } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import StyledCalendar from '../components/molecules/StyledCalendar';
-
-LocaleConfig.locales['en'] = {
-  monthNames: [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ],
-  monthNamesShort: [
-    'Jan.',
-    'Feb.',
-    'Mar.',
-    'Apr.',
-    'May',
-    'June',
-    'July',
-    'Aug.',
-    'Sep.',
-    'Oct.',
-    'Nov.',
-    'Dec.',
-  ],
-  dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thirsday', 'Friday', 'Satuday'],
-  dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-  today: 'Today',
-};
-LocaleConfig.defaultLocale = 'en';
-
-const leftArrow = require('src/images/left.png');
-const rightArrow = require('src/images/right.png');
+import Datepicker from '../components/atoms/Datepicker';
 
 const CalendarScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
-  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedStartDay, setSelectedStartDay] = useState('');
+  const [selectedEndDay, setSelectedEndDay] = useState('');
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+  const [focusedDay, setFocusedDay] = useState('');
 
   useEffect(() => {
     //example selectedDay: {"dateString": "2023-09-24", "day": 24, "month": 9, "timestamp": 1695513600000, "year": 2023}
-    console.log('selectedDay>>> ', selectedDay);
-  }, [selectedDay]);
+    console.log('StartDay>>> ', selectedStartDay);
+    console.log('EndDay>>> ', selectedEndDay);
+  }, [selectedStartDay, selectedEndDay]);
 
   return (
     <ScrollView style={{ flex: 1 }}>
       <TouchableWithoutFeedback
         onPress={() => {
-          // setIsShowDiagramCount(false);
+          setIsCalendarVisible(false);
         }}
         style={{ flex: 1 }}
       >
         <View style={styles.container}>
-          <StyledCalendar setSelectedDay={setSelectedDay} initialDay={'2023-09-22'} />
+          <View style={styles.startEndContainer}>
+            <View>
+              <Text style={styles.startEndItemTitle}>Start date</Text>
+              <Pressable
+                onPress={() => {
+                  setIsCalendarVisible((prev) => !prev);
+                  setFocusedDay('start');
+                }}
+              >
+                <Datepicker
+                  isFocused={focusedDay === 'start' && isCalendarVisible}
+                  value={selectedStartDay.dateString ? selectedStartDay.dateString : '____/__/__'}
+                />
+              </Pressable>
+            </View>
+            <View>
+              <Text style={styles.startEndItemTitle}>End date</Text>
+              <Pressable
+                onPress={() => {
+                  setIsCalendarVisible((prev) => !prev);
+                  setFocusedDay('end');
+                }}
+              >
+                <Datepicker
+                  isFocused={focusedDay === 'end' && isCalendarVisible}
+                  value={selectedEndDay.dateString ? selectedEndDay.dateString : '____/__/__'}
+                />
+              </Pressable>
+            </View>
+          </View>
+          {isCalendarVisible && (
+            <StyledCalendar
+              setSelectedDay={focusedDay === 'start' ? setSelectedStartDay : setSelectedEndDay}
+              initialDay={
+                focusedDay === 'start' ? selectedStartDay.dateString : selectedEndDay.dateString
+              }
+            />
+          )}
           <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 80 }}>
             <View style={styles.submitBtn}>
               <Text style={styles.submitBtnText}>Download</Text>
@@ -89,11 +94,12 @@ const styles = StyleSheet.create({
     paddingVertical: 48,
   },
   startEndContainer: {
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 80,
   },
+  startEndItemTitle: { marginBottom: 12, color: 'rgba(38, 38, 38, 0.60)', fontSize: 16 },
   calendarContainer: { flex: 1 },
 
   submitBtn: {
