@@ -43,39 +43,40 @@ const Dropdown = (props) => {
         </View>
       </Pressable>
       {isOpen && (
-        <View style={{ ...styles.dropdownMenu, width: WIDTH, maxHeight: 226 }}>
-          <ScrollView
+        <View style={{ position: 'relative', zIndex: 999 }}>
+          <View
             style={{
+              ...styles.dropdownMenu,
+              width: WIDTH,
               maxHeight: 226,
-              position: 'relative',
-              left: 0,
-              top: 0,
-              padding: 16,
+              zIndex: 999,
+              position: 'absolute',
             }}
-            nestedScrollEnabled={true}
           >
-            {data &&
-              data.map((item, index) => (
-                <Pressable
-                  key={index}
-                  onPress={() => handleSelect(index, item)}
-                  onBlur={() => {
-                    console.log('AAA');
-                    setIsOpen(false);
-                  }}
-                >
-                  <Text
-                    style={
-                      JSON.stringify(value) === JSON.stringify(item)
-                        ? styles.textItemActive
-                        : styles.textItem
-                    }
+            <ScrollView nestedScrollEnabled={true} onScroll={() => console.log('first')}>
+              {data &&
+                data.map((item, index) => (
+                  <Pressable
+                    key={index}
+                    onPress={() => handleSelect(index, item)}
+                    onBlur={() => {
+                      console.log('AAA');
+                      setIsOpen(false);
+                    }}
                   >
-                    {item.title}
-                  </Text>
-                </Pressable>
-              ))}
-          </ScrollView>
+                    <Text
+                      style={
+                        JSON.stringify(value) === JSON.stringify(item)
+                          ? styles.textItemActive
+                          : styles.textItem
+                      }
+                    >
+                      {item.title}
+                    </Text>
+                  </Pressable>
+                ))}
+            </ScrollView>
+          </View>
         </View>
       )}
     </View>
@@ -95,7 +96,11 @@ const styles = StyleSheet.create({
   arrows: {},
   dropdownMenu: {
     // flex: 1,
-    position: 'relative',
+    // position: 'absolute',
+    zIndex: 999,
+    left: 0,
+    top: 0,
+    padding: 16,
     // left: 0,
     // top: 44,
     // padding: 16,
