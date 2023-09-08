@@ -8,6 +8,8 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { getAllBanks, getBankConversion } from 'src/redux/content/operations';
 import React, { useState, useEffect, cloneElement } from 'react';
 import Dropdown from 'src/components/molecules/Dropdown';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
@@ -33,16 +35,11 @@ const DashboardScreen = ({ navigation }) => {
   const [selectedBank, setSelectedBank] = useState('');
   const [selectedDiagram, setSelectedDiagram] = useState();
   const [isShowDiagramCount, setIsShowDiagramCount] = useState(false);
-  const [banks, setBanks] = useState([
-    'Bank 1',
-    'Bank 2',
-    'Bank 3',
-    'Bank 4',
-    'Bank 5',
-    'Bank 6',
-    'Bank 7',
-    'Bank 8',
-  ]);
+
+  const dispatch = useDispatch();
+
+  const [banks, setBanks] = useState([]);
+  const [banksNames, setBanksNames] = useState([]);
 
   const data = [
     {
@@ -77,12 +74,38 @@ const DashboardScreen = ({ navigation }) => {
   ];
   //=======
   useEffect(() => {
-    api.get();
+    getBanks();
   }, []);
 
   useEffect(() => {
-    console.log('selectedBank', selectedBank);
+    if (selectedBank) {
+      const bankName = banksNames[selectedBank];
+      // getBankConversion(bankName);
+    }
   }, [selectedBank]);
+
+  const getBankConversion = async (bankName) => {
+    try {
+      const data = await dispatch(getBankConversion(bankName));
+      console.log('data', data);
+    } catch (error) {
+      console.warn('Error:', error);
+    }
+  };
+
+  const getBanks = async () => {
+    try {
+      const data = await dispatch(getAllBanks());
+      setBanks(data.payload);
+      const name = data.payload.map((item) => item.name);
+
+      setBanksNames(name);
+      setSelectedBank(name[0]);
+      // console.log('data', data.payload);
+    } catch (error) {
+      console.warn('Error:', error);
+    }
+  };
 
   const handleScrollView = (e) => {
     if (isDropdownOpen) e.preventDefault();
@@ -119,50 +142,52 @@ const DashboardScreen = ({ navigation }) => {
               }}
             >
               <View style={{ justifyContent: 'flex-start', width: 167, height: 42 }}>
-                <ModalDropdown
-                  options={banks}
-                  defaultIndex={0}
-                  defaultValue={banks[0]}
-                  isFullWidth
-                  animated={false}
-                  onSelect={setSelectedBank}
-                  textStyle={{ fontSize: 16, fontWeight: '600' }}
-                  style={{
-                    backgroundColor: '#F4F4F4',
-                    paddingHorizontal: 16,
-                    paddingVertical: 11,
-                    justifyContent: 'space-between',
-                  }}
-                  dropdownStyle={{
-                    marginLeft: -16,
-                    marginTop: Platform.OS === 'ios' ? 12 : -12,
-                    paddingLeft: 11,
-                    paddingRight: 2,
-                    width: 167,
-                    backgroundColor: '#F4F4F4',
-                    borderWidth: 0,
-                  }}
-                  dropdownTextStyle={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    backgroundColor: '#F4F4F4',
-                    color: 'rgba(38, 38, 38, 0.50)',
-                  }}
-                  renderRightComponent={() => (
-                    <Image
-                      source={
-                        isDropdownOpen
-                          ? require('src/images/arrow_up.png')
-                          : require('src/images/arrow_down.png')
-                      }
-                      style={{ width: 26, height: 36, marginLeft: 'auto' }}
-                    ></Image>
-                  )}
-                  renderRowProps={{ activeOpacity: 1 }}
-                  renderSeparator={() => <></>}
-                  onDropdownWillShow={() => setIsDropdownOpen(true)}
-                  onDropdownWillHide={() => setIsDropdownOpen(false)}
-                />
+                {banksNames.length > 0 && (
+                  <ModalDropdown
+                    options={banksNames}
+                    defaultIndex={0}
+                    defaultValue={banksNames[0]}
+                    isFullWidth
+                    animated={false}
+                    onSelect={setSelectedBank}
+                    textStyle={{ fontSize: 16, fontWeight: '600' }}
+                    style={{
+                      backgroundColor: '#F4F4F4',
+                      paddingHorizontal: 16,
+                      paddingVertical: 11,
+                      justifyContent: 'space-between',
+                    }}
+                    dropdownStyle={{
+                      marginLeft: -16,
+                      marginTop: Platform.OS === 'ios' ? 12 : -12,
+                      paddingLeft: 11,
+                      paddingRight: 2,
+                      width: 167,
+                      backgroundColor: '#F4F4F4',
+                      borderWidth: 0,
+                    }}
+                    dropdownTextStyle={{
+                      fontSize: 16,
+                      fontWeight: '600',
+                      backgroundColor: '#F4F4F4',
+                      color: 'rgba(38, 38, 38, 0.50)',
+                    }}
+                    renderRightComponent={() => (
+                      <Image
+                        source={
+                          isDropdownOpen
+                            ? require('src/images/arrow_up.png')
+                            : require('src/images/arrow_down.png')
+                        }
+                        style={{ width: 26, height: 36, marginLeft: 'auto' }}
+                      ></Image>
+                    )}
+                    renderRowProps={{ activeOpacity: 1 }}
+                    renderSeparator={() => <></>}
+                    onDropdownWillShow={() => setIsDropdownOpen(true)}
+                    onDropdownWillHide={() => setIsDropdownOpen(false)}
+                  />
+                )}
                 {/* <Dropdown
                   isOpen={isDropdownOpen}
                   value={setSelectedBank}

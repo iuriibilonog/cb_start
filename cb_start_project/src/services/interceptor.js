@@ -3,12 +3,13 @@ import {
   getDataFromStorage,
   setDataToStorage,
   clearAsyncStorage,
-} from '../helpers/asyncStorageHelpers';
+} from 'src/helpers/asyncStorageHelpers';
 import navigationHelper from 'src/helpers/navigationHelper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { useContext } from 'react';
 // import { UIContext } from 'contexts/UIContext';
 
-const url = 'https://httpstat.us/401';
+const url = process.env.EXPO_PUBLIC_API_URL;
 
 const api = axios.create({
   withCredentials: true,
@@ -16,11 +17,15 @@ const api = axios.create({
 });
 
 export const AxiosInterceptor = ({ children }) => {
-  api.interceptors.request.use((config) => {
+  // getReqData();
+
+  api.interceptors.request.use(async (config) => {
+    const token = await AsyncStorage.getItem('token');
+    const lang = await AsyncStorage.getItem('lang');
     config.headers = {
-      'Content-Language': getDataFromStorage('lang') || 'en',
+      'Content-Language': lang || 'en',
       // 'X-Requested-With': 'XMLHttpRequest',
-      'X-Access-Token': getDataFromStorage('token') || null,
+      Authorization: `Bearer ${token}` || null,
       // 'X-Client-Version': window.COMMIT_SHA || null,
       'Content-Type': 'application/json',
     };

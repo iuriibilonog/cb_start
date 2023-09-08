@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import DashboardScreen from './DashboardScreen';
 import GeneralReportsScreen from './GeneralReportsScreen';
@@ -8,11 +8,11 @@ import MerchantsScreen from './MerchantsScreen';
 import MerchantsApiKeyScreen from './MerchantsApiKeyScreen';
 import StatusScreen from './StatusScreen';
 import FilterColumnsScreen from './FilterColumnsScreen';
-import { Image } from 'react-native';
+import { Image, Pressable } from 'react-native';
 
 const DashboardStack = createStackNavigator();
 
-const DashboardRoutes = () => {
+const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const profileIcon = require('src/images/profile_icon.png');
   const headerLeft = require('src/images/header_left.png');
   return (
@@ -22,11 +22,13 @@ const DashboardRoutes = () => {
           headerTitle: 'Dashboard',
           headerTitleAlign: 'left',
           headerRight: ({ size }) => (
-            <Image
-              source={profileIcon}
-              style={{ width: 25, height: 25, marginRight: 20 }}
-              // onPress={() => navigation.navigate("registration")}
-            />
+            <Pressable onPress={handlePressIconLogOut}>
+              <Image
+                source={profileIcon}
+                style={{ width: 25, height: 25, marginRight: 20 }}
+                // onPress={() => navigation.navigate("registration")}
+              />
+            </Pressable>
           ),
         }}
         name="DashboardScreen"

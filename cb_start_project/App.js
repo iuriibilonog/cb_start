@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
-import store from 'src/redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+
+import { store, persistor } from './src/redux/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import navigationHelper from 'src/helpers/navigationHelper';
 import { AxiosInterceptor } from 'src/services/interceptor';
-import { View } from 'react-native';
+import { Text } from 'react-native';
 import { IntlProvider } from 'react-intl';
 import UA from 'src/lang/ua.json';
 import EN from 'src/lang/en.js';
@@ -16,6 +19,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+
   const routing = useRouting();
 
   useEffect(() => {
@@ -59,16 +63,18 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-      <IntlProvider locale={locale} messages={lang}>
-        <NavigationContainer
-          onReady={onLayoutRootView}
-          ref={(navigatorRef) => {
-            navigationHelper.setTopLevelNavigator(navigatorRef);
-          }}
-        >
-          <AxiosInterceptor>{routing}</AxiosInterceptor>
-        </NavigationContainer>
-      </IntlProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <IntlProvider locale={locale} messages={lang}>
+          <NavigationContainer
+            onReady={onLayoutRootView}
+            ref={(navigatorRef) => {
+              navigationHelper.setTopLevelNavigator(navigatorRef);
+            }}
+          >
+            <AxiosInterceptor>{routing}</AxiosInterceptor>
+          </NavigationContainer>
+        </IntlProvider>
+      </PersistGate>
     </Provider>
   );
 }

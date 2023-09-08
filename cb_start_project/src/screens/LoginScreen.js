@@ -17,7 +17,9 @@ import {
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDispatch } from 'react-redux';
-import { authLoginUser } from '../redux/auth/authOperations';
+import { userLogin } from 'src/redux/user/operations';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { FormattedMessage } from 'react-intl';
 
 const logoBack = require('src/images/logo_back.png');
@@ -26,17 +28,20 @@ const boxChecked = require('src/images/box_checked.png');
 const eyeOff = require('src/images/eye_off.png');
 const eyeOn = require('src/images/eye_on.png');
 
-const RegistrationScreen = ({ navigation }) => {
+const RegistrationScreen = ({ navigation, setIsAuth }) => {
   const [inputValue, setInputValue] = useState('');
-  const [isRememberMe, setIsRememberMe] = useState(false);
   const [isPassShown, setIsPassShown] = useState(false);
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (data) => {
-    console.log('submit data>>', { ...inputValue, isRememberMe });
-    dispatch(authLoginUser({ ...inputValue, isRememberMe }));
-    // navigation.navigate('RegistrationScreen');
+  const handleSubmit = () => {
+    try {
+      dispatch(userLogin(inputValue));
+      setIsAuth(true);
+    } catch (error) {
+      console.warn((err) => 'Error:', err);
+    }
+
     Keyboard.dismiss();
   };
 
@@ -48,9 +53,7 @@ const RegistrationScreen = ({ navigation }) => {
     setInputValue((prev) => ({ ...prev, ...data }));
   };
 
-  useEffect(() => {
-    console.log('InputValues: ', inputValue);
-  }, [inputValue]);
+  useEffect(() => {}, [inputValue]);
   const headerHeight = useHeaderHeight();
   return (
     <TouchableWithoutFeedback
@@ -80,7 +83,6 @@ const RegistrationScreen = ({ navigation }) => {
             <View style={styles.passInputWrapper}>
               <FormattedMessage id={'common.password'}>
                 {(msg) => {
-                  console.log('msg', msg);
                   return (
                     <TextInput
                       style={{ ...styles.input, marginBottom: 60 }}

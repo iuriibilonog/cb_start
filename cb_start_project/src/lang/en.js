@@ -3,6 +3,9 @@ const lang = {
   'common.email': 'email',
   'common.password': 'password',
   'common.sign_in': 'Sign In',
+  'common.log_out_title': 'Are you sure?',
+  'common.log_out_btn_confirm': 'Log out',
+  'common.log_out_btn_cancel': 'Cancel',
 
   // ================ Secure Screen ===================
   'secure.title_enter': 'Please enter your PIN code',
