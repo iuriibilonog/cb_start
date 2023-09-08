@@ -67,11 +67,13 @@ const GeneralReportsScreen = () => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <Pressable onPress={() => setIsClickedOutside((prev) => !prev)} style={styles.container}>
-        <FiltersDropdown
-          data={filters}
-          onDelete={handleDeleteFilter}
-          isClickedOutside={isClickedOutside}
-        />
+        <View style={{ marginTop: 12 }}>
+          <FiltersDropdown
+            data={filters}
+            onDelete={handleDeleteFilter}
+            isClickedOutside={isClickedOutside}
+          />
+        </View>
         <View style={styles.radioBoxContainer}>
           <RadioList
             data={[{ value: 'Payments' }, { value: 'Transactions' }]}
