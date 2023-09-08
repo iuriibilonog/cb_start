@@ -8,35 +8,57 @@ import LoginScreen from 'src/screens/LoginScreen';
 import RegistrationScreen from 'src/screens/RegistrationScreen';
 import DashboardScreen from 'src/screens/DashboardScreens/DashboardScreen';
 import EnterSecureScreen from 'src/screens/EnterSecureScreen';
+import LogOutScreen from 'src/screens/LogOutScreen';
 import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
 import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getToken } from './src/redux/user/selectors';
+import { useSelector } from 'react-redux';
+
+import { getDataFromStorage } from 'src/helpers/asyncStorageHelpers';
 
 const profileIcon = require('src/images/profile_icon.png');
 export const useRouting = () => {
-  const [isAuth, setIsAuth] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
+  const [isShowLogOut, setIsShowLogOut] = useState(false);
+
+  // const isAuth = useSelector(getToken) ? true : false;
 
   const AuthStack = createStackNavigator();
   const MainStack = createBottomTabNavigator();
 
+  const handlePressIconLogOut = () => {
+    setIsShowLogOut(true);
+  };
+
   return (
     <>
-      {!isAuth ? (
+      {isShowLogOut ? (
         <AuthStack.Navigator>
           <AuthStack.Screen
             options={{ headerShown: false }}
+            name="LogOutScreen"
+            // component={LogOutScreen}
+          >
+            {(props) => (
+              <LogOutScreen {...props} setIsShowLogOut={setIsShowLogOut} setIsAuth={setIsAuth} />
+            )}
+          </AuthStack.Screen>
+        </AuthStack.Navigator>
+      ) : !isAuth ? (
+        <AuthStack.Navigator>
+          {/* <AuthStack.Screen
+            options={{ headerShown: false }}
             name="EnterSecureScreen"
             component={EnterSecureScreen}
-          />
+          /> */}
           <AuthStack.Screen
             options={{ headerShown: false }}
             name="LoginScreen"
-            component={LoginScreen}
-          />
-          <AuthStack.Screen
-            options={{ headerShown: false }}
-            name="RegistrationScreen"
-            component={RegistrationScreen}
-          />
+            // component={LoginScreen}
+          >
+            {(props) => <LoginScreen {...props} setIsAuth={setIsAuth} />}
+          </AuthStack.Screen>
         </AuthStack.Navigator>
       ) : (
         <MainStack.Navigator
@@ -72,8 +94,12 @@ export const useRouting = () => {
               },
             }}
             name="DashboardRoutes"
-            component={DashboardRoutes}
-          />
+            // component={DashboardRoutes}
+          >
+            {(props) => (
+              <DashboardRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />
+            )}
+          </MainStack.Screen>
 
           <MainStack.Screen
             options={{
