@@ -11,7 +11,6 @@ import {
 import { useDispatch } from 'react-redux';
 import { getAllBanks, getBankConversion } from 'src/redux/content/operations';
 import React, { useState, useEffect, cloneElement } from 'react';
-import Dropdown from 'src/components/molecules/Dropdown';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import api from 'src/services/interceptor';
 import ModalDropdown from 'react-native-modal-dropdown';
