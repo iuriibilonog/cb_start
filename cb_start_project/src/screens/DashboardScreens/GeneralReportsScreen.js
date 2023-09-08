@@ -1,22 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Radio from 'src/components/molecules/Radio';
 
 const arrowRight = require('src/images/right.png');
+
 const GeneralReportsScreen = () => {
   const [selectedId, setSelectedId] = useState(3);
+  const [radioSelect, setRadioSelect] = useState();
+
+  const navigation = useNavigation();
 
   const handleReportSelect = (e) => {
     setSelectedId(e);
+    // switch (e) {
+    //   case 1:
+    //     navigation('');
+    //   case 2:
+    //     navigation('');
+    //   case 3:
+    //     navigation('');
+    //   case 4:
+    //     navigation('');
+    //   case 5:
+    //     navigation('');
+    //   case 6:
+    //     navigation('');
+    // }
   };
+
+  useEffect(() => {
+    console.log('Radio selected:', radioSelect);
+  }, [radioSelect]);
+
   return (
-    <View>
+    <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.radioBoxContainer}>
-        <View style={styles.radioBoxItem}>
-          <Text>Payments</Text>
-        </View>
-        <View style={styles.radioBoxItem}>
-          <Text>Transactions</Text>
-        </View>
+        <Radio
+          data={[{ value: 'Payments' }, { value: 'Transactions' }]}
+          onSelect={setRadioSelect}
+          defaultValue={{ value: 'Payments' }}
+        />
       </View>
       <View style={styles.reportsContainer}>
         {/* <View style={{...styles.reportContainerItem, backgroundColor:selectedId ===1 ?'#F4F4F4':'#fff'}}> */}
@@ -27,7 +51,14 @@ const GeneralReportsScreen = () => {
           }}
           onPress={() => handleReportSelect(1)}
         >
-          <Text>Calendar</Text>
+          <Text
+            style={{
+              ...styles.itemText,
+              fontWeight: selectedId === 1 ? '700' : '600',
+            }}
+          >
+            Calendar
+          </Text>
           <Image source={arrowRight} style={styles.arrowRight} />
         </TouchableOpacity>
         <TouchableOpacity
@@ -38,7 +69,14 @@ const GeneralReportsScreen = () => {
           }}
           onPress={() => handleReportSelect(2)}
         >
-          <Text>Timezone</Text>
+          <Text
+            style={{
+              ...styles.itemText,
+              fontWeight: selectedId === 2 ? '700' : '600',
+            }}
+          >
+            Timezone
+          </Text>
           <Image source={arrowRight} style={styles.arrowRight} />
         </TouchableOpacity>
         <TouchableOpacity
@@ -48,7 +86,14 @@ const GeneralReportsScreen = () => {
           }}
           onPress={() => handleReportSelect(3)}
         >
-          <Text>Merchants</Text>
+          <Text
+            style={{
+              ...styles.itemText,
+              fontWeight: selectedId === 3 ? '700' : '600',
+            }}
+          >
+            Merchants
+          </Text>
           <Image source={arrowRight} style={styles.arrowRight} />
         </TouchableOpacity>
         <TouchableOpacity
@@ -58,7 +103,14 @@ const GeneralReportsScreen = () => {
           }}
           onPress={() => handleReportSelect(4)}
         >
-          <Text>Merchant’s api key</Text>
+          <Text
+            style={{
+              ...styles.itemText,
+              fontWeight: selectedId === 4 ? '700' : '600',
+            }}
+          >
+            Merchant’s api key
+          </Text>
           <Image source={arrowRight} style={styles.arrowRight} />
         </TouchableOpacity>
         <TouchableOpacity
@@ -68,16 +120,37 @@ const GeneralReportsScreen = () => {
           }}
           onPress={() => handleReportSelect(5)}
         >
-          <Text>Status</Text>
+          <Text
+            style={{
+              ...styles.itemText,
+              fontWeight: selectedId === 5 ? '700' : '600',
+            }}
+          >
+            Status
+          </Text>
           <Image source={arrowRight} style={styles.arrowRight} />
         </TouchableOpacity>
 
-        <View style={{ ...styles.reportContainerItem, marginTop: 80 }}>
-          <Text>Filters columns</Text>
+        <TouchableOpacity
+          style={{
+            ...styles.reportContainerItem,
+            marginTop: 80,
+            backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
+          }}
+          onPress={() => handleReportSelect(6)}
+        >
+          <Text
+            style={{
+              ...styles.itemText,
+              fontWeight: selectedId === 6 ? '700' : '600',
+            }}
+          >
+            Filters columns
+          </Text>
           <Image source={arrowRight} style={styles.arrowRight} />
-        </View>
+        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -89,8 +162,10 @@ const styles = StyleSheet.create({
     paddingTop: 48,
     paddingBottom: 80,
   },
+  radioBoxItem: { flexDirection: 'row', alignItems: 'center' },
   reportsContainer: { backgroundColor: '#fff' },
   arrowRight: { width: 24, height: 24 },
+  radio: { width: 24, height: 24, marginRight: 14 },
   reportContainerItem: {
     backgroundColor: '#fff',
     paddingHorizontal: 22,
@@ -99,6 +174,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  itemText: { fontSize: 18, letterSpacing: 0.3 },
 });
 
 export default GeneralReportsScreen;
