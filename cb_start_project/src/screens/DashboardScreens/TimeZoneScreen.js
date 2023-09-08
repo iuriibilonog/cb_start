@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Radio from 'src/components/molecules/Radio';
+import RadioList from 'src/components/molecules/RadioList';
 
 const arrowRight = require('src/images/right.png');
 
@@ -35,7 +35,7 @@ const TimeZoneScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.radioBoxContainer}>
-        <Radio
+        <RadioList
           data={data}
           onSelect={setRadioSelect}
           defaultValue={{ value: 'UTC0' }}

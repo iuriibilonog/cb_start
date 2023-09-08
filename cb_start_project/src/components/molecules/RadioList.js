@@ -3,7 +3,9 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 
 const radioBlank = require('src/images/radio_blank.png');
 const radioFilled = require('src/images/radio_filled.png');
-const Radio = ({ data, onSelect, defaultValue, styling = {} }) => {
+
+const RadioList = ({ data, onSelect, defaultValue, styling = {} }) => {
+
   const [selection, setSelection] = useState(defaultValue);
 
   const { size = 18, spaceBetween = 18 } = styling;
@@ -50,4 +52,4 @@ const styles = StyleSheet.create({
   itemText: { letterSpacing: 0.3 },
 });
 
-export default Radio;
+export default RadioList;

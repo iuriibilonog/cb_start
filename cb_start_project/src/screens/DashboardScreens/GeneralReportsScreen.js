@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Radio from 'src/components/molecules/Radio';
+import RadioList from 'src/components/molecules/RadioList';
 
 const arrowRight = require('src/images/right.png');
 
@@ -43,7 +43,7 @@ const GeneralReportsScreen = () => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.radioBoxContainer}>
-        <Radio
+        <RadioList
           data={[{ value: 'Payments' }, { value: 'Transactions' }]}
           onSelect={setRadioSelect}
           defaultValue={{ value: 'Payments' }}
