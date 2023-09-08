@@ -22,6 +22,8 @@ const CalendarScreen = ({ navigation }) => {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [focusedDay, setFocusedDay] = useState('');
 
+  const initialDate = new Date().toISOString().slice(0, 10).replace(/-/g, '/')
+
   useEffect(() => {
     //example selectedDay: {"dateString": "2023-09-24", "day": 24, "month": 9, "timestamp": 1695513600000, "year": 2023}
     console.log('StartDay>>> ', selectedStartDay);
@@ -48,7 +50,7 @@ const CalendarScreen = ({ navigation }) => {
               >
                 <Datepicker
                   isFocused={focusedDay === 'start' && isCalendarVisible}
-                  value={selectedStartDay.dateString ? selectedStartDay.dateString : '____/__/__'}
+                  value={selectedStartDay.dateString ? selectedStartDay.dateString : initialDate}
                 />
               </Pressable>
             </View>
@@ -62,7 +64,7 @@ const CalendarScreen = ({ navigation }) => {
               >
                 <Datepicker
                   isFocused={focusedDay === 'end' && isCalendarVisible}
-                  value={selectedEndDay.dateString ? selectedEndDay.dateString : '____/__/__'}
+                  value={selectedEndDay.dateString ? selectedEndDay.dateString : initialDate}
                 />
               </Pressable>
             </View>

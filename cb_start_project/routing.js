@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 
 import { getDataFromStorage } from 'src/helpers/asyncStorageHelpers';
 
+const profileIcon = require('src/images/profile_icon.png');
 export const useRouting = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [isShowLogOut, setIsShowLogOut] = useState(false);
