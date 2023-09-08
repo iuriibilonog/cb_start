@@ -42,7 +42,7 @@ const MerchantsScreen = () => {
           <CheckBoxList
             data={data}
             onSelect={setCheckBoxSelect}
-            defaultValue={[{ value: 'XXXX' }]}
+            // defaultValue={[{ value: 'XXXX' }]}
             styling={{ size: 18, spaceBetween: 34 }}
             isFirstBoxAll={true}
           />
@@ -70,19 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     maxWidth: Dimensions.get('window').width - 80,
   },
-  radioBoxItem: { flexDirection: 'row', alignItems: 'center' },
-  reportsContainer: { backgroundColor: '#fff' },
-  arrowRight: { width: 24, height: 24 },
-  radio: { width: 24, height: 24, marginRight: 14 },
-  reportContainerItem: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 22,
-    paddingVertical: 10,
-    marginVertical: 3,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  itemText: { fontSize: 18, letterSpacing: 0.3 },
+
   submitBtn: {
     height: 44,
     width: 175,
