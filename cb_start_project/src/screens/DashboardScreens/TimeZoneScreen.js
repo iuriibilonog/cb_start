@@ -33,21 +33,23 @@ const TimeZoneScreen = () => {
   }, [radioSelect]);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.radioBoxContainer}>
-        <RadioList
-          data={data}
-          onSelect={setRadioSelect}
-          defaultValue={{ value: 'UTC0' }}
-          styling={{ size: 18, spaceBetween: 34 }}
-        />
-      </View>
-
-      <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
-        <View style={styles.submitBtn}>
-          <Text style={styles.submitBtnText}>Download</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.radioBoxContainer}>
+          <RadioList
+            data={data}
+            onSelect={setRadioSelect}
+            defaultValue={{ value: 'UTC0' }}
+            styling={{ size: 18, spaceBetween: 34 }}
+          />
         </View>
-      </TouchableOpacity>
+
+        <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
+          <View style={styles.submitBtn}>
+            <Text style={styles.submitBtnText}>Download</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
