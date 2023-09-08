@@ -249,6 +249,7 @@ const DashboardScreen = ({ navigation }) => {
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => navigation.navigate('GeneralReportsScreen')}
+            style={{ width: 175 }}
           >
             <View style={styles.submitBtn}>
               <Text style={styles.submitBtnText}>Report options</Text>

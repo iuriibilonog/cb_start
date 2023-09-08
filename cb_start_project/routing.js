@@ -11,6 +11,7 @@ import EnterSecureScreen from 'src/screens/EnterSecureScreen';
 import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
 import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
 
+const profileIcon = require('src/images/profile_icon.png');
 export const useRouting = () => {
   const [isAuth, setIsAuth] = useState(true);
 

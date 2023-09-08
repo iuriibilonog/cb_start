@@ -12,21 +12,28 @@ const GeneralReportsScreen = () => {
   const navigation = useNavigation();
 
   const handleReportSelect = (e) => {
+    console.log('selectedId', e);
     setSelectedId(e);
-    // switch (e) {
-    //   case 1:
-    //     navigation('');
-    //   case 2:
-    //     navigation('');
-    //   case 3:
-    //     navigation('');
-    //   case 4:
-    //     navigation('');
-    //   case 5:
-    //     navigation('');
-    //   case 6:
-    //     navigation('');
-    // }
+    switch (e) {
+      case 1:
+        navigation.navigate('CalendarScreen');
+        break;
+      case 2:
+        navigation.navigate('TimeZoneScreen');
+        break;
+      case 3:
+        navigation.navigate('MerchantsScreen');
+        break;
+      case 4:
+        navigation.navigate('MerchantsApiKeyScreen');
+        break;
+      case 5:
+        navigation.navigate('StatusScreen');
+        break;
+      case 6:
+        navigation.navigate('FilterColumnsScreen');
+        break;
+    }
   };
 
   useEffect(() => {

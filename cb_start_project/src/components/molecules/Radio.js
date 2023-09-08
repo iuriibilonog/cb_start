@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 
 const radioBlank = require('src/images/radio_blank.png');
 const radioFilled = require('src/images/radio_filled.png');
-const Radio = ({ data, onSelect, defaultValue }) => {
+const Radio = ({ data, onSelect, defaultValue, styling = {} }) => {
   const [selection, setSelection] = useState(defaultValue);
+
+  const { size = 18, spaceBetween = 18 } = styling;
   const selectHandler = (item) => {
     setSelection(item);
     onSelect(item);
@@ -14,7 +16,11 @@ const Radio = ({ data, onSelect, defaultValue }) => {
     <View>
       {data.map((item, index) => {
         return (
-          <Pressable key={index} style={styles.radioBoxItem} onPress={() => selectHandler(item)}>
+          <Pressable
+            key={index}
+            style={{ ...styles.radioBoxItem, marginBottom: spaceBetween }}
+            onPress={() => selectHandler(item)}
+          >
             <Image
               source={selection.value === item.value ? radioFilled : radioBlank}
               style={styles.radio}
@@ -22,6 +28,7 @@ const Radio = ({ data, onSelect, defaultValue }) => {
             <Text
               style={{
                 ...styles.itemText,
+                fontSize: size,
                 opacity: selection.value === item.value ? 1 : 0.5,
                 fontWeight: selection.value === item.value ? '700' : '600',
               }}
@@ -38,9 +45,9 @@ const styles = StyleSheet.create({
   radioBoxContainer: {
     backgroundColor: '#fff',
   },
-  radioBoxItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 18 },
+  radioBoxItem: { flexDirection: 'row', alignItems: 'center' },
   radio: { width: 24, height: 24, marginRight: 14 },
-  itemText: { fontSize: 18, letterSpacing: 0.3 },
+  itemText: { letterSpacing: 0.3 },
 });
 
 export default Radio;
