@@ -39,7 +39,7 @@ const LogOutScreen = ({ setIsShowLogOut, navigation, setIsAuth }) => {
       console.warn((err) => 'Error:', err);
     }
 
-    setIsShowLogOut(false);
+    // setIsShowLogOut(false);
   };
 
   const handleLogoutCansel = () => {

@@ -189,24 +189,6 @@ const DashboardScreen = ({ navigation }) => {
                     onDropdownWillHide={() => setIsDropdownOpen(false)}
                   />
                 )}
-                {/* <Dropdown
-                  isOpen={isDropdownOpen}
-                  value={setSelectedBank}
-                  data={[
-                    { id: 1, title: 'AppexMoney1' },
-                    { id: 2, title: 'Forta2' },
-                    { id: 3, title: 'AppexMoney3' },
-                    { id: 4, title: 'Forta4' },
-                    { id: 5, title: 'AppexMoney5' },
-                    { id: 6, title: 'Forta6' },
-                    { id: 7, title: 'AppexMoney7' },
-                    { id: 8, title: 'Forta8' },
-                    { id: 9, title: 'AppexMoney9' },
-                    { id: 10, title: 'Forta10' },
-                    { id: 11, title: 'AppexMoney11' },
-                    { id: 12, title: 'Forta12' },
-                  ]}
-                />*/}
               </View>
               <View style={styles.currencyWrapper}>
                 <View style={{ marginRight: 8 }}>
@@ -295,7 +277,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
   },
   titleContainer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  title: { fontSize: 34, fontWeight: '700' },
+  title: { fontFamily: 'Mont', fontSize: 34, fontWeight: '700' },
   smallTitle: { fontSize: 16, fontWeight: '700', marginBottom: 21 },
   bankContainer: { zIndex: 1, marginTop: 30 },
   currencyWrapper: { flexDirection: 'row' },

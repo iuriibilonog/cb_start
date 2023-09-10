@@ -5,10 +5,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 
 import { store, persistor } from './src/redux/store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Font from 'expo-font';
 import navigationHelper from 'src/helpers/navigationHelper';
 import { AxiosInterceptor } from 'src/services/interceptor';
-import { Text } from 'react-native';
+
 import { IntlProvider } from 'react-intl';
 import UA from 'src/lang/ua.json';
 import EN from 'src/lang/en.js';
@@ -25,8 +25,9 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        // await Font.loadAsync(Entypo.font);
-        //load fonts
+        await Font.loadAsync({
+          Mont: require('./assets/fonts/Mont_Regular.ttf'),
+        });
 
         await new Promise((resolve) => setTimeout(resolve, 3000));
       } catch (e) {
