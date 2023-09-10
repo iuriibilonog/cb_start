@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
+import FiltersDropdown from 'src/components/molecules/FiltersDropdown';
 
 const arrowRight = require('src/images/right.png');
 
 const GeneralReportsScreen = () => {
   const [selectedId, setSelectedId] = useState(3);
   const [radioSelect, setRadioSelect] = useState();
+  const [filters, setFilters] = useState([
+    { value: 'Select all filters' },
+    { value: 'Payment Description' },
+    { value: 'Payment ID' },
+    { value: 'Customer Email' },
+    { value: 'Type' },
+  ]);
+  const [isClickedOutside, setIsClickedOutside] = useState(false);
 
   const navigation = useNavigation();
 
@@ -40,123 +57,139 @@ const GeneralReportsScreen = () => {
     console.log('Radio selected:', radioSelect);
   }, [radioSelect]);
 
+  const handleDeleteFilter = (filterForDeletetion) => {
+    console.log('filterForDeletetion', filterForDeletetion);
+    const correctedFiltersList = filters.filter((item) => item.value !== filterForDeletetion.value);
+    console.log('correctedFiltersList', correctedFiltersList);
+    setFilters(correctedFiltersList);
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <View style={styles.radioBoxContainer}>
-        <RadioList
-          data={[{ value: 'Payments' }, { value: 'Transactions' }]}
-          onSelect={setRadioSelect}
-          defaultValue={{ value: 'Payments' }}
-        />
-      </View>
-      <View style={styles.reportsContainer}>
-        {/* <View style={{...styles.reportContainerItem, backgroundColor:selectedId ===1 ?'#F4F4F4':'#fff'}}> */}
-        <TouchableOpacity
-          style={{
-            ...styles.reportContainerItem,
-            backgroundColor: selectedId === 1 ? '#F4F4F4' : '#fff',
-          }}
-          onPress={() => handleReportSelect(1)}
-        >
-          <Text
+      <Pressable onPress={() => setIsClickedOutside((prev) => !prev)} style={styles.container}>
+        <View style={{ marginTop: 12 }}>
+          <FiltersDropdown
+            data={filters}
+            onDelete={handleDeleteFilter}
+            isClickedOutside={isClickedOutside}
+          />
+        </View>
+        <View style={styles.radioBoxContainer}>
+          <RadioList
+            data={[{ value: 'Payments' }, { value: 'Transactions' }]}
+            onSelect={setRadioSelect}
+            defaultValue={{ value: 'Payments' }}
+          />
+        </View>
+        <View style={styles.reportsContainer}>
+          {/* <View style={{...styles.reportContainerItem, backgroundColor:selectedId ===1 ?'#F4F4F4':'#fff'}}> */}
+          <TouchableOpacity
             style={{
-              ...styles.itemText,
-              fontWeight: selectedId === 1 ? '700' : '600',
+              ...styles.reportContainerItem,
+              backgroundColor: selectedId === 1 ? '#F4F4F4' : '#fff',
             }}
+            onPress={() => handleReportSelect(1)}
           >
-            Calendar
-          </Text>
-          <Image source={arrowRight} style={styles.arrowRight} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          name={2}
-          style={{
-            ...styles.reportContainerItem,
-            backgroundColor: selectedId === 2 ? '#F4F4F4' : '#fff',
-          }}
-          onPress={() => handleReportSelect(2)}
-        >
-          <Text
+            <Text
+              style={{
+                ...styles.itemText,
+                fontWeight: selectedId === 1 ? '700' : '600',
+              }}
+            >
+              Calendar
+            </Text>
+            <Image source={arrowRight} style={styles.arrowRight} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            name={2}
             style={{
-              ...styles.itemText,
-              fontWeight: selectedId === 2 ? '700' : '600',
+              ...styles.reportContainerItem,
+              backgroundColor: selectedId === 2 ? '#F4F4F4' : '#fff',
             }}
+            onPress={() => handleReportSelect(2)}
           >
-            Timezone
-          </Text>
-          <Image source={arrowRight} style={styles.arrowRight} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            ...styles.reportContainerItem,
-            backgroundColor: selectedId === 3 ? '#F4F4F4' : '#fff',
-          }}
-          onPress={() => handleReportSelect(3)}
-        >
-          <Text
+            <Text
+              style={{
+                ...styles.itemText,
+                fontWeight: selectedId === 2 ? '700' : '600',
+              }}
+            >
+              Timezone
+            </Text>
+            <Image source={arrowRight} style={styles.arrowRight} />
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
-              ...styles.itemText,
-              fontWeight: selectedId === 3 ? '700' : '600',
+              ...styles.reportContainerItem,
+              backgroundColor: selectedId === 3 ? '#F4F4F4' : '#fff',
             }}
+            onPress={() => handleReportSelect(3)}
           >
-            Merchants
-          </Text>
-          <Image source={arrowRight} style={styles.arrowRight} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            ...styles.reportContainerItem,
-            backgroundColor: selectedId === 4 ? '#F4F4F4' : '#fff',
-          }}
-          onPress={() => handleReportSelect(4)}
-        >
-          <Text
+            <Text
+              style={{
+                ...styles.itemText,
+                fontWeight: selectedId === 3 ? '700' : '600',
+              }}
+            >
+              Merchants
+            </Text>
+            <Image source={arrowRight} style={styles.arrowRight} />
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
-              ...styles.itemText,
-              fontWeight: selectedId === 4 ? '700' : '600',
+              ...styles.reportContainerItem,
+              backgroundColor: selectedId === 4 ? '#F4F4F4' : '#fff',
             }}
+            onPress={() => handleReportSelect(4)}
           >
-            Merchant’s api key
-          </Text>
-          <Image source={arrowRight} style={styles.arrowRight} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            ...styles.reportContainerItem,
-            backgroundColor: selectedId === 5 ? '#F4F4F4' : '#fff',
-          }}
-          onPress={() => handleReportSelect(5)}
-        >
-          <Text
+            <Text
+              style={{
+                ...styles.itemText,
+                fontWeight: selectedId === 4 ? '700' : '600',
+              }}
+            >
+              Merchant’s api key
+            </Text>
+            <Image source={arrowRight} style={styles.arrowRight} />
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
-              ...styles.itemText,
-              fontWeight: selectedId === 5 ? '700' : '600',
+              ...styles.reportContainerItem,
+              backgroundColor: selectedId === 5 ? '#F4F4F4' : '#fff',
             }}
+            onPress={() => handleReportSelect(5)}
           >
-            Status
-          </Text>
-          <Image source={arrowRight} style={styles.arrowRight} />
-        </TouchableOpacity>
+            <Text
+              style={{
+                ...styles.itemText,
+                fontWeight: selectedId === 5 ? '700' : '600',
+              }}
+            >
+              Status
+            </Text>
+            <Image source={arrowRight} style={styles.arrowRight} />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{
-            ...styles.reportContainerItem,
-            marginTop: 80,
-            backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
-          }}
-          onPress={() => handleReportSelect(6)}
-        >
-          <Text
+          <TouchableOpacity
             style={{
-              ...styles.itemText,
-              fontWeight: selectedId === 6 ? '700' : '600',
+              ...styles.reportContainerItem,
+              marginTop: 80,
+              backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
             }}
+            onPress={() => handleReportSelect(6)}
           >
-            Filters columns
-          </Text>
-          <Image source={arrowRight} style={styles.arrowRight} />
-        </TouchableOpacity>
-      </View>
+            <Text
+              style={{
+                ...styles.itemText,
+                fontWeight: selectedId === 6 ? '700' : '600',
+              }}
+            >
+              Filters columns
+            </Text>
+            <Image source={arrowRight} style={styles.arrowRight} />
+          </TouchableOpacity>
+        </View>
+      </Pressable>
     </ScrollView>
   );
 };

@@ -36,22 +36,24 @@ const MerchantsScreen = () => {
   }, [checkBoxSelect]);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.radioBoxContainer}>
-        <CheckBoxList
-          data={data}
-          onSelect={setCheckBoxSelect}
-          defaultValue={[{ value: 'XXXX' }]}
-          styling={{ size: 18, spaceBetween: 34 }}
-          isFirstBoxAll={true}
-        />
-      </View>
-
-      <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
-        <View style={styles.submitBtn}>
-          <Text style={styles.submitBtnText}>Download</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.radioBoxContainer}>
+          <CheckBoxList
+            data={data}
+            onSelect={setCheckBoxSelect}
+            // defaultValue={[{ value: 'XXXX' }]}
+            styling={{ size: 18, spaceBetween: 34 }}
+            isFirstBoxAll={true}
+          />
         </View>
-      </TouchableOpacity>
+
+        <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
+          <View style={styles.submitBtn}>
+            <Text style={styles.submitBtnText}>Download</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -68,19 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     maxWidth: Dimensions.get('window').width - 80,
   },
-  radioBoxItem: { flexDirection: 'row', alignItems: 'center' },
-  reportsContainer: { backgroundColor: '#fff' },
-  arrowRight: { width: 24, height: 24 },
-  radio: { width: 24, height: 24, marginRight: 14 },
-  reportContainerItem: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 22,
-    paddingVertical: 10,
-    marginVertical: 3,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  itemText: { fontSize: 18, letterSpacing: 0.3 },
+
   submitBtn: {
     height: 44,
     width: 175,

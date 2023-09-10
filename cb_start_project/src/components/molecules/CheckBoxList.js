@@ -4,7 +4,13 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 const checkboxBlank = require('src/images/dark_box_empty.png');
 const checkboxFilled = require('src/images/dark_box_checked.png');
 
-const CheckBoxList = ({ data, onSelect, defaultValue, styling = {}, isFirstBoxAll = false }) => {
+const CheckBoxList = ({
+  data,
+  onSelect,
+  defaultValue = [],
+  styling = {},
+  isFirstBoxAll = false,
+}) => {
   const [selection, setSelection] = useState(defaultValue);
 
   const { size = 18, spaceBetween = 18 } = styling;
@@ -59,8 +65,8 @@ const CheckBoxList = ({ data, onSelect, defaultValue, styling = {}, isFirstBoxAl
               style={{
                 ...styles.itemText,
                 fontSize: size,
-                opacity: selection.value === item.value ? 1 : 0.5,
-                fontWeight: selection.value === item.value ? '700' : '600',
+                opacity: selection.find((i) => i.value === item.value) ? 1 : 0.5,
+                fontWeight: selection.find((i) => i.value === item.value) ? '700' : '600',
               }}
             >
               {item.value}
