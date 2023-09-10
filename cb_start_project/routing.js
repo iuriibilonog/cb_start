@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,17 +12,16 @@ import LogOutScreen from 'src/screens/LogOutScreen';
 import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
 import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getToken } from './src/redux/user/selectors';
+import { isLoggedIn } from './src/redux/user/selectors';
 import { useSelector } from 'react-redux';
 
 import { getDataFromStorage } from 'src/helpers/asyncStorageHelpers';
 
 const profileIcon = require('src/images/profile_icon.png');
-export const useRouting = () => {
-  const [isAuth, setIsAuth] = useState(false);
+export const Routing = () => {
+  const [isAuth2, setIsAuth] = useState(false);
   const [isShowLogOut, setIsShowLogOut] = useState(false);
-
-  // const isAuth = useSelector(getToken) ? true : false;
+  const isAuth = useSelector(isLoggedIn);
 
   const AuthStack = createStackNavigator();
   const MainStack = createBottomTabNavigator();
@@ -38,12 +37,8 @@ export const useRouting = () => {
           <AuthStack.Screen
             options={{ headerShown: false }}
             name="LogOutScreen"
-            // component={LogOutScreen}
-          >
-            {(props) => (
-              <LogOutScreen {...props} setIsShowLogOut={setIsShowLogOut} setIsAuth={setIsAuth} />
-            )}
-          </AuthStack.Screen>
+            component={LogOutScreen}
+          />
         </AuthStack.Navigator>
       ) : !isAuth ? (
         <AuthStack.Navigator>
@@ -55,10 +50,8 @@ export const useRouting = () => {
           <AuthStack.Screen
             options={{ headerShown: false }}
             name="LoginScreen"
-            // component={LoginScreen}
-          >
-            {(props) => <LoginScreen {...props} setIsAuth={setIsAuth} />}
-          </AuthStack.Screen>
+            component={LoginScreen}
+          />
         </AuthStack.Navigator>
       ) : (
         <MainStack.Navigator

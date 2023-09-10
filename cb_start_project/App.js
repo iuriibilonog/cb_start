@@ -13,14 +13,14 @@ import { IntlProvider } from 'react-intl';
 import UA from 'src/lang/ua.json';
 import EN from 'src/lang/en.js';
 
-import { useRouting } from './routing';
+import { Routing } from './routing';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
 
-  const routing = useRouting();
+  // const routing = useRouting();
 
   useEffect(() => {
     async function prepare() {
@@ -38,6 +38,7 @@ export default function App() {
 
     prepare();
   }, []);
+
   // console.log('language', navigator.language);
   // const locale = navigator.language;
   const locale = 'en';
@@ -71,7 +72,9 @@ export default function App() {
               navigationHelper.setTopLevelNavigator(navigatorRef);
             }}
           >
-            <AxiosInterceptor>{routing}</AxiosInterceptor>
+            <AxiosInterceptor>
+              <Routing />
+            </AxiosInterceptor>
           </NavigationContainer>
         </IntlProvider>
       </PersistGate>

@@ -40,6 +40,7 @@ const DashboardScreen = ({ navigation }) => {
 
   const [banks, setBanks] = useState([]);
   const [banksNames, setBanksNames] = useState([]);
+  const [currentBankConversion, setCurrentBankConversion] = useState({});
 
   const data = [
     {
@@ -80,13 +81,14 @@ const DashboardScreen = ({ navigation }) => {
   useEffect(() => {
     if (selectedBank) {
       const bankName = banksNames[selectedBank];
-      // getBankConversion(bankName);
+      // getCurrentBankConversion(bankName);
     }
   }, [selectedBank]);
 
-  const getBankConversion = async (bankName) => {
+  const getCurrentBankConversion = async (bankName) => {
     try {
       const data = await dispatch(getBankConversion(bankName));
+      setCurrentBankConversion(data.payload);
       console.log('data', data);
     } catch (error) {
       console.warn('Error:', error);

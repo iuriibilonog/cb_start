@@ -18,7 +18,6 @@ const userSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder.addCase(userLogin.fulfilled, (state, action) => {
-      console.log('action', action.payload);
       state.userinfo = action.payload.user;
       state.token = action.payload.accessToken;
       state.refresh = action.payload.refreshToken;
@@ -31,7 +30,6 @@ const userSlice = createSlice({
       });
     builder.addCase(userLogout.fulfilled, (state, action) => initialState),
       builder.addCase(userLogout.rejected, (state, action) => {
-        console.log('action999', action);
         state.error = {
           status: action.payload.requestStatus,
           message: action.payload,
