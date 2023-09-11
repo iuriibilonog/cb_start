@@ -11,6 +11,7 @@ import EnterSecureScreen from 'src/screens/EnterSecureScreen';
 import LogOutScreen from 'src/screens/LogOutScreen';
 import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
 import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
+import TransactionsScreen from 'src/screens/TransactionsScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getToken } from './src/redux/user/selectors';
 import { useSelector } from 'react-redux';
@@ -19,7 +20,7 @@ import { getDataFromStorage } from 'src/helpers/asyncStorageHelpers';
 
 const profileIcon = require('src/images/profile_icon.png');
 export const useRouting = () => {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
   const [isShowLogOut, setIsShowLogOut] = useState(false);
 
   // const isAuth = useSelector(getToken) ? true : false;
@@ -124,7 +125,7 @@ export const useRouting = () => {
               },
             }}
             name="CardScreen"
-            component={DashboardScreen}
+            component={TransactionsScreen}
           />
           <MainStack.Screen
             options={{
