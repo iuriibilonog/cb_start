@@ -37,7 +37,7 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
   const handleSubmit = () => {
     try {
       dispatch(userLogin(inputValue));
-      setIsAuth(true);
+      // setIsAuth(true);
     } catch (error) {
       console.warn((err) => 'Error:', err);
     }

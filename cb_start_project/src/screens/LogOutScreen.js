@@ -34,12 +34,12 @@ const LogOutScreen = ({ setIsShowLogOut, navigation, setIsAuth }) => {
     console.log('refresh', refresh);
     try {
       dispatch(userLogout({ email: user.email, refreshToken: refresh }));
-      setIsAuth(false);
+      // setIsAuth(false);
     } catch (error) {
       console.warn((err) => 'Error:', err);
     }
 
-    setIsShowLogOut(false);
+    // setIsShowLogOut(false);
   };
 
   const handleLogoutCansel = () => {
