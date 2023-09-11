@@ -1,5 +1,7 @@
 import { Text, View, Image, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { FormattedMessage } from 'react-intl';
+import SimpleText from '../atoms/SimpleText';
 
 const arrowDown = require('src/images/arrow_down.png');
 const deleteIcon = require('src/images/delete.png');
@@ -36,16 +38,14 @@ const FiltersDropdown = (props) => {
   return (
     <View>
       <Pressable onPress={() => setIsOpen((prev) => !prev)} style={styles.container}>
-        <Text style={{ fontSize: 16, fontWeight: '600', paddingVertical: 3 }}>
+        <SimpleText style={{ paddingVertical: 3 }}>
           {isOpen ? 'Filters' : 'Selected filters'}
-        </Text>
+        </SimpleText>
         <View style={styles.arrows}>
           {isOpen ? (
-            <Text
-              style={{ fontSize: 16, fontWeight: '600', letterSpacing: 0.48, color: '#FC595A' }}
-            >
-              Reset
-            </Text>
+            <SimpleText style={{ letterSpacing: 0.48, color: '#FC595A' }}>
+              <FormattedMessage id={'dashboard.reset'} />
+            </SimpleText>
           ) : (
             <Image source={isOpen ? arrowUp : arrowDown} style={{ width: 26, height: 26 }} />
           )}
@@ -62,7 +62,7 @@ const FiltersDropdown = (props) => {
             {data &&
               data.map((item, index) => (
                 <View key={index} style={styles.itemWrapper}>
-                  <Text style={styles.textItem}>{item.value}</Text>
+                  <SimpleText style={styles.textItem}>{item.value}</SimpleText>
                   <Pressable
                     onPress={() => handleDelete(index, item)}
                     // style={styles.itemWrapper}
@@ -97,8 +97,6 @@ const styles = StyleSheet.create({
   textItem: {
     paddingVertical: 8,
     color: 'rgba(38, 38, 38, 0.50)',
-    fontWeight: '600',
-    fontSize: 16,
   },
   itemWrapper: {
     flexDirection: 'row',

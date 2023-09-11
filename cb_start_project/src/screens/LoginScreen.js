@@ -21,6 +21,7 @@ import { userLogin } from 'src/redux/user/operations';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { FormattedMessage } from 'react-intl';
+import SimpleText from '../components/atoms/SimpleText';
 
 const logoBack = require('src/images/logo_back.png');
 const boxEmpty = require('src/images/box_empty.png');
@@ -113,9 +114,9 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
             <Text style={styles.rememberTxt}>Remember me</Text>
           </Pressable> */}
             <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-              <Text>
+              <SimpleText>
                 <FormattedMessage id={'common.sign_in'} />
-              </Text>
+              </SimpleText>
             </TouchableOpacity>
             {/* <Pressable
             onPress={() => navigation.navigate('RegistrationScreen')}

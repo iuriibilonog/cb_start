@@ -20,7 +20,8 @@ const profileIcon = require('src/images/profile_icon.png');
 export const Routing = () => {
   const [isAuth2, setIsAuth] = useState(false);
   const [isShowLogOut, setIsShowLogOut] = useState(false);
-  const isAuth = useSelector(isLoggedIn);
+  const isAuth = true;
+  // useSelector(isLoggedIn);
 
   useEffect(() => {
     if (!isAuth && isShowLogOut) setIsShowLogOut(false);

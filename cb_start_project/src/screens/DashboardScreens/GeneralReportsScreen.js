@@ -11,6 +11,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
 import FiltersDropdown from 'src/components/molecules/FiltersDropdown';
+import SimpleText from '../../components/atoms/SimpleText';
+import { FormattedMessage } from 'react-intl';
 
 const arrowRight = require('src/images/right.png');
 
@@ -90,14 +92,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(1)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 1 ? '700' : '600',
+                fontFamily: selectedId === 1 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Calendar
-            </Text>
+              <FormattedMessage id={'dashboard.calendar'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -108,14 +110,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(2)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 2 ? '700' : '600',
+                fontFamily: selectedId === 2 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Timezone
-            </Text>
+              <FormattedMessage id={'dashboard.timezone'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -125,14 +127,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(3)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 3 ? '700' : '600',
+                fontFamily: selectedId === 3 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Merchants
-            </Text>
+              <FormattedMessage id={'dashboard.merchants'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -142,14 +144,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(4)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 4 ? '700' : '600',
+                fontFamily: selectedId === 4 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Merchant’s api key
-            </Text>
+              <FormattedMessage id={'dashboard.merchants_api_key'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -159,14 +161,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(5)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 5 ? '700' : '600',
+                fontFamily: selectedId === 5 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Status
-            </Text>
+              <FormattedMessage id={'dashboard.status'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
 
@@ -178,14 +180,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(6)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 6 ? '700' : '600',
+                fontFamily: selectedId === 6 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Filters columns
-            </Text>
+              <FormattedMessage id={'dashboard.filters_columns'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
         </View>

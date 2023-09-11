@@ -1,5 +1,6 @@
 import { Text, View, Image, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import SimpleText from './SimpleText';
 
 const calendarIcon = require('src/images/calendar_icon.png');
 
@@ -14,7 +15,7 @@ const Datepicker = (props) => {
   return (
     // <Pressable onPress={() => setIsOpen((prev) => !prev)} style={styles.container}>
     <View style={styles.container}>
-      <Text style={{ ...styles.valueText, opacity: isFocused ? 1 : 0.5 }}>{value}</Text>
+      <SimpleText style={{ ...styles.valueText, opacity: isFocused ? 1 : 0.5 }}>{value}</SimpleText>
       <Image source={calendarIcon} style={styles.calendarIcon} />
     </View>
   );

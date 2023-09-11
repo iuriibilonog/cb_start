@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Platform,
 } from 'react-native';
 import React, { useState, useEffect, cloneElement } from 'react';
 import { Calendar } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
+import SimpleText from '../atoms/SimpleText';
 
 LocaleConfig.locales['en'] = {
   monthNames: [
@@ -151,12 +153,12 @@ const StyledCalendar = (props) => {
             disabledArrowColor: '#d9e1e8',
             monthTextColor: 'blue',
             indicatorColor: 'blue',
-            // textDayFontFamily: 'monospace',
-            // textMonthFontFamily: 'monospace',
-            // textDayHeaderFontFamily: 'monospace',
-            textDayFontWeight: '300',
-            textMonthFontWeight: 'bold',
-            textDayHeaderFontWeight: '700',
+            textDayFontFamily: 'Mont',
+            textMonthFontFamily: 'Mont_B',
+            textDayHeaderFontFamily: 'Mont_SB',
+            // textDayFontWeight: '300',
+            // textMonthFontWeight: 'bold',
+            // textDayHeaderFontWeight: '700',
             textDayFontSize: 16,
             textMonthFontSize: 16,
             textDayHeaderFontSize: 12,
@@ -232,20 +234,20 @@ const StyledCalendar = (props) => {
                 style={{
                   position: 'absolute',
                   left: -Dimensions.get('window').width + 110,
-                  top: -20,
+
+                  top: Platform.OS === 'ios' ? -13 : -20,
                 }}
               >
-                <Text
+                <SimpleText
                   style={{
-                    height: 50,
+                    // height: 50,
                     fontSize: 26,
-
-                    fontWeight: '700',
+                    fontFamily: 'Mont_SB',
                     letterSpacing: 0.78,
                   }}
                 >
                   {date.toString('MMMM')}
-                </Text>
+                </SimpleText>
               </View>
             );
           }}

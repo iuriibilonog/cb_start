@@ -10,6 +10,8 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
+import SimpleText from '../components/atoms/SimpleText';
+import { FormattedMessage } from 'react-intl';
 
 const logo = require('src/images/logo.png');
 const arrowDown = require('src/images/arrow_down_small.png');
@@ -60,7 +62,7 @@ const TransactionsScreen = ({ navigation }) => {
           paddingTop: 19,
         }}
       >
-        <Text>Filters</Text>
+        <SimpleText>Filters</SimpleText>
         <Image source={arrowDown} style={{ width: 20, height: 20 }} />
       </View>
       <View
@@ -74,24 +76,24 @@ const TransactionsScreen = ({ navigation }) => {
       >
         <View style={{ width: 20 }}></View>
         <View style={{ ...styles.tableCell, width: width / 6 }}>
-          <Text key={index} style={styles.headerText}>
-            Int.ID
-          </Text>
+          <SimpleText key={index} style={styles.headerText}>
+            <FormattedMessage id={'transactions.int_id'} />
+          </SimpleText>
         </View>
         <View style={{ ...styles.tableCell, width: width / 3 }}>
-          <Text key={index} style={styles.headerText}>
-            Amount
-          </Text>
+          <SimpleText key={index} style={styles.headerText}>
+            <FormattedMessage id={'transactions.amount'} />
+          </SimpleText>
         </View>
-        <View style={{ ...styles.tableCell, width: width / 7 }}>
-          <Text key={index} style={styles.headerText}>
-            Mode
-          </Text>
+        <View style={{ ...styles.tableCell, width: width / 8 }}>
+          <SimpleText key={index} style={styles.headerText}>
+            <FormattedMessage id={'transactions.mode'} />
+          </SimpleText>
         </View>
         <View style={{ ...styles.tableCellStatus }}>
-          <Text key={index} style={styles.headerText}>
-            Status
-          </Text>
+          <SimpleText key={index} style={styles.headerText}>
+            <FormattedMessage id={'transactions.status'} />
+          </SimpleText>
         </View>
       </View>
       {date &&
@@ -112,13 +114,13 @@ const TransactionsScreen = ({ navigation }) => {
             </View>
 
             <View style={{ ...styles.tableCell, width: width / 6 }}>
-              <Text style={[styles.bgColorData]}>{value.date}</Text>
+              <SimpleText>{value.date}</SimpleText>
             </View>
             <View style={{ ...styles.tableCell, width: width / 3 }}>
-              <Text style={[styles.bgColorData]}>{value.create_user}</Text>
+              <SimpleText>{value.create_user}</SimpleText>
             </View>
-            <View style={{ ...styles.tableCell, width: width / 7 }}>
-              <Text style={[styles.bgColorData]}>{value.mode}</Text>
+            <View style={{ ...styles.tableCell, width: width / 8 }}>
+              <SimpleText>{value.mode}</SimpleText>
             </View>
             <View
               style={{
@@ -132,7 +134,7 @@ const TransactionsScreen = ({ navigation }) => {
                     : '#FDFF9A',
               }}
             >
-              <Text style={[styles.bgColorData]}>{value.status}</Text>
+              <SimpleText>{value.status}</SimpleText>
             </View>
           </View>
         ))}
@@ -147,10 +149,10 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     backgroundColor: '#fff',
   },
-  headerText: { fontWeight: '700' },
+  headerText: { fontFamily: 'Mont_SB' },
   tableRow: { paddingLeft: 14 },
   tableCell: { paddingVertical: 10, paddingHorizontal: 5 },
-  tableCellStatus: { flex: 1, paddingVertical: 10, paddingHorizontal: 15 },
+  tableCellStatus: { flex: 1, paddingVertical: 10, paddingLeft: 15, paddingRight: 5 },
 });
 
 export default TransactionsScreen;
