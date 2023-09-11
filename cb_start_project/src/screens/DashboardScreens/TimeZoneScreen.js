@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
+import { FormattedMessage } from 'react-intl';
+import SimpleText from '../../components/atoms/SimpleText';
 
 const arrowRight = require('src/images/right.png');
 
@@ -59,7 +61,9 @@ const TimeZoneScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
 
         <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
-            <Text style={styles.submitBtnText}>Download</Text>
+            <SimpleText style={styles.submitBtnText}>
+              <FormattedMessage id={'dashboard.download'} />
+            </SimpleText>
           </View>
         </TouchableOpacity>
       </View>
@@ -102,9 +106,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   submitBtnText: {
-    fontSize: 16,
     letterSpacing: 0.48,
-    fontWeight: '700',
+    fontFamily: 'Mont_SB',
     color: '#fff',
   },
 });

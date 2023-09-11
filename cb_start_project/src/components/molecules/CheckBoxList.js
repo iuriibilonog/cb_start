@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import SimpleText from '../atoms/SimpleText';
 
 const checkboxBlank = require('src/images/dark_box_empty.png');
 const checkboxFilled = require('src/images/dark_box_checked.png');
@@ -61,16 +62,16 @@ const CheckBoxList = ({
               }
               style={styles.checkbox}
             />
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
                 fontSize: size,
                 opacity: selection.find((i) => i.value === item.value) ? 1 : 0.5,
-                fontWeight: selection.find((i) => i.value === item.value) ? '700' : '600',
+                fontFamily: selection.find((i) => i.value === item.value) ? 'Mont_SB' : 'Mont',
               }}
             >
               {item.value}
-            </Text>
+            </SimpleText>
           </Pressable>
         );
       })}

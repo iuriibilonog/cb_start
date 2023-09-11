@@ -1,5 +1,6 @@
 import { Text, View, Image, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import SimpleText from '../atoms/SimpleText';
 
 const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
@@ -37,7 +38,7 @@ const Dropdown = (props) => {
         onPress={() => setIsOpen((prev) => !prev)}
         style={{ ...styles.container, width: WIDTH, marginBottom: 2 }}
       >
-        <Text style={{ fontSize: 16, fontWeight: '600' }}>{value.title}</Text>
+        <SimpleText>{value.title}</SimpleText>
         <View style={styles.arrows}>
           <Image source={isOpen ? arrowUp : arrowDown} style={{ width: 26, height: 26 }} />
         </View>
@@ -64,7 +65,7 @@ const Dropdown = (props) => {
                       setIsOpen(false);
                     }}
                   >
-                    <Text
+                    <SimpleText
                       style={
                         JSON.stringify(value) === JSON.stringify(item)
                           ? styles.textItemActive
@@ -72,7 +73,7 @@ const Dropdown = (props) => {
                       }
                     >
                       {item.title}
-                    </Text>
+                    </SimpleText>
                   </Pressable>
                 ))}
             </ScrollView>
@@ -106,8 +107,8 @@ const styles = StyleSheet.create({
     // padding: 16,
     backgroundColor: '#F4F4F4',
   },
-  textItem: { padding: 3, color: 'rgba(38, 38, 38, 0.50)', fontWeight: '600', fontSize: 16 },
-  textItemActive: { padding: 3, color: '#262626', fontWeight: '700', fontSize: 16 },
+  textItem: { padding: 3, color: 'rgba(38, 38, 38, 0.50)' },
+  textItemActive: { padding: 3, color: '#262626', fontFamily: 'Mont_SB' },
 });
 
 export default Dropdown;

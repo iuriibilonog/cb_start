@@ -26,7 +26,9 @@ export default function App() {
     async function prepare() {
       try {
         await Font.loadAsync({
-          Mont: require('./assets/fonts/Mont_Regular.ttf'),
+          Mont: require('./assets/fonts/Mont_Regular.ttf'), //fontWeight=600
+          Mont_SB: require('./assets/fonts/Mont_SemiBold.ttf'), //fontWeight=700
+          Mont_B: require('./assets/fonts/Mont_Bold.ttf'), //fontWeight=800
         });
 
         await new Promise((resolve) => setTimeout(resolve, 3000));

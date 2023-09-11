@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 
 import { useDispatch } from 'react-redux';
+import SimpleText from '../components/atoms/SimpleText';
 
 const logoBack = require('src/images/logo_back.png');
 
@@ -160,9 +161,9 @@ const EnterSecureScreen = ({ navigation }) => {
     <View style={styles.container}>
       <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
         <View>
-          <Text style={styles.title}>
+          <SimpleText style={styles.title}>
             <FormattedMessage id={'secure.title_enter'} />
-          </Text>
+          </SimpleText>
           <Animated.View style={[styles.codeContainer, animatedStyles]}>
             {passcode.map((item) => (
               <View key={item.id} style={styles[getCodeStyles(item)]}></View>
@@ -217,7 +218,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 115,
     fontSize: 20,
-    fontWeight: '600',
     color: '#36D0BB',
   },
 

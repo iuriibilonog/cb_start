@@ -22,6 +22,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { userLogout } from 'src/redux/user/operations';
 import { getUser, getRefresh } from '../redux/user/selectors';
+import SimpleText from '../components/atoms/SimpleText';
 const logoBack = require('src/images/logo_back.png');
 
 const LogOutScreen = ({ setIsShowLogOut, navigation, setIsAuth }) => {
@@ -50,18 +51,18 @@ const LogOutScreen = ({ setIsShowLogOut, navigation, setIsAuth }) => {
     <View style={styles.container}>
       <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
         <View>
-          <Text style={styles.title}>
+          <SimpleText style={styles.title}>
             <FormattedMessage id={'common.log_out_title'} />
-          </Text>
+          </SimpleText>
           <TouchableOpacity style={styles.confirm} onPress={handleLogoutSubmit}>
-            <Text style={styles.confirmText}>
+            <SimpleText style={styles.confirmText}>
               <FormattedMessage id={'common.log_out_btn_confirm'} />
-            </Text>
+            </SimpleText>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cancel} onPress={handleLogoutCansel}>
-            <Text style={styles.confirmText}>
+            <SimpleText style={styles.confirmText}>
               <FormattedMessage id={'common.log_out_btn_cancel'} />
-            </Text>
+            </SimpleText>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -85,7 +86,6 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: 24,
-    fontWeight: '600',
     color: '#fff',
     letterSpacing: 1.2,
   },
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   confirmText: {
     textAlign: 'center',
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: 'Mont_SB',
     letterSpacing: 1,
     color: '#fff',
   },

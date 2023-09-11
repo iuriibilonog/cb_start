@@ -14,6 +14,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import api from '../services/interceptor';
+import SimpleText from '../components/atoms/SimpleText';
+import { FormattedMessage } from 'react-intl';
 // import StyledTextInputBox from 'src/components/molecules/StyledTextInputBox';
 // import StyledButton from 'src/components/atoms/StyledButton/StyledButton';
 
@@ -77,11 +79,15 @@ const RegistrationScreen = ({ navigation }) => {
       {/* <View style={styles.rememberWrapper}> */}
       <Pressable onPress={() => setIsRememberMe((prev) => !prev)} style={styles.rememberWrapper}>
         <Image source={isRememberMe ? boxChecked : boxEmpty} style={{ width: 25, height: 25 }} />
-        <Text style={styles.rememberTxt}>Remember me</Text>
+        <SimpleText style={styles.rememberTxt}>
+          <FormattedMessage id={'common.remember_me'} />
+        </SimpleText>
       </Pressable>
       {/* </View> */}
       <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-        <Text> Sign Up </Text>
+        <SimpleText>
+          <FormattedMessage id={'common.sign_up'} />
+        </SimpleText>
       </TouchableOpacity>
     </View>
   );
@@ -103,6 +109,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(54, 208, 187, 0.20)',
     borderRadius: 2,
     textAlign: 'center',
+    fontFamily: 'Mont',
+    fontSize: 16,
   },
   passInputWrapper: { width: '100%', position: 'relative' },
   rememberWrapper: {

@@ -14,6 +14,8 @@ import React, { useState, useEffect, cloneElement } from 'react';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import api from 'src/services/interceptor';
 import ModalDropdown from 'react-native-modal-dropdown';
+import SimpleText from '../../components/atoms/SimpleText';
+import { FormattedMessage } from 'react-intl';
 
 const DashboardScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
@@ -125,7 +127,9 @@ const DashboardScreen = ({ navigation }) => {
       >
         <View style={styles.container}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>All Balances</Text>
+            <SimpleText style={styles.title}>
+              <FormattedMessage id={'dashboard.all_balances'} />
+            </SimpleText>
             <TouchableOpacity
               activeOpacity={0.5}
               onPress={() => navigation.navigate('CalendarScreen')}
@@ -134,7 +138,10 @@ const DashboardScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.bankContainer}>
-            <Text style={styles.smallTitle}>Banks</Text>
+            <SimpleText style={styles.smallTitle}>
+              {' '}
+              <FormattedMessage id={'dashboard.banks'} />
+            </SimpleText>
             <View
               style={{
                 flexDirection: 'row',
@@ -151,7 +158,7 @@ const DashboardScreen = ({ navigation }) => {
                     isFullWidth
                     animated={false}
                     onSelect={setSelectedBank}
-                    textStyle={{ fontSize: 16, fontWeight: '600' }}
+                    textStyle={{ fontSize: 16, fontFamily: 'Mont' }}
                     style={{
                       backgroundColor: '#F4F4F4',
                       paddingHorizontal: 16,
@@ -192,20 +199,22 @@ const DashboardScreen = ({ navigation }) => {
               </View>
               <View style={styles.currencyWrapper}>
                 <View style={{ marginRight: 8 }}>
-                  <Text style={styles.currency}>EUR</Text>
-                  <Text style={styles.currency}>KZT</Text>
-                  <Text style={styles.currency}>USD</Text>
+                  <SimpleText style={styles.currency}>EUR</SimpleText>
+                  <SimpleText style={styles.currency}>KZT</SimpleText>
+                  <SimpleText style={styles.currency}>USD</SimpleText>
                 </View>
                 <View>
-                  <Text style={styles.currency}>{euroCurrency}</Text>
-                  <Text style={styles.currency}>{kztCurrency}</Text>
-                  <Text style={styles.currency}>{usdCurrency}</Text>
+                  <SimpleText style={styles.currency}>{euroCurrency}</SimpleText>
+                  <SimpleText style={styles.currency}>{kztCurrency}</SimpleText>
+                  <SimpleText style={styles.currency}>{usdCurrency}</SimpleText>
                 </View>
               </View>
             </View>
           </View>
           <View style={styles.bankConversionContainer}>
-            <Text style={styles.smallTitle}>Bank conversion</Text>
+            <SimpleText style={styles.smallTitle}>
+              <FormattedMessage id={'dashboard.bank_conversion'} />
+            </SimpleText>
             <View style={styles.pieChartWrapper}>
               <View style={{ justifyContent: 'center' }}>
                 <View style={{ backdropFilter: 'blur(20) ' }}>
@@ -235,32 +244,40 @@ const DashboardScreen = ({ navigation }) => {
                           : 'rgba(198, 255, 169, 0.40)',
                     }}
                   >
-                    <Text style={{ fontSize: 14 }}>{selectedDiagram.title}</Text>
+                    <SimpleText style={{ fontSize: 14 }}>{selectedDiagram.title}</SimpleText>
                   </View>
                 )}
               </View>
               <View style={styles.chartLegendWrapper}>
                 <View style={styles.chartLegendItem}>
                   <View style={{ ...styles.circle, backgroundColor: '#FE8383' }} />
-                  <Text style={styles.legendText}>Declined</Text>
+                  <SimpleText style={styles.legendText}>
+                    <FormattedMessage id={'dashboard.declined'} />
+                  </SimpleText>
                 </View>
                 <View style={styles.chartLegendItem}>
                   <View
                     style={{ ...styles.circle, backgroundColor: 'rgba(162, 223, 141, 0.60)' }}
                   />
-                  <Text style={styles.legendText}>Approved</Text>
+                  <SimpleText style={styles.legendText}>
+                    <FormattedMessage id={'dashboard.approved'} />
+                  </SimpleText>
                 </View>
               </View>
             </View>
           </View>
-          <Text style={{ ...styles.title, marginTop: 50 }}>Generate report</Text>
+          <SimpleText style={{ ...styles.title, marginTop: 50 }}>
+            <FormattedMessage id={'dashboard.generate_report'} />
+          </SimpleText>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => navigation.navigate('GeneralReportsScreen')}
             style={{ width: 175 }}
           >
             <View style={styles.submitBtn}>
-              <Text style={styles.submitBtnText}>Report options</Text>
+              <SimpleText style={styles.submitBtnText}>
+                <FormattedMessage id={'dashboard.report_options'} />
+              </SimpleText>
             </View>
           </TouchableOpacity>
         </View>
@@ -277,12 +294,12 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
   },
   titleContainer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  title: { fontFamily: 'Mont', fontSize: 34, fontWeight: '700' },
-  smallTitle: { fontSize: 16, fontWeight: '700', marginBottom: 21 },
+  title: { fontFamily: 'Mont', fontSize: 34 },
+  smallTitle: { fontFamily: 'Mont_SB', marginBottom: 21 },
   bankContainer: { zIndex: 1, marginTop: 30 },
   currencyWrapper: { flexDirection: 'row' },
   bankConversionContainer: { marginTop: 50 },
-  currency: { fontSize: 16, fontWeight: '600', lineHeight: 21, marginBottom: 15 },
+  currency: { lineHeight: 21, marginBottom: 15 },
   circle: { borderRadius: 8, width: 8, height: 8, marginRight: 8 },
   chartLegendWrapper: { marginBottom: 20 },
   chartLegendItem: {
@@ -311,7 +328,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
   },
-  legendText: { fontSize: 14, fontWeight: '600' },
+  legendText: { fontSize: 14 },
   submitBtn: {
     height: 44,
     width: 175,
@@ -322,9 +339,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   submitBtnText: {
-    fontSize: 16,
     letterSpacing: 0.48,
-    fontWeight: '700',
+    fontFamily: 'Mont_SB',
     color: '#fff',
   },
 });

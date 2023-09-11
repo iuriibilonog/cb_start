@@ -9,55 +9,35 @@ import {
   Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import RadioList from 'src/components/molecules/RadioList';
 import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
-const arrowRight = require('src/images/right.png');
-
-const StatusScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
-  const [radioSelect, setRadioSelect] = useState({ value: 'All' });
-  const reportType = route.params.type.value;
+const BanksScreen = () => {
+  const [checkBoxSelect, setCheckBoxSelect] = useState([]);
   const data = [
     { value: 'All' },
-    { value: 'declined' },
-    { value: 'approved' },
-    { value: 'procesing' },
-    { value: 'new' },
+    { value: 'Royal' },
+    { value: 'Unlimited' },
+    { value: 'Munzen' },
+    { value: 'Forta' },
   ];
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    switch (reportType) {
-      case 'Payments':
-        setPaymentsFilter('timeZone', radioSelect.value);
-        break;
-      case 'Transactions':
-        setTransactionFilter('timeZone', radioSelect.value);
-        break;
-
-      default:
-        break;
-    }
-  }, [radioSelect]);
+    console.log('Checkbox selected:', checkBoxSelect);
+  }, [checkBoxSelect]);
 
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
-          {/* <CheckBoxList
+          <CheckBoxList
             data={data}
             onSelect={setCheckBoxSelect}
             styling={{ size: 18, spaceBetween: 34 }}
             isFirstBoxAll={true}
-          /> */}
-          <RadioList
-            data={data}
-            onSelect={setRadioSelect}
-            defaultValue={{ value: 'All' }}
-            styling={{ size: 18, spaceBetween: 34 }}
           />
         </View>
 
@@ -102,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StatusScreen;
+export default BanksScreen;

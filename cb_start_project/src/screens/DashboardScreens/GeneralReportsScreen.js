@@ -11,6 +11,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
 import FiltersDropdown from 'src/components/molecules/FiltersDropdown';
+import SimpleText from '../../components/atoms/SimpleText';
+import { FormattedMessage } from 'react-intl';
 
 const arrowRight = require('src/images/right.png');
 
@@ -48,7 +50,12 @@ const GeneralReportsScreen = () => {
         navigation.navigate('StatusScreen', { type: radioSelect });
         break;
       case 6:
-        navigation.navigate('FilterColumnsScreen', { type: radioSelect });
+        if (radioSelect === 'Payments') {
+          navigation.navigate('FilterColumnsScreen', { type: radioSelect });
+        } else {
+          navigation.navigate('BanksScreen', { type: radioSelect });
+        }
+
         break;
     }
   };
@@ -90,14 +97,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(1)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 1 ? '700' : '600',
+                fontFamily: selectedId === 1 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Calendar
-            </Text>
+              <FormattedMessage id={'dashboard.calendar'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -108,14 +115,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(2)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 2 ? '700' : '600',
+                fontFamily: selectedId === 2 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Timezone
-            </Text>
+              <FormattedMessage id={'dashboard.timezone'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -125,14 +132,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(3)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 3 ? '700' : '600',
+                fontFamily: selectedId === 3 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Merchants
-            </Text>
+              <FormattedMessage id={'dashboard.merchants'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -142,14 +149,14 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(4)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 4 ? '700' : '600',
+                fontFamily: selectedId === 4 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Merchant’s api key
-            </Text>
+              <FormattedMessage id={'dashboard.merchants_api_key'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -159,35 +166,55 @@ const GeneralReportsScreen = () => {
             }}
             onPress={() => handleReportSelect(5)}
           >
-            <Text
+            <SimpleText
               style={{
                 ...styles.itemText,
-                fontWeight: selectedId === 5 ? '700' : '600',
+                fontFamily: selectedId === 5 ? 'Mont_SB' : 'Mont',
               }}
             >
-              Status
-            </Text>
+              <FormattedMessage id={'dashboard.status'} />
+            </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{
-              ...styles.reportContainerItem,
-              marginTop: 80,
-              backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
-            }}
-            onPress={() => handleReportSelect(6)}
-          >
-            <Text
+          {radioSelect?.value === 'Transactions' ? (
+            <TouchableOpacity
               style={{
-                ...styles.itemText,
-                fontWeight: selectedId === 6 ? '700' : '600',
+                ...styles.reportContainerItem,
+                backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
               }}
+              onPress={() => handleReportSelect(6)}
             >
-              Filters columns
-            </Text>
-            <Image source={arrowRight} style={styles.arrowRight} />
-          </TouchableOpacity>
+              <SimpleText
+                style={{
+                  ...styles.itemText,
+                  fontFamily: selectedId === 6 ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                <FormattedMessage id={'dashboard.banks'} />
+              </SimpleText>
+              <Image source={arrowRight} style={styles.arrowRight} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={{
+                ...styles.reportContainerItem,
+                marginTop: 80,
+                backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
+              }}
+              onPress={() => handleReportSelect(6)}
+            >
+              <SimpleText
+                style={{
+                  ...styles.itemText,
+                  fontFamily: selectedId === 6 ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                <FormattedMessage id={'dashboard.filters_columns'} />
+              </SimpleText>
+              <Image source={arrowRight} style={styles.arrowRight} />
+            </TouchableOpacity>
+          )}
         </View>
       </Pressable>
     </ScrollView>

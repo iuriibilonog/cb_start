@@ -12,8 +12,10 @@ import {
 import React, { useState, useEffect, cloneElement } from 'react';
 import { Calendar } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
-import StyledCalendar from '../../components/molecules/StyledCalendar';
-import Datepicker from '../../components/atoms/Datepicker';
+import StyledCalendar from 'src/components/molecules/StyledCalendar';
+import Datepicker from 'src/components/atoms/Datepicker';
+import SimpleText from 'src/components/atoms/SimpleText';
+import { FormattedMessage } from 'react-intl';
 
 const CalendarScreen = ({ navigation }) => {
   const calendarIcon = require('src/images/calendar_icon.png');
@@ -22,7 +24,7 @@ const CalendarScreen = ({ navigation }) => {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [focusedDay, setFocusedDay] = useState('');
 
-  const initialDate = new Date().toISOString().slice(0, 10).replace(/-/g, '/')
+  const initialDate = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
 
   useEffect(() => {
     //example selectedDay: {"dateString": "2023-09-24", "day": 24, "month": 9, "timestamp": 1695513600000, "year": 2023}
@@ -41,7 +43,9 @@ const CalendarScreen = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.startEndContainer}>
             <View>
-              <Text style={styles.startEndItemTitle}>Start date</Text>
+              <SimpleText style={styles.startEndItemTitle}>
+                <FormattedMessage id={'dashboard.start_date'} />
+              </SimpleText>
               <Pressable
                 onPress={() => {
                   setIsCalendarVisible((prev) => !prev);
@@ -55,7 +59,9 @@ const CalendarScreen = ({ navigation }) => {
               </Pressable>
             </View>
             <View>
-              <Text style={styles.startEndItemTitle}>End date</Text>
+              <SimpleText style={styles.startEndItemTitle}>
+                <FormattedMessage id={'dashboard.end_date'} />
+              </SimpleText>
               <Pressable
                 onPress={() => {
                   setIsCalendarVisible((prev) => !prev);
@@ -79,7 +85,9 @@ const CalendarScreen = ({ navigation }) => {
           )}
           <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 80 }}>
             <View style={styles.submitBtn}>
-              <Text style={styles.submitBtnText}>Download</Text>
+              <SimpleText style={styles.submitBtnText}>
+                <FormattedMessage id={'dashboard.download'} />
+              </SimpleText>
             </View>
           </TouchableOpacity>
         </View>
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 80,
   },
-  startEndItemTitle: { marginBottom: 12, color: 'rgba(38, 38, 38, 0.60)', fontSize: 16 },
+  startEndItemTitle: { marginBottom: 12, color: 'rgba(38, 38, 38, 0.60)' },
   calendarContainer: { flex: 1 },
 
   submitBtn: {
@@ -114,9 +122,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   submitBtnText: {
-    fontSize: 16,
+    fontFamily: 'Mont_SB',
     letterSpacing: 0.48,
-    fontWeight: '700',
     color: '#fff',
   },
 });
