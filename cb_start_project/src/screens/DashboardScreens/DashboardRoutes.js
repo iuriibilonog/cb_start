@@ -8,6 +8,7 @@ import MerchantsScreen from './MerchantsScreen';
 import MerchantsApiKeyScreen from './MerchantsApiKeyScreen';
 import StatusScreen from './StatusScreen';
 import FilterColumnsScreen from './FilterColumnsScreen';
+import BanksScreen from './BanksScreen';
 import { Image, Pressable } from 'react-native';
 
 const DashboardStack = createStackNavigator();
@@ -145,6 +146,22 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         }}
         name="FilterColumnsScreen"
         component={FilterColumnsScreen}
+      />
+      <DashboardStack.Screen
+        options={{
+          headerBackTitleVisible: false,
+          headerTitle: 'Banks',
+          headerTitleAlign: 'left',
+          headerBackImage: () => (
+            <Image
+              source={headerLeft}
+              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              // onPress={() => navigation.navigate("registration")}
+            />
+          ),
+        }}
+        name="BanksScreen"
+        component={BanksScreen}
       />
     </DashboardStack.Navigator>
   );

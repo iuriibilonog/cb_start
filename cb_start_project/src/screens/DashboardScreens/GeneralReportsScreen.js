@@ -50,7 +50,7 @@ const GeneralReportsScreen = () => {
         navigation.navigate('StatusScreen');
         break;
       case 6:
-        navigation.navigate('FilterColumnsScreen');
+        navigation.navigate(radioSelect === 'Payments' ? 'FilterColumnsScreen' : 'BanksScreen');
         break;
     }
   };
@@ -172,24 +172,44 @@ const GeneralReportsScreen = () => {
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{
-              ...styles.reportContainerItem,
-              marginTop: 80,
-              backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
-            }}
-            onPress={() => handleReportSelect(6)}
-          >
-            <SimpleText
+          {radioSelect?.value === 'Transactions' ? (
+            <TouchableOpacity
               style={{
-                ...styles.itemText,
-                fontFamily: selectedId === 6 ? 'Mont_SB' : 'Mont',
+                ...styles.reportContainerItem,
+                backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
               }}
+              onPress={() => handleReportSelect(6)}
             >
-              <FormattedMessage id={'dashboard.filters_columns'} />
-            </SimpleText>
-            <Image source={arrowRight} style={styles.arrowRight} />
-          </TouchableOpacity>
+              <SimpleText
+                style={{
+                  ...styles.itemText,
+                  fontFamily: selectedId === 6 ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                <FormattedMessage id={'dashboard.banks'} />
+              </SimpleText>
+              <Image source={arrowRight} style={styles.arrowRight} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={{
+                ...styles.reportContainerItem,
+                marginTop: 80,
+                backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
+              }}
+              onPress={() => handleReportSelect(6)}
+            >
+              <SimpleText
+                style={{
+                  ...styles.itemText,
+                  fontFamily: selectedId === 6 ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                <FormattedMessage id={'dashboard.filters_columns'} />
+              </SimpleText>
+              <Image source={arrowRight} style={styles.arrowRight} />
+            </TouchableOpacity>
+          )}
         </View>
       </Pressable>
     </ScrollView>
