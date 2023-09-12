@@ -9,31 +9,49 @@ import {
   Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import RadioList from 'src/components/molecules/RadioList';
 import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
 const arrowRight = require('src/images/right.png');
 
-const MerchantsApiKeyScreen = () => {
-  const [checkBoxSelect, setCheckBoxSelect] = useState([]);
+const MerchantsApiKeyScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
+  const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
+  const reportType = route.params.type.value;
   const data = [{ value: 'All api keys' }, { value: 'Test 1' }, { value: 'Test 2' }];
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log('Checkbox selected:', checkBoxSelect);
-  }, [checkBoxSelect]);
+    switch (reportType) {
+      case 'Payments':
+        setPaymentsFilter('merchantApiKey', radioSelect.value);
+        break;
+      case 'Transactions':
+        setTransactionFilter('merchantApiKey', radioSelect.value);
+        break;
+
+      default:
+        break;
+    }
+  }, [radioSelect]);
 
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
-          <CheckBoxList
+          {/* <CheckBoxList
             data={data}
             onSelect={setCheckBoxSelect}
             styling={{ size: 18, spaceBetween: 34 }}
             isFirstBoxAll={true}
+          /> */}
+          <RadioList
+            data={data}
+            onSelect={setRadioSelect}
+            defaultValue={{ value: 'All api keys' }}
+            styling={{ size: 18, spaceBetween: 34 }}
           />
         </View>
 

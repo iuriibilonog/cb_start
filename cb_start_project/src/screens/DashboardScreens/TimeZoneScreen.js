@@ -15,8 +15,25 @@ import SimpleText from '../../components/atoms/SimpleText';
 
 const arrowRight = require('src/images/right.png');
 
-const TimeZoneScreen = () => {
-  const [radioSelect, setRadioSelect] = useState();
+const TimeZoneScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
+  const [radioSelect, setRadioSelect] = useState({ value: 'UTC0' });
+
+  const reportType = route.params.type.value;
+
+  useEffect(() => {
+    switch (reportType) {
+      case 'Payments':
+        setPaymentsFilter('status', radioSelect.value);
+        break;
+      case 'Transactions':
+        setTransactionFilter('status', radioSelect.value);
+        break;
+
+      default:
+        break;
+    }
+  }, [radioSelect]);
+
   const data = [
     { value: 'UTC0' },
     { value: '(UTC+0) Dublin, Lisbon, London' },
@@ -29,10 +46,6 @@ const TimeZoneScreen = () => {
   ];
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    console.log('Radio selected:', radioSelect);
-  }, [radioSelect]);
 
   return (
     <ScrollView>

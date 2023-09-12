@@ -15,7 +15,7 @@ import { FormattedMessage } from 'react-intl';
 
 const arrowRight = require('src/images/right.png');
 
-const FilterColumnsScreen = () => {
+const FilterColumnsScreen = ({ setPaymentsFilter }) => {
   const [checkBoxSelect, setCheckBoxSelect] = useState([]);
   const data = [
     { value: 'Select all filters' },
@@ -48,7 +48,9 @@ const FilterColumnsScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log('Checkbox selected:', checkBoxSelect);
+    const filters = checkBoxSelect.map((item) => Object.values(item)).flat();
+
+    setPaymentsFilter('filterColumns', filters);
   }, [checkBoxSelect]);
 
   return (

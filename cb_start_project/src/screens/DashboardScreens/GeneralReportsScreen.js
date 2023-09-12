@@ -18,7 +18,7 @@ const arrowRight = require('src/images/right.png');
 
 const GeneralReportsScreen = () => {
   const [selectedId, setSelectedId] = useState(3);
-  const [radioSelect, setRadioSelect] = useState();
+  const [radioSelect, setRadioSelect] = useState({ value: 'Payments' });
   const [filters, setFilters] = useState([
     { value: 'Select all filters' },
     { value: 'Payment Description' },
@@ -35,22 +35,27 @@ const GeneralReportsScreen = () => {
     setSelectedId(e);
     switch (e) {
       case 1:
-        navigation.navigate('CalendarScreen');
+        navigation.navigate('CalendarScreen', { type: radioSelect });
         break;
       case 2:
-        navigation.navigate('TimeZoneScreen');
+        navigation.navigate('TimeZoneScreen', { type: radioSelect });
         break;
       case 3:
-        navigation.navigate('MerchantsScreen');
+        navigation.navigate('MerchantsScreen', { type: radioSelect });
         break;
       case 4:
-        navigation.navigate('MerchantsApiKeyScreen');
+        navigation.navigate('MerchantsApiKeyScreen', { type: radioSelect });
         break;
       case 5:
-        navigation.navigate('StatusScreen');
+        navigation.navigate('StatusScreen', { type: radioSelect });
         break;
       case 6:
-        navigation.navigate(radioSelect === 'Payments' ? 'FilterColumnsScreen' : 'BanksScreen');
+        if (radioSelect === 'Payments') {
+          navigation.navigate('FilterColumnsScreen', { type: radioSelect });
+        } else {
+          navigation.navigate('BanksScreen', { type: radioSelect });
+        }
+
         break;
     }
   };

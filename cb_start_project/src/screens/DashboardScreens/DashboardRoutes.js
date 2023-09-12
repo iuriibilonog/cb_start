@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import DashboardScreen from './DashboardScreen';
 import GeneralReportsScreen from './GeneralReportsScreen';
@@ -14,6 +14,28 @@ import { Image, Pressable } from 'react-native';
 const DashboardStack = createStackNavigator();
 
 const DashboardRoutes = ({ handlePressIconLogOut }) => {
+  const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([]);
+  const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
+
+  useEffect(() => {
+    console.log('genReportPaymentsFilters', genReportPaymentsFilters);
+  }, [genReportPaymentsFilters, genReportTransactionFilters]);
+
+  const setPaymentsFilter = (filterName, data) => {
+    const filter = genReportPaymentsFilters.filter(
+      (item) => !Object.keys(item).includes(filterName)
+    );
+    console.log('data999', data);
+
+    setGenReportPaymentsFilters((prev) => [...filter, { [filterName]: data }]);
+  };
+  const setTransactionFilter = (filterName, data) => {
+    const filter = genReportPaymentsFilters.filter(
+      (item) => !Object.keys(item).includes(filterName)
+    );
+    setGenReportTransactionFilters((prev) => [...filter, { [filterName]: data }]);
+  };
+
   const profileIcon = require('src/images/profile_icon.png');
   const headerLeft = require('src/images/header_left.png');
   return (
@@ -81,8 +103,17 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="TimeZoneScreen"
-        component={TimeZoneScreen}
-      />
+        // component={TimeZoneScreen}
+      >
+        {(props) => (
+          <TimeZoneScreen
+            {...props}
+            setPaymentsFilter={setPaymentsFilter}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </DashboardStack.Screen>
+
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
@@ -97,8 +128,16 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="MerchantsScreen"
-        component={MerchantsScreen}
-      />
+        // component={MerchantsScreen}
+      >
+        {(props) => (
+          <MerchantsScreen
+            {...props}
+            setPaymentsFilter={setPaymentsFilter}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </DashboardStack.Screen>
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
@@ -113,8 +152,16 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="MerchantsApiKeyScreen"
-        component={MerchantsApiKeyScreen}
-      />
+        // component={MerchantsApiKeyScreen}
+      >
+        {(props) => (
+          <MerchantsApiKeyScreen
+            {...props}
+            setPaymentsFilter={setPaymentsFilter}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </DashboardStack.Screen>
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
@@ -129,8 +176,16 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="StatusScreen"
-        component={StatusScreen}
-      />
+        // component={StatusScreen}
+      >
+        {(props) => (
+          <StatusScreen
+            {...props}
+            setPaymentsFilter={setPaymentsFilter}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </DashboardStack.Screen>
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
@@ -145,8 +200,17 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="FilterColumnsScreen"
-        component={FilterColumnsScreen}
-      />
+        // component={FilterColumnsScreen}
+      >
+        {(props) => (
+          <FilterColumnsScreen
+            {...props}
+            setPaymentsFilter={setPaymentsFilter}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </DashboardStack.Screen>
+
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
