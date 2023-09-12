@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getAllBanks, getBankConversion } from './operations';
+import { getAllBanks, getBankConversion, getAllUsers, getTransactionData } from './operations';
 
 const initialState = {
   content: {
     banks: [],
-    // email: null,
-    // name: null,
-    // isLoggedIn: false,
+    allUsers: [],
+    transactionData: [],
+    error: null,
   },
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: 'content',
   initialState,
   extraReducers: (builder) => {
     builder.addCase(getAllBanks.fulfilled, (state, action) => {
@@ -26,6 +26,22 @@ const userSlice = createSlice({
       state.content.currentBankConversion = action.payload;
     }),
       builder.addCase(getBankConversion.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.content.allUsers = action.payload.items;
+    }),
+      builder.addCase(getAllUsers.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+    builder.addCase(getTransactionData.fulfilled, (state, action) => {
+      state.content.transactionData = action.payload.items;
+    }),
+      builder.addCase(getTransactionData.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };

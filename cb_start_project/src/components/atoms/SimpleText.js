@@ -2,7 +2,6 @@ import { Text, View, Image, StyleSheet, TextInput, Pressable, ScrollView } from 
 import React, { useState, useEffect } from 'react';
 
 const SimpleText = (props) => {
-  console.log(props.style);
   return <Text style={{ ...styles.initialStyles, ...props.style }}>{props.children}</Text>;
 };
 

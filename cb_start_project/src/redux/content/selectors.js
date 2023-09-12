@@ -1,1 +1,3 @@
-export const getBanks = (state) => state.user.content.banks;
+export const getBanks = (state) => state.content.content.banks;
+export const getUsers = (state) => state.content.content.allUsers;
+export const getTransactionInfo = (state) => state.content.content.transactionData;

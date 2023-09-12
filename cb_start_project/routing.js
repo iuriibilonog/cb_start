@@ -14,18 +14,29 @@ import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
 import TransactionsScreen from 'src/screens/TransactionsScreen';
 
 import { isLoggedIn } from './src/redux/user/selectors';
-import { useSelector } from 'react-redux';
+import { getUsers } from './src/redux/content/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllUsers } from './src/redux/content/operations';
 
 const profileIcon = require('src/images/profile_icon.png');
 export const Routing = () => {
-  const [isAuth2, setIsAuth] = useState(false);
   const [isShowLogOut, setIsShowLogOut] = useState(false);
-  // const isAuth = useSelector(isLoggedIn);
-  const isAuth = true;
+  const isAuth = useSelector(isLoggedIn);
+  const allUsers = useSelector(getUsers);
+  // const isAuth = true;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isAuth && isShowLogOut) setIsShowLogOut(false);
+    // if (isAuth && allUsers.length) {
+    //   dispatch(getAllUsers());
+    console.log('first');
+    // }
   }, [isAuth]);
+
+  // useEffect(() => {
+  //   console.log('allUsers9999', allUsers);
+  // }, [allUsers]);
 
   const AuthStack = createStackNavigator();
   const MainStack = createBottomTabNavigator();
