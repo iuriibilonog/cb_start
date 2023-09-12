@@ -13,6 +13,7 @@ import React, { useState, useEffect, cloneElement } from 'react';
 import { Calendar } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import SimpleText from '../atoms/SimpleText';
+import { MaskedTextInput } from 'react-native-mask-text';
 
 LocaleConfig.locales['en'] = {
   monthNames: [
@@ -53,7 +54,6 @@ const leftArrow = require('src/images/left.png');
 const rightArrow = require('src/images/right.png');
 
 const StyledCalendar = (props) => {
-  console.log('props', props);
   const [selectedDay, setSelectedDay] = useState(
     props.initialDay ? { dateString: props.initialDay } : ''
   );
@@ -68,6 +68,13 @@ const StyledCalendar = (props) => {
       props.setSelectedDay({ ...selectedDay, dateString: correctedDateString });
     }
   }, [selectedDay]);
+
+  useEffect(() => {
+    if (props.initialDay) {
+      setSelectedDay({ dateString: props.initialDay });
+    }
+  }, [props.initialDay]);
+
   return (
     <View style={styles.container}>
       <View style={styles.startEndContainer}></View>
@@ -171,18 +178,18 @@ const StyledCalendar = (props) => {
           // maxDate={'2023-12-01'}
           // Handler which gets executed on day press. Default = undefined
           onDayPress={(day) => {
-            console.log('selected day', day);
+            // console.log('selected day', day);
             setSelectedDay(day);
           }}
           // Handler which gets executed on day long press. Default = undefined
           onDayLongPress={(day) => {
-            console.log('Loong selected day', day);
+            // console.log('Loong selected day', day);
           }}
           // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
           monthFormat={'MMMM'}
           // Handler which gets executed when visible month changes in calendar. Default = undefined
           onMonthChange={(month) => {
-            console.log('month changed', month);
+            // console.log('month changed', month);
           }}
           // Hide month navigation arrows. Default = false
           hideArrows={false}
