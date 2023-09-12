@@ -27,9 +27,9 @@ const StatusScreen = () => {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    console.log('Checkbox selected:', checkBoxSelect);
-  }, [checkBoxSelect]);
+  // useEffect(() => {
+  //   console.log('Checkbox selected:', checkBoxSelect);
+  // }, [checkBoxSelect]);
 
   return (
     <ScrollView>

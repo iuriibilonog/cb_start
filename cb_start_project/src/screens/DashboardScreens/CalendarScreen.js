@@ -16,9 +16,11 @@ import StyledCalendar from 'src/components/molecules/StyledCalendar';
 import Datepicker from 'src/components/atoms/Datepicker';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
+import { MaskedTextInput } from 'react-native-mask-text';
+
+const calendarIcon = require('src/images/calendar_icon.png');
 
 const CalendarScreen = ({ navigation }) => {
-  const calendarIcon = require('src/images/calendar_icon.png');
   const [selectedStartDay, setSelectedStartDay] = useState('');
   const [selectedEndDay, setSelectedEndDay] = useState('');
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
@@ -26,11 +28,11 @@ const CalendarScreen = ({ navigation }) => {
 
   const initialDate = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
 
-  useEffect(() => {
-    //example selectedDay: {"dateString": "2023-09-24", "day": 24, "month": 9, "timestamp": 1695513600000, "year": 2023}
-    console.log('StartDay>>> ', selectedStartDay);
-    console.log('EndDay>>> ', selectedEndDay);
-  }, [selectedStartDay, selectedEndDay]);
+  // useEffect(() => {
+  //   //example selectedDay: {"dateString": "2023-09-24", "day": 24, "month": 9, "timestamp": 1695513600000, "year": 2023}
+  //   console.log('StartDay>>> ', selectedStartDay);
+  //   console.log('EndDay>>> ', selectedEndDay);
+  // }, [selectedStartDay, selectedEndDay]);
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -51,11 +53,14 @@ const CalendarScreen = ({ navigation }) => {
                   setIsCalendarVisible((prev) => !prev);
                   setFocusedDay('start');
                 }}
+                style={styles.datePickerWrapper}
               >
                 <Datepicker
                   isFocused={focusedDay === 'start' && isCalendarVisible}
                   value={selectedStartDay.dateString ? selectedStartDay.dateString : initialDate}
+                  setValue={setSelectedStartDay}
                 />
+                <Image source={calendarIcon} style={styles.calendarIcon} />
               </Pressable>
             </View>
             <View>
@@ -67,11 +72,14 @@ const CalendarScreen = ({ navigation }) => {
                   setIsCalendarVisible((prev) => !prev);
                   setFocusedDay('end');
                 }}
+                style={styles.datePickerWrapper}
               >
                 <Datepicker
                   isFocused={focusedDay === 'end' && isCalendarVisible}
                   value={selectedEndDay.dateString ? selectedEndDay.dateString : initialDate}
+                  setValue={setSelectedEndDay}
                 />
+                <Image source={calendarIcon} style={styles.calendarIcon} />
               </Pressable>
             </View>
           </View>
@@ -79,7 +87,9 @@ const CalendarScreen = ({ navigation }) => {
             <StyledCalendar
               setSelectedDay={focusedDay === 'start' ? setSelectedStartDay : setSelectedEndDay}
               initialDay={
-                focusedDay === 'start' ? selectedStartDay.dateString : selectedEndDay.dateString
+                focusedDay === 'start'
+                  ? selectedStartDay?.dateString?.replace(/\//g, '-')
+                  : selectedEndDay?.dateString?.replace(/\//g, '-')
               }
             />
           )}
@@ -103,6 +113,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 48,
   },
+  datePickerWrapper: {
+    height: 40,
+    width: 150,
+    backgroundColor: '#F4F4F4',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   startEndContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -111,7 +131,7 @@ const styles = StyleSheet.create({
   },
   startEndItemTitle: { marginBottom: 12, color: 'rgba(38, 38, 38, 0.60)' },
   calendarContainer: { flex: 1 },
-
+  dateWrapper: { height: 40, backgroundColor: '#F4F4F4' },
   submitBtn: {
     height: 44,
     width: 175,
@@ -126,6 +146,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.48,
     color: '#fff',
   },
+  calendarIcon: { width: 16, height: 16 },
 });
 
 export default CalendarScreen;
