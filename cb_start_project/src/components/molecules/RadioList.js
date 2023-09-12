@@ -16,30 +16,31 @@ const RadioList = ({ data, onSelect, defaultValue, styling = {} }) => {
 
   return (
     <View>
-      {data.map((item, index) => {
-        return (
-          <Pressable
-            key={index}
-            style={{ ...styles.radioBoxItem, marginBottom: spaceBetween }}
-            onPress={() => selectHandler(item)}
-          >
-            <Image
-              source={selection.value === item.value ? radioFilled : radioBlank}
-              style={styles.radio}
-            />
-            <SimpleText
-              style={{
-                ...styles.itemText,
-                fontSize: size,
-                opacity: selection.value === item.value ? 1 : 0.5,
-                fontFamily: selection.value === item.value ? 'Mont_SB' : 'Mont',
-              }}
+      {data.length > 0 &&
+        data.map((item, index) => {
+          return (
+            <Pressable
+              key={index}
+              style={{ ...styles.radioBoxItem, marginBottom: spaceBetween }}
+              onPress={() => selectHandler(item)}
             >
-              {item.value}
-            </SimpleText>
-          </Pressable>
-        );
-      })}
+              <Image
+                source={selection.username === item.username ? radioFilled : radioBlank}
+                style={styles.radio}
+              />
+              <SimpleText
+                style={{
+                  ...styles.itemText,
+                  fontSize: size,
+                  opacity: selection.username === item.username ? 1 : 0.5,
+                  fontFamily: selection.username === item.username ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                {item.username}
+              </SimpleText>
+            </Pressable>
+          );
+        })}
     </View>
   );
 };

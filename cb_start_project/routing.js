@@ -28,15 +28,10 @@ export const Routing = () => {
 
   useEffect(() => {
     if (!isAuth && isShowLogOut) setIsShowLogOut(false);
-    // if (isAuth && allUsers.length) {
-    //   dispatch(getAllUsers());
-    console.log('first');
-    // }
+    if (isAuth && !allUsers.length) {
+      dispatch(getAllUsers());
+    }
   }, [isAuth]);
-
-  // useEffect(() => {
-  //   console.log('allUsers9999', allUsers);
-  // }, [allUsers]);
 
   const AuthStack = createStackNavigator();
   const MainStack = createBottomTabNavigator();
