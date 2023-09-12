@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getTransactionData } from 'src/redux/content/operations';
+import { getTransactionInfo } from 'src/redux/content/selectors';
 import {
   Text,
   StyleSheet,
@@ -21,6 +24,17 @@ const arrowDown = require('src/images/arrow_down_small.png');
 const arrowUp = require('src/images/arrow_up.png');
 
 const TransactionsScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const transactionInfo = useSelector(getTransactionInfo);
+
+  useEffect(() => {
+    dispatch(getTransactionData());
+  }, []);
+
+  useEffect(() => {
+    console.log('transactionInfo', transactionInfo);
+  }, [transactionInfo]);
+
   const handleNextScreen = () => {
     console.log('nextScreen>>');
     navigation.navigate('LoginScreen');
