@@ -99,20 +99,23 @@ const DashboardScreen = ({ navigation }) => {
   const getBanks = async () => {
     try {
       const data = await dispatch(getAllBanks());
-      setBanks(data.payload);
-      const name = data.payload.map((item) => item.name);
+      if (data.payload && Array.isArray(data.payload)) {
+        setBanks(data.payload);
+        const name = data.payload.map((item) => item.name);
 
-      setBanksNames(name);
-      setSelectedBank(name[0]);
+        setBanksNames(name);
+        setSelectedBank(name[0]);
+      }
+
       // console.log('data', data.payload);
     } catch (error) {
       console.warn('Error:', error);
     }
   };
 
-  const handleScrollView = (e) => {
-    if (isDropdownOpen) e.preventDefault();
-  };
+  // const handleScrollView = (e) => {
+  //   if (isDropdownOpen) e.preventDefault();
+  // };
 
   let euroCurrency = 19984.38,
     kztCurrency = 332577687.13,
@@ -139,7 +142,6 @@ const DashboardScreen = ({ navigation }) => {
           </View>
           <View style={styles.bankContainer}>
             <SimpleText style={styles.smallTitle}>
-              {' '}
               <FormattedMessage id={'dashboard.banks'} />
             </SimpleText>
             <View
@@ -150,52 +152,50 @@ const DashboardScreen = ({ navigation }) => {
               }}
             >
               <View style={{ justifyContent: 'flex-start', width: 167, height: 42 }}>
-                {banksNames.length > 0 && (
-                  <ModalDropdown
-                    options={banksNames}
-                    defaultIndex={0}
-                    defaultValue={banksNames[0]}
-                    isFullWidth
-                    animated={false}
-                    onSelect={setSelectedBank}
-                    textStyle={{ fontSize: 16, fontFamily: 'Mont' }}
-                    style={{
-                      backgroundColor: '#F4F4F4',
-                      paddingHorizontal: 16,
-                      paddingVertical: 11,
-                      justifyContent: 'space-between',
-                    }}
-                    dropdownStyle={{
-                      marginLeft: -16,
-                      marginTop: Platform.OS === 'ios' ? 12 : -12,
-                      paddingLeft: 11,
-                      paddingRight: 2,
-                      width: 167,
-                      backgroundColor: '#F4F4F4',
-                      borderWidth: 0,
-                    }}
-                    dropdownTextStyle={{
-                      fontSize: 16,
-                      fontWeight: '600',
-                      backgroundColor: '#F4F4F4',
-                      color: 'rgba(38, 38, 38, 0.50)',
-                    }}
-                    renderRightComponent={() => (
-                      <Image
-                        source={
-                          isDropdownOpen
-                            ? require('src/images/arrow_up.png')
-                            : require('src/images/arrow_down.png')
-                        }
-                        style={{ width: 26, height: 36, marginLeft: 'auto' }}
-                      ></Image>
-                    )}
-                    renderRowProps={{ activeOpacity: 1 }}
-                    renderSeparator={() => <></>}
-                    onDropdownWillShow={() => setIsDropdownOpen(true)}
-                    onDropdownWillHide={() => setIsDropdownOpen(false)}
-                  />
-                )}
+                <ModalDropdown
+                  options={banksNames}
+                  defaultIndex={0}
+                  defaultValue={banksNames[0]}
+                  isFullWidth
+                  animated={false}
+                  onSelect={setSelectedBank}
+                  textStyle={{ fontSize: 16, fontFamily: 'Mont' }}
+                  style={{
+                    backgroundColor: '#F4F4F4',
+                    paddingHorizontal: 16,
+                    paddingVertical: 11,
+                    justifyContent: 'space-between',
+                  }}
+                  dropdownStyle={{
+                    marginLeft: -16,
+                    marginTop: Platform.OS === 'ios' ? 12 : -12,
+                    paddingLeft: 11,
+                    paddingRight: 2,
+                    width: 167,
+                    backgroundColor: '#F4F4F4',
+                    borderWidth: 0,
+                  }}
+                  dropdownTextStyle={{
+                    fontSize: 16,
+                    fontWeight: '600',
+                    backgroundColor: '#F4F4F4',
+                    color: 'rgba(38, 38, 38, 0.50)',
+                  }}
+                  renderRightComponent={() => (
+                    <Image
+                      source={
+                        isDropdownOpen
+                          ? require('src/images/arrow_up.png')
+                          : require('src/images/arrow_down.png')
+                      }
+                      style={{ width: 26, height: 36, marginLeft: 'auto' }}
+                    ></Image>
+                  )}
+                  renderRowProps={{ activeOpacity: 1 }}
+                  renderSeparator={() => <></>}
+                  onDropdownWillShow={() => setIsDropdownOpen(true)}
+                  onDropdownWillHide={() => setIsDropdownOpen(false)}
+                />
               </View>
               <View style={styles.currencyWrapper}>
                 <View style={{ marginRight: 8 }}>
