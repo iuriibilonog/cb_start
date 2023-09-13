@@ -11,12 +11,12 @@ import EnterSecureScreen from 'src/screens/EnterSecureScreen';
 import LogOutScreen from 'src/screens/LogOutScreen';
 import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
 import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
-import TransactionsScreen from 'src/screens/TransactionsScreen';
+import TransactionsRoutes from 'src/screens/TransactionsScreens/TransactionsRoutes';
 
-import { isLoggedIn } from './src/redux/user/selectors';
-import { getUsers } from './src/redux/content/selectors';
+import { isLoggedIn } from 'src/redux/user/selectors';
+import { getUsers } from 'src/redux/content/selectors';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllUsers } from './src/redux/content/operations';
+import { getAllUsers } from 'src/redux/content/operations';
 
 const profileIcon = require('src/images/profile_icon.png');
 export const Routing = () => {
@@ -87,8 +87,8 @@ export const Routing = () => {
 
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
-                  ? (image = require('./src/images/dash_active.png'))
-                  : (image = require('./src/images/dash.png'));
+                  ? (image = require('src/images/dash_active.png'))
+                  : (image = require('src/images/dash.png'));
                 return (
                   <View>
                     <Image source={image} />
@@ -106,19 +106,11 @@ export const Routing = () => {
 
           <MainStack.Screen
             options={{
-              headerTitle: 'Card',
-              headerTitleAlign: 'left',
-              headerRight: ({ size }) => (
-                <Image
-                  source={profileIcon}
-                  style={{ width: 25, height: 25, marginRight: 20 }}
-                  // onPress={() => navigation.navigate("registration")}
-                />
-              ),
+              headerShown: false,
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
-                  ? (image = require('./src/images/card_active.png'))
-                  : (image = require('./src/images/card.png'));
+                  ? (image = require('src/images/card_active.png'))
+                  : (image = require('src/images/card.png'));
                 return (
                   <View>
                     <Image source={image} />
@@ -126,9 +118,12 @@ export const Routing = () => {
                 );
               },
             }}
-            name="CardScreen"
-            component={TransactionsScreen}
-          />
+            name="TransactionsRoutes"
+          >
+            {(props) => (
+              <TransactionsRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />
+            )}
+          </MainStack.Screen>
           <MainStack.Screen
             options={{
               headerTitle: 'Api',
@@ -142,8 +137,8 @@ export const Routing = () => {
               ),
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
-                  ? (image = require('./src/images/api_active.png'))
-                  : (image = require('./src/images/api.png'));
+                  ? (image = require('src/images/api_active.png'))
+                  : (image = require('src/images/api.png'));
                 return (
                   <View>
                     <Image source={image} />
@@ -167,8 +162,8 @@ export const Routing = () => {
               ),
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
-                  ? (image = require('./src/images/users_active.png'))
-                  : (image = require('./src/images/users.png'));
+                  ? (image = require('src/images/users_active.png'))
+                  : (image = require('src/images/users.png'));
                 return (
                   <View>
                     <Image source={image} />
@@ -192,8 +187,8 @@ export const Routing = () => {
               ),
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
-                  ? (image = require('./src/images/balance_active.png'))
-                  : (image = require('./src/images/balance.png'));
+                  ? (image = require('src/images/balance_active.png'))
+                  : (image = require('src/images/balance.png'));
                 return (
                   <View>
                     <Image source={image} />
