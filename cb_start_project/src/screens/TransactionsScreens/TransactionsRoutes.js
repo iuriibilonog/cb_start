@@ -54,17 +54,18 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
       <TransactionsStack.Screen
         options={{
           headerBackTitleVisible: false,
-          headerTitle: '',
-          // headerTitleAlign: 'left',
-          headerRight: ({ size }) => (
-            <Pressable onPress={handlePressIconLogOut}>
-              <Image
-                source={closeIcon}
-                style={{ width: 25, height: 25, marginRight: 20 }}
-                onPress={() => navigation.navigate('TransactionsScreen')}
-              />
-            </Pressable>
-          ),
+          headerShown: false,
+          // headerTitle: '',
+          // // headerTitleAlign: 'left',
+          // headerRight: ({ size }) => (
+          //   <Pressable onPress={handlePressIconLogOut}>
+          //     <Image
+          //       source={closeIcon}
+          //       style={{ width: 25, height: 25, marginRight: 20 }}
+          //       onPress={() => navigation.navigate('TransactionsScreen')}
+          //     />
+          //   </Pressable>
+          // ),
         }}
         name="CardholderScreen"
         component={CardholderScreen}

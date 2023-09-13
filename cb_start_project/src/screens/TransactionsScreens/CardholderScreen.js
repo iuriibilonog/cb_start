@@ -19,6 +19,7 @@ import {
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
+const closeIcon = require('src/images/delete.png');
 const cardholder = require('src/images/master_card.png');
 
 const CardholderScreen = ({ navigation, id = 416989 }) => {
@@ -40,97 +41,74 @@ const CardholderScreen = ({ navigation, id = 416989 }) => {
   const { width } = Dimensions.get('window');
 
   return (
-    <ScrollView>
-      <View style={styles.wrapper}>
-        <View
+    <>
+      <View
+        style={{
+          height: 54,
+          marginTop: 20,
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
+          backgroundColor: '#fff',
+        }}
+      >
+        <Pressable
+          onPress={() => navigation.navigate('TransactionsScreen')}
           style={{
-            alignItems: 'left',
-            justifyContent: 'center',
-            paddingVertical: 28,
+            marginLeft: 'auto',
+            backgroundColor: '#fff',
           }}
         >
-          <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 24 }}>Details payment</SimpleText>
-          <View style={{ position: 'relative' }}>
-            <Image source={cardholder} style={{ width: 350, height: 197, marginTop: 30 }} />
-            {data && (
-              <View style={{ position: 'absolute', top: 135, left: 22 }}>
-                <SimpleText
-                  style={{
-                    color: 'rgba(189, 189, 189, 0.60)',
-                    fontSize: 20,
-                    fontFamily: 'Mont_SB',
-                    letterSpacing: 9,
-                  }}
-                >
-                  {data.cardNumber}
-                </SimpleText>
-              </View>
-            )}
-            {data && (
-              <View style={{ position: 'absolute', top: 190, left: 22 }}>
-                <SimpleText
-                  style={{
-                    color: 'rgba(190, 190, 190, 0.60)',
-                    fontSize: 13,
-                    fontFamily: 'Mont_SB',
-                    textTransform: 'uppercase'
-                  }}
-                >
-                  {data.customerFirstName} {data.customerLastName}
-                </SimpleText>
-              </View>
-            )}
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
+          <Image source={closeIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
+        </Pressable>
+      </View>
+
+      <ScrollView>
+        <View style={styles.wrapper}>
           <View
             style={{
-              ...styles.tableCol,
-              width: width / 2,
-              backgroundColor: '#fff',
+              alignItems: 'left',
+              justifyContent: 'center',
+              paddingTop: 10,
+              marginBottom: 33,
             }}
           >
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.card.number'} />:
+            <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 24 }}>
+              <FormattedMessage id={'transactions.details_payment'} />
             </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.card.card_holder'} />:
-            </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.customer.first_name'} />:
-            </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.customer.last_name'} />:
-            </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.customer.email'} />:
-            </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.customer.phone'} />:
-            </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.card.bin'} />:
-            </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.card.brand'} />:
-            </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.card.country'} />:
-            </SimpleText>
-
-            <SimpleText style={styles.titlesTxt}>
-              <FormattedMessage id={'transactions.card.issuer'} />:
-            </SimpleText>
+            <View style={{ position: 'relative' }}>
+              <Image source={cardholder} style={{ width: 350, height: 197, marginTop: 30 }} />
+              {data && (
+                <View style={{ position: 'absolute', top: 135, left: 22 }}>
+                  <SimpleText
+                    style={{
+                      color: 'rgba(189, 189, 189, 0.60)',
+                      fontSize: 20,
+                      fontFamily: 'Mont_SB',
+                      letterSpacing: 9,
+                    }}
+                  >
+                    {data.cardNumber}
+                  </SimpleText>
+                </View>
+              )}
+              {data && (
+                <View style={{ position: 'absolute', top: 190, left: 22 }}>
+                  <SimpleText
+                    style={{
+                      color: 'rgba(190, 190, 190, 0.60)',
+                      fontSize: 13,
+                      fontFamily: 'Mont_SB',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {data.customerFirstName} {data.customerLastName}
+                  </SimpleText>
+                </View>
+              )}
+            </View>
           </View>
-          {data && (
+          <View style={{ flexDirection: 'row' }}>
             <View
               style={{
                 ...styles.tableCol,
@@ -138,30 +116,79 @@ const CardholderScreen = ({ navigation, id = 416989 }) => {
                 backgroundColor: '#fff',
               }}
             >
-              <SimpleText style={styles.valuesTxt}>{data.cardNumber}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.card.number'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.cardHolder}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.card.card_holder'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.customerFirstName}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.customer.first_name'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.customerLastName}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.customer.last_name'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.customerEmail}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.customer.email'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.customerPhone}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.customer.phone'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.bin.bin}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.card.bin'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.bin.brand}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.card.brand'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.bin.country}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.card.country'} />:
+              </SimpleText>
 
-              <SimpleText style={styles.valuesTxt}>{data.bin.issuer}</SimpleText>
+              <SimpleText style={styles.titlesTxt}>
+                <FormattedMessage id={'transactions.card.issuer'} />:
+              </SimpleText>
             </View>
-          )}
+            {data && (
+              <View
+                style={{
+                  ...styles.tableCol,
+                  width: width / 2,
+                  backgroundColor: '#fff',
+                }}
+              >
+                <SimpleText style={styles.valuesTxt}>{data.cardNumber}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.cardHolder}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.customerFirstName}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.customerLastName}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.customerEmail}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.customerPhone}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.bin.bin}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.bin.brand}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.bin.country}</SimpleText>
+
+                <SimpleText style={styles.valuesTxt}>{data.bin.issuer}</SimpleText>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 

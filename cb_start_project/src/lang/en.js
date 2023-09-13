@@ -53,9 +53,8 @@ const lang = {
   'transactions.merchant_order_id': 'Merchant Order ID',
   'transactions.api_key_name': 'API Key name',
   'transactions.bank_payment_id': 'Bank Payment ID',
-  'transactions.visit_3DS': '  Visit 3DS',
-
-
+  'transactions.visit_3DS': 'Visit 3DS',
+  'transactions.details_payment': 'Details payment',
 
   //common=====
   'common.date':'Date',
