@@ -8,16 +8,28 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
 import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import { FormattedMessage } from 'react-intl';
 import SimpleText from '../../components/atoms/SimpleText';
+import { getUsers } from 'src/redux/content/selectors';
 
 const arrowRight = require('src/images/right.png');
 
 const MerchantsScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
-  const [radioSelect, setRadioSelect] = useState({ value: 'All merchants' });
+  const [radioSelect, setRadioSelect] = useState({ username: 'All merchants' });
+  const [merchants, setMerchants] = useState([{ username: 'All merchants' }]);
+  const allUsers = useSelector(getUsers);
+
+  useEffect(() => {
+    if (allUsers.length) {
+      const data = allUsers.filter((item) => parseInt(item.roleId) === 1);
+      console.log('data', data);
+      setMerchants((prev) => [...prev, ...data]);
+    }
+  }, [allUsers]);
 
   const reportType = route.params.type.value;
 
@@ -63,7 +75,7 @@ const MerchantsScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => 
             isFirstBoxAll={true}
           /> */}
           <RadioList
-            data={data}
+            data={merchants}
             onSelect={setRadioSelect}
             defaultValue={{ value: 'All merchants' }}
             styling={{ size: 18, spaceBetween: 34 }}
