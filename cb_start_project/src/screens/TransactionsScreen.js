@@ -3505,7 +3505,7 @@ const TransactionsScreen = ({ navigation }) => {
     setSelectedIndex(index);
   };
 
-  const flatListRenderModule = (item) => (
+  const flatListRenderModule = (item, index) => (
     <>
       <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}>
         <View
@@ -3525,13 +3525,31 @@ const TransactionsScreen = ({ navigation }) => {
             />
           </View>
           <View style={{ ...styles.tableCell, width: width / 6 }}>
-            <SimpleText>{item.id}</SimpleText>
+            <SimpleText
+              style={{
+                fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
+              }}
+            >
+              {item.id}
+            </SimpleText>
           </View>
           <View style={{ ...styles.tableCell, width: width / 4 }}>
-            <SimpleText>{item.amount}</SimpleText>
+            <SimpleText
+              style={{
+                fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
+              }}
+            >
+              {item.amount}
+            </SimpleText>
           </View>
           <View style={{ ...styles.tableCell, width: width / 6 }}>
-            <SimpleText>{item.mode}</SimpleText>
+            <SimpleText
+              style={{
+                fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
+              }}
+            >
+              {item.mode}
+            </SimpleText>
           </View>
           <View
             style={{
@@ -3545,7 +3563,13 @@ const TransactionsScreen = ({ navigation }) => {
                   : '#FDFF96',
             }}
           >
-            <SimpleText>{item.status}</SimpleText>
+            <SimpleText
+              style={{
+                fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
+              }}
+            >
+              {item.status}
+            </SimpleText>
           </View>
         </View>
         {isAdditDataOpen && selectedIndex === item.id && (
@@ -3784,7 +3808,7 @@ const TransactionsScreen = ({ navigation }) => {
       </View>
       <FlatList
         data={transactionsData.items}
-        renderItem={({ item }) => flatListRenderModule(item)}
+        renderItem={({ item, index }) => flatListRenderModule(item, index)}
       />
       {/* {transactionsData &&
           transactionsData.items.map((value, index) => (
