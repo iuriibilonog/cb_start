@@ -38,6 +38,20 @@ const lang = {
   'transactions.amount': 'Amount',
   'transactions.mode': 'Mode',
   'transactions.status': 'Status',
+
+  'transactions.cardholder_data': 'Cardholder data',
+  'transactions.card.number': 'Card number',
+  'transactions.card.card_holder': 'Card holder',
+  'transactions.customer.first_name': 'Customer first name',
+  'transactions.customer.last_name': 'Customer last name',
+  'transactions.customer.email': 'Customer email',
+  'transactions.customer.phone': 'Customer phone',
+  'transactions.card.bin': 'Card bin',
+  'transactions.card.brand': 'Card brand',
+  'transactions.card.country': 'Card country',
+  'transactions.card.issuer': 'Card issuer',
+
+
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />
