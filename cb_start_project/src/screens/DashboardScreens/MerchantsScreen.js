@@ -19,43 +19,48 @@ import { getUsers } from 'src/redux/content/selectors';
 const arrowRight = require('src/images/right.png');
 
 const MerchantsScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
-  const [radioSelect, setRadioSelect] = useState({ username: 'All merchants' });
-  const [merchants, setMerchants] = useState([{ username: 'All merchants' }]);
+  const [radioSelect, setRadioSelect] = useState({ value: 'All merchants' });
+  const [merchants, setMerchants] = useState([{ value: 'All merchants' }]);
   const allUsers = useSelector(getUsers);
 
   useEffect(() => {
     if (allUsers.length) {
-      const data = allUsers.filter((item) => parseInt(item.roleId) === 1);
-      console.log('data', data);
+      const data = allUsers
+        .filter((item) => parseInt(item.roleId) === 1)
+        .map((item) => ({
+          ...item,
+          value: item.username,
+        }));
+
       setMerchants((prev) => [...prev, ...data]);
     }
   }, [allUsers]);
 
   const reportType = route.params.type.value;
 
-  const data = [
-    { value: 'All merchants' },
-    { value: 'Getapay' },
-    { value: 'XXXX' },
-    { value: 'Impaya' },
-    { value: 'MB' },
-    { value: 'tlwsn' },
-    { value: 'testCreateUser3' },
-    { value: 'testCreateUser4' },
-    { value: 'testCreateUser8' },
-    { value: 'testCreateUser11' },
-    { value: 'unlim' },
-  ];
+  // const data = [
+  //   { value: 'All merchants' },
+  //   { value: 'Getapay' },
+  //   { value: 'XXXX' },
+  //   { value: 'Impaya' },
+  //   { value: 'MB' },
+  //   { value: 'tlwsn' },
+  //   { value: 'testCreateUser3' },
+  //   { value: 'testCreateUser4' },
+  //   { value: 'testCreateUser8' },
+  //   { value: 'testCreateUser11' },
+  //   { value: 'unlim' },
+  // ];
 
   const navigation = useNavigation();
 
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('merchant', radioSelect.value);
+        setPaymentsFilter('merchant', radioSelect);
         break;
       case 'Transactions':
-        setTransactionFilter('merchant', radioSelect.value);
+        setTransactionFilter('merchant', radioSelect);
         break;
 
       default:

@@ -17,6 +17,32 @@ export const getAllUsers = createAsyncThunk('content/getAllUsers', async (_, thu
     return thunkAPI.rejectWithValue(error);
   }
 });
+export const getBankBalance = createAsyncThunk('content/getBankBalance', async (bank, thunkAPI) => {
+  try {
+    const { data } = await api.get(`${BASE_URL}/api/banks/balance/${bank}`, {
+      withCredentials: true,
+    });
+
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const getMerchantsApiKeys = createAsyncThunk(
+  'content/getMerchantsApiKeys',
+  async (id, thunkAPI) => {
+    try {
+      const { data } = await api.get(`${BASE_URL}/api/api-keys?page=1&pageSize=100&filter=${id}`, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export const getAllBanks = createAsyncThunk('content/getAllBanks', async (_, thunkAPI) => {
   try {

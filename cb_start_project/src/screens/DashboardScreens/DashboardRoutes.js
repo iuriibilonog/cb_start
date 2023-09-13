@@ -25,7 +25,6 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     const filter = genReportPaymentsFilters.filter(
       (item) => !Object.keys(item).includes(filterName)
     );
-    console.log('data999', data);
 
     setGenReportPaymentsFilters((prev) => [...filter, { [filterName]: data }]);
   };
@@ -87,8 +86,16 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="GeneralReportsScreen"
-        component={GeneralReportsScreen}
-      />
+        // component={GeneralReportsScreen}
+      >
+        {(props) => (
+          <GeneralReportsScreen
+            {...props}
+            genReportPaymentsFilters={genReportPaymentsFilters}
+            genReportTransactionFilters={genReportTransactionFilters}
+          />
+        )}
+      </DashboardStack.Screen>
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
@@ -159,6 +166,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             {...props}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
+            genReportPaymentsFilters={genReportPaymentsFilters}
+            genReportTransactionFilters={genReportTransactionFilters}
           />
         )}
       </DashboardStack.Screen>

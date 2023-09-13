@@ -32,10 +32,10 @@ const StatusScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('timeZone', radioSelect.value);
+        setPaymentsFilter('status', radioSelect.value);
         break;
       case 'Transactions':
-        setTransactionFilter('timeZone', radioSelect.value);
+        setTransactionFilter('status', radioSelect.value);
         break;
 
       default:

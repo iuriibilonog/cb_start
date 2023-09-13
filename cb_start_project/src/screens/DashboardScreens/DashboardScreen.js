@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { getAllBanks, getBankConversion } from 'src/redux/content/operations';
+import { getAllBanks, getBankConversion, getBankBalance } from 'src/redux/content/operations';
 import React, { useState, useEffect, cloneElement } from 'react';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import api from 'src/services/interceptor';
@@ -18,9 +18,22 @@ import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
 const DashboardScreen = ({ navigation }) => {
+  // need for <Dropdown to close pressing out of as onBlur doesn`t work )
+  const [isDropdownOpen, setIsDropdownOpen] = useState();
+  const [selectedBank, setSelectedBank] = useState('0');
+  const [selectedDiagram, setSelectedDiagram] = useState();
+  const [isShowDiagramCount, setIsShowDiagramCount] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const [banks, setBanks] = useState([]);
+  const [banksNames, setBanksNames] = useState([]);
+  const [bankBalance, setBankBalance] = useState([]);
+  const [currentBankConversion, setCurrentBankConversion] = useState({});
   const calendarIcon = require('src/images/calendar_icon.png');
-  const approvedValue = 250;
-  const declinedValue = 79;
+
+  const approvedValue = currentBankConversion?.approvedCount || 18;
+  const declinedValue = currentBankConversion?.declinedCount || 82;
   let approvedPercent, declinedPercent;
   if (approvedValue <= declinedValue) {
     approvedPercent = Math.round(100 / (2 * (declinedValue / approvedValue)));
@@ -30,18 +43,6 @@ const DashboardScreen = ({ navigation }) => {
     declinedPercent = Math.round(100 / (2 * (approvedValue / declinedValue)));
     approvedPercent = Math.abs(declinedPercent - 100);
   }
-
-  // need for <Dropdown to close pressing out of as onBlur doesn`t work )
-  const [isDropdownOpen, setIsDropdownOpen] = useState();
-  const [selectedBank, setSelectedBank] = useState('');
-  const [selectedDiagram, setSelectedDiagram] = useState();
-  const [isShowDiagramCount, setIsShowDiagramCount] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const [banks, setBanks] = useState([]);
-  const [banksNames, setBanksNames] = useState([]);
-  const [currentBankConversion, setCurrentBankConversion] = useState({});
 
   const data = [
     {
@@ -80,9 +81,14 @@ const DashboardScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (selectedBank) {
-      const bankName = banksNames[selectedBank];
-      // getCurrentBankConversion(bankName);
+    console.log('BANK CHANGED');
+    console.log('selectedBank', selectedBank);
+    if (selectedBank || selectedBank === 0) {
+      const bankName = banksNames[selectedBank] || banksNames[0];
+      console.log('bankName', bankName);
+
+      getBalance(bankName);
+      getCurrentBankConversion(bankName);
     }
   }, [selectedBank]);
 
@@ -95,6 +101,15 @@ const DashboardScreen = ({ navigation }) => {
       console.warn('Error:', error);
     }
   };
+  const getBalance = async (bankName) => {
+    try {
+      const data = await dispatch(getBankBalance(bankName));
+      setBankBalance(data.payload);
+      console.log('data11', data);
+    } catch (error) {
+      console.warn('Error:', error);
+    }
+  };
 
   const getBanks = async () => {
     try {
@@ -103,11 +118,11 @@ const DashboardScreen = ({ navigation }) => {
         setBanks(data.payload);
         const name = data.payload.map((item) => item.name);
 
+        console.log('name', name);
+
         setBanksNames(name);
         setSelectedBank(name[0]);
       }
-
-      // console.log('data', data.payload);
     } catch (error) {
       console.warn('Error:', error);
     }
@@ -117,9 +132,6 @@ const DashboardScreen = ({ navigation }) => {
   //   if (isDropdownOpen) e.preventDefault();
   // };
 
-  let euroCurrency = 19984.38,
-    kztCurrency = 332577687.13,
-    usdCurrency = 260.2;
   return (
     <ScrollView>
       <TouchableWithoutFeedback
@@ -197,17 +209,18 @@ const DashboardScreen = ({ navigation }) => {
                   onDropdownWillHide={() => setIsDropdownOpen(false)}
                 />
               </View>
-              <View style={styles.currencyWrapper}>
-                <View style={{ marginRight: 8 }}>
-                  <SimpleText style={styles.currency}>EUR</SimpleText>
-                  <SimpleText style={styles.currency}>KZT</SimpleText>
-                  <SimpleText style={styles.currency}>USD</SimpleText>
-                </View>
-                <View>
-                  <SimpleText style={styles.currency}>{euroCurrency}</SimpleText>
-                  <SimpleText style={styles.currency}>{kztCurrency}</SimpleText>
-                  <SimpleText style={styles.currency}>{usdCurrency}</SimpleText>
-                </View>
+              <View>
+                {bankBalance.length > 0 &&
+                  bankBalance.map((item, index) => (
+                    <View style={styles.currencyWrapper} key={index}>
+                      <View style={{ marginRight: 8 }}>
+                        <SimpleText style={styles.currency}>{item.currency}</SimpleText>
+                      </View>
+                      <View>
+                        <SimpleText style={styles.currency}>{item.amount}</SimpleText>
+                      </View>
+                    </View>
+                  ))}
               </View>
             </View>
           </View>

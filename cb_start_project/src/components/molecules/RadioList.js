@@ -25,18 +25,18 @@ const RadioList = ({ data, onSelect, defaultValue, styling = {} }) => {
               onPress={() => selectHandler(item)}
             >
               <Image
-                source={selection.username === item.username ? radioFilled : radioBlank}
+                source={selection.value === item.value ? radioFilled : radioBlank}
                 style={styles.radio}
               />
               <SimpleText
                 style={{
                   ...styles.itemText,
                   fontSize: size,
-                  opacity: selection.username === item.username ? 1 : 0.5,
-                  fontFamily: selection.username === item.username ? 'Mont_SB' : 'Mont',
+                  opacity: selection.value === item.value ? 1 : 0.5,
+                  fontFamily: selection.value === item.value ? 'Mont_SB' : 'Mont',
                 }}
               >
-                {item.username}
+                {item.value}
               </SimpleText>
             </Pressable>
           );
