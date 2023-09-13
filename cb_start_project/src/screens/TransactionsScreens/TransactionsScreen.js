@@ -156,29 +156,45 @@ const TransactionsScreen = () => {
               <SimpleText>ID</SimpleText>
             </View>
             <View style={styles.additDataCell}>
-              <SimpleText>Merchant Order ID</SimpleText>
+              <SimpleText>
+                <FormattedMessage id={'transactions.merchant_order_id'} />
+              </SimpleText>
             </View>
             <View style={styles.additDataCell}>
-              <SimpleText>Date</SimpleText>
+              <SimpleText>
+                <FormattedMessage id={'common.date'} />
+              </SimpleText>
             </View>
             <View style={styles.additDataCell}>
-              <SimpleText>API Key name</SimpleText>
+              <SimpleText>
+                <FormattedMessage id={'transactions.api_key_name'} />
+              </SimpleText>
             </View>
             <View style={styles.additDataCell}>
-              <SimpleText>Mode</SimpleText>
+              <SimpleText>
+                <FormattedMessage id={'transactions.mode'} />
+              </SimpleText>
             </View>
             <View style={styles.additDataCell}>
-              <SimpleText>Description</SimpleText>
+              <SimpleText>
+                <FormattedMessage id={'common.description'} />
+              </SimpleText>
             </View>
             <View style={styles.additDataCell}>
-              <SimpleText>Status</SimpleText>
+              <SimpleText>
+                <FormattedMessage id={'transactions.status'} />
+              </SimpleText>
             </View>
             <View style={styles.additDataCell}>
-              <SimpleText>Amount</SimpleText>
+              <SimpleText>
+                <FormattedMessage id={'transactions.amount'} />
+              </SimpleText>
             </View>
             {item.transactions.length > 0 && !isDetailsOpen && (
               <View style={styles.additDataCell}>
-                <SimpleText>Details</SimpleText>
+                <SimpleText>
+                  <FormattedMessage id={'common.details'} />
+                </SimpleText>
               </View>
             )}
           </View>
@@ -262,22 +278,34 @@ const TransactionsScreen = () => {
                 <SimpleText>ID</SimpleText>
               </View>
               <View style={styles.additDataCell}>
-                <SimpleText>Bank Payment ID</SimpleText>
+                <SimpleText>
+                  <FormattedMessage id={'transactions.bank_payment_id'} />
+                </SimpleText>
               </View>
               <View style={styles.additDataCell}>
-                <SimpleText>Bank</SimpleText>
+                <SimpleText>
+                  <FormattedMessage id={'common.bank'} />
+                </SimpleText>
               </View>
               <View style={styles.additDataCell}>
-                <SimpleText>Date</SimpleText>
+                <SimpleText>
+                  <FormattedMessage id={'common.date'} />
+                </SimpleText>
               </View>
               <View style={styles.additDataCell}>
-                <SimpleText>Message</SimpleText>
+                <SimpleText>
+                  <FormattedMessage id={'common.message'} />
+                </SimpleText>
               </View>
               <View style={styles.additDataCell}>
-                <SimpleText>Visit 3DS</SimpleText>
+                <SimpleText>
+                  <FormattedMessage id={'transactions.visit_3DS'} />
+                </SimpleText>
               </View>
               <View style={styles.additDataCell}>
-                <SimpleText>Status</SimpleText>
+                <SimpleText>
+                  <FormattedMessage id={'transactions.status'} />
+                </SimpleText>
               </View>
             </View>
             <View
@@ -363,7 +391,9 @@ const TransactionsScreen = () => {
           paddingVertical: 28,
         }}
       >
-        <SimpleText>Filters</SimpleText>
+        <SimpleText>
+          <FormattedMessage id={'common.filters'} />
+        </SimpleText>
         <Image source={arrowDown} style={{ width: 20, height: 20 }} />
       </View>
       <View

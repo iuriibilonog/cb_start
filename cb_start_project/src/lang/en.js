@@ -1,7 +1,6 @@
 const lang = {
   // ================ Authorization Screen =================
-  'common.email': 'email',
-  'common.password': 'password',
+
   'common.sign_in': 'Sign In',
   'common.log_out_title': 'Are you sure?',
   'common.log_out_btn_confirm': 'Log out',
@@ -33,7 +32,7 @@ const lang = {
   'dashboard.filters_columns': 'Filters columns',
   'dashboard.reset': 'Reset',
 
-  //===dashboard===
+  //===transactions===
   'transactions.int_id': 'Int.ID',
   'transactions.amount': 'Amount',
   'transactions.mode': 'Mode',
@@ -50,6 +49,24 @@ const lang = {
   'transactions.card.brand': 'Card brand',
   'transactions.card.country': 'Card country',
   'transactions.card.issuer': 'Card issuer',
+
+  'transactions.merchant_order_id': 'Merchant Order ID',
+  'transactions.api_key_name': 'API Key name',
+  'transactions.bank_payment_id': 'Bank Payment ID',
+  'transactions.visit_3DS': '  Visit 3DS',
+
+
+
+  //common=====
+  'common.date':'Date',
+  'common.email': 'email',
+  'common.password': 'password',
+  'common.description': 'Description',
+  'common.details': 'Details',
+  'common.bank': 'Bank',
+  'common.bank': 'Message',
+  'common.filters': 'Filters',
+
 
 
 };
