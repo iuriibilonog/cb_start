@@ -70,8 +70,16 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="CalendarScreen"
-        component={CalendarScreen}
-      />
+        // component={CalendarScreen}
+      >
+        {(props) => (
+          <CalendarScreen
+            {...props}
+            setPaymentsFilter={setPaymentsFilter}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </DashboardStack.Screen>
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,

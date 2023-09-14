@@ -20,19 +20,52 @@ import { MaskedTextInput } from 'react-native-mask-text';
 
 const calendarIcon = require('src/images/calendar_icon.png');
 
-const CalendarScreen = ({ navigation }) => {
-  const [selectedStartDay, setSelectedStartDay] = useState('');
-  const [selectedEndDay, setSelectedEndDay] = useState('');
+const CalendarScreen = ({ navigation, route }) => {
+  const initialDate = new Date().toISOString().slice(0, 10);
+  const [selectedStartDay, setSelectedStartDay] = useState(initialDate);
+  const [selectedEndDay, setSelectedEndDay] = useState(initialDate);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [focusedDay, setFocusedDay] = useState('');
 
-  const initialDate = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
+  useEffect(() => {
+    // balancePeriod
+    if (route.params.isBalancePeriod) {
+      console.log('first999', route.params.balancePeriod);
+      setSelectedStartDay({ dateString: route.params.balancePeriod.startDate });
+      setSelectedEndDay({ dateString: route.params.balancePeriod.endDate });
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   //example selectedDay: {"dateString": "2023-09-24", "day": 24, "month": 9, "timestamp": 1695513600000, "year": 2023}
-  //   console.log('StartDay>>> ', selectedStartDay);
-  //   console.log('EndDay>>> ', selectedEndDay);
-  // }, [selectedStartDay, selectedEndDay]);
+  const handlePressDownload = () => {
+    if (route.params.isBalancePeriod) {
+      const { getBalancePeriod } = route.params;
+
+      const start = selectedStartDay.dateString || selectedStartDay;
+      const end = selectedEndDay.dateString || selectedEndDay;
+
+      getBalancePeriod({ startDate: start, endDate: end });
+      navigation.navigate('DashboardScreen');
+    }
+  };
+
+  const handleSelectedDay = (data) => {
+    console.log('data', data);
+
+    switch (focusedDay) {
+      case 'start':
+        if (!data.dateString) return;
+        setSelectedStartDay(data);
+        break;
+      case 'end':
+        if (!data.dateString) return;
+        setSelectedEndDay(data);
+
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -85,15 +118,17 @@ const CalendarScreen = ({ navigation }) => {
           </View>
           {isCalendarVisible && (
             <StyledCalendar
-              setSelectedDay={focusedDay === 'start' ? setSelectedStartDay : setSelectedEndDay}
+              setSelectedDay={handleSelectedDay}
               initialDay={
-                focusedDay === 'start'
-                  ? selectedStartDay?.dateString?.replace(/\//g, '-')
-                  : selectedEndDay?.dateString?.replace(/\//g, '-')
+                focusedDay === 'start' ? selectedStartDay?.dateString : selectedEndDay?.dateString
               }
             />
           )}
-          <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 80 }}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={{ marginTop: 80 }}
+            onPress={handlePressDownload}
+          >
             <View style={styles.submitBtn}>
               <SimpleText style={styles.submitBtnText}>
                 <FormattedMessage id={'dashboard.download'} />

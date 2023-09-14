@@ -7,9 +7,7 @@ import { MaskedTextInput } from 'react-native-mask-text';
 const calendarIcon = require('src/images/calendar_icon.png');
 
 const Datepicker = (props) => {
-  const [value, setValue] = useState(
-    props.value || new Date().toISOString().slice(0, 10).replace(/-/g, '/')
-  );
+  const [value, setValue] = useState(props.value || new Date().toISOString().slice(0, 10));
   const [isFormatError, setIsFormatError] = useState(false);
   const { isDisabled, isFocused } = props;
 
