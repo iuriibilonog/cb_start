@@ -19,6 +19,7 @@ import { FormattedMessage } from 'react-intl';
 
 const DashboardScreen = ({ navigation }) => {
   // need for <Dropdown to close pressing out of as onBlur doesn`t work )
+  const initialDate = new Date().toISOString().slice(0, 10);
   const [isDropdownOpen, setIsDropdownOpen] = useState();
   const [selectedBank, setSelectedBank] = useState('0');
   const [selectedDiagram, setSelectedDiagram] = useState();
@@ -31,12 +32,15 @@ const DashboardScreen = ({ navigation }) => {
 
   const [banksNames, setBanksNames] = useState([]);
   const [bankBalance, setBankBalance] = useState([]);
+  const [balancePeriod, setBalancePeriod] = useState({
+    startDate: initialDate,
+    endDate: initialDate,
+  });
   const [currentBankConversion, setCurrentBankConversion] = useState({});
   const calendarIcon = require('src/images/calendar_icon.png');
 
   const approvedValue = currentBankConversion?.approvedCount || 0;
   const declinedValue = currentBankConversion?.declinedCount || 0;
-  console.log(currentBankConversion?.approvedCount, currentBankConversion?.declinedCount);
 
   let approvedPercent, declinedPercent;
   if (approvedValue === 0 && declinedValue === 0) {
@@ -94,18 +98,29 @@ const DashboardScreen = ({ navigation }) => {
   useEffect(() => {
     console.log('BANK CHANGED');
     console.log('selectedBank', selectedBank);
-    if (selectedBank || selectedBank === 0) {
-      const bankName = banksNames[selectedBank] || banksNames[0];
+    if ((selectedBank || selectedBank === 0) && initialBank) {
+      const bankName = banksNames[selectedBank] || initialBank;
       console.log('bankName', bankName);
 
       getBalance(bankName);
       getCurrentBankConversion(bankName);
     }
-  }, [selectedBank]);
+  }, [selectedBank, initialBank]);
+
+  useEffect(() => {
+    if (balancePeriod.startDate !== initialDate || balancePeriod.endDate !== initialDate) {
+      const bankName = banksNames[selectedBank] || initialBank;
+      getCurrentBankConversion(bankName);
+    }
+  }, [balancePeriod]);
+
+  const getBalancePeriod = (data) => {
+    setBalancePeriod(data);
+  };
 
   const getCurrentBankConversion = async (bankName) => {
     try {
-      const data = await dispatch(getBankConversion(bankName));
+      const data = await dispatch(getBankConversion({ bankName, balancePeriod }));
       setCurrentBankConversion(data.payload);
       // console.log('data', data);
     } catch (error) {
@@ -158,7 +173,13 @@ const DashboardScreen = ({ navigation }) => {
             </SimpleText>
             <TouchableOpacity
               activeOpacity={0.5}
-              onPress={() => navigation.navigate('CalendarScreen')}
+              onPress={() =>
+                navigation.navigate('CalendarScreen', {
+                  isBalancePeriod: true,
+                  getBalancePeriod,
+                  balancePeriod,
+                })
+              }
             >
               <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
@@ -331,10 +352,10 @@ const styles = StyleSheet.create({
   titleContainer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   title: { fontFamily: 'Mont', fontSize: 34 },
   smallTitle: { fontFamily: 'Mont_SB', marginBottom: 21 },
-  bankContainer: { zIndex: 1, marginTop: 30 },
+  bankContainer: { zIndex: 1, marginTop: 50 },
   currencyWrapper: { flexDirection: 'row' },
   noTransactionWrapper: { marginTop: 30, marginBottom: 40 },
-  bankConversionContainer: { marginTop: 50 },
+  bankConversionContainer: { marginTop: 30 },
   currency: { lineHeight: 21, marginBottom: 15 },
   circle: { borderRadius: 8, width: 8, height: 8, marginRight: 8 },
   chartLegendWrapper: { marginBottom: 20 },

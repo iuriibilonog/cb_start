@@ -57,10 +57,13 @@ export const getAllBanks = createAsyncThunk('content/getAllBanks', async (_, thu
 });
 export const getBankConversion = createAsyncThunk(
   'content/getBankConversion',
-  async (bankName, thunkAPI) => {
+  async (data, thunkAPI) => {
+    const { bankName } = data;
+    const { startDate, endDate } = data.balancePeriod;
+    console.log('data999999999999999', data);
     try {
       const { data } = await api.get(
-        `${BASE_URL}/api/banks/conversion/${bankName}?startDate=2023-01-08&endDate=2023-09-08&timezone=Europe/Riga`,
+        `${BASE_URL}/api/banks/conversion/${bankName}?startDate=${startDate}&endDate=${endDate}&timezone=Europe/Riga`,
         {
           withCredentials: true,
         }
