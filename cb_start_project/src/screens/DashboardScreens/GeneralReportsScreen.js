@@ -15,10 +15,12 @@ import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
 const arrowRight = require('src/images/right.png');
+const arrowRightDisable = require('src/images/arrowRightDisable.png');
 
-const GeneralReportsScreen = () => {
+const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFilters }) => {
   const [selectedId, setSelectedId] = useState(3);
   const [radioSelect, setRadioSelect] = useState({ value: 'Payments' });
+  const [isMerchantApiKeyAvaible, setIsMerchantApiKeyAvaible] = useState(false);
   const [filters, setFilters] = useState([
     { value: 'Select all filters' },
     { value: 'Payment Description' },
@@ -29,6 +31,33 @@ const GeneralReportsScreen = () => {
   const [isClickedOutside, setIsClickedOutside] = useState(false);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    switch (radioSelect.value) {
+      case 'Payments':
+        let merchantObj = genReportPaymentsFilters.find((item) => item.merchant);
+
+        if (!merchantObj?.merchant?.value || merchantObj.merchant?.value === 'All merchants') {
+          setIsMerchantApiKeyAvaible(false);
+        } else {
+          setIsMerchantApiKeyAvaible(true);
+        }
+
+        break;
+      case 'Transactions':
+        merchantObj = genReportTransactionFilters.find((item) => item.merchant);
+
+        if (!merchantObj.merchant && merchantObj.merchant === 'All merchants') {
+          setIsMerchantApiKeyAvaible(false);
+        } else {
+          setIsMerchantApiKeyAvaible(true);
+        }
+        break;
+
+      default:
+        break;
+    }
+  }, [genReportPaymentsFilters, genReportTransactionFilters]);
 
   const handleReportSelect = (e) => {
     console.log('selectedId', e);
@@ -142,23 +171,45 @@ const GeneralReportsScreen = () => {
             </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.reportContainerItem,
-              backgroundColor: selectedId === 4 ? '#F4F4F4' : '#fff',
-            }}
-            onPress={() => handleReportSelect(4)}
-          >
-            <SimpleText
+          {console.log('isMerchantApiKeyAvaible', isMerchantApiKeyAvaible)}
+          {!isMerchantApiKeyAvaible ? (
+            <View
               style={{
-                ...styles.itemText,
-                fontFamily: selectedId === 4 ? 'Mont_SB' : 'Mont',
+                ...styles.reportContainerItem,
+                backgroundColor: '#fff',
               }}
+              onPress={() => handleReportSelect(4)}
             >
-              <FormattedMessage id={'dashboard.merchants_api_key'} />
-            </SimpleText>
-            <Image source={arrowRight} style={styles.arrowRight} />
-          </TouchableOpacity>
+              <SimpleText
+                style={{
+                  ...styles.itemText,
+                  opacity: 0.5,
+                  fontFamily: selectedId === 4 ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                <FormattedMessage id={'dashboard.merchants_api_key'} />
+              </SimpleText>
+              <Image source={arrowRightDisable} style={styles.arrowRight} />
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={{
+                ...styles.reportContainerItem,
+                backgroundColor: selectedId === 4 ? '#F4F4F4' : '#fff',
+              }}
+              onPress={() => handleReportSelect(4)}
+            >
+              <SimpleText
+                style={{
+                  ...styles.itemText,
+                  fontFamily: selectedId === 4 ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                <FormattedMessage id={'dashboard.merchants_api_key'} />
+              </SimpleText>
+              <Image source={arrowRight} style={styles.arrowRight} />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={{
               ...styles.reportContainerItem,

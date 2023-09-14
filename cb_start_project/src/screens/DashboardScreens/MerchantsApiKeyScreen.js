@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import {
   View,
   Text,
@@ -13,29 +13,73 @@ import RadioList from 'src/components/molecules/RadioList';
 import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
+import { useSelector, useDispatch } from 'react-redux';
+import { getMerchantsApiKeys } from 'src/redux/content/operations';
 
 const arrowRight = require('src/images/right.png');
 
-const MerchantsApiKeyScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
+const MerchantsApiKeyScreen = ({
+  route,
+  setPaymentsFilter,
+  setTransactionFilter,
+  genReportPaymentsFilters,
+  genReportTransactionFilters,
+}) => {
   const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
   const reportType = route.params.type.value;
-  const data = [{ value: 'All api keys' }, { value: 'Test 1' }, { value: 'Test 2' }];
+  const dispatch = useDispatch();
+  const [data, setData] = useState([{ value: 'All api keys' }]);
+  const [merchId, setMerchId] = useState('');
 
   const navigation = useNavigation();
 
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('merchantApiKey', radioSelect.value);
+        let merchantObj = genReportPaymentsFilters.find((item) => item.merchant);
+
+        if (merchantObj.merchant?.value && merchantObj?.merchant?.value !== 'All merchants') {
+          setMerchId(merchantObj.merchant.id);
+          getMerchApiKeys(merchantObj.merchant.id);
+        }
         break;
       case 'Transactions':
-        setTransactionFilter('merchantApiKey', radioSelect.value);
+        break;
+
+      default:
+        break;
+    }
+  }, [genReportPaymentsFilters, genReportTransactionFilters]);
+
+  useEffect(() => {
+    switch (reportType) {
+      case 'Payments':
+        setPaymentsFilter('merchantApiKey', radioSelect);
+        break;
+      case 'Transactions':
+        setTransactionFilter('merchantApiKey', radioSelect);
         break;
 
       default:
         break;
     }
   }, [radioSelect]);
+
+  const getMerchApiKeys = async (id) => {
+    if (id.toString() === merchId.toString()) return;
+
+    try {
+      const data = await dispatch(getMerchantsApiKeys(id));
+      const keys = data.payload.items.map((item) => ({
+        ...item,
+        value: item.name,
+      }));
+
+      setData((prev) => [...prev, ...keys]);
+    } catch (error) {
+      console.warn('Error:', error);
+    }
+  };
 
   return (
     <ScrollView>

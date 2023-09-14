@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { getAllBanks, getBankConversion } from 'src/redux/content/operations';
+import { getAllBanks, getBankConversion, getBankBalance } from 'src/redux/content/operations';
 import React, { useState, useEffect, cloneElement } from 'react';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import api from 'src/services/interceptor';
@@ -18,9 +18,22 @@ import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
 const DashboardScreen = ({ navigation }) => {
+  // need for <Dropdown to close pressing out of as onBlur doesn`t work )
+  const [isDropdownOpen, setIsDropdownOpen] = useState();
+  const [selectedBank, setSelectedBank] = useState('0');
+  const [selectedDiagram, setSelectedDiagram] = useState();
+  const [isShowDiagramCount, setIsShowDiagramCount] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const [banks, setBanks] = useState([]);
+  const [banksNames, setBanksNames] = useState([]);
+  const [bankBalance, setBankBalance] = useState([]);
+  const [currentBankConversion, setCurrentBankConversion] = useState({});
   const calendarIcon = require('src/images/calendar_icon.png');
-  const approvedValue = 0;
-  const declinedValue = 0;
+
+  const approvedValue = currentBankConversion?.approvedCount || 18;
+  const declinedValue = currentBankConversion?.declinedCount || 82;
   let approvedPercent, declinedPercent;
   if (approvedValue <= declinedValue) {
     approvedPercent = Math.round(100 / (2 * (declinedValue / approvedValue)));
@@ -30,22 +43,6 @@ const DashboardScreen = ({ navigation }) => {
     declinedPercent = Math.round(100 / (2 * (approvedValue / declinedValue)));
     approvedPercent = Math.abs(declinedPercent - 100);
   }
-
-  // need for <Dropdown to close pressing out of as onBlur doesn`t work )
-  const [isDropdownOpen, setIsDropdownOpen] = useState();
-  const [selectedDiagram, setSelectedDiagram] = useState();
-  const [isShowDiagramCount, setIsShowDiagramCount] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const [banks, setBanks] = useState([]);
-
-  const [banksNames, setBanksNames] = useState([]);
-  const [initialBank, setInitialBank] = useState('');
-  const [selectedBank, setSelectedBank] = useState('');
-
-  const [currentBankConversion, setCurrentBankConversion] = useState({});
-
   const data = [
     {
       value: approvedValue,
@@ -83,9 +80,14 @@ const DashboardScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (selectedBank) {
-      const bankName = banksNames[selectedBank];
-      // getCurrentBankConversion(bankName);
+    console.log('BANK CHANGED');
+    console.log('selectedBank', selectedBank);
+    if (selectedBank || selectedBank === 0) {
+      const bankName = banksNames[selectedBank] || banksNames[0];
+      console.log('bankName', bankName);
+
+      getBalance(bankName);
+      getCurrentBankConversion(bankName);
     }
   }, [selectedBank]);
 
@@ -98,6 +100,15 @@ const DashboardScreen = ({ navigation }) => {
       console.warn('Error:', error);
     }
   };
+  const getBalance = async (bankName) => {
+    try {
+      const data = await dispatch(getBankBalance(bankName));
+      setBankBalance(data.payload);
+      console.log('data11', data);
+    } catch (error) {
+      console.warn('Error:', error);
+    }
+  };
 
   const getBanks = async () => {
     try {
@@ -106,11 +117,11 @@ const DashboardScreen = ({ navigation }) => {
         setBanks(data.payload);
         const name = data.payload.map((item) => item.name);
 
+        console.log('name', name);
+
         setBanksNames(name);
         setInitialBank(name[0]);
       }
-
-      // console.log('data', data.payload);
     } catch (error) {
       console.warn('Error:', error);
     }
@@ -120,9 +131,6 @@ const DashboardScreen = ({ navigation }) => {
   //   if (isDropdownOpen) e.preventDefault();
   // };
 
-  let euroCurrency = 19984.38,
-    kztCurrency = 332577687.13,
-    usdCurrency = 260.2;
   return (
     <ScrollView>
       <TouchableWithoutFeedback
@@ -202,17 +210,18 @@ const DashboardScreen = ({ navigation }) => {
                   />
                 )}
               </View>
-              <View style={styles.currencyWrapper}>
-                <View style={{ marginRight: 8 }}>
-                  <SimpleText style={styles.currency}>EUR</SimpleText>
-                  <SimpleText style={styles.currency}>KZT</SimpleText>
-                  <SimpleText style={styles.currency}>USD</SimpleText>
-                </View>
-                <View>
-                  <SimpleText style={styles.currency}>{euroCurrency}</SimpleText>
-                  <SimpleText style={styles.currency}>{kztCurrency}</SimpleText>
-                  <SimpleText style={styles.currency}>{usdCurrency}</SimpleText>
-                </View>
+              <View>
+                {bankBalance.length > 0 &&
+                  bankBalance.map((item, index) => (
+                    <View style={styles.currencyWrapper} key={index}>
+                      <View style={{ marginRight: 8 }}>
+                        <SimpleText style={styles.currency}>{item.currency}</SimpleText>
+                      </View>
+                      <View>
+                        <SimpleText style={styles.currency}>{item.amount}</SimpleText>
+                      </View>
+                    </View>
+                  ))}
               </View>
             </View>
           </View>
@@ -273,7 +282,7 @@ const DashboardScreen = ({ navigation }) => {
               </View>
             ) : (
               <View style={styles.noTransactionWrapper}>
-                <SimpleText style={{fontSize:20, letterSpacing:1, fontFamily:'Mont_SB'}}>
+                <SimpleText style={{ fontSize: 20, letterSpacing: 1, fontFamily: 'Mont_SB' }}>
                   <FormattedMessage id={'dashboard.no_transactions'} />
                 </SimpleText>
               </View>
@@ -311,8 +320,8 @@ const styles = StyleSheet.create({
   smallTitle: { fontFamily: 'Mont_SB', marginBottom: 21 },
   bankContainer: { zIndex: 1, marginTop: 30 },
   currencyWrapper: { flexDirection: 'row' },
-  noTransactionWrapper: {marginTop:30, marginBottom:40}
-,  bankConversionContainer: { marginTop: 50 },
+  noTransactionWrapper: { marginTop: 30, marginBottom: 40 },
+  bankConversionContainer: { marginTop: 50 },
   currency: { lineHeight: 21, marginBottom: 15 },
   circle: { borderRadius: 8, width: 8, height: 8, marginRight: 8 },
   chartLegendWrapper: { marginBottom: 20 },
