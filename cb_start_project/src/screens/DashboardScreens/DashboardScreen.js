@@ -27,19 +27,31 @@ const DashboardScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const [banks, setBanks] = useState([]);
+  const [initialBank, setInitialBank] = useState('');
+
   const [banksNames, setBanksNames] = useState([]);
   const [bankBalance, setBankBalance] = useState([]);
   const [currentBankConversion, setCurrentBankConversion] = useState({});
   const calendarIcon = require('src/images/calendar_icon.png');
 
-  const approvedValue = currentBankConversion?.approvedCount || 18;
-  const declinedValue = currentBankConversion?.declinedCount || 82;
+  const approvedValue = currentBankConversion?.approvedCount || 0;
+  const declinedValue = currentBankConversion?.declinedCount || 0;
+  console.log(currentBankConversion?.approvedCount, currentBankConversion?.declinedCount);
+
   let approvedPercent, declinedPercent;
-  if (approvedValue <= declinedValue) {
+  if (approvedValue === 0 && declinedValue === 0) {
+    approvedPercent === 0;
+    declinedPercent === 0;
+  } else if (approvedValue === 0) {
+    approvedPercent = 0;
+    declinedPercent = 100;
+  } else if (declinedValue === 0) {
+    approvedPercent = 100;
+    declinedPercent = 0;
+  } else if (approvedValue <= declinedValue) {
     approvedPercent = Math.round(100 / (2 * (declinedValue / approvedValue)));
     declinedPercent = Math.abs(approvedPercent - 100);
-  }
-  if (approvedValue > declinedValue) {
+  } else if (approvedValue > declinedValue) {
     declinedPercent = Math.round(100 / (2 * (approvedValue / declinedValue)));
     approvedPercent = Math.abs(declinedPercent - 100);
   }
@@ -132,7 +144,7 @@ const DashboardScreen = ({ navigation }) => {
   // };
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.mainWrapper}>
       <TouchableWithoutFeedback
         onPress={() => {
           setIsDropdownOpen((prev) => !prev);
@@ -229,7 +241,7 @@ const DashboardScreen = ({ navigation }) => {
             <SimpleText style={styles.smallTitle}>
               <FormattedMessage id={'dashboard.bank_conversion'} />
             </SimpleText>
-            {approvedValue && declinedValue ? (
+            {approvedValue || declinedValue ? (
               <View style={styles.pieChartWrapper}>
                 <View style={{ justifyContent: 'center' }}>
                   <View style={{ backdropFilter: 'blur(20) ' }}>
@@ -315,6 +327,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 30,
   },
+  mainWrapper: { flex: 1, backgroundColor: '#fff' },
   titleContainer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   title: { fontFamily: 'Mont', fontSize: 34 },
   smallTitle: { fontFamily: 'Mont_SB', marginBottom: 21 },

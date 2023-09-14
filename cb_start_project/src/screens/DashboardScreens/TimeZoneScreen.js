@@ -48,7 +48,7 @@ const TimeZoneScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
   const navigation = useNavigation();
 
   return (
-    <ScrollView>
+    <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList

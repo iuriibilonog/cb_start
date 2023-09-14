@@ -35,7 +35,7 @@ const CalendarScreen = ({ navigation }) => {
   // }, [selectedStartDay, selectedEndDay]);
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <TouchableWithoutFeedback
         onPress={() => {
           setIsCalendarVisible(false);

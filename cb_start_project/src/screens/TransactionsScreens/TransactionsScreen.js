@@ -366,8 +366,8 @@ const TransactionsScreen = () => {
             style={{
               color: '#3D73FF',
               textDecorationLine: 'underline',
-              textDecoration: 'underline',
-              textDecorationStyle: 'underline',
+              // textDecoration: 'underline',
+              // textDecorationStyle: 'underline',
               //doesn`t work on IOS !!!!
             }}
           >

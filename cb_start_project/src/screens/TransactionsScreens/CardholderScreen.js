@@ -44,8 +44,7 @@ const CardholderScreen = ({ navigation, id = 416989 }) => {
     <>
       <View
         style={{
-          height: 54,
-          marginTop: 20,
+          height: 74,
           flexDirection: 'row',
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
@@ -77,9 +76,9 @@ const CardholderScreen = ({ navigation, id = 416989 }) => {
               <FormattedMessage id={'transactions.details_payment'} />
             </SimpleText>
             <View style={{ position: 'relative' }}>
-              <Image source={cardholder} style={{ width: 350, height: 197, marginTop: 30 }} />
+              <Image source={cardholder} style={{ width: (width-40), height: ((width-40)/1.777), marginTop: 30 }} />
               {data && (
-                <View style={{ position: 'absolute', top: 135, left: 22 }}>
+                <View style={{ position: 'absolute', bottom: 70, left: 22 }}>
                   <SimpleText
                     style={{
                       color: 'rgba(189, 189, 189, 0.60)',
@@ -93,7 +92,7 @@ const CardholderScreen = ({ navigation, id = 416989 }) => {
                 </View>
               )}
               {data && (
-                <View style={{ position: 'absolute', top: 190, left: 22 }}>
+                <View style={{ position: 'absolute', bottom: 25, left: 22 }}>
                   <SimpleText
                     style={{
                       color: 'rgba(190, 190, 190, 0.60)',

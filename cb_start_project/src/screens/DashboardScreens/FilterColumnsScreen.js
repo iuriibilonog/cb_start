@@ -54,7 +54,7 @@ const FilterColumnsScreen = ({ setPaymentsFilter }) => {
   }, [checkBoxSelect]);
 
   return (
-    <ScrollView>
+    <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <CheckBoxList
