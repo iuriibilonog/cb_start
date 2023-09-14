@@ -21,13 +21,7 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
   const [selectedId, setSelectedId] = useState(3);
   const [radioSelect, setRadioSelect] = useState({ value: 'Payments' });
   const [isMerchantApiKeyAvaible, setIsMerchantApiKeyAvaible] = useState(false);
-  const [filters, setFilters] = useState([
-    { value: 'Select all filters' },
-    { value: 'Payment Description' },
-    { value: 'Payment ID' },
-    { value: 'Customer Email' },
-    { value: 'Type' },
-  ]);
+  const [filters, setFilters] = useState([]);
   const [isClickedOutside, setIsClickedOutside] = useState(false);
 
   const navigation = useNavigation();
@@ -35,29 +29,39 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
   useEffect(() => {
     switch (radioSelect.value) {
       case 'Payments':
-        let merchantObj = genReportPaymentsFilters.find((item) => item.merchant);
+        let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchant');
 
-        if (!merchantObj?.merchant?.value || merchantObj.merchant?.value === 'All merchants') {
+        if (!merchantObj || (merchantObj && merchantObj.value === 'All merchants')) {
           setIsMerchantApiKeyAvaible(false);
         } else {
           setIsMerchantApiKeyAvaible(true);
         }
-
+        // const filtersValues = genReportPaymentsFilters.map(item=>)
+        console.log('=Payments==>', genReportPaymentsFilters);
+        setFilters(genReportPaymentsFilters);
+        // setFilters(
+        //   genReportPaymentsFilters.map((item) => {
+        //     console.log('>', item);
+        //     return Object.values(item)[0];
+        //   })
+        // );
         break;
       case 'Transactions':
-        merchantObj = genReportTransactionFilters.find((item) => item.merchant);
-
-        if (!merchantObj.merchant && merchantObj.merchant === 'All merchants') {
+        merchantObj = genReportTransactionFilters.find((item) => item.name === 'merchant');
+        console.log('<<<', genReportTransactionFilters);
+        if (!merchantObj || (merchantObj && merchantObj.value === 'All merchants')) {
           setIsMerchantApiKeyAvaible(false);
         } else {
           setIsMerchantApiKeyAvaible(true);
         }
+        console.log('=Transactions==>', genReportTransactionFilters);
+        setFilters(genReportTransactionFilters);
         break;
 
       default:
         break;
     }
-  }, [genReportPaymentsFilters, genReportTransactionFilters]);
+  }, [genReportPaymentsFilters, genReportTransactionFilters, radioSelect]);
 
   const handleReportSelect = (e) => {
     console.log('selectedId', e);
@@ -89,13 +93,9 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
     }
   };
 
-  useEffect(() => {
-    console.log('Radio selected:', radioSelect);
-  }, [radioSelect]);
-
   const handleDeleteFilter = (filterForDeletetion) => {
     console.log('filterForDeletetion', filterForDeletetion);
-    const correctedFiltersList = filters.filter((item) => item.value !== filterForDeletetion.value);
+    const correctedFiltersList = filters.filter((item) => item.name !== filterForDeletetion.name);
     console.log('correctedFiltersList', correctedFiltersList);
     setFilters(correctedFiltersList);
   };
@@ -103,13 +103,16 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <Pressable onPress={() => setIsClickedOutside((prev) => !prev)} style={styles.container}>
-        <View style={{ marginTop: 12 }}>
-          <FiltersDropdown
-            data={filters}
-            onDelete={handleDeleteFilter}
-            isClickedOutside={isClickedOutside}
-          />
-        </View>
+        {filters.length > 0 && (
+          <View style={{ marginTop: 12 }}>
+            <FiltersDropdown
+              isVisible={true}
+              data={filters}
+              onDelete={handleDeleteFilter}
+              isClickedOutside={isClickedOutside}
+            />
+          </View>
+        )}
         <View style={styles.radioBoxContainer}>
           <RadioList
             data={[{ value: 'Payments' }, { value: 'Transactions' }]}

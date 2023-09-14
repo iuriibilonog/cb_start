@@ -16,9 +16,27 @@ import { FormattedMessage } from 'react-intl';
 
 const arrowRight = require('src/images/right.png');
 
-const StatusScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
-  const [radioSelect, setRadioSelect] = useState({ value: 'All' });
+const StatusScreen = ({
+  route,
+  setPaymentsFilter,
+  setTransactionFilter,
+  paymentFilter,
+  transactionFilter,
+}) => {
   const reportType = route.params.type.value;
+
+  const defaultPaymentFilter =
+    paymentFilter && paymentFilter.find((item) => item.name === 'status')
+      ? paymentFilter.find((item) => item.name === 'status')
+      : { value: 'All' };
+  const defaultTransactionFilter =
+    transactionFilter && transactionFilter.find((item) => item.name === 'status')
+      ? transactionFilter.find((item) => item.name === 'status')
+      : { value: 'All' };
+
+  const [radioSelect, setRadioSelect] = useState(
+    reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
+  );
   const data = [
     { value: 'All' },
     { value: 'declined' },
@@ -32,10 +50,10 @@ const StatusScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('status', radioSelect.value);
+        setPaymentsFilter('status', { filters: radioSelect.value, value: radioSelect.value });
         break;
       case 'Transactions':
-        setTransactionFilter('status', radioSelect.value);
+        setTransactionFilter('status', { filters: radioSelect.value, value: radioSelect.value });
         break;
 
       default:
@@ -56,7 +74,7 @@ const StatusScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
           <RadioList
             data={data}
             onSelect={setRadioSelect}
-            defaultValue={{ value: 'All' }}
+            defaultValue={radioSelect}
             styling={{ size: 18, spaceBetween: 34 }}
           />
         </View>

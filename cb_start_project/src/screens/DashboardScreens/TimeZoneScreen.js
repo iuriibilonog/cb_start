@@ -15,18 +15,35 @@ import SimpleText from '../../components/atoms/SimpleText';
 
 const arrowRight = require('src/images/right.png');
 
-const TimeZoneScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
-  const [radioSelect, setRadioSelect] = useState({ value: 'UTC0' });
-
+const TimeZoneScreen = ({
+  route,
+  setPaymentsFilter,
+  setTransactionFilter,
+  paymentFilter,
+  transactionFilter,
+}) => {
   const reportType = route.params.type.value;
+
+  const defaultPaymentFilter =
+    paymentFilter && paymentFilter.find((item) => item.name === 'timezone')
+      ? paymentFilter.find((item) => item.name === 'timezone')
+      : { value: 'UTC0' };
+  const defaultTransactionFilter =
+    transactionFilter && transactionFilter.find((item) => item.name === 'timezone')
+      ? transactionFilter.find((item) => item.name === 'timezone')
+      : { value: 'UTC0' };
+
+  const [radioSelect, setRadioSelect] = useState(
+    reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
+  );
 
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('status', radioSelect.value);
+        setPaymentsFilter('timezone', { filters: radioSelect.value, value: radioSelect.value });
         break;
       case 'Transactions':
-        setTransactionFilter('status', radioSelect.value);
+        setTransactionFilter('timezone', { filters: radioSelect.value, value: radioSelect.value });
         break;
 
       default:
@@ -54,7 +71,7 @@ const TimeZoneScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
           <RadioList
             data={data}
             onSelect={setRadioSelect}
-            defaultValue={{ value: 'UTC0' }}
+            defaultValue={radioSelect}
             styling={{ size: 18, spaceBetween: 34 }}
           />
         </View>
