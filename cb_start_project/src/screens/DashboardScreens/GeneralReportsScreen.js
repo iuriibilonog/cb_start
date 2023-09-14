@@ -79,7 +79,7 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
         navigation.navigate('StatusScreen', { type: radioSelect });
         break;
       case 6:
-        if (radioSelect === 'Payments') {
+        if (radioSelect.value === 'Payments') {
           navigation.navigate('FilterColumnsScreen', { type: radioSelect });
         } else {
           navigation.navigate('BanksScreen', { type: radioSelect });
