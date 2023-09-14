@@ -57,8 +57,10 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
 
   useEffect(() => {
     console.log('checkBoxSelect---', checkBoxSelect);
-    const filters = checkBoxSelect.map((item) => Object.values(item));
-    setPaymentsFilter('filterColumns', { filters: filters, value: filters.join(' ,') });
+    setPaymentsFilter('filterColumns', {
+      filters: checkBoxSelect,
+      value: checkBoxSelect.map((item) => item.value).join(' ,'),
+    });
     // setPaymentsFilter('filterColumns', filters);
   }, [checkBoxSelect]);
 
@@ -69,6 +71,7 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
           <CheckBoxList
             data={data}
             onSelect={setCheckBoxSelect}
+            defaultValue={checkBoxSelect}
             styling={{ size: 18, spaceBetween: 34 }}
             isFirstBoxAll={true}
           />
