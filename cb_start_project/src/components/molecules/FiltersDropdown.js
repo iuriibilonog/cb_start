@@ -7,7 +7,7 @@ const arrowDown = require('src/images/arrow_down.png');
 const deleteIcon = require('src/images/delete.png');
 
 const FiltersDropdown = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(props.isVisible ? true : false);
   const [value, setValue] = useState({});
   const [data, setData] = useState([]);
 
@@ -21,7 +21,7 @@ const FiltersDropdown = (props) => {
   }, [props.data]);
 
   useEffect(() => {
-    setIsOpen(false);
+    setIsOpen(props.isVisible ? true : false);
   }, [props.isClickedOutside]);
 
   const handleDelete = (index, item) => {
@@ -37,7 +37,10 @@ const FiltersDropdown = (props) => {
 
   return (
     <View>
-      <Pressable onPress={() => setIsOpen((prev) => !prev)} style={styles.container}>
+      <Pressable
+        onPress={() => setIsOpen((prev) => (props.isVisible ? true : !prev))}
+        style={styles.container}
+      >
         <SimpleText style={{ paddingVertical: 3 }}>
           {isOpen ? 'Filters' : 'Selected filters'}
         </SimpleText>
@@ -62,7 +65,14 @@ const FiltersDropdown = (props) => {
             {data &&
               data.map((item, index) => (
                 <View key={index} style={styles.itemWrapper}>
-                  <SimpleText style={styles.textItem}>{item.value}</SimpleText>
+                  {console.log('<item>', item)}
+                  <SimpleText style={styles.textItem}>
+                    {typeof item === 'string'
+                      ? item
+                      : Array.isArray(item)
+                      ? item.join(',')
+                      : item.value}
+                  </SimpleText>
                   <Pressable
                     onPress={() => handleDelete(index, item)}
                     // style={styles.itemWrapper}

@@ -16,23 +16,22 @@ const DashboardStack = createStackNavigator();
 const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([]);
   const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
+  const [filters, setFilters] = useState([]);
 
   useEffect(() => {
     console.log('genReportPaymentsFilters', genReportPaymentsFilters);
   }, [genReportPaymentsFilters, genReportTransactionFilters]);
 
   const setPaymentsFilter = (filterName, data) => {
-    const filter = genReportPaymentsFilters.filter(
-      (item) => !Object.keys(item).includes(filterName)
-    );
+    console.log('=====================');
+    console.log('filterName, data', filterName, data);
+    const filter = genReportPaymentsFilters.filter((item) => item.name !== filterName);
 
-    setGenReportPaymentsFilters((prev) => [...filter, { [filterName]: data }]);
+    setGenReportPaymentsFilters((prev) => [...filter, { name: filterName, ...data }]);
   };
   const setTransactionFilter = (filterName, data) => {
-    const filter = genReportPaymentsFilters.filter(
-      (item) => !Object.keys(item).includes(filterName)
-    );
-    setGenReportTransactionFilters((prev) => [...filter, { [filterName]: data }]);
+    const filter = genReportTransactionFilters.filter((item) => item.name !== filterName);
+    setGenReportTransactionFilters((prev) => [...filter, { name: filterName, ...data }]);
   };
 
   const profileIcon = require('src/images/profile_icon.png');
@@ -115,6 +114,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <TimeZoneScreen
             {...props}
+            paymentFilter={genReportPaymentsFilters}
+            transactionFilter={genReportTransactionFilters}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
           />
@@ -140,6 +141,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <MerchantsScreen
             {...props}
+            paymentFilter={genReportPaymentsFilters}
+            transactionFilter={genReportTransactionFilters}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
           />
@@ -190,6 +193,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <StatusScreen
             {...props}
+            paymentFilter={genReportPaymentsFilters}
+            transactionFilter={genReportTransactionFilters}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
           />
@@ -214,8 +219,10 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <FilterColumnsScreen
             {...props}
+            paymentFilter={genReportPaymentsFilters}
+            // transactionFilter={genReportTransactionFilters}
             setPaymentsFilter={setPaymentsFilter}
-            setTransactionFilter={setTransactionFilter}
+            // setTransactionFilter={setTransactionFilter}
           />
         )}
       </DashboardStack.Screen>
@@ -234,8 +241,18 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="BanksScreen"
-        component={BanksScreen}
-      />
+        // component={BanksScreen}
+      >
+        {(props) => (
+          <BanksScreen
+            {...props}
+            paymentFilter={genReportPaymentsFilters}
+            transactionFilter={genReportTransactionFilters}
+            setPaymentsFilter={setPaymentsFilter}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </DashboardStack.Screen>
     </DashboardStack.Navigator>
   );
 };

@@ -15,8 +15,16 @@ import { FormattedMessage } from 'react-intl';
 
 const arrowRight = require('src/images/right.png');
 
-const FilterColumnsScreen = ({ setPaymentsFilter }) => {
-  const [checkBoxSelect, setCheckBoxSelect] = useState([]);
+const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
+  const defaultPaymentFilter =
+    paymentFilter && paymentFilter.find((item) => item.name === 'filterColumns')
+      ? paymentFilter.find((item) => item.name === 'filterColumns')
+      : { filters: [] };
+  console.log('defaultPaymentFilter', defaultPaymentFilter);
+
+  const [radioSelect, setRadioSelect] = useState(defaultPaymentFilter);
+
+  const [checkBoxSelect, setCheckBoxSelect] = useState(defaultPaymentFilter.filters);
   const data = [
     { value: 'Select all filters' },
     { value: 'Payment Description' },
@@ -48,9 +56,10 @@ const FilterColumnsScreen = ({ setPaymentsFilter }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const filters = checkBoxSelect.map((item) => Object.values(item)).flat();
-
-    setPaymentsFilter('filterColumns', filters);
+    console.log('checkBoxSelect---', checkBoxSelect);
+    const filters = checkBoxSelect.map((item) => Object.values(item));
+    setPaymentsFilter('filterColumns', { filters: filters, value: filters.join(' ,') });
+    // setPaymentsFilter('filterColumns', filters);
   }, [checkBoxSelect]);
 
   return (

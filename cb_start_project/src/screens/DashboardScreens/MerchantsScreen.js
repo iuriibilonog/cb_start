@@ -18,8 +18,27 @@ import { getUsers } from 'src/redux/content/selectors';
 
 const arrowRight = require('src/images/right.png');
 
-const MerchantsScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => {
-  const [radioSelect, setRadioSelect] = useState({ value: 'All merchants' });
+const MerchantsScreen = ({
+  route,
+  setPaymentsFilter,
+  setTransactionFilter,
+  paymentFilter,
+  transactionFilter,
+}) => {
+  const reportType = route.params.type.value;
+  const defaultPaymentFilter =
+    paymentFilter && paymentFilter.find((item) => item.name === 'merchant')
+      ? paymentFilter.find((item) => item.name === 'merchant')
+      : { value: 'All merchants' };
+  const defaultTransactionFilter =
+    transactionFilter && transactionFilter.find((item) => item.name === 'merchant')
+      ? transactionFilter.find((item) => item.name === 'merchant')
+      : { value: 'All merchants' };
+
+  const [radioSelect, setRadioSelect] = useState(
+    reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
+  );
+
   const [merchants, setMerchants] = useState([{ value: 'All merchants' }]);
   const allUsers = useSelector(getUsers);
 
@@ -35,8 +54,6 @@ const MerchantsScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => 
       setMerchants((prev) => [...prev, ...data]);
     }
   }, [allUsers]);
-
-  const reportType = route.params.type.value;
 
   // const data = [
   //   { value: 'All merchants' },
@@ -57,10 +74,10 @@ const MerchantsScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => 
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('merchant', radioSelect);
+        setPaymentsFilter('merchant', { filters: radioSelect, value: radioSelect.value });
         break;
       case 'Transactions':
-        setTransactionFilter('merchant', radioSelect);
+        setTransactionFilter('merchant', { filters: radioSelect, value: radioSelect.value });
         break;
 
       default:
@@ -82,7 +99,7 @@ const MerchantsScreen = ({ route, setPaymentsFilter, setTransactionFilter }) => 
           <RadioList
             data={merchants}
             onSelect={setRadioSelect}
-            defaultValue={{ value: 'All merchants' }}
+            defaultValue={radioSelect}
             styling={{ size: 18, spaceBetween: 34 }}
           />
         </View>
