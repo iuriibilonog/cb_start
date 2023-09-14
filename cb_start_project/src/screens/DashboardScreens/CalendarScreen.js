@@ -20,21 +20,45 @@ import { MaskedTextInput } from 'react-native-mask-text';
 
 const calendarIcon = require('src/images/calendar_icon.png');
 
-const CalendarScreen = ({ navigation, route }) => {
+const CalendarScreen = ({ navigation, route, setPaymentsFilter, setTransactionFilter }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState(initialDate);
   const [selectedEndDay, setSelectedEndDay] = useState(initialDate);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [focusedDay, setFocusedDay] = useState('');
+  const reportType = route.params.type.value;
 
   useEffect(() => {
-    // balancePeriod
     if (route.params.isBalancePeriod) {
-      console.log('first999', route.params.balancePeriod);
       setSelectedStartDay({ dateString: route.params.balancePeriod.startDate });
       setSelectedEndDay({ dateString: route.params.balancePeriod.endDate });
     }
   }, []);
+
+  useEffect(() => {
+    if (route.params.isBalancePeriod) return;
+    const start = selectedStartDay.dateString || selectedStartDay;
+    const end = selectedEndDay.dateString || selectedEndDay;
+    switch (reportType) {
+      case 'Payments':
+        let arr = [{ startDate: start }, { endDate: end }];
+
+        // arr.forEach((item) => setPaymentsFilter(Object.entries(item).split(',')));
+        arr.forEach((item, index) => console.log('item', Object.entries(item)[index]));
+
+        // setPaymentsFilter('startDate', start);
+
+        // setPaymentsFilter('endDate', end);
+
+        break;
+      case 'Transactions':
+        setTransactionFilter({ startDate: start, endDate: end });
+        break;
+
+      default:
+        break;
+    }
+  }, [selectedStartDay, selectedEndDay]);
 
   const handlePressDownload = () => {
     if (route.params.isBalancePeriod) {
