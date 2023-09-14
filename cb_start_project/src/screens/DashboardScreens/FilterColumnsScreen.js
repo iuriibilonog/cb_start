@@ -57,11 +57,11 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
 
   useEffect(() => {
     console.log('checkBoxSelect---', checkBoxSelect);
+    const checkValues = checkBoxSelect.filter((item) => item.value !== 'Select all filters');
     setPaymentsFilter('filterColumns', {
-      filters: checkBoxSelect,
-      value: checkBoxSelect.map((item) => item.value).join(' ,'),
+      filters: checkValues.map((item) => item.value),
+      value: checkValues.map((item) => item.value).join(' ,'),
     });
-    // setPaymentsFilter('filterColumns', filters);
   }, [checkBoxSelect]);
 
   return (

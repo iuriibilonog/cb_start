@@ -37,7 +37,7 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
           setIsMerchantApiKeyAvaible(true);
         }
         // const filtersValues = genReportPaymentsFilters.map(item=>)
-        console.log('=Payments==>', genReportPaymentsFilters);
+
         setFilters(genReportPaymentsFilters);
         // setFilters(
         //   genReportPaymentsFilters.map((item) => {
@@ -174,7 +174,7 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
             </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
-          {console.log('isMerchantApiKeyAvaible', isMerchantApiKeyAvaible)}
+
           {!isMerchantApiKeyAvaible ? (
             <View
               style={{

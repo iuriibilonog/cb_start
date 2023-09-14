@@ -65,7 +65,6 @@ const FiltersDropdown = (props) => {
             {data &&
               data.map((item, index) => (
                 <View key={index} style={styles.itemWrapper}>
-                  {console.log('<item>', item)}
                   <SimpleText style={styles.textItem}>
                     {typeof item === 'string'
                       ? item

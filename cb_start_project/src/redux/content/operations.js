@@ -75,6 +75,21 @@ export const getBankConversion = createAsyncThunk(
     }
   }
 );
+export const getReport = createAsyncThunk('content/getReport', async (reportData, thunkAPI) => {
+  console.log('data999999999999999', reportData);
+  try {
+    const { data } = await api.get(
+      `${BASE_URL}/api/payments/export?${reportData}&exportFields=createdAt&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
 export const getTransactionData = createAsyncThunk(
   'content/getTransactionData',
   async (_, thunkAPI) => {

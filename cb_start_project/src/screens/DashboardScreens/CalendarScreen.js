@@ -20,18 +20,50 @@ import { MaskedTextInput } from 'react-native-mask-text';
 
 const calendarIcon = require('src/images/calendar_icon.png');
 
-const CalendarScreen = ({ navigation, route, setPaymentsFilter, setTransactionFilter }) => {
+const CalendarScreen = ({
+  navigation,
+  route,
+  setPaymentsFilter,
+  setTransactionFilter,
+  genReportPaymentsFilters,
+  genReportTransactionFilters,
+}) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState(initialDate);
   const [selectedEndDay, setSelectedEndDay] = useState(initialDate);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [focusedDay, setFocusedDay] = useState('');
-  const reportType = route.params.type.value;
+  const reportType = route.params?.type?.value;
 
   useEffect(() => {
     if (route.params.isBalancePeriod) {
       setSelectedStartDay({ dateString: route.params.balancePeriod.startDate });
       setSelectedEndDay({ dateString: route.params.balancePeriod.endDate });
+    } else {
+      switch (reportType) {
+        case 'Payments':
+          let date = genReportPaymentsFilters.find((item) =>
+            Object.keys(item).includes('startDate')
+          );
+          if (date) {
+            setSelectedStartDay({ dateString: date.startDate });
+            setSelectedEndDay({ dateString: date.endDate });
+          }
+
+          break;
+        case 'Transactions':
+          date = genReportTransactionFilters.find((item) =>
+            Object.keys(item).includes('startDate')
+          );
+          if (date) {
+            setSelectedStartDay({ dateString: date.startDate });
+            setSelectedEndDay({ dateString: date.endDate });
+          }
+          break;
+
+        default:
+          break;
+      }
     }
   }, []);
 
@@ -41,18 +73,18 @@ const CalendarScreen = ({ navigation, route, setPaymentsFilter, setTransactionFi
     const end = selectedEndDay.dateString || selectedEndDay;
     switch (reportType) {
       case 'Payments':
-        let arr = [{ startDate: start }, { endDate: end }];
-
-        // arr.forEach((item) => setPaymentsFilter(Object.entries(item).split(',')));
-        arr.forEach((item, index) => console.log('item', Object.entries(item)[index]));
-
-        // setPaymentsFilter('startDate', start);
-
-        // setPaymentsFilter('endDate', end);
+        setPaymentsFilter('date', {
+          filters: { startDate: start, endDate: end },
+          value: [start, end],
+        });
+        // setPaymentsFilter('date', { startDate: start, endDate: end });
 
         break;
       case 'Transactions':
-        setTransactionFilter({ startDate: start, endDate: end });
+        setTransactionFilter('date', {
+          filters: { startDate: start, endDate: end },
+          value: [start, end],
+        });
         break;
 
       default:
@@ -70,6 +102,7 @@ const CalendarScreen = ({ navigation, route, setPaymentsFilter, setTransactionFi
       getBalancePeriod({ startDate: start, endDate: end });
       navigation.navigate('DashboardScreen');
     }
+    setIsCalendarVisible(false);
   };
 
   const handleSelectedDay = (data) => {
