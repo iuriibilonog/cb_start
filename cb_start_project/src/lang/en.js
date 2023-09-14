@@ -31,6 +31,7 @@ const lang = {
   'dashboard.status': 'Status',
   'dashboard.filters_columns': 'Filters columns',
   'dashboard.reset': 'Reset',
+  'dashboard.no_transactions': 'No transactions for this date',
 
   //===transactions===
   'transactions.int_id': 'Int.ID',
