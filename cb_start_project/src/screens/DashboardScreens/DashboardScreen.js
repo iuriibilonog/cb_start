@@ -195,7 +195,9 @@ const DashboardScreen = ({ navigation }) => {
                 alignItems: 'flex-start',
               }}
             >
-              <View style={{ justifyContent: 'flex-start', width: 167, height: 42 }}>
+              <View
+                style={{ justifyContent: 'flex-start', width: 167, height: 42, marginBottom: 97 }}
+              >
                 {banksNames && initialBank && (
                   <ModalDropdown
                     options={banksNames}
