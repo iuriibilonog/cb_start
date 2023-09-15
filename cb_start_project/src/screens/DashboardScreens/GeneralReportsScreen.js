@@ -21,7 +21,7 @@ const GeneralReportsScreen = ({
   genReportPaymentsFilters,
   genReportTransactionFilters,
   handleDeleteFilter,
-  handleDeleteAllFilters
+  handleDeleteAllFilters,
 }) => {
   const [selectedId, setSelectedId] = useState(3);
   const [radioSelect, setRadioSelect] = useState({ value: 'Payments' });

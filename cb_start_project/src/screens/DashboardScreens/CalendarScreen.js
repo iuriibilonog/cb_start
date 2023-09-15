@@ -29,8 +29,8 @@ const CalendarScreen = ({
   genReportTransactionFilters,
 }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
-  const [selectedStartDay, setSelectedStartDay] = useState(initialDate);
-  const [selectedEndDay, setSelectedEndDay] = useState(initialDate);
+  const [selectedStartDay, setSelectedStartDay] = useState();
+  const [selectedEndDay, setSelectedEndDay] = useState();
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [focusedDay, setFocusedDay] = useState('');
   const reportType = route.params?.type?.value;
@@ -42,23 +42,15 @@ const CalendarScreen = ({
     } else {
       switch (reportType) {
         case 'Payments':
-          let date = genReportPaymentsFilters.find((item) =>
-            Object.keys(item).includes('startDate')
-          );
-          if (date) {
-            setSelectedStartDay({ dateString: date.startDate });
-            setSelectedEndDay({ dateString: date.endDate });
-          }
+          let date = genReportPaymentsFilters.find((item) => item.name === 'date');
+          setSelectedStartDay({ dateString: date ? date.filters.startDate : initialDate });
+          setSelectedEndDay({ dateString: date ? date.filters.endDate : initialDate });
 
           break;
         case 'Transactions':
-          date = genReportTransactionFilters.find((item) =>
-            Object.keys(item).includes('startDate')
-          );
-          if (date) {
-            setSelectedStartDay({ dateString: date.startDate });
-            setSelectedEndDay({ dateString: date.endDate });
-          }
+          date = genReportTransactionFilters.find((item) => item.name === 'date');
+          setSelectedStartDay({ dateString: date ? date.filters.startDate : initialDate });
+          setSelectedEndDay({ dateString: date ? date.filters.endDate : initialDate });
           break;
 
         default:
@@ -69,26 +61,28 @@ const CalendarScreen = ({
 
   useEffect(() => {
     if (route.params.isBalancePeriod) return;
-    const start = selectedStartDay.dateString || selectedStartDay;
-    const end = selectedEndDay.dateString || selectedEndDay;
-    switch (reportType) {
-      case 'Payments':
-        setPaymentsFilter('date', {
-          filters: { startDate: start, endDate: end },
-          value: [start, end],
-        });
-        // setPaymentsFilter('date', { startDate: start, endDate: end });
+    if (selectedStartDay && selectedEndDay) {
+      const start = selectedStartDay.dateString || selectedStartDay;
+      const end = selectedEndDay.dateString || selectedEndDay;
+      switch (reportType) {
+        case 'Payments':
+          setPaymentsFilter('date', {
+            filters: { startDate: start, endDate: end },
+            value: `${start}, ${end}`,
+          });
+          // setPaymentsFilter('date', { startDate: start, endDate: end });
 
-        break;
-      case 'Transactions':
-        setTransactionFilter('date', {
-          filters: { startDate: start, endDate: end },
-          value: [start, end],
-        });
-        break;
+          break;
+        case 'Transactions':
+          setTransactionFilter('date', {
+            filters: { startDate: start, endDate: end },
+            value: `${start}, ${end}`,
+          });
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
   }, [selectedStartDay, selectedEndDay]);
 
@@ -106,7 +100,6 @@ const CalendarScreen = ({
   };
 
   const handleSelectedDay = (data) => {
-    console.log('data', data);
 
     switch (focusedDay) {
       case 'start':
@@ -145,11 +138,13 @@ const CalendarScreen = ({
                 }}
                 style={styles.datePickerWrapper}
               >
-                <Datepicker
-                  isFocused={focusedDay === 'start' && isCalendarVisible}
-                  value={selectedStartDay.dateString ? selectedStartDay.dateString : initialDate}
-                  setValue={setSelectedStartDay}
-                />
+                {selectedStartDay && selectedEndDay && (
+                  <Datepicker
+                    isFocused={focusedDay === 'start' && isCalendarVisible}
+                    value={selectedStartDay.dateString}
+                    setValue={setSelectedStartDay}
+                  />
+                )}
                 <Image source={calendarIcon} style={styles.calendarIcon} />
               </Pressable>
             </View>
@@ -164,11 +159,13 @@ const CalendarScreen = ({
                 }}
                 style={styles.datePickerWrapper}
               >
-                <Datepicker
-                  isFocused={focusedDay === 'end' && isCalendarVisible}
-                  value={selectedEndDay.dateString ? selectedEndDay.dateString : initialDate}
-                  setValue={setSelectedEndDay}
-                />
+                {selectedStartDay && selectedEndDay && (
+                  <Datepicker
+                    isFocused={focusedDay === 'end' && isCalendarVisible}
+                    value={selectedEndDay.dateString}
+                    setValue={setSelectedEndDay}
+                  />
+                )}
                 <Image source={calendarIcon} style={styles.calendarIcon} />
               </Pressable>
             </View>
@@ -176,9 +173,7 @@ const CalendarScreen = ({
           {isCalendarVisible && (
             <StyledCalendar
               setSelectedDay={handleSelectedDay}
-              initialDay={
-                focusedDay === 'start' ? selectedStartDay?.dateString : selectedEndDay?.dateString
-              }
+              initialDay={focusedDay === 'start' ? selectedStartDay : selectedEndDay}
             />
           )}
           <TouchableOpacity
