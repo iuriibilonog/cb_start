@@ -20,6 +20,7 @@ import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from '@cherry-soft/react-native-basic-pagination';
 import { useNavigation } from '@react-navigation/native';
+import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 
 const close = require('src/images/delete.png');
 const arrowDown = require('src/images/arrow_down_small.png');
@@ -30,6 +31,7 @@ const TransactionsScreen = () => {
   const dispatch = useDispatch();
   const transactionInfo = useSelector(getTransactionInfo);
   const [data, setData] = useState(null);
+  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
   const navigation = useNavigation();
 
@@ -383,19 +385,33 @@ const TransactionsScreen = () => {
     // <ScrollView>
 
     <View style={styles.wrapper}>
-      <View
+      {!isFiltersVisible && (
+        <View style={styles.title}>
+          <SimpleText style={{ fontSize: 34, fontFamily: 'Mont_SB' }}>
+            <FormattedMessage id={'transactions.transactions'} />
+          </SimpleText>
+        </View>
+      )}
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() => setIsFiltersVisible((prev) => !prev)}
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
-          paddingVertical: 28,
+          justifyContent: isFiltersVisible ? 'flex-start' : 'center',
+          paddingLeft: isFiltersVisible ? 20 : 0,
+          paddingTop: isFiltersVisible ? 17 : 0,
+          paddingBottom: isFiltersVisible ? 17 : 28,
         }}
       >
-        <SimpleText>
+        <SimpleText style={{ fontFamily: 'Mont_SB' }}>
           <FormattedMessage id={'common.filters'} />
         </SimpleText>
-        <Image source={arrowDown} style={{ width: 20, height: 20 }} />
-      </View>
+        <Image source={isFiltersVisible ? arrowUp : arrowDown} style={{ width: 20, height: 20 }} />
+      </TouchableOpacity>
+
+      {isFiltersVisible && <TransactionsFilters />}
+
       <View
         style={{
           ...styles.tableRow,
@@ -447,6 +463,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     backgroundColor: '#fff',
   },
+  title: { marginTop: 30, marginBottom: 36, paddingLeft: 20 },
   headerText: { fontFamily: 'Mont_SB' },
   tableRow: { paddingLeft: 14 },
   tableCell: { paddingVertical: 15, paddingHorizontal: 5 },

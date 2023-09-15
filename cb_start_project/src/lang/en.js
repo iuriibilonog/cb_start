@@ -34,6 +34,7 @@ const lang = {
   'dashboard.no_transactions': 'No transactions for this date',
 
   //===transactions===
+  'transactions.transactions': 'Transactions',
   'transactions.int_id': 'Int.ID',
   'transactions.amount': 'Amount',
   'transactions.mode': 'Mode',
@@ -57,8 +58,18 @@ const lang = {
   'transactions.visit_3DS': 'Visit 3DS',
   'transactions.details_payment': 'Details payment',
 
+  //filters====
+  'filters.calendar': 'calendar',
+  'filters.banks': 'banks',
+  'filters.merchants': 'merchants',
+  'filters.status': 'status',
+  'filters.gmt': 'gmt',
+  'filters.key': 'Merchant`s api key',
+  'filters.currency': 'currency',
+  'filters.mode': 'mode',
+
   //common=====
-  'common.date':'Date',
+  'common.date': 'Date',
   'common.email': 'email',
   'common.password': 'password',
   'common.description': 'Description',
@@ -66,9 +77,6 @@ const lang = {
   'common.bank': 'Bank',
   'common.bank': 'Message',
   'common.filters': 'Filters',
-
-
-
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />
