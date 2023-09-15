@@ -20,21 +20,77 @@ import { MaskedTextInput } from 'react-native-mask-text';
 
 const calendarIcon = require('src/images/calendar_icon.png');
 
-const CalendarScreen = ({ navigation, route }) => {
+const CalendarScreen = ({
+  navigation,
+  route,
+  setPaymentsFilter,
+  setTransactionFilter,
+  genReportPaymentsFilters,
+  genReportTransactionFilters,
+}) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState(initialDate);
   const [selectedEndDay, setSelectedEndDay] = useState(initialDate);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [focusedDay, setFocusedDay] = useState('');
+  const reportType = route.params?.type?.value;
 
   useEffect(() => {
-    // balancePeriod
     if (route.params.isBalancePeriod) {
-      console.log('first999', route.params.balancePeriod);
       setSelectedStartDay({ dateString: route.params.balancePeriod.startDate });
       setSelectedEndDay({ dateString: route.params.balancePeriod.endDate });
+    } else {
+      switch (reportType) {
+        case 'Payments':
+          let date = genReportPaymentsFilters.find((item) =>
+            Object.keys(item).includes('startDate')
+          );
+          if (date) {
+            setSelectedStartDay({ dateString: date.startDate });
+            setSelectedEndDay({ dateString: date.endDate });
+          }
+
+          break;
+        case 'Transactions':
+          date = genReportTransactionFilters.find((item) =>
+            Object.keys(item).includes('startDate')
+          );
+          if (date) {
+            setSelectedStartDay({ dateString: date.startDate });
+            setSelectedEndDay({ dateString: date.endDate });
+          }
+          break;
+
+        default:
+          break;
+      }
     }
   }, []);
+
+  useEffect(() => {
+    if (route.params.isBalancePeriod) return;
+    const start = selectedStartDay.dateString || selectedStartDay;
+    const end = selectedEndDay.dateString || selectedEndDay;
+    switch (reportType) {
+      case 'Payments':
+        setPaymentsFilter('date', {
+          filters: { startDate: start, endDate: end },
+          value: [start, end],
+        });
+        // setPaymentsFilter('date', { startDate: start, endDate: end });
+
+        break;
+      case 'Transactions':
+        setTransactionFilter('date', {
+          filters: { startDate: start, endDate: end },
+          value: [start, end],
+        });
+        break;
+
+      default:
+        break;
+    }
+  }, [selectedStartDay, selectedEndDay]);
 
   const handlePressDownload = () => {
     if (route.params.isBalancePeriod) {
@@ -46,6 +102,7 @@ const CalendarScreen = ({ navigation, route }) => {
       getBalancePeriod({ startDate: start, endDate: end });
       navigation.navigate('DashboardScreen');
     }
+    setIsCalendarVisible(false);
   };
 
   const handleSelectedDay = (data) => {

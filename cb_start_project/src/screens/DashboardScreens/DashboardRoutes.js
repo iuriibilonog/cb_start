@@ -10,21 +10,84 @@ import StatusScreen from './StatusScreen';
 import FilterColumnsScreen from './FilterColumnsScreen';
 import BanksScreen from './BanksScreen';
 import { Image, Pressable } from 'react-native';
+import { getReport } from 'src/redux/content/operations';
+import { useDispatch } from 'react-redux';
 
 const DashboardStack = createStackNavigator();
 
 const DashboardRoutes = ({ handlePressIconLogOut }) => {
-  const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([]);
-  const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
-  const [filters, setFilters] = useState([]);
+  const initialDate = new Date().toISOString().slice(0, 10);
+  const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([
+    {
+      filters: { endDate: `${initialDate}`, startDate: `${initialDate}` },
+      name: 'date',
+      value: [`${initialDate}`, `${initialDate}`],
+    },
+  ]);
+  const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([
+    {
+      filters: { endDate: `${initialDate}`, startDate: `${initialDate}` },
+      name: 'date',
+      value: [`${initialDate}`, `${initialDate}`],
+    },
+  ]);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    // console.log('genReportPaymentsFilters', genReportPaymentsFilters);
-  }, [genReportPaymentsFilters, genReportTransactionFilters]);
+  // useEffect(() => {
+  //   console.log('genReportPaymentsFilters', genReportPaymentsFilters);
+  // }, [genReportPaymentsFilters, genReportTransactionFilters]);
+
+  const confirmReport = async () => {
+    let str = '';
+
+    genReportPaymentsFilters.map((item) => {
+      switch (item.name) {
+        case 'date':
+          str = `startDate=${item.value[1]}` + '&' + `endDate=${item.value[0]}`;
+          break;
+        case 'timezone':
+          str = str + '&' + `timezone=${item.filters.code}`;
+          break;
+        case 'merchant':
+          if (item.value !== 'All merchants') {
+            str = str + '&' + `userId=${item.filters.id}`;
+          }
+          break;
+        case 'merchantApiKey':
+          if (item.value !== 'All api keys') {
+            str = str + '&' + `apiKeyId=${item.filters.id}`;
+          }
+          break;
+        case 'status':
+          if (item.value !== 'All') {
+            str = str + '&' + `status=${item.value}`;
+          }
+          break;
+        case 'banks':
+          if (item.value !== 'All') {
+            str = str + '&' + `bankName=${item.value}`;
+          }
+          break;
+        case 'filterColumns':
+          const filters = item.filters.map(
+            (filter) => (filter = `exportFields=${filter.replace(/ /g, '')}`)
+          );
+          str = str + '&' + `${filters.join('&')}`;
+          break;
+
+        default:
+          break;
+      }
+    });
+    try {
+      const report = dispatch(getReport(str));
+      console.log('report', report);
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
 
   const setPaymentsFilter = (filterName, data) => {
-    // console.log('=====================');
-    // console.log('filterName, data', filterName, data);
     const filter = genReportPaymentsFilters.filter((item) => item.name !== filterName);
 
     setGenReportPaymentsFilters((prev) => [...filter, { name: filterName, ...data }]);
@@ -33,6 +96,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     const filter = genReportTransactionFilters.filter((item) => item.name !== filterName);
     setGenReportTransactionFilters((prev) => [...filter, { name: filterName, ...data }]);
   };
+
+  const handleDeleteFilter = () => {};
 
   const profileIcon = require('src/images/profile_icon.png');
   const headerLeft = require('src/images/header_left.png');
@@ -76,6 +141,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             {...props}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
+            genReportPaymentsFilters={genReportPaymentsFilters}
+            genReportTransactionFilters={genReportTransactionFilters}
           />
         )}
       </DashboardStack.Screen>
@@ -100,6 +167,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             {...props}
             genReportPaymentsFilters={genReportPaymentsFilters}
             genReportTransactionFilters={genReportTransactionFilters}
+            handleDeleteFilter={handleDeleteFilter}
           />
         )}
       </DashboardStack.Screen>
@@ -126,6 +194,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             transactionFilter={genReportTransactionFilters}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmReport}
           />
         )}
       </DashboardStack.Screen>
@@ -254,9 +323,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <BanksScreen
             {...props}
-            paymentFilter={genReportPaymentsFilters}
             transactionFilter={genReportTransactionFilters}
-            setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
           />
         )}

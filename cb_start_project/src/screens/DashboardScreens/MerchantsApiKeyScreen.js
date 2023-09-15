@@ -38,9 +38,9 @@ const MerchantsApiKeyScreen = ({
       case 'Payments':
         let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchant');
 
-        if (merchantObj?.value && merchantObj?.value !== 'All merchants') {
-          setMerchId(merchantObj.merchant.id);
-          getMerchApiKeys(merchantObj.merchant.id);
+        if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
+          setMerchId(merchantObj.filters.id);
+          getMerchApiKeys(merchantObj.filters.id);
         }
         break;
       case 'Transactions':
@@ -54,10 +54,11 @@ const MerchantsApiKeyScreen = ({
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('merchantApiKey', radioSelect);
+        setPaymentsFilter('merchantApiKey', { filters: radioSelect, value: radioSelect.value });
+
         break;
       case 'Transactions':
-        setTransactionFilter('merchantApiKey', radioSelect);
+        setTransactionFilter('merchantApiKey', { filters: radioSelect, value: radioSelect.value });
         break;
 
       default:

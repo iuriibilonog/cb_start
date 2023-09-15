@@ -21,6 +21,7 @@ const TimeZoneScreen = ({
   setTransactionFilter,
   paymentFilter,
   transactionFilter,
+  confirmReport,
 }) => {
   const reportType = route.params.type.value;
 
@@ -40,10 +41,10 @@ const TimeZoneScreen = ({
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('timezone', { filters: radioSelect.value, value: radioSelect.value });
+        setPaymentsFilter('timezone', { filters: radioSelect, value: radioSelect.value });
         break;
       case 'Transactions':
-        setTransactionFilter('timezone', { filters: radioSelect.value, value: radioSelect.value });
+        setTransactionFilter('timezone', { filters: radioSelect, value: radioSelect.value });
         break;
 
       default:
@@ -52,14 +53,29 @@ const TimeZoneScreen = ({
   }, [radioSelect]);
 
   const data = [
-    { value: 'UTC0' },
-    { value: '(UTC+0) Dublin, Lisbon, London' },
-    { value: '(UTC+1) Berlin, Vienna, Rome, Paris' },
-    { value: '(UTC+2) Athens, Kiev, Riga' },
-    { value: '(UTC+3) Minsk, Moscow, St.Petersburg' },
-    { value: '(UTC+4) Baku, Yerevan, Saratov, Tbilisi' },
-    { value: '(UTC+5) Tashkent, Yekaterinburg' },
-    { value: '(UTC+6) Astana , Omsk' },
+    { value: 'UTC0', code: 'Etc/UTC' },
+    {
+      value: '(UTC+0) Dublin, Lisbon, London',
+      code: 'Europe/London',
+    },
+    {
+      value: '(UTC+1) Berlin, Vienna, Rome, Paris',
+      code: 'Europe/Paris',
+    },
+    { value: '(UTC+2) Athens, Kiev, Riga', code: 'Europe/Riga' },
+    {
+      value: '(UTC+3) Minsk, Moscow, St. Petersburg',
+      code: 'Europe/Moscow',
+    },
+    {
+      value: '(UTC+4) Baku, Yerevan, Saratov, Tbilisi',
+      code: 'Asia/Baku',
+    },
+    {
+      value: '(UTC+5) Tashkent, Yekaterinburg',
+      code: 'Asia/Tashkent',
+    },
+    { value: '(UTC+6) Astana, Omsk', code: 'Asia/Omsk' },
   ];
 
   const navigation = useNavigation();
@@ -76,7 +92,7 @@ const TimeZoneScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

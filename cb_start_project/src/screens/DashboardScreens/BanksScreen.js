@@ -9,35 +9,45 @@ import {
   Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { getBanks } from 'src/redux/content/selectors';
+import RadioList from 'src/components/molecules/RadioList';
 import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
-const BanksScreen = () => {
+const BanksScreen = ({ setTransactionFilter }) => {
   const [checkBoxSelect, setCheckBoxSelect] = useState([]);
-  const data = [
-    { value: 'All' },
-    { value: 'Royal' },
-    { value: 'Unlimited' },
-    { value: 'Munzen' },
-    { value: 'Forta' },
-  ];
+  const [radioSelect, setRadioSelect] = useState({ value: 'All' });
+  const [banks, setBanks] = useState([{ value: 'All' }]);
 
   const navigation = useNavigation();
+  const data = useSelector(getBanks);
 
   useEffect(() => {
-    console.log('Checkbox selected:', checkBoxSelect);
-  }, [checkBoxSelect]);
+    if (!data.length) return;
+    const modifyBanks = data.map((item) => ({
+      name: item.name,
+      value: item.name,
+      id: item.id,
+    }));
+    setBanks((prev) => [...prev, ...modifyBanks]);
+    console.log('modifyBanks', modifyBanks);
+  }, [data]);
+
+  useEffect(() => {
+    setTransactionFilter('banks', { filters: radioSelect, value: radioSelect.value });
+  }, [radioSelect]);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
-          <CheckBoxList
-            data={data}
-            onSelect={setCheckBoxSelect}
+          <RadioList
+            data={banks}
+            onSelect={setRadioSelect}
+            defaultValue={radioSelect}
             styling={{ size: 18, spaceBetween: 34 }}
-            isFirstBoxAll={true}
           />
         </View>
 
