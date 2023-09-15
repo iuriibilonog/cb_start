@@ -12,6 +12,8 @@ const CheckBoxList = ({
   styling = {},
   isFirstBoxAll = false,
 }) => {
+  console.log('data', data);
+  console.log('defaultValue', defaultValue);
   const [selection, setSelection] = useState(defaultValue);
 
   const { size = 18, spaceBetween = 18 } = styling;

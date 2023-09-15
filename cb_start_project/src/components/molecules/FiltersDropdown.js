@@ -1,4 +1,13 @@
-import { Text, View, Image, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  TextInput,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import SimpleText from '../atoms/SimpleText';
@@ -30,6 +39,10 @@ const FiltersDropdown = (props) => {
     // setIsOpen(false);
   };
 
+  const handleReset = () => {
+    props.onDelete('all');
+  };
+
   // useEffect(() => {
   //   props.value(value);
   // }, [value]);
@@ -45,9 +58,11 @@ const FiltersDropdown = (props) => {
         </SimpleText>
         <View style={styles.arrows}>
           {isOpen ? (
-            <SimpleText style={{ letterSpacing: 0.48, color: '#FC595A' }}>
-              <FormattedMessage id={'dashboard.reset'} />
-            </SimpleText>
+            <TouchableOpacity activeOpacity={0.5} onPress={handleReset}>
+              <SimpleText style={{ letterSpacing: 0.48, color: '#FC595A' }}>
+                <FormattedMessage id={'dashboard.reset'} />
+              </SimpleText>
+            </TouchableOpacity>
           ) : (
             <Image source={isOpen ? arrowUp : arrowDown} style={{ width: 26, height: 26 }} />
           )}
@@ -71,12 +86,13 @@ const FiltersDropdown = (props) => {
                       ? item.join(',')
                       : item.value}
                   </SimpleText>
-                  <Pressable
+                  <TouchableOpacity
+                    activeOpacity={0.5}
                     onPress={() => handleDelete(index, item)}
                     // style={styles.itemWrapper}
                   >
                     <Image source={deleteIcon} style={{ width: 24, height: 24 }} />
-                  </Pressable>
+                  </TouchableOpacity>
                 </View>
               ))}
           </ScrollView>
@@ -104,6 +120,7 @@ const styles = StyleSheet.create({
   },
   textItem: {
     paddingVertical: 8,
+    marginRight: 10,
     color: 'rgba(38, 38, 38, 0.50)',
   },
   itemWrapper: {

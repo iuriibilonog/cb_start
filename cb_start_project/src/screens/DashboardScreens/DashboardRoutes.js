@@ -97,7 +97,27 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     setGenReportTransactionFilters((prev) => [...filter, { name: filterName, ...data }]);
   };
 
-  const handleDeleteFilter = () => {};
+  const handleDeleteFilter = (radioSelectValue, { name }) => {
+    switch (radioSelectValue) {
+      case 'Payments':
+        setGenReportPaymentsFilters((prev) => prev.filter((item) => item.name !== name));
+        break;
+      case 'Transactions':
+        setGenReportTransactionFilters((prev) => prev.filter((item) => item.name !== name));
+        break;
+    }
+  };
+
+  const handleDeleteAllFilters = (radioSelectValue) => {
+    switch (radioSelectValue) {
+      case 'Payments':
+        setGenReportPaymentsFilters([]);
+        break;
+      case 'Transactions':
+        setGenReportTransactionFilters([]);
+        break;
+    }
+  };
 
   const profileIcon = require('src/images/profile_icon.png');
   const headerLeft = require('src/images/header_left.png');
@@ -168,6 +188,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             genReportPaymentsFilters={genReportPaymentsFilters}
             genReportTransactionFilters={genReportTransactionFilters}
             handleDeleteFilter={handleDeleteFilter}
+            handleDeleteAllFilters={handleDeleteAllFilters}
           />
         )}
       </DashboardStack.Screen>

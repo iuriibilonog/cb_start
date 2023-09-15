@@ -17,7 +17,12 @@ import { FormattedMessage } from 'react-intl';
 const arrowRight = require('src/images/right.png');
 const arrowRightDisable = require('src/images/arrowRightDisable.png');
 
-const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFilters }) => {
+const GeneralReportsScreen = ({
+  genReportPaymentsFilters,
+  genReportTransactionFilters,
+  handleDeleteFilter,
+  handleDeleteAllFilters
+}) => {
   const [selectedId, setSelectedId] = useState(3);
   const [radioSelect, setRadioSelect] = useState({ value: 'Payments' });
   const [isMerchantApiKeyAvaible, setIsMerchantApiKeyAvaible] = useState(false);
@@ -91,11 +96,14 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
     }
   };
 
-  const handleDeleteFilter = (filterForDeletetion) => {
+  const handleDeleteSelectedFilter = (filterForDeletetion) => {
     // console.log('filterForDeletetion', filterForDeletetion);
-    const correctedFiltersList = filters.filter((item) => item.name !== filterForDeletetion.name);
+    // const correctedFiltersList = filters.filter((item) => item.name !== filterForDeletetion.name);
     // console.log('correctedFiltersList', correctedFiltersList);
-    setFilters(correctedFiltersList);
+    if (filterForDeletetion === 'all') {
+      handleDeleteAllFilters(radioSelect.value);
+    } else handleDeleteFilter(radioSelect.value, filterForDeletetion);
+    // setFilters(correctedFiltersList);
   };
 
   return (
@@ -106,7 +114,7 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
             <FiltersDropdown
               isVisible={true}
               data={filters}
-              onDelete={handleDeleteFilter}
+              onDelete={handleDeleteSelectedFilter}
               isClickedOutside={isClickedOutside}
             />
           </View>

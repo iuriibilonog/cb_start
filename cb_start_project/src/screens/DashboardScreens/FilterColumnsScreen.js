@@ -18,6 +18,7 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
     paymentFilter && paymentFilter.find((item) => item.name === 'filterColumns')
       ? paymentFilter.find((item) => item.name === 'filterColumns')
       : { filters: [] };
+  console.log('<<----PaymentFilter', paymentFilter);
   const [checkBoxSelect, setCheckBoxSelect] = useState(defaultPaymentFilter.filters);
   const data = [
     { value: 'Select all filters' },
@@ -51,10 +52,13 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
 
   useEffect(() => {
     console.log('checkBoxSelect---', checkBoxSelect);
+    const isAllSelected = checkBoxSelect.find((item) => item.value === 'Select all filters');
     const checkValues = checkBoxSelect.filter((item) => item.value !== 'Select all filters');
     setPaymentsFilter('filterColumns', {
-      filters: checkValues.map((item) => item.value),
-      value: checkValues.map((item) => item.value).join(' ,'),
+      filters: checkValues,
+      value: isAllSelected
+        ? 'Select all filters'
+        : checkValues.map((item) => item.value).join(', '),
     });
   }, [checkBoxSelect]);
 
