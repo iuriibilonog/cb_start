@@ -16,8 +16,6 @@ const CheckBoxList = ({
 
   const { size = 18, spaceBetween = 18 } = styling;
   const selectHandler = (item, index) => {
-    console.log('selection', selection);
-    console.log('item', item);
     const isItemPresent = selection.find((i) => i.value === item.value);
     const withoutItem = selection.filter((i) => i.value !== item.value);
     switch (isFirstBoxAll) {

@@ -37,7 +37,7 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
           setIsMerchantApiKeyAvaible(true);
         }
         // const filtersValues = genReportPaymentsFilters.map(item=>)
-        console.log('=Payments==>', genReportPaymentsFilters);
+        // console.log('=Payments==>', genReportPaymentsFilters);
         setFilters(genReportPaymentsFilters);
         // setFilters(
         //   genReportPaymentsFilters.map((item) => {
@@ -48,13 +48,12 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
         break;
       case 'Transactions':
         merchantObj = genReportTransactionFilters.find((item) => item.name === 'merchant');
-        console.log('<<<', genReportTransactionFilters);
         if (!merchantObj || (merchantObj && merchantObj.value === 'All merchants')) {
           setIsMerchantApiKeyAvaible(false);
         } else {
           setIsMerchantApiKeyAvaible(true);
         }
-        console.log('=Transactions==>', genReportTransactionFilters);
+        // console.log('=Transactions==>', genReportTransactionFilters);
         setFilters(genReportTransactionFilters);
         break;
 
@@ -64,7 +63,6 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
   }, [genReportPaymentsFilters, genReportTransactionFilters, radioSelect]);
 
   const handleReportSelect = (e) => {
-    console.log('selectedId', e);
     setSelectedId(e);
     switch (e) {
       case 1:
@@ -94,9 +92,9 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
   };
 
   const handleDeleteFilter = (filterForDeletetion) => {
-    console.log('filterForDeletetion', filterForDeletetion);
+    // console.log('filterForDeletetion', filterForDeletetion);
     const correctedFiltersList = filters.filter((item) => item.name !== filterForDeletetion.name);
-    console.log('correctedFiltersList', correctedFiltersList);
+    // console.log('correctedFiltersList', correctedFiltersList);
     setFilters(correctedFiltersList);
   };
 
@@ -174,7 +172,7 @@ const GeneralReportsScreen = ({ genReportPaymentsFilters, genReportTransactionFi
             </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
-          {console.log('isMerchantApiKeyAvaible', isMerchantApiKeyAvaible)}
+          {/* {console.log('isMerchantApiKeyAvaible', isMerchantApiKeyAvaible)} */}
           {!isMerchantApiKeyAvaible ? (
             <View
               style={{

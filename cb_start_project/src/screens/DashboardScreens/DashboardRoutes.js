@@ -19,12 +19,12 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const [filters, setFilters] = useState([]);
 
   useEffect(() => {
-    console.log('genReportPaymentsFilters', genReportPaymentsFilters);
+    // console.log('genReportPaymentsFilters', genReportPaymentsFilters);
   }, [genReportPaymentsFilters, genReportTransactionFilters]);
 
   const setPaymentsFilter = (filterName, data) => {
-    console.log('=====================');
-    console.log('filterName, data', filterName, data);
+    // console.log('=====================');
+    // console.log('filterName, data', filterName, data);
     const filter = genReportPaymentsFilters.filter((item) => item.name !== filterName);
 
     setGenReportPaymentsFilters((prev) => [...filter, { name: filterName, ...data }]);
