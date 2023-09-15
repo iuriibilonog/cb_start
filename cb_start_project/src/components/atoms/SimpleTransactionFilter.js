@@ -61,7 +61,7 @@ const SimpleTransactionFilter = ({ type, isActive, isDot }) => {
     <View style={styles.filterWrapper}>
       {activeImgSource && imgSource && (
         <View style={{ alignItems: 'center', justifyContent: 'space-between' }}>
-          <View style={{ position: 'relative', width: 24, height: 24 }}>
+          <View style={{ position: 'relative', width: 28, height: 28, alignItems:'center' }}>
             <Image
               source={isActive ? activeImgSource : imgSource}
               style={{ ...styles.image, width: isActive ? 27 : 24, height: isActive ? 27 : 24 }}
