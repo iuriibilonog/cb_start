@@ -17,20 +17,8 @@ const DashboardStack = createStackNavigator();
 
 const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
-  const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([
-    {
-      filters: { endDate: `${initialDate}`, startDate: `${initialDate}` },
-      name: 'date',
-      value: [`${initialDate}`, `${initialDate}`],
-    },
-  ]);
-  const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([
-    {
-      filters: { endDate: `${initialDate}`, startDate: `${initialDate}` },
-      name: 'date',
-      value: [`${initialDate}`, `${initialDate}`],
-    },
-  ]);
+  const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([]);
+  const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {

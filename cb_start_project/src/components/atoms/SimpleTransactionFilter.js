@@ -20,7 +20,6 @@ const transactionActive = require('src/images/filters/transaction_active.png');
 const transaction = require('src/images/filters/transaction.png');
 
 const SimpleTransactionFilter = ({ type, isActive, isDot }) => {
-  console.log('isActive', isActive);
   let imgSource;
   let activeImgSource;
   switch (type) {

@@ -77,6 +77,7 @@ const lang = {
   'common.bank': 'Bank',
   'common.bank': 'Message',
   'common.filters': 'Filters',
+  'common.message': 'message',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />
