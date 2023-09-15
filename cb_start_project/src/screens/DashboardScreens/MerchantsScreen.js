@@ -39,13 +39,26 @@ const MerchantsScreen = ({
     reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
   );
 
-  const [merchants, setMerchants] = useState([{ value: 'All merchants' }]);
+  const [merchants, setMerchants] = useState([
+    { value: 'All merchants' },
+    { id: 10, value: 'Getapay' },
+    { id: 36, value: 'Impaya' },
+    { id: 43, value: 'XXXX' },
+    { id: 52, value: 'MB' },
+  ]);
   const allUsers = useSelector(getUsers);
 
   useEffect(() => {
     if (allUsers.length) {
       const data = allUsers
-        .filter((item) => parseInt(item.roleId) === 1)
+        .filter(
+          (item) =>
+            parseInt(item.roleId) === 1 &&
+            item.id !== 10 &&
+            item.id !== 36 &&
+            item.id !== 43 &&
+            item.id !== 52
+        )
         .map((item) => ({
           ...item,
           value: item.username,
@@ -54,20 +67,6 @@ const MerchantsScreen = ({
       setMerchants((prev) => [...prev, ...data]);
     }
   }, [allUsers]);
-
-  // const data = [
-  //   { value: 'All merchants' },
-  //   { value: 'Getapay' },
-  //   { value: 'XXXX' },
-  //   { value: 'Impaya' },
-  //   { value: 'MB' },
-  //   { value: 'tlwsn' },
-  //   { value: 'testCreateUser3' },
-  //   { value: 'testCreateUser4' },
-  //   { value: 'testCreateUser8' },
-  //   { value: 'testCreateUser11' },
-  //   { value: 'unlim' },
-  // ];
 
   const navigation = useNavigation();
 

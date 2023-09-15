@@ -33,9 +33,9 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   ]);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   console.log('genReportPaymentsFilters', genReportPaymentsFilters);
-  // }, [genReportPaymentsFilters, genReportTransactionFilters]);
+  useEffect(() => {
+    console.log('genReportPaymentsFilters', genReportPaymentsFilters);
+  }, [genReportPaymentsFilters, genReportTransactionFilters]);
 
   const confirmReport = async () => {
     let str = '';
@@ -43,7 +43,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     genReportPaymentsFilters.map((item) => {
       switch (item.name) {
         case 'date':
-          str = `startDate=${item.value[1]}` + '&' + `endDate=${item.value[0]}`;
+          str = `startDate=${item.value[0]}` + '&' + `endDate=${item.value[1]}`;
           break;
         case 'timezone':
           str = str + '&' + `timezone=${item.filters.code}`;
@@ -69,10 +69,9 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           }
           break;
         case 'filterColumns':
-          const filters = item.filters.map(
-            (filter) => (filter = `exportFields=${filter.replace(/ /g, '')}`)
-          );
+          const filters = item.filters.map((filter) => (filter = `exportFields=${filter.code}`));
           str = str + '&' + `${filters.join('&')}`;
+          console.log('str', str);
           break;
 
         default:
@@ -80,7 +79,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       }
     });
     try {
-      const report = dispatch(getReport(str));
+      // console.log('str', str);
+      const report = await dispatch(getReport(str));
       console.log('report', report);
     } catch (error) {
       console.log('Error', error);

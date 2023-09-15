@@ -76,7 +76,6 @@ export const getBankConversion = createAsyncThunk(
   }
 );
 export const getReport = createAsyncThunk('content/getReport', async (reportData, thunkAPI) => {
-  console.log('data999999999999999', reportData);
   try {
     const { data } = await api.get(
       `${BASE_URL}/api/payments/export?${reportData}&exportFields=createdAt&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode`,
@@ -95,7 +94,7 @@ export const getTransactionData = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { data } = await api.get(
-        `${BASE_URL}/api/payments?page=1&pageSize=100&includeTransactions=true&startDate=2023-09-12&endDate=2023-09-12&timezone=Etc/UTC`,
+        `${BASE_URL}/api/payments?page=1&pageSize=100&includeTransactions=true&startDate=2022-09-12&endDate=2023-09-15&timezone=Etc/UTC`,
         {
           withCredentials: true,
         }
