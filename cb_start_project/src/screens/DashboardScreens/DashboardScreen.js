@@ -162,7 +162,7 @@ const DashboardScreen = ({ navigation }) => {
     <ScrollView style={styles.mainWrapper}>
       <TouchableWithoutFeedback
         onPress={() => {
-          setIsDropdownOpen((prev) => !prev);
+          setIsDropdownOpen(false);
           setIsShowDiagramCount(false);
         }}
       >
