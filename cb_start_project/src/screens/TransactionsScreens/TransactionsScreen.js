@@ -73,6 +73,12 @@ const TransactionsScreen = () => {
     navigation.navigate('CardholderScreen', { id: itemId });
   };
 
+  const validTextShow = (date) => {
+    console.log('DATE', date);
+    const a = date.split('T');
+    return a[0] + ' ' + a[1].slice(0, 5);
+  };
+
   const flatListRenderModule = (item, index) => (
     <>
       <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}>
@@ -213,7 +219,7 @@ const TransactionsScreen = () => {
               <SimpleText>{item.orderId}</SimpleText>
             </View>
             <View style={styles.additDataCellValues}>
-              <SimpleText>{item.updatedAt}</SimpleText>
+              <SimpleText>{validTextShow(item.updatedAt)}</SimpleText>
             </View>
             <View style={styles.additDataCellValues}>
               <SimpleText>{item.apiKey.name}</SimpleText>
@@ -326,7 +332,7 @@ const TransactionsScreen = () => {
                 <SimpleText>{transaction.paymentMethod.paymentMethod.bank.name}</SimpleText>
               </View>
               <View style={styles.additDataCellValues}>
-                <SimpleText>{transaction.updatedAt}</SimpleText>
+                <SimpleText>{validTextShow(transaction.updatedAt)}</SimpleText>
               </View>
               <View style={styles.additDataCellValues}>
                 <SimpleText>{transaction.message}</SimpleText>
