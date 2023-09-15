@@ -96,11 +96,11 @@ const DashboardScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    console.log('BANK CHANGED');
-    console.log('selectedBank', selectedBank);
+    // console.log('BANK CHANGED');
+    // console.log('selectedBank', selectedBank);
     if ((selectedBank || selectedBank === 0) && initialBank) {
       const bankName = banksNames[selectedBank] || initialBank;
-      console.log('bankName', bankName);
+      // console.log('bankName', bankName);
 
       getBalance(bankName);
       getCurrentBankConversion(bankName);
@@ -131,7 +131,7 @@ const DashboardScreen = ({ navigation }) => {
     try {
       const data = await dispatch(getBankBalance(bankName));
       setBankBalance(data.payload);
-      console.log('data11', data);
+      // console.log('data11', data);
     } catch (error) {
       console.warn('Error:', error);
     }
@@ -162,7 +162,7 @@ const DashboardScreen = ({ navigation }) => {
     <ScrollView style={styles.mainWrapper}>
       <TouchableWithoutFeedback
         onPress={() => {
-          setIsDropdownOpen((prev) => !prev);
+          setIsDropdownOpen(false);
           setIsShowDiagramCount(false);
         }}
       >

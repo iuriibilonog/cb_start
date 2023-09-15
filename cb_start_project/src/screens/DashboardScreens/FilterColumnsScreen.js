@@ -13,17 +13,12 @@ import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
-const arrowRight = require('src/images/right.png');
-
 const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
   const defaultPaymentFilter =
     paymentFilter && paymentFilter.find((item) => item.name === 'filterColumns')
       ? paymentFilter.find((item) => item.name === 'filterColumns')
       : { filters: [] };
-  console.log('defaultPaymentFilter', defaultPaymentFilter);
-
-  const [radioSelect, setRadioSelect] = useState(defaultPaymentFilter);
-
+  console.log('<<----PaymentFilter', paymentFilter);
   const [checkBoxSelect, setCheckBoxSelect] = useState(defaultPaymentFilter.filters);
   const data = [
     { value: 'Select all filters' },
@@ -54,10 +49,13 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
 
   useEffect(() => {
     console.log('checkBoxSelect---', checkBoxSelect);
+    const isAllSelected = checkBoxSelect.find((item) => item.value === 'Select all filters');
     const checkValues = checkBoxSelect.filter((item) => item.value !== 'Select all filters');
     setPaymentsFilter('filterColumns', {
       filters: checkValues,
-      value: checkValues.map((item) => item.value).join(' ,'),
+      value: isAllSelected
+        ? 'Select all filters'
+        : checkValues.map((item) => item.value).join(', '),
     });
   }, [checkBoxSelect]);
 

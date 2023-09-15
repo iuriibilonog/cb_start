@@ -53,27 +53,27 @@ LocaleConfig.defaultLocale = 'en';
 const leftArrow = require('src/images/left.png');
 const rightArrow = require('src/images/right.png');
 
-const StyledCalendar = (props) => {
-  const [selectedDay, setSelectedDay] = useState(
-    props.initialDay ? { dateString: props.initialDay } : ''
-  );
+const StyledCalendar = ({initialDay, setSelectedDay}) => {
+  // const [selectedDay, setSelectedDay] = useState(
+  //   props.initialDay ? { dateString: props.initialDay } : ''
+  // );
 
-  useEffect(() => {
-    if (props.setSelectedDay) {
-      let correctedDateString = '';
-      if (selectedDay.dateString) {
-        correctedDateString = selectedDay.dateString;
-        selectedDay.dateString;
-      }
-      props.setSelectedDay({ ...selectedDay, dateString: correctedDateString });
-    }
-  }, [selectedDay]);
+  // useEffect(() => {
+  //   if (props.setSelectedDay) {
+  //     let correctedDateString = '';
+  //     if (selectedDay.dateString) {
+  //       correctedDateString = selectedDay.dateString;
+  //       selectedDay.dateString;
+  //     }
+  //     props.setSelectedDay({ ...selectedDay, dateString: correctedDateString });
+  //   }
+  // }, [selectedDay]);
 
-  useEffect(() => {
-    if (props.initialDay) {
-      setSelectedDay({ dateString: props.initialDay });
-    }
-  }, [props.initialDay]);
+  // useEffect(() => {
+  //   if (props.initialDay) {
+  //     setSelectedDay({ dateString: props.initialDay });
+  //   }
+  // }, [props.initialDay]);
 
   return (
     <View style={styles.container}>
@@ -97,7 +97,7 @@ const StyledCalendar = (props) => {
           markingType={'custom'}
           markedDates={{
             // '2023-09-20'
-            [selectedDay.dateString]: {
+            [initialDay.dateString]: {
               customStyles: {
                 container: {
                   width: 50,
