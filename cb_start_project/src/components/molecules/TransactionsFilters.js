@@ -29,7 +29,6 @@ const transaction = require('src/images/filters/transaction.png');
 
 const TransactionsFilters = (props) => {
   const [selection, setSelection] = useState('calendar'); //'calendar'
-  console.log(selection);
 
   return (
     <View style={styles.container}>
