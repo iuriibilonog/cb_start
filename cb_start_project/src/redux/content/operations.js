@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setDataToStorage, removeDataToStorage } from 'src/helpers/asyncStorageHelpers';
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+const initialDate = new Date().toISOString().slice(0, 10);
 
 export const getAllUsers = createAsyncThunk('content/getAllUsers', async (_, thunkAPI) => {
   try {
@@ -79,6 +80,8 @@ export const getBankConversion = createAsyncThunk(
   }
 );
 export const getReport = createAsyncThunk('content/getReport', async (reportData, thunkAPI) => {
+  if (!reportData.includes('startDate'))
+    reportData = `startDate=${initialDate}` + '&' + `endDate=${initialDate}` + reportData;
   try {
     const { data } = await api.get(
       `${BASE_URL}/api/payments/export?${reportData}&exportFields=createdAt&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode`,

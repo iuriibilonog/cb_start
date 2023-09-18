@@ -85,6 +85,7 @@ export const AxiosInterceptor = ({ children }) => {
       //   else {
       //     context.showErrorInterceptor(error);
       //   }
+      throw error?.response?.data || error;
     }
   );
 

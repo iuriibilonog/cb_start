@@ -31,6 +31,7 @@ const userSlice = createSlice({
           message: action.payload,
         };
       });
+
     // builder.addCase(getBankBalance.fulfilled, (state, action) => {
     //   state.content.banks = action.payload;
     // }),
