@@ -9,7 +9,7 @@ import MerchantsApiKeyScreen from './MerchantsApiKeyScreen';
 import StatusScreen from './StatusScreen';
 import FilterColumnsScreen from './FilterColumnsScreen';
 import BanksScreen from './BanksScreen';
-import { Image, Pressable } from 'react-native';
+import { Image, Pressable, Alert } from 'react-native';
 import { getReport } from 'src/redux/content/operations';
 import { useDispatch } from 'react-redux';
 
@@ -66,12 +66,15 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           break;
       }
     });
-    try {
-      // console.log('str', str);
-      const report = await dispatch(getReport(str));
-      // console.log('report', report);
-    } catch (error) {
-      console.log('Error', error);
+
+    const report = await dispatch(getReport(str));
+
+    if (report.error) {
+      Alert.alert(`${report.payload.error}`, ' ', [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+    } else {
+      console.log('report', report);
     }
   };
 
