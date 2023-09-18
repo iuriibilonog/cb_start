@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
 import { FormattedMessage } from 'react-intl';
 import SimpleText from '../../components/atoms/SimpleText';
+import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 
 const arrowRight = require('src/images/right.png');
 
@@ -22,6 +23,8 @@ const TimeZoneScreen = ({
   paymentFilter,
   transactionFilter,
   confirmReport,
+  isFiltersVisible,
+  filtersDots,
 }) => {
   const reportType = route.params.type.value;
 
@@ -82,6 +85,7 @@ const TimeZoneScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {isFiltersVisible && <TransactionsFilters isActive={'timezone'} filtersDots={filtersDots} />}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList

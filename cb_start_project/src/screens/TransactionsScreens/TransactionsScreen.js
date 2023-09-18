@@ -41,7 +41,7 @@ const TransactionsScreen = ({ genReportTransactionFilters, filtersDots }) => {
 
   useEffect(() => {
     dispatch(getTransactionData());
-    console.log('genReportTransactionFilters', genReportTransactionFilters);
+    // console.log('genReportTransactionFilters', genReportTransactionFilters);
   }, [genReportTransactionFilters]);
 
   useEffect(() => {

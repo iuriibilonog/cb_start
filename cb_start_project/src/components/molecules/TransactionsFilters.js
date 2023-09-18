@@ -11,7 +11,6 @@ import {
 import SimpleTransactionFilter from 'src/components/atoms/SimpleTransactionFilter';
 import { useNavigation } from '@react-navigation/native';
 
-
 const TransactionsFilters = (props) => {
   const [selection, setSelection] = useState(props.isActive || ''); //'date'
   const navigation = useNavigation();
@@ -85,15 +84,39 @@ const TransactionsFilters = (props) => {
             navigation.navigate('BanksScreen', { type: { value: 'Transactions' } });
           }}
         >
-          <SimpleTransactionFilter type="banks" isActive={selection === 'banks'} isDot={props?.filtersDots?.includes('banks')} />
+          <SimpleTransactionFilter
+            type="banks"
+            isActive={selection === 'banks'}
+            isDot={props?.filtersDots?.includes('banks')}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.filtersCol}>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => setSelection('mode')}>
-          <SimpleTransactionFilter type="mode" isActive={selection === 'mode'} />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => {
+            setSelection('mode');
+            navigation.navigate('ModeScreen', { type: { value: 'Transactions' } });
+          }}
+        >
+          <SimpleTransactionFilter
+            type="mode"
+            isActive={selection === 'mode'}
+            isDot={props?.filtersDots?.includes('mode')}
+          />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => setSelection('gmt')}>
-          <SimpleTransactionFilter type="gmt" isActive={selection === 'gmt'} />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => {
+            setSelection('gmt');
+            navigation.navigate('TimeZoneScreen', { type: { value: 'Transactions' } });
+          }}
+        >
+          <SimpleTransactionFilter
+            type="gmt"
+            isActive={selection === 'timezone'}
+            isDot={props?.filtersDots?.includes('timezone')}
+          />
         </TouchableOpacity>
       </View>
     </View>

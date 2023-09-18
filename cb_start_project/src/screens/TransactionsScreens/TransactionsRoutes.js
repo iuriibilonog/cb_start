@@ -6,6 +6,9 @@ import CalendarScreen from '../DashboardScreens/CalendarScreen';
 import MerchantsScreen from '../DashboardScreens/MerchantsScreen';
 import StatusScreen from '../DashboardScreens/StatusScreen';
 import BanksScreen from '../DashboardScreens/BanksScreen';
+import ModeScreen from '../TransactionsScreens/ModeScreen';
+import CurrencyScreen from '../TransactionsScreens/CurrencyScreen';
+
 import TimeZoneScreen from '../DashboardScreens/TimeZoneScreen';
 import MerchantsApiKeyScreen from '../DashboardScreens/MerchantsApiKeyScreen';
 
@@ -230,6 +233,56 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
       >
         {(props) => (
           <BanksScreen
+            {...props}
+            isFiltersVisible={true}
+            filtersDots={filtersDots}
+            transactionFilter={genReportTransactionFilters}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </TransactionsStack.Screen>
+      <TransactionsStack.Screen
+        options={{
+          headerBackTitleVisible: false,
+          headerTitle: 'Mode',
+          headerTitleAlign: 'left',
+          headerBackImage: () => (
+            <Image
+              source={headerLeft}
+              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              // onPress={() => navigation.navigate('TransactionsScreen')}
+            />
+          ),
+        }}
+        name="ModeScreen"
+      >
+        {(props) => (
+          <ModeScreen
+            {...props}
+            isFiltersVisible={true}
+            filtersDots={filtersDots}
+            transactionFilter={genReportTransactionFilters}
+            setTransactionFilter={setTransactionFilter}
+          />
+        )}
+      </TransactionsStack.Screen>
+      <TransactionsStack.Screen
+        options={{
+          headerBackTitleVisible: false,
+          headerTitle: 'Currency',
+          headerTitleAlign: 'left',
+          headerBackImage: () => (
+            <Image
+              source={headerLeft}
+              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              // onPress={() => navigation.navigate('TransactionsScreen')}
+            />
+          ),
+        }}
+        name="CurrencyScreen"
+      >
+        {(props) => (
+          <CurrencyScreen
             {...props}
             isFiltersVisible={true}
             filtersDots={filtersDots}
