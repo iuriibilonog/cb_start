@@ -34,7 +34,7 @@ const GeneralReportsScreen = ({
   useEffect(() => {
     switch (radioSelect.value) {
       case 'Payments':
-        let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchant');
+        let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchants');
 
         if (!merchantObj || (merchantObj && merchantObj.value === 'All merchants')) {
           setIsMerchantApiKeyAvaible(false);
@@ -52,7 +52,7 @@ const GeneralReportsScreen = ({
         // );
         break;
       case 'Transactions':
-        merchantObj = genReportTransactionFilters.find((item) => item.name === 'merchant');
+        merchantObj = genReportTransactionFilters.find((item) => item.name === 'merchants');
         if (!merchantObj || (merchantObj && merchantObj.value === 'All merchants')) {
           setIsMerchantApiKeyAvaible(false);
         } else {
