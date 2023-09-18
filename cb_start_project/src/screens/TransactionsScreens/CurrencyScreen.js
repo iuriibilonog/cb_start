@@ -12,12 +12,21 @@ const CurrencyScreen = ({
   transactionFilter,
   isFiltersVisible,
   filtersDots,
+  isMerchApiKeyAvailable,
 }) => {
   const getDefaultFilter = transactionFilter?.find((item) => item.name === 'currency');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
 
   const [radioSelect, setRadioSelect] = useState(defaultTransactionFilter);
-  const [currencies, setCurrencies] = useState([{ value: 'All' }, {value:'EUR'}, {value:'USD'},{ value: 'RUB' }, {value:'KZT'}, {value:'INR'}, {value:'BRL'}]);
+  const [currencies, setCurrencies] = useState([
+    { value: 'All' },
+    { value: 'EUR' },
+    { value: 'USD' },
+    { value: 'RUB' },
+    { value: 'KZT' },
+    { value: 'INR' },
+    { value: 'BRL' },
+  ]);
 
   // const data = useSelector(getCurrencies);
 
@@ -37,7 +46,13 @@ const CurrencyScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'currency'} filtersDots={filtersDots} />}
+      {isFiltersVisible && (
+        <TransactionsFilters
+          isActive={'currency'}
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList

@@ -8,7 +8,6 @@ import StatusScreen from '../DashboardScreens/StatusScreen';
 import BanksScreen from '../DashboardScreens/BanksScreen';
 import ModeScreen from '../TransactionsScreens/ModeScreen';
 import CurrencyScreen from '../TransactionsScreens/CurrencyScreen';
-
 import TimeZoneScreen from '../DashboardScreens/TimeZoneScreen';
 import MerchantsApiKeyScreen from '../DashboardScreens/MerchantsApiKeyScreen';
 
@@ -20,6 +19,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
   const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([]);
   const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
   const [filtersDots, setFiltersDots] = useState([]);
+  const [isMerchApiKeyAvailable, setIsMerchApiKeyAvailable] = useState(false);
 
   useEffect(() => {
     // console.log('genReportPaymentsFilters', genReportPaymentsFilters);
@@ -27,7 +27,11 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
       (item) => item.name && item.name !== ''
     );
     if (filtersWithData) {
+      console.log('<><><><>', filtersWithData);
       setFiltersDots(filtersWithData.map((item) => item.name));
+      setIsMerchApiKeyAvailable(
+        filtersWithData.find((item) => item.name === 'merchants') !== undefined
+      );
     }
   }, [genReportTransactionFilters]);
 
@@ -65,6 +69,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <TransactionsScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             genReportTransactionFilters={genReportTransactionFilters}
@@ -108,6 +113,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <CalendarScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
@@ -133,6 +139,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <MerchantsScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
@@ -158,6 +165,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <MerchantsApiKeyScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
@@ -183,6 +191,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <StatusScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
@@ -208,6 +217,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <TimeZoneScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
@@ -234,6 +244,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <BanksScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
@@ -259,6 +270,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <ModeScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
@@ -284,6 +296,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
         {(props) => (
           <CurrencyScreen
             {...props}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}

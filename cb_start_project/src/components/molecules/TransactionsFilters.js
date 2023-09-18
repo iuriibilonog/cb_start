@@ -74,8 +74,21 @@ const TransactionsFilters = (props) => {
         </TouchableOpacity>
       </View>
       <View style={styles.filtersCol}>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => setSelection('key')}>
-          <SimpleTransactionFilter type="key" isActive={selection === 'key'} />
+        <TouchableOpacity
+          activeOpacity={props.isMerchApiKeyAvailable ? 0.5 : 1}
+          onPress={() => {
+            if (props.isMerchApiKeyAvailable) {
+              setSelection('key');
+              navigation.navigate('MerchantsApiKeyScreen', { type: { value: 'Transactions' } });
+            }
+          }}
+        >
+          <SimpleTransactionFilter
+            type="key"
+            isActive={selection === 'key'}
+            isInactive={!props.isMerchApiKeyAvailable}
+            isDot={props?.filtersDots?.includes('merchantApiKey')}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}

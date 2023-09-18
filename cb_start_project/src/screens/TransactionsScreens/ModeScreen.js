@@ -12,7 +12,7 @@ import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 
-const ModeScreen = ({ setTransactionFilter, transactionFilter, isFiltersVisible, filtersDots }) => {
+const ModeScreen = ({ setTransactionFilter, transactionFilter, isFiltersVisible, filtersDots , isMerchApiKeyAvailable}) => {
   const getDefaultFilter = transactionFilter?.find((item) => item.name === 'mode');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
 
@@ -37,7 +37,7 @@ const ModeScreen = ({ setTransactionFilter, transactionFilter, isFiltersVisible,
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'mode'} filtersDots={filtersDots} />}
+      {isFiltersVisible && <TransactionsFilters isActive={'mode'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList

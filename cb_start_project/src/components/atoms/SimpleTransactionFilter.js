@@ -11,7 +11,9 @@ const status = require('src/images/filters/status.png');
 const clockActive = require('src/images/filters/clock_active.png');
 const clock = require('src/images/filters/clock.png');
 const keyActive = require('src/images/filters/key_active.png');
+const keyInactive = require('src/images/filters/key_inactive.png');
 const key = require('src/images/filters/key.png');
+
 const userActive = require('src/images/filters/user_active.png');
 const user = require('src/images/filters/user.png');
 const moneyActive = require('src/images/filters/money_active.png');
@@ -19,9 +21,10 @@ const money = require('src/images/filters/money.png');
 const transactionActive = require('src/images/filters/transaction_active.png');
 const transaction = require('src/images/filters/transaction.png');
 
-const SimpleTransactionFilter = ({ type, isActive, isDot }) => {
+const SimpleTransactionFilter = ({ type, isActive, isInactive, isDot }) => {
   let imgSource;
   let activeImgSource;
+  let inactiveImgSource;
   switch (type) {
     case 'date':
       imgSource = calendar;
@@ -42,6 +45,7 @@ const SimpleTransactionFilter = ({ type, isActive, isDot }) => {
     case 'key':
       imgSource = key;
       activeImgSource = keyActive;
+      inactiveImgSource = keyInactive;
       break;
     case 'merchants':
       imgSource = user;
@@ -70,7 +74,7 @@ const SimpleTransactionFilter = ({ type, isActive, isDot }) => {
             }}
           >
             <Image
-              source={isActive ? activeImgSource : imgSource}
+              source={isInactive ? inactiveImgSource : isActive ? activeImgSource : imgSource}
               style={{ ...styles.image, width: isActive ? 27 : 24, height: isActive ? 27 : 24 }}
             />
             {isDot && (
@@ -90,7 +94,7 @@ const SimpleTransactionFilter = ({ type, isActive, isDot }) => {
           <SimpleText
             style={{
               ...styles.text,
-              color: isActive ? '#36D0BB' : '#BAC0D0',
+              color: isInactive ? 'rgba(186, 192, 208, 0.40)' : isActive ? '#36D0BB' : '#BAC0D0',
               marginTop: 7,
               textAlign: 'center',
             }}

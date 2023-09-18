@@ -30,6 +30,7 @@ const CalendarScreen = ({
   transactionFilter,
   isFiltersVisible,
   filtersDots,
+  isMerchApiKeyAvailable
 }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState();
@@ -121,7 +122,7 @@ const CalendarScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'date'} filtersDots={filtersDots} />}
+      {isFiltersVisible && <TransactionsFilters isActive={'date'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
       <TouchableWithoutFeedback
         onPress={() => {
           setIsCalendarVisible(false);

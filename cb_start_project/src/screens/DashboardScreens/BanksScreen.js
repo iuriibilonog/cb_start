@@ -22,6 +22,7 @@ const BanksScreen = ({
   transactionFilter,
   isFiltersVisible,
   filtersDots,
+  isMerchApiKeyAvailable
 }) => {
   const getDefaultFilter = transactionFilter?.find((item) => item.name === 'banks');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
@@ -50,7 +51,7 @@ const BanksScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'banks'} filtersDots={filtersDots} />}
+      {isFiltersVisible && <TransactionsFilters isActive={'banks'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList

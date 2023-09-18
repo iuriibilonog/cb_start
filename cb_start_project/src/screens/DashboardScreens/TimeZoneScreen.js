@@ -25,6 +25,7 @@ const TimeZoneScreen = ({
   confirmReport,
   isFiltersVisible,
   filtersDots,
+  isMerchApiKeyAvailable
 }) => {
   const reportType = route.params.type.value;
 
@@ -85,7 +86,7 @@ const TimeZoneScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'timezone'} filtersDots={filtersDots} />}
+      {isFiltersVisible && <TransactionsFilters isActive={'timezone'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList
