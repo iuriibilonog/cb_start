@@ -23,7 +23,7 @@ const SimpleTransactionFilter = ({ type, isActive, isDot }) => {
   let imgSource;
   let activeImgSource;
   switch (type) {
-    case 'calendar':
+    case 'date':
       imgSource = calendar;
       activeImgSource = calendarActive;
       break;

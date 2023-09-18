@@ -53,7 +53,7 @@ LocaleConfig.defaultLocale = 'en';
 const leftArrow = require('src/images/left.png');
 const rightArrow = require('src/images/right.png');
 
-const StyledCalendar = ({initialDay, setSelectedDay}) => {
+const StyledCalendar = ({ initialDay, setSelectedDay }) => {
   // const [selectedDay, setSelectedDay] = useState(
   //   props.initialDay ? { dateString: props.initialDay } : ''
   // );
@@ -171,7 +171,7 @@ const StyledCalendar = ({initialDay, setSelectedDay}) => {
             textDayHeaderFontSize: 12,
           }}
           // Initially visible month. Default = now
-          // initialDate={'2021-01-01'}
+          initialDate={initialDay.dateString}
           // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
           // minDate={'2012-05-10'}
           // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined

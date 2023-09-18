@@ -59,7 +59,7 @@ const lang = {
   'transactions.details_payment': 'Details payment',
 
   //filters====
-  'filters.calendar': 'calendar',
+  'filters.date': 'calendar',
   'filters.banks': 'banks',
   'filters.merchants': 'merchants',
   'filters.status': 'status',

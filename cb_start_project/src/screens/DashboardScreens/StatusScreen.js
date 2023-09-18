@@ -11,8 +11,9 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
 import CheckBoxList from 'src/components/molecules/CheckBoxList';
-import SimpleText from '../../components/atoms/SimpleText';
+import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
+import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 
 const arrowRight = require('src/images/right.png');
 
@@ -22,6 +23,8 @@ const StatusScreen = ({
   setTransactionFilter,
   paymentFilter,
   transactionFilter,
+  isFiltersVisible,
+  filtersDots,
 }) => {
   const reportType = route.params.type.value;
 
@@ -63,6 +66,7 @@ const StatusScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {isFiltersVisible && <TransactionsFilters isActive={'status'} filtersDots={filtersDots} />}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           {/* <CheckBoxList

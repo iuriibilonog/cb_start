@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTransactionData } from 'src/redux/content/operations';
 import { getTransactionInfo } from 'src/redux/content/selectors';
@@ -27,7 +27,7 @@ const arrowDown = require('src/images/arrow_down_small.png');
 const arrowUp = require('src/images/arrow_up.png');
 const card = require('src/images/credit_card.png');
 
-const TransactionsScreen = () => {
+const TransactionsScreen = ({ genReportTransactionFilters, filtersDots }) => {
   const dispatch = useDispatch();
   const transactionInfo = useSelector(getTransactionInfo);
   const [data, setData] = useState(null);
@@ -38,6 +38,11 @@ const TransactionsScreen = () => {
   useEffect(() => {
     dispatch(getTransactionData());
   }, []);
+
+  useEffect(() => {
+    dispatch(getTransactionData());
+    console.log('genReportTransactionFilters', genReportTransactionFilters);
+  }, [genReportTransactionFilters]);
 
   useEffect(() => {
     if (transactionInfo) {
@@ -74,7 +79,6 @@ const TransactionsScreen = () => {
   };
 
   const validTextShow = (date) => {
-    console.log('DATE', date);
     const a = date.split('T');
     return a[0] + ' ' + a[1].slice(0, 5);
   };
@@ -416,7 +420,7 @@ const TransactionsScreen = () => {
         <Image source={isFiltersVisible ? arrowUp : arrowDown} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
 
-      {isFiltersVisible && <TransactionsFilters />}
+      {isFiltersVisible && <TransactionsFilters isActive="" filtersDots={filtersDots} />}
 
       <View
         style={{
@@ -449,7 +453,7 @@ const TransactionsScreen = () => {
           </SimpleText>
         </View>
       </View>
-      <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
+      {/* <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} /> */}
       <Pagination
         totalItems={100}
         pageSize={5}
@@ -496,4 +500,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TransactionsScreen;
+export default memo(TransactionsScreen);

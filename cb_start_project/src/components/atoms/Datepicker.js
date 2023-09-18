@@ -13,6 +13,7 @@ const Datepicker = (props) => {
 
   useEffect(() => {
     setValue(props.value);
+    // console.log('props-->>', props.value);
   }, [props.value]);
 
   const handleValue = (value) => {
@@ -26,7 +27,7 @@ const Datepicker = (props) => {
       setIsFormatError(true);
     } else if (moment(value, 'YYYY/MM/DD').isValid()) {
       setIsFormatError(false);
-      props.setValue({ dateString: value });
+      props.setValue({ dateString: value.replace(/\//g, '-') });
     } else {
       setIsFormatError(true);
     }
@@ -45,7 +46,17 @@ const Datepicker = (props) => {
       keyboardType="numeric"
       style={{ ...styles.valueText, color: isFormatError ? 'red' : '#262626' }}
     />
+
     // </View>
+
+    // <TextInputMask
+    //   type={'datetime'}
+    //   options={{
+    //     format: 'YYYY/MM/DD',
+    //   }}
+    //   value={value}
+    //   onChangeText={(text) => handleValue(text)}
+    // />
   );
 };
 

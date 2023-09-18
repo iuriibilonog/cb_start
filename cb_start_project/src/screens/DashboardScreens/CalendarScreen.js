@@ -15,6 +15,7 @@ import { LocaleConfig } from 'react-native-calendars';
 import StyledCalendar from 'src/components/molecules/StyledCalendar';
 import Datepicker from 'src/components/atoms/Datepicker';
 import SimpleText from 'src/components/atoms/SimpleText';
+import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import { FormattedMessage } from 'react-intl';
 import { MaskedTextInput } from 'react-native-mask-text';
 
@@ -25,8 +26,10 @@ const CalendarScreen = ({
   route,
   setPaymentsFilter,
   setTransactionFilter,
-  genReportPaymentsFilters,
-  genReportTransactionFilters,
+  paymentFilter,
+  transactionFilter,
+  isFiltersVisible,
+  filtersDots,
 }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState();
@@ -36,19 +39,19 @@ const CalendarScreen = ({
   const reportType = route.params?.type?.value;
 
   useEffect(() => {
-    if (route.params.isBalancePeriod) {
+    if (route.params?.isBalancePeriod) {
       setSelectedStartDay({ dateString: route.params.balancePeriod.startDate });
       setSelectedEndDay({ dateString: route.params.balancePeriod.endDate });
     } else {
       switch (reportType) {
         case 'Payments':
-          let date = genReportPaymentsFilters.find((item) => item.name === 'date');
+          let date = paymentFilter.find((item) => item.name === 'date');
           setSelectedStartDay({ dateString: date ? date.filters.startDate : initialDate });
           setSelectedEndDay({ dateString: date ? date.filters.endDate : initialDate });
 
           break;
         case 'Transactions':
-          date = genReportTransactionFilters.find((item) => item.name === 'date');
+          date = transactionFilter.find((item) => item.name === 'date');
           setSelectedStartDay({ dateString: date ? date.filters.startDate : initialDate });
           setSelectedEndDay({ dateString: date ? date.filters.endDate : initialDate });
           break;
@@ -60,7 +63,7 @@ const CalendarScreen = ({
   }, []);
 
   useEffect(() => {
-    if (route.params.isBalancePeriod) return;
+    if (route.params?.isBalancePeriod) return;
     if (selectedStartDay && selectedEndDay) {
       const start = selectedStartDay.dateString || selectedStartDay;
       const end = selectedEndDay.dateString || selectedEndDay;
@@ -87,7 +90,7 @@ const CalendarScreen = ({
   }, [selectedStartDay, selectedEndDay]);
 
   const handlePressDownload = () => {
-    if (route.params.isBalancePeriod) {
+    if (route.params?.isBalancePeriod) {
       const { getBalancePeriod } = route.params;
 
       const start = selectedStartDay.dateString || selectedStartDay;
@@ -100,7 +103,6 @@ const CalendarScreen = ({
   };
 
   const handleSelectedDay = (data) => {
-
     switch (focusedDay) {
       case 'start':
         if (!data.dateString) return;
@@ -119,6 +121,7 @@ const CalendarScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {isFiltersVisible && <TransactionsFilters isActive={'date'} filtersDots={filtersDots} />}
       <TouchableWithoutFeedback
         onPress={() => {
           setIsCalendarVisible(false);

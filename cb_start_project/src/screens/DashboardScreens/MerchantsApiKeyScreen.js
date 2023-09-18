@@ -36,7 +36,7 @@ const MerchantsApiKeyScreen = ({
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchant');
+        let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchants');
 
         if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
           setMerchId(merchantObj.filters.id);

@@ -15,10 +15,19 @@ import RadioList from 'src/components/molecules/RadioList';
 import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
+import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 
-const BanksScreen = ({ setTransactionFilter }) => {
+const BanksScreen = ({
+  setTransactionFilter,
+  transactionFilter,
+  isFiltersVisible,
+  filtersDots,
+}) => {
+  const getDefaultFilter = transactionFilter?.find((item) => item.name === 'banks');
+  const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
+
   const [checkBoxSelect, setCheckBoxSelect] = useState([]);
-  const [radioSelect, setRadioSelect] = useState({ value: 'All' });
+  const [radioSelect, setRadioSelect] = useState(defaultTransactionFilter);
   const [banks, setBanks] = useState([{ value: 'All' }]);
 
   const navigation = useNavigation();
@@ -32,7 +41,7 @@ const BanksScreen = ({ setTransactionFilter }) => {
       id: item.id,
     }));
     setBanks((prev) => [...prev, ...modifyBanks]);
-    console.log('modifyBanks', modifyBanks);
+    // console.log('modifyBanks', modifyBanks);
   }, [data]);
 
   useEffect(() => {
@@ -41,6 +50,7 @@ const BanksScreen = ({ setTransactionFilter }) => {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {isFiltersVisible && <TransactionsFilters isActive={'banks'} filtersDots={filtersDots} />}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList

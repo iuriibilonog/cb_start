@@ -21,9 +21,9 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log('genReportPaymentsFilters', genReportPaymentsFilters);
-  }, [genReportPaymentsFilters, genReportTransactionFilters]);
+  // useEffect(() => {
+  //   console.log('genReportPaymentsFilters', genReportPaymentsFilters);
+  // }, [genReportPaymentsFilters, genReportTransactionFilters]);
 
   const confirmReport = async () => {
     let str = '';
@@ -36,7 +36,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         case 'timezone':
           str = str + '&' + `timezone=${item.filters.code}`;
           break;
-        case 'merchant':
+        case 'merchants':
           if (item.value !== 'All merchants') {
             str = str + '&' + `userId=${item.filters.id}`;
           }
@@ -59,7 +59,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         case 'filterColumns':
           const filters = item.filters.map((filter) => (filter = `exportFields=${filter.code}`));
           str = str + '&' + `${filters.join('&')}`;
-          console.log('str', str);
+          // console.log('str', str);
           break;
 
         default:
@@ -152,8 +152,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             {...props}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
-            genReportPaymentsFilters={genReportPaymentsFilters}
-            genReportTransactionFilters={genReportTransactionFilters}
+            paymentFilter={genReportPaymentsFilters}
+            transactionFilter={genReportTransactionFilters}
           />
         )}
       </DashboardStack.Screen>

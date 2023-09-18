@@ -15,6 +15,7 @@ import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import { FormattedMessage } from 'react-intl';
 import SimpleText from '../../components/atoms/SimpleText';
 import { getUsers } from 'src/redux/content/selectors';
+import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 
 const arrowRight = require('src/images/right.png');
 
@@ -24,15 +25,17 @@ const MerchantsScreen = ({
   setTransactionFilter,
   paymentFilter,
   transactionFilter,
+  isFiltersVisible,
+  filtersDots,
 }) => {
   const reportType = route.params.type.value;
   const defaultPaymentFilter =
-    paymentFilter && paymentFilter.find((item) => item.name === 'merchant')
-      ? paymentFilter.find((item) => item.name === 'merchant')
+    paymentFilter && paymentFilter.find((item) => item.name === 'merchants')
+      ? paymentFilter.find((item) => item.name === 'merchants')
       : { value: 'All merchants' };
   const defaultTransactionFilter =
-    transactionFilter && transactionFilter.find((item) => item.name === 'merchant')
-      ? transactionFilter.find((item) => item.name === 'merchant')
+    transactionFilter && transactionFilter.find((item) => item.name === 'merchants')
+      ? transactionFilter.find((item) => item.name === 'merchants')
       : { value: 'All merchants' };
 
   const [radioSelect, setRadioSelect] = useState(
@@ -73,10 +76,10 @@ const MerchantsScreen = ({
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('merchant', { filters: radioSelect, value: radioSelect.value });
+        setPaymentsFilter('merchants', { filters: radioSelect, value: radioSelect.value });
         break;
       case 'Transactions':
-        setTransactionFilter('merchant', { filters: radioSelect, value: radioSelect.value });
+        setTransactionFilter('merchants', { filters: radioSelect, value: radioSelect.value });
         break;
 
       default:
@@ -86,6 +89,7 @@ const MerchantsScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {isFiltersVisible && <TransactionsFilters isActive={'merchants'} filtersDots={filtersDots} />}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           {/* <CheckBoxList
