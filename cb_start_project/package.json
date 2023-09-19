@@ -17,9 +17,12 @@
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.5.0",
+    "base-64": "^1.0.0",
     "expo": "~49.0.8",
     "expo-file-system": "~15.4.4",
     "expo-font": "~11.4.0",
+    "expo-media-library": "~15.4.1",
+    "expo-sharing": "~11.5.0",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
     "i": "^0.3.7",
@@ -40,9 +43,7 @@
     "react-native-svg": "^13.13.0",
     "react-redux": "^8.1.2",
     "redux-persist": "^6.0.0",
-    "xlsx": "^0.18.5",
-    "expo-media-library": "~15.4.1",
-    "expo-sharing": "~11.5.0"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

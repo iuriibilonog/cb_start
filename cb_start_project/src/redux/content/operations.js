@@ -89,9 +89,8 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
       `${BASE_URL}/api/payments/export?${reportData}&exportFields=createdAt&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode`,
       {
         withCredentials: true,
-        headers: {
-          responseType: 'blob',
-        },
+
+        responseType: 'blob',
       }
     );
 
