@@ -64,6 +64,7 @@ const ApiScreen = (props) => {
         <View
           style={{
             ...styles.tableRow,
+            height: isAdditDataOpen && selectedIndex === item.id ? 45 : 40,
             flexDirection: 'row',
             alignItems: 'center',
             backgroundColor:
@@ -111,15 +112,16 @@ const ApiScreen = (props) => {
           >
             <View
               style={{
-                ...styles.tableCell,
-                width: 52,
-                alignItems: 'center',
+                ...styles.actionsCell,
+                width: isAdditDataOpen && selectedIndex === item.id ? 52 : 46,
+                // width: 46,
+                // height: 40,
                 backgroundColor: isAdditDataOpen && selectedIndex === item.id ? '#FFEFB4' : '#fff',
               }}
             >
               <Image
                 source={isAdditDataOpen && selectedIndex === item.id ? editIcon : editInactiveIcon}
-                style={{ width: 20, height: 20 }}
+                style={{ width: 19, height: 19 }}
               />
             </View>
           </TouchableOpacity>
@@ -129,9 +131,10 @@ const ApiScreen = (props) => {
           >
             <View
               style={{
-                ...styles.tableCell,
-                width: 52,
-                alignItems: 'center',
+                ...styles.actionsCell,
+                // width: 52,
+                // height: 40,
+
                 backgroundColor: isAdditDataOpen && selectedIndex === item.id ? '#FFF0F0' : '#fff',
               }}
             >
@@ -139,7 +142,7 @@ const ApiScreen = (props) => {
                 source={
                   isAdditDataOpen && selectedIndex === item.id ? deleteIcon : deleteInactiveIcon
                 }
-                style={{ width: 20, height: 20 }}
+                style={{ width: 24, height: 24 }}
               />
             </View>
           </TouchableOpacity>
@@ -148,7 +151,7 @@ const ApiScreen = (props) => {
       {isAdditDataOpen && selectedIndex === item.id && (
         <View
           style={{
-            ...styles.tableRow,
+            paddingLeft: 15,
             flexDirection: 'row',
             backgroundColor: '#F4F4F4',
             alignItems: 'center',
@@ -195,8 +198,10 @@ const ApiScreen = (props) => {
       </View>
       <View
         style={{
-          ...styles.tableRow,
+          height: 50,
+          paddingLeft: 15,
           flexDirection: 'row',
+          alignItems: 'center',
           borderBottomWidth: 1,
           borderBottomColor: 'rgba(217, 217, 217, 0.70)',
           backgroundColor: '#F4F4F4',
@@ -244,8 +249,14 @@ const styles = StyleSheet.create({
   titleWrapper: { marginTop: 30, marginBottom: 30, paddingLeft: 20 },
   titleText: { fontFamily: 'Mont_SB', fontSize: 34 },
   headerText: { fontFamily: 'Mont_SB', textAlign: 'center' },
-  tableRow: { paddingLeft: 15 },
-  tableCell: { paddingVertical: 15, paddingHorizontal: 5 },
+  tableRow: { height: 40, paddingLeft: 15 },
+  tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center' },
+  actionsCell: {
+    flex: 1,
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    justifyContent: 'center',
+  },
   additDataCell: {
     height: 40,
     paddingLeft: 5,
