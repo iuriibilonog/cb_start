@@ -68,6 +68,13 @@ const lang = {
   'filters.currency': 'currency',
   'filters.mode': 'mode',
 
+  //API=======
+  'api.api_keys': 'API keys',
+  'api.api_key': 'API key',
+  'api.api_key_name': 'API Key name',
+
+  'api.edit_api': 'Edit API Key name',
+
   //common=====
   'common.date': 'Date',
   'common.email': 'email',
@@ -77,7 +84,11 @@ const lang = {
   'common.bank': 'Bank',
   'common.bank': 'Message',
   'common.filters': 'Filters',
-  'common.message': 'message',
+  'common.user': 'User',
+  'common.edit': 'Edit',
+  'common.del': 'Del',
+  'common.delete': 'Delete',
+  'common.delete_confirm': 'Are you sure  want delete?',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

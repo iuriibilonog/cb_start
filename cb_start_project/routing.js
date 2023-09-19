@@ -12,6 +12,7 @@ import LogOutScreen from 'src/screens/LogOutScreen';
 import CreateSecurePassScreen from 'src/screens/CreateSecurePassScreen';
 import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
 import TransactionsRoutes from 'src/screens/TransactionsScreens/TransactionsRoutes';
+import ApiRoutes from 'src/screens/ApiScreens/ApiRoutes';
 
 import { isLoggedIn } from 'src/redux/user/selectors';
 import { getUsers } from 'src/redux/content/selectors';
@@ -126,15 +127,7 @@ export const Routing = () => {
           </MainStack.Screen>
           <MainStack.Screen
             options={{
-              headerTitle: 'Api',
-              headerTitleAlign: 'left',
-              headerRight: ({ size }) => (
-                <Image
-                  source={profileIcon}
-                  style={{ width: 25, height: 25, marginRight: 20 }}
-                  // onPress={() => navigation.navigate("registration")}
-                />
-              ),
+              headerShown: false,
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
                   ? (image = require('src/images/api_active.png'))
@@ -146,9 +139,10 @@ export const Routing = () => {
                 );
               },
             }}
-            name="ApiScreen"
-            component={DashboardScreen}
-          />
+            name="ApiRoutes"
+          >
+            {(props) => <ApiRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
+          </MainStack.Screen>
           <MainStack.Screen
             options={{
               headerTitle: 'Users',

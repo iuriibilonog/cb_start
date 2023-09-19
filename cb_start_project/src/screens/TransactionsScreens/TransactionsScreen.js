@@ -29,7 +29,7 @@ const TransactionsScreen = ({
 
   useEffect(() => {
 
-      console.log('TRANSACTIONSCREENß') 
+      console.log('TRANSACTIONSCREEN') 
 
     dispatch(getTransactionData());
   }, []);
