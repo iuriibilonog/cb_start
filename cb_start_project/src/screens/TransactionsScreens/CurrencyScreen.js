@@ -1,65 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { getBanks } from 'src/redux/content/selectors';
+import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+// import { useSelector } from 'react-redux';
+// import { getCurrencies } from 'src/redux/content/selectors';
 import RadioList from 'src/components/molecules/RadioList';
-import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 
-const BanksScreen = ({
+const CurrencyScreen = ({
   setTransactionFilter,
   transactionFilter,
   isFiltersVisible,
   filtersDots,
-  isMerchApiKeyAvailable
+  isMerchApiKeyAvailable,
 }) => {
-  const getDefaultFilter = transactionFilter?.find((item) => item.name === 'banks');
+  const getDefaultFilter = transactionFilter?.find((item) => item.name === 'currency');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
 
-  const [checkBoxSelect, setCheckBoxSelect] = useState([]);
   const [radioSelect, setRadioSelect] = useState(defaultTransactionFilter);
-  const [banks, setBanks] = useState([{ value: 'All' }]);
+  const [currencies, setCurrencies] = useState([
+    { value: 'All' },
+    { value: 'EUR' },
+    { value: 'USD' },
+    { value: 'RUB' },
+    { value: 'KZT' },
+    { value: 'INR' },
+    { value: 'BRL' },
+  ]);
 
-  const navigation = useNavigation();
-  const data = useSelector(getBanks);
+  // const data = useSelector(getCurrencies);
 
- useEffect(() => {
-  console.log('BANKSCREEN') 
-  }, []);
+  // useEffect(() => {
+  //   if (!data.length) return;
+  //   const modifyCurrencies = data.map((item) => ({
+  //     name: item.name,
+  //     value: item.name,
+  //     id: item.id,
+  //   }));
+  //   setCurrencies((prev) => [{ value: 'All' }, ...modifyCurrencies]);
+  // }, [data]);
 
   useEffect(() => {
-    if (!data.length) return;
-    const modifyBanks = data.map((item) => ({
-      name: item.name,
-      value: item.name,
-      id: item.id,
-    }));
-    setBanks((prev) => [...prev, ...modifyBanks]);
-    // console.log('modifyBanks', modifyBanks);
-  }, [data]);
-
-  useEffect(() => {
-    setTransactionFilter('banks', { filters: radioSelect, value: radioSelect.value });
+    setTransactionFilter('currency', { filters: radioSelect, value: radioSelect.value });
   }, [radioSelect]);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'banks'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
+      {isFiltersVisible && (
+        <TransactionsFilters
+          isActive={'currency'}
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList
-            data={banks}
+            data={currencies}
             onSelect={setRadioSelect}
             defaultValue={radioSelect}
             styling={{ size: 18, spaceBetween: 34 }}
@@ -107,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BanksScreen;
+export default CurrencyScreen;

@@ -6,6 +6,8 @@ import {
   getBankBalance,
   getTransactionData,
   getMerchantsApiKeys,
+  // getAllModes,
+  // getAllCurrencies,
 } from './operations';
 
 const initialState = {
@@ -31,6 +33,23 @@ const userSlice = createSlice({
           message: action.payload,
         };
       });
+
+    // builder.addCase(getAllModes.fulfilled, (state, action) => {
+    //   state.content.modes = action.payload;
+    // }),
+    //   builder.addCase(getAllModes.rejected, (state, action) => {
+    //     state.error = {
+    //       message: action.payload,
+    //     };
+    //   });
+    // builder.addCase(getAllCurrencies.fulfilled, (state, action) => {
+    //   state.content.currencies = action.payload;
+    // }),
+    //   builder.addCase(getAllCurrencies.rejected, (state, action) => {
+    //     state.error = {
+    //       message: action.payload,
+    //     };
+    //   });
 
     // builder.addCase(getBankBalance.fulfilled, (state, action) => {
     //   state.content.banks = action.payload;

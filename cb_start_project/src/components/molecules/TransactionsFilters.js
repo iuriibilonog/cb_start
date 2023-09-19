@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,11 +10,17 @@ import {
 } from 'react-native';
 import SimpleTransactionFilter from 'src/components/atoms/SimpleTransactionFilter';
 import { useNavigation } from '@react-navigation/native';
-
+import { CommonActions } from '@react-navigation/native';
 
 const TransactionsFilters = (props) => {
-  const [selection, setSelection] = useState(props.isActive || ''); //'date'
+  // const [selection, setSelection] = useState(props.isActive || ''); //'date'
   const navigation = useNavigation();
+  let selection;
+  // console.log('PROPS>', props);
+  selection = props.isActive;
+  useEffect(() => {
+    // console.log('FILTERS');
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -22,7 +28,17 @@ const TransactionsFilters = (props) => {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            setSelection('date');
+            // setSelection('date');
+            // navigation.reset({
+            //   index: 1,
+            //   routes: [{ name: 'TransactionsScreen' }],
+            // });
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'TransactionsScreen' }],
+              })
+            );
             navigation.navigate('CalendarScreen', { type: { value: 'Transactions' } });
           }}
         >
@@ -35,7 +51,13 @@ const TransactionsFilters = (props) => {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            setSelection('status');
+            // setSelection('status');
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'TransactionsScreen' }],
+              })
+            );
             navigation.navigate('StatusScreen', { type: { value: 'Transactions' } });
           }}
         >
@@ -50,7 +72,13 @@ const TransactionsFilters = (props) => {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            setSelection('merchants');
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'TransactionsScreen' }],
+              })
+            );
+            // setSelection('merchants');
             navigation.navigate('MerchantsScreen', { type: { value: 'Transactions' } });
           }}
         >
@@ -63,7 +91,13 @@ const TransactionsFilters = (props) => {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            setSelection('currency');
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'TransactionsScreen' }],
+              })
+            );
+            // setSelection('currency');
             navigation.navigate('CurrencyScreen', { type: { value: 'Transactions' } });
           }}
         >
@@ -75,25 +109,86 @@ const TransactionsFilters = (props) => {
         </TouchableOpacity>
       </View>
       <View style={styles.filtersCol}>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => setSelection('key')}>
-          <SimpleTransactionFilter type="key" isActive={selection === 'key'} />
+        <TouchableOpacity
+          activeOpacity={props.isMerchApiKeyAvailable ? 0.5 : 1}
+          onPress={() => {
+            if (props.isMerchApiKeyAvailable) {
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: 'TransactionsScreen' }],
+                })
+              );
+              // setSelection('key');
+              navigation.navigate('MerchantsApiKeyScreen', { type: { value: 'Transactions' } });
+            }
+          }}
+        >
+          <SimpleTransactionFilter
+            type="key"
+            isActive={selection === 'key'}
+            isInactive={!props.isMerchApiKeyAvailable}
+            isDot={props?.filtersDots?.includes('merchantApiKey')}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            setSelection('banks');
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'TransactionsScreen' }],
+              })
+            );
+            // setSelection('banks');
             navigation.navigate('BanksScreen', { type: { value: 'Transactions' } });
           }}
         >
-          <SimpleTransactionFilter type="banks" isActive={selection === 'banks'} isDot={props?.filtersDots?.includes('banks')} />
+          <SimpleTransactionFilter
+            type="banks"
+            isActive={selection === 'banks'}
+            isDot={props?.filtersDots?.includes('banks')}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.filtersCol}>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => setSelection('mode')}>
-          <SimpleTransactionFilter type="mode" isActive={selection === 'mode'} />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => {
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'TransactionsScreen' }],
+              })
+            );
+            // setSelection('mode');
+            navigation.navigate('ModeScreen', { type: { value: 'Transactions' } });
+          }}
+        >
+          <SimpleTransactionFilter
+            type="mode"
+            isActive={selection === 'mode'}
+            isDot={props?.filtersDots?.includes('mode')}
+          />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => setSelection('gmt')}>
-          <SimpleTransactionFilter type="gmt" isActive={selection === 'gmt'} />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => {
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'TransactionsScreen' }],
+              })
+            );
+            // setSelection('gmt');
+            navigation.navigate('TimeZoneScreen', { type: { value: 'Transactions' } });
+          }}
+        >
+          <SimpleTransactionFilter
+            type="gmt"
+            isActive={selection === 'timezone'}
+            isDot={props?.filtersDots?.includes('timezone')}
+          />
         </TouchableOpacity>
       </View>
     </View>

@@ -2,20 +2,7 @@ import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTransactionData } from 'src/redux/content/operations';
 import { getTransactionInfo } from 'src/redux/content/selectors';
-import {
-  Text,
-  StyleSheet,
-  View,
-  Keyboard,
-  Dimensions,
-  Pressable,
-  TouchableWithoutFeedback,
-  ImageBackground,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import { StyleSheet, View, Dimensions, Image, TouchableOpacity } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from '@cherry-soft/react-native-basic-pagination';
@@ -27,7 +14,12 @@ const arrowDown = require('src/images/arrow_down_small.png');
 const arrowUp = require('src/images/arrow_up.png');
 const card = require('src/images/credit_card.png');
 
-const TransactionsScreen = ({ genReportTransactionFilters, filtersDots }) => {
+const TransactionsScreen = ({
+  genReportTransactionFilters,
+  filtersDots,
+  inactiveFilters,
+  isMerchApiKeyAvailable,
+}) => {
   const dispatch = useDispatch();
   const transactionInfo = useSelector(getTransactionInfo);
   const [data, setData] = useState(null);
@@ -36,12 +28,15 @@ const TransactionsScreen = ({ genReportTransactionFilters, filtersDots }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
+
+      console.log('TRANSACTIONSCREENß') 
+
     dispatch(getTransactionData());
   }, []);
 
   useEffect(() => {
     dispatch(getTransactionData());
-    console.log('genReportTransactionFilters', genReportTransactionFilters);
+    // console.log('genReportTransactionFilters', genReportTransactionFilters);
   }, [genReportTransactionFilters]);
 
   useEffect(() => {
@@ -420,7 +415,13 @@ const TransactionsScreen = ({ genReportTransactionFilters, filtersDots }) => {
         <Image source={isFiltersVisible ? arrowUp : arrowDown} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
 
-      {isFiltersVisible && <TransactionsFilters isActive="" filtersDots={filtersDots} />}
+      {isFiltersVisible && (
+        <TransactionsFilters
+          // isActive=""
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
 
       <View
         style={{

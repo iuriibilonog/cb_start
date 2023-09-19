@@ -14,6 +14,7 @@ import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
+import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import { getMerchantsApiKeys } from 'src/redux/content/operations';
 
 const arrowRight = require('src/images/right.png');
@@ -24,6 +25,9 @@ const MerchantsApiKeyScreen = ({
   setTransactionFilter,
   genReportPaymentsFilters,
   genReportTransactionFilters,
+  isFiltersVisible,
+  filtersDots,
+  isMerchApiKeyAvailable,
 }) => {
   const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
   const reportType = route.params.type.value;
@@ -84,6 +88,13 @@ const MerchantsApiKeyScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {isFiltersVisible && (
+        <TransactionsFilters
+          isActive={'key'}
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           {/* <CheckBoxList

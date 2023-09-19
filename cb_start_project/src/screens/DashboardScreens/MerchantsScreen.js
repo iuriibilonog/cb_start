@@ -27,6 +27,7 @@ const MerchantsScreen = ({
   transactionFilter,
   isFiltersVisible,
   filtersDots,
+  isMerchApiKeyAvailable,
 }) => {
   const reportType = route.params.type.value;
   const defaultPaymentFilter =
@@ -89,7 +90,13 @@ const MerchantsScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'merchants'} filtersDots={filtersDots} />}
+      {isFiltersVisible && (
+        <TransactionsFilters
+          isActive={'merchants'}
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           {/* <CheckBoxList

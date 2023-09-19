@@ -1,65 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { getBanks } from 'src/redux/content/selectors';
+// import { getModes } from 'src/redux/content/selectors';
 import RadioList from 'src/components/molecules/RadioList';
-import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 
-const BanksScreen = ({
-  setTransactionFilter,
-  transactionFilter,
-  isFiltersVisible,
-  filtersDots,
-  isMerchApiKeyAvailable
-}) => {
-  const getDefaultFilter = transactionFilter?.find((item) => item.name === 'banks');
+const ModeScreen = ({ setTransactionFilter, transactionFilter, isFiltersVisible, filtersDots , isMerchApiKeyAvailable}) => {
+  const getDefaultFilter = transactionFilter?.find((item) => item.name === 'mode');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
 
-  const [checkBoxSelect, setCheckBoxSelect] = useState([]);
   const [radioSelect, setRadioSelect] = useState(defaultTransactionFilter);
-  const [banks, setBanks] = useState([{ value: 'All' }]);
+  const [modes, setModes] = useState([{ value: 'All' }, {value:'payin'}, {value:'payout'}]);
+  // const data = useSelector(getModes);
 
-  const navigation = useNavigation();
-  const data = useSelector(getBanks);
+  // useEffect(() => {
+  //   if (!data.length) return;
+  //   const modifyModes = data.map((item) => ({
+  //     name: item.name,
+  //     value: item.name,
+  //     id: item.id,
+  //   }));
+  //   setModes((prev) => [{ value: 'All' }, ...modifyModes]);
 
- useEffect(() => {
-  console.log('BANKSCREEN') 
-  }, []);
-
-  useEffect(() => {
-    if (!data.length) return;
-    const modifyBanks = data.map((item) => ({
-      name: item.name,
-      value: item.name,
-      id: item.id,
-    }));
-    setBanks((prev) => [...prev, ...modifyBanks]);
-    // console.log('modifyBanks', modifyBanks);
-  }, [data]);
+  // }, [data]);
 
   useEffect(() => {
-    setTransactionFilter('banks', { filters: radioSelect, value: radioSelect.value });
+    setTransactionFilter('mode', { filters: radioSelect, value: radioSelect.value });
   }, [radioSelect]);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'banks'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
+      {isFiltersVisible && <TransactionsFilters isActive={'mode'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList
-            data={banks}
+            data={modes}
             onSelect={setRadioSelect}
             defaultValue={radioSelect}
             styling={{ size: 18, spaceBetween: 34 }}
@@ -107,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BanksScreen;
+export default ModeScreen;

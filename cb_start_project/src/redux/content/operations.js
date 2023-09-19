@@ -117,3 +117,28 @@ export const getTransactionData = createAsyncThunk(
     }
   }
 );
+
+// export const getAllModes = createAsyncThunk('content/getAllModes', async (_, thunkAPI) => {
+//   try {
+//     // const { data } = await api.get(`${BASE_URL}/api/modes`, {
+//     //   withCredentials: true,
+//     // });
+//     // return data;
+//   } catch (error) {
+//     // return thunkAPI.rejectWithValue(error);
+//   }
+// });
+
+// export const getAllCurrencies = createAsyncThunk(
+//   'content/getAllCurrencies',
+//   async (_, thunkAPI) => {
+//     try {
+//       // const { data } = await api.get(`${BASE_URL}/api/currencies`, {
+//       //   withCredentials: true,
+//       // });
+//       // return data;
+//     } catch (error) {
+//       // return thunkAPI.rejectWithValue(error);
+//     }
+//   }
+// );

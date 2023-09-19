@@ -25,6 +25,7 @@ const StatusScreen = ({
   transactionFilter,
   isFiltersVisible,
   filtersDots,
+  isMerchApiKeyAvailable,
 }) => {
   const reportType = route.params.type.value;
 
@@ -48,6 +49,10 @@ const StatusScreen = ({
     { value: 'new' },
   ];
 
+  useEffect(() => {
+    console.log('STATUSSCREEN');
+  }, []);
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -66,7 +71,13 @@ const StatusScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'status'} filtersDots={filtersDots} />}
+      {isFiltersVisible && (
+        <TransactionsFilters
+          isActive={'status'}
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           {/* <CheckBoxList
