@@ -28,6 +28,9 @@ const TransactionsScreen = ({
   const navigation = useNavigation();
 
   useEffect(() => {
+
+      console.log('TRANSACTIONSCREENß') 
+
     dispatch(getTransactionData());
   }, []);
 
@@ -414,7 +417,7 @@ const TransactionsScreen = ({
 
       {isFiltersVisible && (
         <TransactionsFilters
-          isActive=""
+          // isActive=""
           filtersDots={filtersDots}
           isMerchApiKeyAvailable={isMerchApiKeyAvailable}
         />

@@ -49,6 +49,10 @@ const StatusScreen = ({
     { value: 'new' },
   ];
 
+  useEffect(() => {
+    console.log('STATUSSCREEN');
+  }, []);
+
   const navigation = useNavigation();
 
   useEffect(() => {

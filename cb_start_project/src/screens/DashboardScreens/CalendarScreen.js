@@ -40,6 +40,7 @@ const CalendarScreen = ({
   const reportType = route.params?.type?.value;
 
   useEffect(() => {
+    console.log('CALENDARSCREEN')
     if (route.params?.isBalancePeriod) {
       setSelectedStartDay({ dateString: route.params.balancePeriod.startDate });
       setSelectedEndDay({ dateString: route.params.balancePeriod.endDate });

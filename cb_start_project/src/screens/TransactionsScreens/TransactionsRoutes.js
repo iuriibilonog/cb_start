@@ -27,7 +27,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
       (item) => item.name && item.name !== ''
     );
     if (filtersWithData) {
-      console.log('<><><><>', filtersWithData);
+      // console.log('<><><><>', filtersWithData);
       setFiltersDots(filtersWithData.map((item) => item.name));
       setIsMerchApiKeyAvailable(
         filtersWithData.find((item) => item.name === 'merchants') !== undefined

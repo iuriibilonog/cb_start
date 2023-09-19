@@ -34,6 +34,10 @@ const BanksScreen = ({
   const navigation = useNavigation();
   const data = useSelector(getBanks);
 
+ useEffect(() => {
+  console.log('BANKSCREEN') 
+  }, []);
+
   useEffect(() => {
     if (!data.length) return;
     const modifyBanks = data.map((item) => ({
