@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as FileSystem from 'expo-file-system';
+import * as XLSX from 'xlsx';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
 import DashboardScreen from './DashboardScreen';
 import GeneralReportsScreen from './GeneralReportsScreen';
 import CalendarScreen from './CalendarScreen';
@@ -31,7 +35,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     genReportPaymentsFilters.map((item) => {
       switch (item.name) {
         case 'date':
-          str = `startDate=${item.value[0]}` + '&' + `endDate=${item.value[1]}`;
+          str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
           break;
         case 'timezone':
           str = str + '&' + `timezone=${item.filters.code}`;
@@ -74,7 +78,44 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         { text: 'OK', onPress: () => console.log('OK Pressed') },
       ]);
     } else {
-      console.log('report', report);
+      const blob = new Blob([report.payload], {
+        type: 'application/json',
+      });
+      // const url = URL.createObjectURL(blob);
+
+      const fr = new FileReader();
+      console.log('fr', fr);
+
+      fr.onload = async () => {
+        const fileUri = `${FileSystem.documentDirectory}/report.xlsx`;
+
+        console.log('fr', fr);
+        await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        Sharing.shareAsync(fileUri);
+        // const { StorageAccessFramework } = FileSystem;
+        // const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+        // if (permissions.granted) {
+        //   let directoryUri = permissions.directoryUri;
+        //   await StorageAccessFramework.createFileAsync(
+        //     directoryUri,
+        //     'report1',
+        //     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        //   )
+        //     .then(async (fileUri) => {
+        //       await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
+        //         encoding: FileSystem.EncodingType.Base64,
+        //       });
+        //     })
+        //     .catch((e) => {
+        //       console.log(e);
+        //     });
+        // }
+      };
+      fr.readAsDataURL(blob);
+      // console.log('fr.readAsDataURL', fr.onload());
     }
   };
 

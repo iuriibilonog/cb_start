@@ -80,13 +80,18 @@ export const getBankConversion = createAsyncThunk(
   }
 );
 export const getReport = createAsyncThunk('content/getReport', async (reportData, thunkAPI) => {
-  if (!reportData.includes('startDate'))
+  if (!reportData.includes('startDate')) {
     reportData = `startDate=${initialDate}` + '&' + `endDate=${initialDate}` + reportData;
+  }
+
   try {
     const { data } = await api.get(
       `${BASE_URL}/api/payments/export?${reportData}&exportFields=createdAt&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode`,
       {
         withCredentials: true,
+        headers: {
+          responseType: 'blob',
+        },
       }
     );
 

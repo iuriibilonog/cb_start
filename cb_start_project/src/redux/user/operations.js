@@ -17,7 +17,7 @@ export const userLogin = createAsyncThunk(
 
       await AsyncStorage.setItem('isLoggedIn', 'true');
       await AsyncStorage.setItem('token', data.accessToken);
-      await AsyncStorage.setItem('refresh', data.refreshToken);
+      // await AsyncStorage.setItem('refresh', data.refreshToken);
 
       return data;
     } catch (error) {
