@@ -4,6 +4,7 @@ import * as FileSystem from 'expo-file-system';
 import * as XLSX from 'xlsx';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
+import { decode as atob, encode as btoa } from 'base-64';
 import DashboardScreen from './DashboardScreen';
 import GeneralReportsScreen from './GeneralReportsScreen';
 import CalendarScreen from './CalendarScreen';
@@ -13,7 +14,7 @@ import MerchantsApiKeyScreen from './MerchantsApiKeyScreen';
 import StatusScreen from './StatusScreen';
 import FilterColumnsScreen from './FilterColumnsScreen';
 import BanksScreen from './BanksScreen';
-import { Image, Pressable, Alert } from 'react-native';
+import { Image, Pressable, Alert, Platform } from 'react-native';
 import { getReport } from 'src/redux/content/operations';
 import { useDispatch } from 'react-redux';
 
@@ -81,38 +82,39 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       const blob = new Blob([report.payload], {
         type: 'application/json',
       });
-      // const url = URL.createObjectURL(blob);
 
       const fr = new FileReader();
-      console.log('fr', fr);
+      // console.log('fr', fr);
 
       fr.onload = async () => {
-        const fileUri = `${FileSystem.documentDirectory}/report.xlsx`;
+        if (Platform.OS === 'ios') {
+          const fileUri = `${FileSystem.documentDirectory}/report.xlsx`;
 
-        console.log('fr', fr);
-        await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        Sharing.shareAsync(fileUri);
-        // const { StorageAccessFramework } = FileSystem;
-        // const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+          await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          Sharing.shareAsync(fileUri);
+        } else {
+          const { StorageAccessFramework } = FileSystem;
+          const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
 
-        // if (permissions.granted) {
-        //   let directoryUri = permissions.directoryUri;
-        //   await StorageAccessFramework.createFileAsync(
-        //     directoryUri,
-        //     'report1',
-        //     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        //   )
-        //     .then(async (fileUri) => {
-        //       await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
-        //         encoding: FileSystem.EncodingType.Base64,
-        //       });
-        //     })
-        //     .catch((e) => {
-        //       console.log(e);
-        //     });
-        // }
+          if (permissions.granted) {
+            let directoryUri = permissions.directoryUri;
+            await StorageAccessFramework.createFileAsync(
+              directoryUri,
+              'report1',
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
+              .then(async (fileUri) => {
+                await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
+                  encoding: FileSystem.EncodingType.Base64,
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
+        }
       };
       fr.readAsDataURL(blob);
       // console.log('fr.readAsDataURL', fr.onload());
