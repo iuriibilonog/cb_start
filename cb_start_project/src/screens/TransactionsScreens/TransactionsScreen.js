@@ -111,7 +111,7 @@ const TransactionsScreen = ({
           style={{
             ...styles.tableRow,
             flexDirection: 'row',
-            alignItems: 'center',
+            // alignItems: 'center',
             backgroundColor: index % 2 !== 0 ? '#FAFAFA' : '#fff',
           }}
         >
@@ -123,10 +123,12 @@ const TransactionsScreen = ({
           </View> */}
           <View
             style={{
-              ...styles.tableCell,
-              width: width / 5,
+              // ...styles.tableCell,
+              width: width / 4,
               flexDirection: 'row',
               alignItems: 'center',
+              borderBottomWidth: 1,
+              borderColor: 'rgba(217, 217, 217, 0.70)',
             }}
           >
             <Image
@@ -150,7 +152,7 @@ const TransactionsScreen = ({
               {item.amount}
             </SimpleText>
           </View>
-          <View style={{ ...styles.tableCell, width: 80 }}>
+          <View style={{ ...styles.tableCell, width: 70 }}>
             <SimpleText
               style={{
                 fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
@@ -470,22 +472,22 @@ const TransactionsScreen = ({
         }}
       >
         {/* <View style={{ width: 20 }}></View> */}
-        <View style={{ ...styles.tableCell, width: width / 5 ,           alignItems: 'center',}}>
+        <View style={{ ...styles.tableHeaderCell, width: width / 4, alignItems: 'center' }}>
           <SimpleText style={styles.headerText}>
             <FormattedMessage id={'transactions.int_id'} />
           </SimpleText>
         </View>
-        <View style={{ ...styles.tableCell, width: width / 4 ,          alignItems: 'center',}}>
+        <View style={{ ...styles.tableHeaderCell, width: width / 4, alignItems: 'center' }}>
           <SimpleText style={styles.headerText}>
             <FormattedMessage id={'transactions.amount'} />
           </SimpleText>
         </View>
-        <View style={{ ...styles.tableCell, width: 80 ,          alignItems: 'center',}}>
+        <View style={{ ...styles.tableHeaderCell, width: 70, alignItems: 'center' }}>
           <SimpleText style={styles.headerText}>
             <FormattedMessage id={'transactions.mode'} />
           </SimpleText>
         </View>
-        <View style={{ ...styles.tableCellStatus ,           alignItems: 'center',}}>
+        <View style={{ ...styles.tableCellStatus, alignItems: 'center' }}>
           <SimpleText style={styles.headerText}>
             <FormattedMessage id={'transactions.status'} />
           </SimpleText>
@@ -513,9 +515,16 @@ const styles = StyleSheet.create({
   },
   title: { marginTop: 30, marginBottom: 36, paddingLeft: 20 },
   headerText: { fontFamily: 'Mont_SB' },
-  tableRow: { paddingLeft: 14 },
-  tableCell: { paddingVertical: 15, paddingHorizontal: 5},
-  tableCellStatus: { flex: 1, paddingVertical: 15, paddingLeft: 15 },
+  tableRow: { paddingLeft: 10 },
+  tableHeaderCell: { paddingVertical: 15, paddingHorizontal: 5 },
+  tableCell: {
+    paddingVertical: 15,
+    paddingHorizontal: 5,
+    // alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: 'rgba(217, 217, 217, 0.70)',
+  },
+  tableCellStatus: { flex: 1, lineHeight: 20, paddingLeft: 15, paddingVertical: 15 },
   additDataCell: {
     height: 40,
     backgroundColor: '#fff',
