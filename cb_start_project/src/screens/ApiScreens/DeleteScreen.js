@@ -16,20 +16,22 @@ import {
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { deleteApiKey } from 'src/redux/content/operations';
 
 const arrowLeft = require('src/images/header_left.png');
 
 const DeleteScreen = (props) => {
-  const [value, setValue] = useState('Getapay');
-  useEffect(() => {
-    console.log('props', props);
-  }, []);
+  const [value, setValue] = useState(props.route.params.name);
+  const dispatch = useDispatch();
 
-  const { width } = Dimensions.get('window');
-
-  const submit = () => {
-    console.log('DELETED', value);
-    props.navigation.navigate('ApiScreen');
+  const submit = async () => {
+    try {
+      await dispatch(deleteApiKey(props.route.params.id));
+      props.navigation.navigate('ApiScreen', { isRefresh: true });
+    } catch (err) {
+      console.log('err', err);
+    }
   };
 
   return (
@@ -88,7 +90,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     alignItems: 'center',
   },
-  title: { fontSize: 24, fontFamily: 'Mont_SB', marginBottom: 70, textAlign: 'center', lineHeight:30 },
+  title: {
+    fontSize: 24,
+    fontFamily: 'Mont_SB',
+    marginBottom: 70,
+    textAlign: 'center',
+    lineHeight: 30,
+  },
   valueTextWrapper: {
     width: '100%',
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTransactionData } from 'src/redux/content/operations';
-import { getTransactionInfo } from 'src/redux/content/selectors';
+import { getApiData } from 'src/redux/content/operations';
+import { getApiInfo } from 'src/redux/content/selectors';
 import { StyleSheet, View, Dimensions, Image, TouchableOpacity, FlatList } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
@@ -17,22 +17,26 @@ const editInactiveIcon = require('src/images/edit_inactive.png');
 
 const ApiScreen = (props) => {
   const dispatch = useDispatch();
-  const transactionInfo = useSelector(getTransactionInfo);
+  const apiData = useSelector(getApiInfo);
   const [data, setData] = useState(null);
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log('ApiScreen');
-
-    dispatch(getTransactionData());
+    dispatch(getApiData());
   }, []);
 
   useEffect(() => {
-    if (transactionInfo) {
-      setData(transactionInfo);
+    if (props.route.params && props.route.params.isRefresh) {
+      dispatch(getApiData());
     }
-  }, [transactionInfo]);
+  }, [props.route.params]);
+
+  useEffect(() => {
+    if (apiData) {
+      setData(apiData);
+    }
+  }, [apiData]);
 
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
@@ -41,21 +45,17 @@ const ApiScreen = (props) => {
 
   const { width } = Dimensions.get('window');
 
-  //=================================
-  //=================================
-  const index = 1;
-
   const handleExpandRow = (index) => {
     setIsAdditDataOpen((prev) => !prev);
     setSelectedIndex(index);
   };
 
-  const handleEdit = (item) => {
-    navigation.navigate('EditScreen', { item });
+  const handleEdit = ({ id, name }) => {
+    navigation.navigate('EditScreen', { id, name });
   };
 
-  const handleDelete = (item) => {
-    navigation.navigate('DeleteScreen', { item });
+  const handleDelete = ({ id, name }) => {
+    navigation.navigate('DeleteScreen', { id, name });
   };
 
   const flatListRenderModule = (item, index) => (
@@ -94,7 +94,7 @@ const ApiScreen = (props) => {
                 fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
               }}
             >
-              {item.amount}
+              {item.id}
             </SimpleText>
           </View>
           <View style={{ ...styles.tableCell, flex: 1 }}>
@@ -103,7 +103,7 @@ const ApiScreen = (props) => {
                 fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
               }}
             >
-              {item.status}
+              {item.name}
             </SimpleText>
           </View>
           <TouchableOpacity
@@ -176,10 +176,10 @@ const ApiScreen = (props) => {
             }}
           >
             <View style={styles.additDataCellValues}>
-              <SimpleText>{item.id}</SimpleText>
+              <SimpleText>{item.name}</SimpleText>
             </View>
             <View style={{ ...styles.additDataCellValues, borderBottomWidth: 0 }}>
-              <SimpleText>{item.orderId}</SimpleText>
+              <SimpleText>{item.apiKey}</SimpleText>
             </View>
           </View>
         </View>

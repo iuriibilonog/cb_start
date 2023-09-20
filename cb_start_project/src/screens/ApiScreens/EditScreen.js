@@ -15,21 +15,28 @@ import {
   TextInput,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
+import { useDispatch } from 'react-redux';
+import { putApiKey } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
 
 const arrowLeft = require('src/images/header_left.png');
 
 const EditScreen = (props) => {
-  const [value, setValue] = useState('Interkassa payout');
+  const [value, setValue] = useState(props.route.params.name);
   useEffect(() => {
-    console.log('props', props);
+    console.log('props', props.route.params);
   }, []);
-
+  const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
 
-  const submit = () => {
-    console.log('EDITED', value);
-    props.navigation.navigate('ApiScreen');
+  const submit = async () => {
+    try {
+      console.log('EDITED', value);
+      await dispatch(putApiKey({id:props.route.params.id, name:value}));
+      props.navigation.navigate('ApiScreen',{isRefresh:true});
+    } catch (err) {
+      console.log('err', err);
+    }
   };
 
   return (

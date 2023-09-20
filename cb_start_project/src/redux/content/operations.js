@@ -118,6 +118,47 @@ export const getTransactionData = createAsyncThunk(
   }
 );
 
+export const getApiData = createAsyncThunk('content/getApiData', async (_, thunkAPI) => {
+  try {
+    const { data } = await api.get(`${BASE_URL}/api/api-keys?page=1&pageSize=100`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const putApiKey = createAsyncThunk('content/putApiKey', async ({ id, name }, thunkAPI) => {
+  try {
+    const { data } = await api.put(
+      `${BASE_URL}/api/api-keys/${id}`,
+      { name: name },
+      {
+        withCredentials: true,
+      }
+    );
+
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const deleteApiKey = createAsyncThunk('content/deleteApiKey', async (id, thunkAPI) => {
+  try {
+    const { data } = await api.delete(
+      `${BASE_URL}/api/api-keys/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
 // export const getAllModes = createAsyncThunk('content/getAllModes', async (_, thunkAPI) => {
 //   try {
 //     // const { data } = await api.get(`${BASE_URL}/api/modes`, {

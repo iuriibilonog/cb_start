@@ -6,6 +6,8 @@ import {
   getBankBalance,
   getTransactionData,
   getMerchantsApiKeys,
+  getApiData,
+  putApiKey,
   // getAllModes,
   // getAllCurrencies,
 } from './operations';
@@ -16,6 +18,7 @@ const initialState = {
     allUsers: [],
     balance: [],
     transactionData: [],
+    apiData: [],
     merchantApiKeys: [],
     error: null,
   },
@@ -88,6 +91,22 @@ const userSlice = createSlice({
       state.content.transactionData = action.payload.items;
     }),
       builder.addCase(getTransactionData.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+    builder.addCase(getApiData.fulfilled, (state, action) => {
+      state.content.apiData = action.payload.items;
+    }),
+      builder.addCase(getApiData.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+    builder.addCase(putApiKey.fulfilled, (state, action) => {
+      // state.content.apiKey = action.payload;
+    }),
+      builder.addCase(putApiKey.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };
