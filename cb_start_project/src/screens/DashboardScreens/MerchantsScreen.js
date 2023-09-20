@@ -27,24 +27,24 @@ const MerchantsScreen = ({
   transactionFilter,
   isFiltersVisible,
   filtersDots,
-  isMerchApiKeyAvailable,confirmReport
+  isMerchApiKeyAvailable,
+  confirmReport,
 }) => {
   const reportType = route.params.type.value;
   const defaultPaymentFilter =
     paymentFilter && paymentFilter.find((item) => item.name === 'merchants')
       ? paymentFilter.find((item) => item.name === 'merchants')
-      : { value: 'All merchants' };
+      : {};
   const defaultTransactionFilter =
     transactionFilter && transactionFilter.find((item) => item.name === 'merchants')
       ? transactionFilter.find((item) => item.name === 'merchants')
-      : { value: 'All merchants' };
+      : {};
 
   const [radioSelect, setRadioSelect] = useState(
     reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
   );
 
   const [merchants, setMerchants] = useState([
-    { value: 'All merchants' },
     { id: 10, value: 'Getapay' },
     { id: 36, value: 'Impaya' },
     { id: 43, value: 'XXXX' },
@@ -77,10 +77,15 @@ const MerchantsScreen = ({
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('merchants', { filters: radioSelect, value: radioSelect.value });
+        if (Object.keys(radioSelect).length > 0) {
+          setPaymentsFilter('merchants', { filters: radioSelect, value: radioSelect.value });
+        }
         break;
       case 'Transactions':
-        setTransactionFilter('merchants', { filters: radioSelect, value: radioSelect.value });
+        console.log('<<))>>', radioSelect);
+        if (Object.keys(radioSelect).length > 0) {
+          setTransactionFilter('merchants', { filters: radioSelect, value: radioSelect.value });
+        }
         break;
 
       default:

@@ -46,23 +46,27 @@ const StatusScreen = ({
     { value: 'All' },
     { value: 'declined' },
     { value: 'approved' },
-    { value: 'procesing' },
+    { value: 'processing' },
     { value: 'new' },
   ];
-
-  useEffect(() => {
-    console.log('STATUSSCREEN');
-  }, []);
 
   const navigation = useNavigation();
 
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('status', { filters: radioSelect.value, value: radioSelect.value });
+        if (radioSelect.value === 'All') {
+          setPaymentsFilter('status', {}, true);
+        } else {
+          setPaymentsFilter('status', { filters: radioSelect.value, value: radioSelect.value });
+        }
         break;
       case 'Transactions':
-        setTransactionFilter('status', { filters: radioSelect.value, value: radioSelect.value });
+        if (radioSelect.value === 'All') {
+          setTransactionFilter('status', {}, true);
+        } else {
+          setTransactionFilter('status', { filters: radioSelect.value, value: radioSelect.value });
+        }
         break;
 
       default:

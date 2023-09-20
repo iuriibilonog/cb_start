@@ -102,10 +102,42 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
 });
 export const getTransactionData = createAsyncThunk(
   'content/getTransactionData',
-  async (_, thunkAPI) => {
+  async (transactionData, thunkAPI) => {
+    // const {
+    //   startDate,
+    //   endDate,
+    //   userId,
+    //   apiKeyId,
+    //   mode,
+    //   status,
+    //   currency,
+    //   timezone,
+    //   bankName,
+    //   page = 1,
+    // } = transactionData;
     try {
+      //https://dev.cashbulls.io/api/payments
+
+      // ?page=1&pageSize=100
+      // &includeTransactions=true
+      // &startDate=2023-09-20
+      // &endDate=2023-09-20
+      // &userId=36
+      // &apiKeyId=48
+      // &mode=payin
+      // &status=declined
+      // &currency=EUR
+      // &timezone=Etc/UTC
+      // &bankName=Royal
+      const setLink = JSON.stringify(transactionData)
+        .replace(/:/g, '=')
+        .replace(/\,/g, '&')
+        .replace(/\"/g, '')
+        .slice(1, -1);
+
       const { data } = await api.get(
-        `${BASE_URL}/api/payments?page=1&pageSize=100&includeTransactions=true&startDate=2022-09-12&endDate=2023-09-15&timezone=Etc/UTC`,
+        `${BASE_URL}/api/payments?page=1&pageSize=100&includeTransactions=true&${setLink}`,
+        // `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&startDate=${startDate}&endDate=${endDate}&userId=${userId}&apiKeyId=${apiKeyId}&mode=${mode}&status=${status}&currency=${currency}&timezone=${timezone}&bankName=${bankName}`,
         {
           withCredentials: true,
         }
@@ -147,12 +179,9 @@ export const putApiKey = createAsyncThunk('content/putApiKey', async ({ id, name
 
 export const deleteApiKey = createAsyncThunk('content/deleteApiKey', async (id, thunkAPI) => {
   try {
-    const { data } = await api.delete(
-      `${BASE_URL}/api/api-keys/${id}`,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await api.delete(`${BASE_URL}/api/api-keys/${id}`, {
+      withCredentials: true,
+    });
 
     return data;
   } catch (error) {

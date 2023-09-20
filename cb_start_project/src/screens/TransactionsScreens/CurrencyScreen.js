@@ -41,7 +41,11 @@ const CurrencyScreen = ({
   // }, [data]);
 
   useEffect(() => {
-    setTransactionFilter('currency', { filters: radioSelect, value: radioSelect.value });
+    if (radioSelect.value === 'All') {
+      setTransactionFilter('currency', {}, true);
+    } else {
+      setTransactionFilter('currency', { filters: radioSelect, value: radioSelect.value });
+    }
   }, [radioSelect]);
 
   return (

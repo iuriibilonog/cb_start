@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTransactionData } from 'src/redux/content/operations';
 import { getTransactionInfo } from 'src/redux/content/selectors';
-import { StyleSheet, View, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Dimensions, Image, TouchableOpacity, FlatList } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from '@cherry-soft/react-native-basic-pagination';
@@ -28,15 +28,41 @@ const TransactionsScreen = ({
   const navigation = useNavigation();
 
   useEffect(() => {
+    console.log('TRANSACTIONSCREEN');
 
-      console.log('TRANSACTIONSCREEN') 
-
-    dispatch(getTransactionData());
+    // dispatch(getTransactionData());
   }, []);
 
+  const createTransactionRequestObject = (filters) => {
+    let result = {};
+    // [{"filters": {"endDate": "2023-09-20", "startDate": "2023-09-20"}, "name": "date", "value": "2023-09-20, 2023-09-20"}, {"filters": {"value": "All merchants"}, "name": "merchants", "value": "All merchants"}, {"filters": {"value": "All api keys"}, "name": "merchantApiKey", "value": "All api keys"}, {"filters": {"value": "All"}, "name": "mode", "value": "All"}, {"filters": "All", "name": "status", "value": "All"}, {"filters": {"value": "All"}, "name": "currency", "value": "All"}, {"filters": {"value": "All"}, "name": "banks", "value": "All"}, {"filters": {"value": "UTC0"}, "name": "timezone", "value": "UTC0"}]
+    filters.forEach((item) => {
+      switch (item.name) {
+        case 'date':
+          result.startDate = item.filters.startDate;
+          result.endDate = item.filters.endDate;
+          break;
+        case 'merchants':
+          result.userId = item.filters.id ? item.filters.id : item.filters.value;
+          break;
+        case 'merchantApiKey':
+          result.merchantApiKey = item.filters.id ? item.filters.id : item.filters.value;
+          break;
+        case 'banks':
+          result.bankName = item.value;
+          break;
+        default:
+          result[item.name] = item.value;
+      }
+    });
+    return result;
+  };
+
   useEffect(() => {
-    dispatch(getTransactionData());
-    // console.log('genReportTransactionFilters', genReportTransactionFilters);
+    console.log('genReportTransactionFilters>>>', genReportTransactionFilters);
+    const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
+    console.log('transactionRequestObject', transactionRequestObject);
+    dispatch(getTransactionData(transactionRequestObject));
   }, [genReportTransactionFilters]);
 
   useEffect(() => {
@@ -89,13 +115,24 @@ const TransactionsScreen = ({
             backgroundColor: index % 2 !== 0 ? '#FAFAFA' : '#fff',
           }}
         >
-          <View style={{ width: 20 }}>
+          {/* <View style={{ width: 20 }}>
             <Image
               source={isAdditDataOpen && selectedIndex === item.id ? arrowUp : arrowDown}
               style={{ width: 20, height: 20 }}
             />
-          </View>
-          <View style={{ ...styles.tableCell, width: width / 6 }}>
+          </View> */}
+          <View
+            style={{
+              ...styles.tableCell,
+              width: width / 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              source={isAdditDataOpen && selectedIndex === item.id ? arrowUp : arrowDown}
+              style={{ width: 20, height: 20 }}
+            />
             <SimpleText
               style={{
                 fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
@@ -113,7 +150,7 @@ const TransactionsScreen = ({
               {item.amount}
             </SimpleText>
           </View>
-          <View style={{ ...styles.tableCell, width: width / 6 }}>
+          <View style={{ ...styles.tableCell, width: 80 }}>
             <SimpleText
               style={{
                 fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
@@ -432,29 +469,29 @@ const TransactionsScreen = ({
           backgroundColor: '#F4F4F4',
         }}
       >
-        <View style={{ width: 20 }}></View>
-        <View style={{ ...styles.tableCell, width: width / 6 }}>
+        {/* <View style={{ width: 20 }}></View> */}
+        <View style={{ ...styles.tableCell, width: width / 5 ,           alignItems: 'center',}}>
           <SimpleText style={styles.headerText}>
             <FormattedMessage id={'transactions.int_id'} />
           </SimpleText>
         </View>
-        <View style={{ ...styles.tableCell, width: width / 4 }}>
+        <View style={{ ...styles.tableCell, width: width / 4 ,          alignItems: 'center',}}>
           <SimpleText style={styles.headerText}>
             <FormattedMessage id={'transactions.amount'} />
           </SimpleText>
         </View>
-        <View style={{ ...styles.tableCell, width: width / 6 }}>
+        <View style={{ ...styles.tableCell, width: 80 ,          alignItems: 'center',}}>
           <SimpleText style={styles.headerText}>
             <FormattedMessage id={'transactions.mode'} />
           </SimpleText>
         </View>
-        <View style={{ ...styles.tableCellStatus }}>
+        <View style={{ ...styles.tableCellStatus ,           alignItems: 'center',}}>
           <SimpleText style={styles.headerText}>
             <FormattedMessage id={'transactions.status'} />
           </SimpleText>
         </View>
       </View>
-      {/* <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} /> */}
+      <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
       <Pagination
         totalItems={100}
         pageSize={5}
@@ -477,7 +514,7 @@ const styles = StyleSheet.create({
   title: { marginTop: 30, marginBottom: 36, paddingLeft: 20 },
   headerText: { fontFamily: 'Mont_SB' },
   tableRow: { paddingLeft: 14 },
-  tableCell: { paddingVertical: 15, paddingHorizontal: 5 },
+  tableCell: { paddingVertical: 15, paddingHorizontal: 5},
   tableCellStatus: { flex: 1, paddingVertical: 15, paddingLeft: 15 },
   additDataCell: {
     height: 40,

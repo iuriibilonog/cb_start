@@ -121,14 +121,18 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     }
   };
 
-  const setPaymentsFilter = (filterName, data) => {
+  const setPaymentsFilter = (filterName, data, isDeleteFilter) => {
     const filter = genReportPaymentsFilters.filter((item) => item.name !== filterName);
 
-    setGenReportPaymentsFilters((prev) => [...filter, { name: filterName, ...data }]);
+    setGenReportPaymentsFilters((prev) =>
+      isDeleteFilter ? filter : [...filter, { name: filterName, ...data }]
+    );
   };
-  const setTransactionFilter = (filterName, data) => {
+  const setTransactionFilter = (filterName, data, isDeleteFilter) => {
     const filter = genReportTransactionFilters.filter((item) => item.name !== filterName);
-    setGenReportTransactionFilters((prev) => [...filter, { name: filterName, ...data }]);
+    setGenReportTransactionFilters((prev) =>
+      isDeleteFilter ? filter : [...filter, { name: filterName, ...data }]
+    );
   };
 
   const handleDeleteFilter = (radioSelectValue, { name }) => {

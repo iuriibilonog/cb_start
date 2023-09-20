@@ -27,7 +27,8 @@ const MerchantsApiKeyScreen = ({
   genReportTransactionFilters,
   isFiltersVisible,
   filtersDots,
-  isMerchApiKeyAvailable,confirmReport
+  isMerchApiKeyAvailable,
+  confirmReport,
 }) => {
   const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
   const reportType = route.params.type.value;
@@ -58,11 +59,22 @@ const MerchantsApiKeyScreen = ({
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('merchantApiKey', { filters: radioSelect, value: radioSelect.value });
+        if (radioSelect.value === 'All api keys') {
+          setPaymentsFilter('merchantApiKey', {}, true);
+        } else {
+          setPaymentsFilter('merchantApiKey', { filters: radioSelect, value: radioSelect.value });
+        }
 
         break;
       case 'Transactions':
-        setTransactionFilter('merchantApiKey', { filters: radioSelect, value: radioSelect.value });
+        if (radioSelect.value === 'All api keys') {
+          setTransactionFilter('merchantApiKey', {}, true);
+        } else {
+          setTransactionFilter('merchantApiKey', {
+            filters: radioSelect,
+            value: radioSelect.value,
+          });
+        }
         break;
 
       default:

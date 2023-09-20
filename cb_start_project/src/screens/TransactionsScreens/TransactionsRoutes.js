@@ -14,10 +14,17 @@ import MerchantsApiKeyScreen from '../DashboardScreens/MerchantsApiKeyScreen';
 import { Image, Pressable } from 'react-native';
 const headerLeft = require('src/images/header_left.png');
 const TransactionsStack = createStackNavigator();
-
+const dateNow = new Date().toISOString().slice(0, 10);
+const initialFilters = [
+  {
+    filters: { endDate: dateNow, startDate: dateNow },
+    name: 'date',
+    value: `${dateNow}, ${dateNow}`,
+  },
+];
 const TransactionsRoutes = ({ handlePressIconLogOut }) => {
-  const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([]);
-  const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
+  const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState(initialFilters);
+  const [genReportTransactionFilters, setGenReportTransactionFilters] = useState(initialFilters);
   const [filtersDots, setFiltersDots] = useState([]);
   const [isMerchApiKeyAvailable, setIsMerchApiKeyAvailable] = useState(false);
 
@@ -40,9 +47,11 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
 
     setGenReportPaymentsFilters((prev) => [...filter, { name: filterName, ...data }]);
   };
-  const setTransactionFilter = (filterName, data) => {
+  const setTransactionFilter = (filterName, data, isDeleteFilter) => {
     const filter = genReportTransactionFilters.filter((item) => item.name !== filterName);
-    setGenReportTransactionFilters((prev) => [...filter, { name: filterName, ...data }]);
+    setGenReportTransactionFilters((prev) =>
+      isDeleteFilter ? filter : [...filter, { name: filterName, ...data }]
+    );
   };
 
   const profileIcon = require('src/images/profile_icon.png');

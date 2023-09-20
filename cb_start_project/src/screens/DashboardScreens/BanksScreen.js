@@ -23,23 +23,17 @@ const BanksScreen = ({
   isFiltersVisible,
   filtersDots,
   isMerchApiKeyAvailable,
-  confirmReport
+  confirmReport,
 }) => {
   const getDefaultFilter = transactionFilter?.find((item) => item.name === 'banks');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
-
-  const [checkBoxSelect, setCheckBoxSelect] = useState([]);
   const [radioSelect, setRadioSelect] = useState(defaultTransactionFilter);
   const [banks, setBanks] = useState([{ value: 'All' }]);
 
-  const navigation = useNavigation();
   const data = useSelector(getBanks);
 
- useEffect(() => {
-  console.log('BANKSCREEN') 
-  }, []);
-
   useEffect(() => {
+    console.log('BANKS', data);
     if (!data.length) return;
     const modifyBanks = data.map((item) => ({
       name: item.name,
@@ -51,12 +45,22 @@ const BanksScreen = ({
   }, [data]);
 
   useEffect(() => {
-    setTransactionFilter('banks', { filters: radioSelect, value: radioSelect.value });
+    if (radioSelect.value === 'All') {
+      setTransactionFilter('banks', {}, true);
+    } else {
+      setTransactionFilter('banks', { filters: radioSelect, value: radioSelect.value });
+    }
   }, [radioSelect]);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'banks'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
+      {isFiltersVisible && (
+        <TransactionsFilters
+          isActive={'banks'}
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList
