@@ -30,7 +30,8 @@ const CalendarScreen = ({
   transactionFilter,
   isFiltersVisible,
   filtersDots,
-  isMerchApiKeyAvailable
+  isMerchApiKeyAvailable,
+  confirmReport,
 }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState();
@@ -40,7 +41,7 @@ const CalendarScreen = ({
   const reportType = route.params?.type?.value;
 
   useEffect(() => {
-    console.log('CALENDARSCREEN')
+    console.log('CALENDARSCREEN');
     if (route.params?.isBalancePeriod) {
       setSelectedStartDay({ dateString: route.params.balancePeriod.startDate });
       setSelectedEndDay({ dateString: route.params.balancePeriod.endDate });
@@ -99,8 +100,10 @@ const CalendarScreen = ({
       const end = selectedEndDay.dateString || selectedEndDay;
 
       getBalancePeriod({ startDate: start, endDate: end });
-      navigation.navigate('DashboardScreen');
+
+      // navigation.navigate('DashboardScreen');
     }
+    confirmReport();
     setIsCalendarVisible(false);
   };
 
@@ -123,7 +126,13 @@ const CalendarScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'date'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
+      {isFiltersVisible && (
+        <TransactionsFilters
+          isActive={'date'}
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
       <TouchableWithoutFeedback
         onPress={() => {
           setIsCalendarVisible(false);

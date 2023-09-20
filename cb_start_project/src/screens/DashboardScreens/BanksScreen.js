@@ -22,7 +22,8 @@ const BanksScreen = ({
   transactionFilter,
   isFiltersVisible,
   filtersDots,
-  isMerchApiKeyAvailable
+  isMerchApiKeyAvailable,
+  confirmReport
 }) => {
   const getDefaultFilter = transactionFilter?.find((item) => item.name === 'banks');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
@@ -66,7 +67,7 @@ const BanksScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

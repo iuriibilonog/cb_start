@@ -27,7 +27,7 @@ const MerchantsApiKeyScreen = ({
   genReportTransactionFilters,
   isFiltersVisible,
   filtersDots,
-  isMerchApiKeyAvailable,
+  isMerchApiKeyAvailable,confirmReport
 }) => {
   const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
   const reportType = route.params.type.value;
@@ -111,7 +111,7 @@ const MerchantsApiKeyScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

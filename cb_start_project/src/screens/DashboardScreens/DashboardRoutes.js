@@ -197,6 +197,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             setTransactionFilter={setTransactionFilter}
             paymentFilter={genReportPaymentsFilters}
             transactionFilter={genReportTransactionFilters}
+            confirmReport={confirmReport}
           />
         )}
       </DashboardStack.Screen>
@@ -277,6 +278,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             transactionFilter={genReportTransactionFilters}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmReport}
           />
         )}
       </DashboardStack.Screen>
@@ -303,6 +305,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             setTransactionFilter={setTransactionFilter}
             genReportPaymentsFilters={genReportPaymentsFilters}
             genReportTransactionFilters={genReportTransactionFilters}
+            confirmReport={confirmReport}
           />
         )}
       </DashboardStack.Screen>
@@ -329,6 +332,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             transactionFilter={genReportTransactionFilters}
             setPaymentsFilter={setPaymentsFilter}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmReport}
           />
         )}
       </DashboardStack.Screen>
@@ -355,6 +359,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             // transactionFilter={genReportTransactionFilters}
             setPaymentsFilter={setPaymentsFilter}
             // setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmReport}
           />
         )}
       </DashboardStack.Screen>
@@ -380,6 +385,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             {...props}
             transactionFilter={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmReport}
           />
         )}
       </DashboardStack.Screen>

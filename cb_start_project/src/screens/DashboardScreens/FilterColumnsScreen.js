@@ -13,7 +13,7 @@ import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
-const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
+const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter,confirmReport }) => {
   const defaultPaymentFilter =
     paymentFilter && paymentFilter.find((item) => item.name === 'filterColumns')
       ? paymentFilter.find((item) => item.name === 'filterColumns')
@@ -72,7 +72,7 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter }) => {
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />
