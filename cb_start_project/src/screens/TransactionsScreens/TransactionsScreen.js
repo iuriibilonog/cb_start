@@ -5,9 +5,9 @@ import { getTransactionInfo } from 'src/redux/content/selectors';
 import { StyleSheet, View, Dimensions, Image, TouchableOpacity, FlatList } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
-import Pagination from '@cherry-soft/react-native-basic-pagination';
 import { useNavigation } from '@react-navigation/native';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import Pagination from 'src/components/molecules/Pagination';
 
 const close = require('src/images/delete.png');
 const arrowDown = require('src/images/arrow_down_small.png');
@@ -494,13 +494,14 @@ const TransactionsScreen = ({
         </View>
       </View>
       <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
-      <Pagination
+      <Pagination />
+      {/* <Pagination
         totalItems={100}
         pageSize={5}
         currentPage={page}
         // pagesToDisplay={2}
         onPageChange={setPage}
-      />
+      /> */}
     </View>
     // </ScrollView>
   );
