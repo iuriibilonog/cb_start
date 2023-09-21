@@ -60,19 +60,22 @@ const Pagination = ({ totalPages = 10, currentPage = 1, setCurrentPage }) => {
       </TouchableOpacity>
       {pagesLine &&
         pagesLine.map((item, index) => (
-          <TouchableOpacity key={index} activeOpacity={0.5} onPress={() => setSelected(item)}>
-            <View style={styles.itemWrapper}>
-              <SimpleText
-                style={{
-                  ...styles.itemText,
-                  fontFamily: item === selected ? 'Mont_SB' : 'Mont',
-                  color: item === selected ? '#212121' : '#96979B',
-                }}
-              >
-                {item}
-              </SimpleText>
-            </View>
-          </TouchableOpacity>
+          <>
+            {index === 3 && <SimpleText style={styles.dots}>...</SimpleText>}
+            <TouchableOpacity key={index} activeOpacity={0.5} onPress={() => setSelected(item)}>
+              <View style={styles.itemWrapper}>
+                <SimpleText
+                  style={{
+                    ...styles.itemText,
+                    fontFamily: item === selected ? 'Mont_SB' : 'Mont',
+                    color: item === selected ? '#212121' : '#96979B',
+                  }}
+                >
+                  {item}
+                </SimpleText>
+              </View>
+            </TouchableOpacity>
+          </>
         ))}
       {/* <TouchableOpacity activeOpacity={0.5} onPress={() => setSelected((prev) => prev + 1)}> */}
 
@@ -91,7 +94,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  itemWrapper: { paddingHorizontal: 5 },
+  itemWrapper: {
+    paddingHorizontal: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  //   dots: { marginRight: 30 },
   itemText: { color: '#96979B' },
   arrow: { width: 24, height: 24, opacity: 0.4 },
 });
