@@ -129,11 +129,19 @@ export const getTransactionData = createAsyncThunk(
       // &currency=EUR
       // &timezone=Etc/UTC
       // &bankName=Royal
-      const setLink = JSON.stringify(transactionData)
+
+      //startDate=2023-09-22&endDate=2023-09-22
+
+      let setLink = JSON.stringify(transactionData)
         .replace(/:/g, '=')
         .replace(/\,/g, '&')
         .replace(/\"/g, '')
         .slice(1, -1);
+      if (!setLink.includes('endDate')) {
+        const initialDate = new Date().toISOString().slice(0, 10);
+
+        setLink = `startDate=${initialDate}&endDate=${initialDate}` + setLink;
+      }
       console.log('page, setLink', page, '<><>', setLink);
       const { data } = await api.get(
         `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&${setLink}`,

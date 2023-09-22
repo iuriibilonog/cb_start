@@ -57,6 +57,7 @@ const lang = {
   'transactions.bank_payment_id': 'Bank Payment ID',
   'transactions.visit_3DS': 'Visit 3DS',
   'transactions.details_payment': 'Details payment',
+  'transactions.not_found': 'Transaction not found',
 
   //filters====
   'filters.date': 'calendar',
@@ -89,6 +90,8 @@ const lang = {
   'common.del': 'Del',
   'common.delete': 'Delete',
   'common.delete_confirm': 'Are you sure  want delete?',
+  'common.reset': 'Reset',
+  'common.data_not_found': 'Data not found',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

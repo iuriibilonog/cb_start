@@ -17,13 +17,7 @@ import { Image, Pressable } from 'react-native';
 const headerLeft = require('src/images/header_left.png');
 const TransactionsStack = createStackNavigator();
 const dateNow = new Date().toISOString().slice(0, 10);
-const initialFilters = [
-  {
-    filters: { endDate: dateNow, startDate: dateNow },
-    name: 'date',
-    value: `${dateNow}, ${dateNow}`,
-  },
-];
+const initialFilters = [];
 const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
   const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState(initialFilters);
   const [genReportTransactionFilters, setGenReportTransactionFilters] = useState(initialFilters);
@@ -43,6 +37,10 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
       setIsMerchApiKeyAvailable(
         filtersWithData.find((item) => item.name === 'merchants') !== undefined
       );
+    }
+    if (genReportTransactionFilters.length === 0) {
+      console.log('Reset filters');
+      confirmTransactionFilters();
     }
   }, [genReportTransactionFilters]);
 
@@ -120,6 +118,7 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
             isFiltersVisible={true}
             filtersDots={filtersDots}
             genReportTransactionFilters={genReportTransactionFilters}
+            setGenReportTransactionFilters={setGenReportTransactionFilters}
             createTransactionRequestObject={createTransactionRequestObject}
           />
         )}

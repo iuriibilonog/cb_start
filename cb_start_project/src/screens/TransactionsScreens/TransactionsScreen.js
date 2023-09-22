@@ -17,6 +17,7 @@ const card = require('src/images/credit_card.png');
 
 const TransactionsScreen = ({
   genReportTransactionFilters,
+  setGenReportTransactionFilters,
   filtersDots,
   inactiveFilters,
   isMerchApiKeyAvailable,
@@ -39,10 +40,10 @@ const TransactionsScreen = ({
   const route = useRoute();
 
   useEffect(() => {
-    console.log('TRANSACTIONSCREEN');
+    console.log('TRANSACTIONSCREEN->', genReportTransactionFilters.length);
 
     // dispatch(getTransactionData());
-  }, []);
+  }, [genReportTransactionFilters]);
 
   useEffect(() => {
     // console.log('route.name', route.name);
@@ -421,23 +422,58 @@ const TransactionsScreen = ({
           </SimpleText>
         </View>
       )}
-      <TouchableOpacity
-        activeOpacity={0.5}
-        onPress={() => setIsFiltersVisible((prev) => !prev)}
+      <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: isFiltersVisible ? 'flex-start' : 'center',
-          paddingLeft: isFiltersVisible ? 20 : 0,
-          paddingTop: isFiltersVisible ? 17 : 0,
-          paddingBottom: isFiltersVisible ? 17 : 28,
+          justifyContent: isFiltersVisible
+            ? 'flex-start'
+            : genReportTransactionFilters.length
+            ? 'space-between'
+            : 'center',
+          paddingLeft: isFiltersVisible ? 20 : genReportTransactionFilters.length > 0 ? 30 : 0,
+          paddingTop: isFiltersVisible ? 17 : genReportTransactionFilters.length > 0 ? 17 : 0,
+          paddingBottom: isFiltersVisible ? 17 : genReportTransactionFilters.length > 0 ? 17 : 28,
         }}
       >
-        <SimpleText style={{ fontFamily: 'Mont_SB' }}>
-          <FormattedMessage id={'common.filters'} />
-        </SimpleText>
-        <Image source={isFiltersVisible ? arrowUp : arrowDown} style={{ width: 20, height: 20 }} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => setIsFiltersVisible((prev) => !prev)}
+          style={{
+            position: 'relative',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          <SimpleText style={{ fontFamily: 'Mont_SB' }}>
+            <FormattedMessage id={'common.filters'} />
+          </SimpleText>
+          <Image
+            source={isFiltersVisible ? arrowUp : arrowDown}
+            style={{ width: 20, height: 20 }}
+          />
+          {!isFiltersVisible && genReportTransactionFilters.length > 0 && (
+            <View style={styles.filterBadge}>
+              <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 10, color: '#fff' }}>
+                {genReportTransactionFilters.length}
+              </SimpleText>
+            </View>
+          )}
+        </TouchableOpacity>
+        {!isFiltersVisible && genReportTransactionFilters.length > 0 && (
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              setGenReportTransactionFilters([]);
+            }}
+            style={{ marginRight: 24 }}
+          >
+            <SimpleText style={{ color: '#FC595A', letterSpacing: 0.48 }}>
+              <FormattedMessage id={'common.reset'} />
+            </SimpleText>
+          </TouchableOpacity>
+        )}
+      </View>
 
       {isFiltersVisible && (
         <TransactionsFilters
@@ -483,7 +519,9 @@ const TransactionsScreen = ({
         <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
       ) : (
         <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
-          <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>Data not found</SimpleText>
+          <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
+            <FormattedMessage id={'transactions.not_found'} />
+          </SimpleText>
         </View>
       )}
       {totalPages > 1 && (
@@ -536,6 +574,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#F4F4F4',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  filterBadge: {
+    width: 14,
+    height: 14,
+    backgroundColor: '#36D0BB',
+    borderRadius: 7,
+    position: 'absolute',
+    top: -7,
+    left: -10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

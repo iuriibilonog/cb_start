@@ -234,7 +234,7 @@ const ApiScreen = (props) => {
       ) : (
         <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
           <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
-            Transaction not found
+            <FormattedMessage id={'common.data_not_found'} />
           </SimpleText>
         </View>
       )}
