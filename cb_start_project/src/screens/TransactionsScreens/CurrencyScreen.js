@@ -13,6 +13,7 @@ const CurrencyScreen = ({
   isFiltersVisible,
   filtersDots,
   isMerchApiKeyAvailable,
+  confirmReport,
 }) => {
   const getDefaultFilter = transactionFilter?.find((item) => item.name === 'currency');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
@@ -67,7 +68,7 @@ const CurrencyScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={() => {}} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

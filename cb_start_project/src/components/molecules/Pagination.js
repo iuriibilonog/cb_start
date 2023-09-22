@@ -68,7 +68,6 @@ const Pagination = ({ totalPages = 20, currentPage = 1, setCurrentPage }) => {
   }, [isKeyboardVisible]);
 
   useEffect(() => {
-    console.log('selected', selected);
     setCurrentPage(selected);
     if (totalPages <= 6) return;
     if (selected >= 5 && totalPages - selected >= 4) {

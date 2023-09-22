@@ -49,6 +49,12 @@ const MerchantsApiKeyScreen = ({
         }
         break;
       case 'Transactions':
+        merchantObj = genReportTransactionFilters.find((item) => item.name === 'merchants');
+
+        if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
+          setMerchId(merchantObj.filters.id);
+          getMerchApiKeys(merchantObj.filters.id);
+        }
         break;
 
       default:
@@ -91,6 +97,8 @@ const MerchantsApiKeyScreen = ({
         ...item,
         value: item.name,
       }));
+
+      console.log('keys', keys);
 
       setData((prev) => [...prev, ...keys]);
     } catch (error) {

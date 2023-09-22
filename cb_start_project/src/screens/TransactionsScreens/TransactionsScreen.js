@@ -1,5 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useRoute } from '@react-navigation/native';
 import { getTransactionData } from 'src/redux/content/operations';
 import { getTransactionInfo } from 'src/redux/content/selectors';
 import { StyleSheet, View, Dimensions, Image, TouchableOpacity, FlatList } from 'react-native';
@@ -19,6 +20,7 @@ const TransactionsScreen = ({
   filtersDots,
   inactiveFilters,
   isMerchApiKeyAvailable,
+  createTransactionRequestObject,
 }) => {
   const dispatch = useDispatch();
   const transactionInfo = useSelector(getTransactionInfo);
@@ -34,43 +36,25 @@ const TransactionsScreen = ({
 
   const navigation = useNavigation();
 
+  const route = useRoute();
+
   useEffect(() => {
     console.log('TRANSACTIONSCREEN');
 
     // dispatch(getTransactionData());
   }, []);
 
-  const createTransactionRequestObject = (filters) => {
-    let result = {};
-    // [{"filters": {"endDate": "2023-09-20", "startDate": "2023-09-20"}, "name": "date", "value": "2023-09-20, 2023-09-20"}, {"filters": {"value": "All merchants"}, "name": "merchants", "value": "All merchants"}, {"filters": {"value": "All api keys"}, "name": "merchantApiKey", "value": "All api keys"}, {"filters": {"value": "All"}, "name": "mode", "value": "All"}, {"filters": "All", "name": "status", "value": "All"}, {"filters": {"value": "All"}, "name": "currency", "value": "All"}, {"filters": {"value": "All"}, "name": "banks", "value": "All"}, {"filters": {"value": "UTC0"}, "name": "timezone", "value": "UTC0"}]
-    filters.forEach((item) => {
-      switch (item.name) {
-        case 'date':
-          result.startDate = item.filters.startDate;
-          result.endDate = item.filters.endDate;
-          break;
-        case 'merchants':
-          result.userId = item.filters.id ? item.filters.id : item.filters.value;
-          break;
-        case 'merchantApiKey':
-          result.merchantApiKey = item.filters.id ? item.filters.id : item.filters.value;
-          break;
-        case 'banks':
-          result.bankName = item.value;
-          break;
-        default:
-          result[item.name] = item.value;
-      }
-    });
-    return result;
-  };
-
   useEffect(() => {
-    console.log('genReportTransactionFilters>>>', genReportTransactionFilters);
-    const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
-    console.log('transactionRequestObject', transactionRequestObject);
-    dispatch(getTransactionData({ transactionData: transactionRequestObject, page: currentPage }));
-  }, [genReportTransactionFilters, currentPage]);
+    console.log('route.name', route.name);
+    if (route.name === 'TransactionsScreen') {
+      console.log('genReportTransactionFilters>>>', genReportTransactionFilters);
+      const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
+      console.log('transactionRequestObject', transactionRequestObject);
+      dispatch(
+        getTransactionData({ transactionData: transactionRequestObject, page: currentPage })
+      );
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     if (transactionInfo) {
@@ -556,4 +540,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(TransactionsScreen);
+export default TransactionsScreen;

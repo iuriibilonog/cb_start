@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
+import { getTransactionData } from 'src/redux/content/operations';
 import TransactionsScreen from './TransactionsScreen';
 import CardholderScreen from './CardholderScreen';
 import CalendarScreen from '../DashboardScreens/CalendarScreen';
@@ -22,11 +24,13 @@ const initialFilters = [
     value: `${dateNow}, ${dateNow}`,
   },
 ];
-const TransactionsRoutes = ({ handlePressIconLogOut }) => {
+const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
   const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState(initialFilters);
   const [genReportTransactionFilters, setGenReportTransactionFilters] = useState(initialFilters);
   const [filtersDots, setFiltersDots] = useState([]);
   const [isMerchApiKeyAvailable, setIsMerchApiKeyAvailable] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // console.log('genReportPaymentsFilters', genReportPaymentsFilters);
@@ -54,8 +58,40 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
     );
   };
 
+  const createTransactionRequestObject = (filters) => {
+    let result = {};
+    // [{"filters": {"endDate": "2023-09-20", "startDate": "2023-09-20"}, "name": "date", "value": "2023-09-20, 2023-09-20"}, {"filters": {"value": "All merchants"}, "name": "merchants", "value": "All merchants"}, {"filters": {"value": "All api keys"}, "name": "merchantApiKey", "value": "All api keys"}, {"filters": {"value": "All"}, "name": "mode", "value": "All"}, {"filters": "All", "name": "status", "value": "All"}, {"filters": {"value": "All"}, "name": "currency", "value": "All"}, {"filters": {"value": "All"}, "name": "banks", "value": "All"}, {"filters": {"value": "UTC0"}, "name": "timezone", "value": "UTC0"}]
+    filters.forEach((item) => {
+      switch (item.name) {
+        case 'date':
+          result.startDate = item.filters.startDate;
+          result.endDate = item.filters.endDate;
+          break;
+        case 'merchants':
+          result.userId = item.filters.id ? item.filters.id : item.filters.value;
+          break;
+        case 'merchantApiKey':
+          result.merchantApiKey = item.filters.id ? item.filters.id : item.filters.value;
+          break;
+        case 'banks':
+          result.bankName = item.value;
+          break;
+        default:
+          result[item.name] = item.value;
+      }
+    });
+    return result;
+  };
+
   const profileIcon = require('src/images/profile_icon.png');
   const closeIcon = require('src/images/delete.png');
+
+  const confirmTransactionFilters = () => {
+    navigation.navigate('TransactionsScreen');
+    const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
+    dispatch(getTransactionData({ transactionData: transactionRequestObject, page: 1 }));
+  };
+
   return (
     <TransactionsStack.Navigator initialRouteName={TransactionsScreen}>
       <TransactionsStack.Screen
@@ -82,6 +118,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             isFiltersVisible={true}
             filtersDots={filtersDots}
             genReportTransactionFilters={genReportTransactionFilters}
+            createTransactionRequestObject={createTransactionRequestObject}
           />
         )}
       </TransactionsStack.Screen>
@@ -110,11 +147,12 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'Calendar',
           headerTitleAlign: 'left',
           headerBackImage: () => (
-            <Image
-              source={headerLeft}
-              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-              // onPress={() => navigation.navigate("registration")}
-            />
+            <Pressable onPress={confirmTransactionFilters}>
+              <Image
+                source={headerLeft}
+                style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              />
+            </Pressable>
           ),
         }}
         name="CalendarScreen"
@@ -127,6 +165,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmTransactionFilters}
           />
         )}
       </TransactionsStack.Screen>
@@ -136,11 +175,12 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'Merchants',
           headerTitleAlign: 'left',
           headerBackImage: () => (
-            <Image
-              source={headerLeft}
-              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-              // onPress={() => navigation.navigate('TransactionsScreen')}
-            />
+            <Pressable onPress={confirmTransactionFilters}>
+              <Image
+                source={headerLeft}
+                style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              />
+            </Pressable>
           ),
         }}
         name="MerchantsScreen"
@@ -153,6 +193,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmTransactionFilters}
           />
         )}
       </TransactionsStack.Screen>
@@ -162,11 +203,12 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'Merchant"s api key',
           headerTitleAlign: 'left',
           headerBackImage: () => (
-            <Image
-              source={headerLeft}
-              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-              // onPress={() => navigation.navigate('TransactionsScreen')}
-            />
+            <Pressable onPress={confirmTransactionFilters}>
+              <Image
+                source={headerLeft}
+                style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              />
+            </Pressable>
           ),
         }}
         name="MerchantsApiKeyScreen"
@@ -177,8 +219,9 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
-            transactionFilter={genReportTransactionFilters}
+            genReportTransactionFilters={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmTransactionFilters}
           />
         )}
       </TransactionsStack.Screen>
@@ -188,11 +231,12 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'Status',
           headerTitleAlign: 'left',
           headerBackImage: () => (
-            <Image
-              source={headerLeft}
-              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-              // onPress={() => navigation.navigate('TransactionsScreen')}
-            />
+            <Pressable onPress={confirmTransactionFilters}>
+              <Image
+                source={headerLeft}
+                style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              />
+            </Pressable>
           ),
         }}
         name="StatusScreen"
@@ -205,6 +249,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmTransactionFilters}
           />
         )}
       </TransactionsStack.Screen>
@@ -214,11 +259,12 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'Timezone',
           headerTitleAlign: 'left',
           headerBackImage: () => (
-            <Image
-              source={headerLeft}
-              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-              // onPress={() => navigation.navigate('TransactionsScreen')}
-            />
+            <Pressable onPress={confirmTransactionFilters}>
+              <Image
+                source={headerLeft}
+                style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              />
+            </Pressable>
           ),
         }}
         name="TimeZoneScreen"
@@ -231,6 +277,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmTransactionFilters}
           />
         )}
       </TransactionsStack.Screen>
@@ -241,11 +288,12 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'Banks',
           headerTitleAlign: 'left',
           headerBackImage: () => (
-            <Image
-              source={headerLeft}
-              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-              // onPress={() => navigation.navigate('TransactionsScreen')}
-            />
+            <Pressable onPress={confirmTransactionFilters}>
+              <Image
+                source={headerLeft}
+                style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              />
+            </Pressable>
           ),
         }}
         name="BanksScreen"
@@ -258,6 +306,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmTransactionFilters}
           />
         )}
       </TransactionsStack.Screen>
@@ -267,11 +316,12 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'Mode',
           headerTitleAlign: 'left',
           headerBackImage: () => (
-            <Image
-              source={headerLeft}
-              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-              // onPress={() => navigation.navigate('TransactionsScreen')}
-            />
+            <Pressable onPress={confirmTransactionFilters}>
+              <Image
+                source={headerLeft}
+                style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              />
+            </Pressable>
           ),
         }}
         name="ModeScreen"
@@ -284,6 +334,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmTransactionFilters}
           />
         )}
       </TransactionsStack.Screen>
@@ -293,11 +344,12 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'Currency',
           headerTitleAlign: 'left',
           headerBackImage: () => (
-            <Image
-              source={headerLeft}
-              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
-              // onPress={() => navigation.navigate('TransactionsScreen')}
-            />
+            <Pressable onPress={confirmTransactionFilters}>
+              <Image
+                source={headerLeft}
+                style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              />
+            </Pressable>
           ),
         }}
         name="CurrencyScreen"
@@ -310,6 +362,7 @@ const TransactionsRoutes = ({ handlePressIconLogOut }) => {
             filtersDots={filtersDots}
             transactionFilter={genReportTransactionFilters}
             setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmTransactionFilters}
           />
         )}
       </TransactionsStack.Screen>
