@@ -24,8 +24,6 @@ const CardholderScreen = (props) => {
   const [data, setData] = useState(null);
   useEffect(() => {
     if (props.route.params.item) {
-      console.log('transInfoCard', props.route.params.item);
-      console.log('id', props.route.params.item.id);
       setData(props.route.params.item);
     }
   }, []);

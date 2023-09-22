@@ -68,10 +68,12 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
           result.endDate = item.filters.endDate;
           break;
         case 'merchants':
-          result.userId = item.filters.id ? item.filters.id : item.filters.value;
+          result.userId = item.filters.id;
+          // result.userId = item.filters.id ? item.filters.id : item.filters.value;
           break;
         case 'merchantApiKey':
-          result.merchantApiKey = item.filters.id ? item.filters.id : item.filters.value;
+          result.merchantApiKey = item.filters.id;
+          // result.merchantApiKey = item.filters.id ? item.filters.id : item.filters.value;
           break;
         case 'banks':
           result.bankName = item.value;

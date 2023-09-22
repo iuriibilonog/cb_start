@@ -45,11 +45,11 @@ const TransactionsScreen = ({
   }, []);
 
   useEffect(() => {
-    console.log('route.name', route.name);
+    // console.log('route.name', route.name);
     if (route.name === 'TransactionsScreen') {
-      console.log('genReportTransactionFilters>>>', genReportTransactionFilters);
+      // console.log('genReportTransactionFilters>>>', genReportTransactionFilters);
       const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
-      console.log('transactionRequestObject', transactionRequestObject);
+      // console.log('transactionRequestObject', transactionRequestObject);
       dispatch(
         getTransactionData({ transactionData: transactionRequestObject, page: currentPage })
       );
@@ -64,14 +64,10 @@ const TransactionsScreen = ({
     }
   }, [transactionInfo]);
 
-  useEffect(() => {
-    console.log('data', data);
-  }, [data]);
-
-  const handleNextScreen = () => {
-    // console.log('nextScreen>>');
-    navigation.navigate('LoginScreen');
-  };
+  // const handleNextScreen = () => {
+  //   // console.log('nextScreen>>');
+  //   navigation.navigate('LoginScreen');
+  // };
 
   //=================================
   //=================================

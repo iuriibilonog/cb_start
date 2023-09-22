@@ -82,7 +82,7 @@ const lang = {
   'common.description': 'Description',
   'common.details': 'Details',
   'common.bank': 'Bank',
-  'common.bank': 'Message',
+  'common.message': 'Message',
   'common.filters': 'Filters',
   'common.user': 'User',
   'common.edit': 'Edit',
