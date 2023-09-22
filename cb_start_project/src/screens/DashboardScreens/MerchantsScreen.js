@@ -78,13 +78,13 @@ const MerchantsScreen = ({
     switch (reportType) {
       case 'Payments':
         if (Object.keys(radioSelect).length > 0) {
-          setPaymentsFilter('merchants', { filters: radioSelect, value: radioSelect.value });
+          setPaymentsFilter('merchants', { filters: radioSelect, value: radioSelect.id });
         }
         break;
       case 'Transactions':
         console.log('<<))>>', radioSelect);
         if (Object.keys(radioSelect).length > 0) {
-          setTransactionFilter('merchants', { filters: radioSelect, value: radioSelect.value });
+          setTransactionFilter('merchants', { filters: radioSelect, value: radioSelect.id });
         }
         break;
 

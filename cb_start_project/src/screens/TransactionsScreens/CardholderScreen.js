@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTransactionData } from 'src/redux/content/operations';
-import { getTransactionInfo } from 'src/redux/content/selectors';
 import {
   Text,
   StyleSheet,
@@ -22,21 +20,15 @@ import { FormattedMessage } from 'react-intl';
 const closeIcon = require('src/images/delete.png');
 const cardholder = require('src/images/master_card.png');
 
-const CardholderScreen = ({ navigation, id = 416989 }) => {
-  const dispatch = useDispatch();
-  const transactionInfo = useSelector(getTransactionInfo);
-
+const CardholderScreen = (props) => {
   const [data, setData] = useState(null);
-
   useEffect(() => {
-    dispatch(getTransactionData());
-  }, []);
-
-  useEffect(() => {
-    if (transactionInfo) {
-      setData(transactionInfo.find((item) => item.id === id));
+    if (props.route.params.item) {
+      console.log('transInfoCard', props.route.params.item);
+      console.log('id', props.route.params.item.id);
+      setData(props.route.params.item);
     }
-  }, [transactionInfo]);
+  }, []);
 
   const { width } = Dimensions.get('window');
 
@@ -52,7 +44,7 @@ const CardholderScreen = ({ navigation, id = 416989 }) => {
         }}
       >
         <Pressable
-          onPress={() => navigation.navigate('TransactionsScreen')}
+          onPress={() => props.navigation.navigate('TransactionsScreen')}
           style={{
             marginLeft: 'auto',
             backgroundColor: '#fff',
@@ -76,7 +68,10 @@ const CardholderScreen = ({ navigation, id = 416989 }) => {
               <FormattedMessage id={'transactions.details_payment'} />
             </SimpleText>
             <View style={{ position: 'relative' }}>
-              <Image source={cardholder} style={{ width: (width-40), height: ((width-40)/1.777), marginTop: 30 }} />
+              <Image
+                source={cardholder}
+                style={{ width: width - 40, height: (width - 40) / 1.777, marginTop: 30 }}
+              />
               {data && (
                 <View style={{ position: 'absolute', bottom: 70, left: 22 }}>
                   <SimpleText
@@ -175,13 +170,13 @@ const CardholderScreen = ({ navigation, id = 416989 }) => {
 
                 <SimpleText style={styles.valuesTxt}>{data.customerPhone}</SimpleText>
 
-                <SimpleText style={styles.valuesTxt}>{data.bin.bin}</SimpleText>
+                <SimpleText style={styles.valuesTxt}>{data.bin?.bin}</SimpleText>
 
-                <SimpleText style={styles.valuesTxt}>{data.bin.brand}</SimpleText>
+                <SimpleText style={styles.valuesTxt}>{data.bin?.brand}</SimpleText>
 
-                <SimpleText style={styles.valuesTxt}>{data.bin.country}</SimpleText>
+                <SimpleText style={styles.valuesTxt}>{data.bin?.country}</SimpleText>
 
-                <SimpleText style={styles.valuesTxt}>{data.bin.issuer}</SimpleText>
+                <SimpleText style={styles.valuesTxt}>{data.bin?.issuer}</SimpleText>
               </View>
             )}
           </View>

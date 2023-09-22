@@ -88,7 +88,7 @@ const userSlice = createSlice({
         };
       });
     builder.addCase(getTransactionData.fulfilled, (state, action) => {
-      state.content.transactionData = action.payload.items;
+      state.content.transactionData = action.payload;
     }),
       builder.addCase(getTransactionData.rejected, (state, action) => {
         state.error = {
@@ -96,7 +96,7 @@ const userSlice = createSlice({
         };
       });
     builder.addCase(getApiData.fulfilled, (state, action) => {
-      state.content.apiData = action.payload.items;
+      state.content.apiData = action.payload;
     }),
       builder.addCase(getApiData.rejected, (state, action) => {
         state.error = {

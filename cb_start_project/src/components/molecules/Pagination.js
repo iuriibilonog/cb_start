@@ -69,6 +69,7 @@ const Pagination = ({ totalPages = 20, currentPage = 1, setCurrentPage }) => {
 
   useEffect(() => {
     console.log('selected', selected);
+    setCurrentPage(selected);
     if (totalPages <= 6) return;
     if (selected >= 5 && totalPages - selected >= 4) {
       setPagesLine([selected - 1, selected, selected + 1]);

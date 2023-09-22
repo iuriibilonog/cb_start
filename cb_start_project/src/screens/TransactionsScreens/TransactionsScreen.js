@@ -24,6 +24,13 @@ const TransactionsScreen = ({
   const transactionInfo = useSelector(getTransactionInfo);
   const [data, setData] = useState(null);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
+  const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
+
+  const { width } = Dimensions.get('window');
 
   const navigation = useNavigation();
 
@@ -62,12 +69,14 @@ const TransactionsScreen = ({
     console.log('genReportTransactionFilters>>>', genReportTransactionFilters);
     const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
     console.log('transactionRequestObject', transactionRequestObject);
-    dispatch(getTransactionData(transactionRequestObject));
-  }, [genReportTransactionFilters]);
+    dispatch(getTransactionData({ transactionData: transactionRequestObject, page: currentPage }));
+  }, [genReportTransactionFilters, currentPage]);
 
   useEffect(() => {
     if (transactionInfo) {
-      setData(transactionInfo);
+      console.log('totalCount', transactionInfo.totalCount);
+      setTotalPages(Math.floor(transactionInfo.totalCount / 100));
+      setData(transactionInfo.items);
     }
   }, [transactionInfo]);
 
@@ -75,14 +84,6 @@ const TransactionsScreen = ({
     // console.log('nextScreen>>');
     navigation.navigate('LoginScreen');
   };
-
-  const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState();
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
-
-  const { width } = Dimensions.get('window');
 
   //=================================
   //=================================
@@ -95,8 +96,9 @@ const TransactionsScreen = ({
     setSelectedIndex(index);
   };
 
-  const handleCardholderDataShow = (itemId) => {
-    navigation.navigate('CardholderScreen', { id: itemId });
+  const handleCardholderDataShow = (item) => {
+    console.log('ID>', item);
+    navigation.navigate('CardholderScreen', { item: item });
   };
 
   const validTextShow = (date) => {
@@ -396,7 +398,7 @@ const TransactionsScreen = ({
         ))}
       {isAdditDataOpen && selectedIndex === item.id && (
         <TouchableOpacity
-          onPress={() => handleCardholderDataShow(item.id)}
+          onPress={() => handleCardholderDataShow(item)}
           activeOpacity={0.5}
           style={{
             flexDirection: 'row',
@@ -494,7 +496,13 @@ const TransactionsScreen = ({
         </View>
       </View>
       <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
-      <Pagination />
+      {totalPages > 1 && (
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
       {/* <Pagination
         totalItems={100}
         pageSize={5}

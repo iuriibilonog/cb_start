@@ -102,7 +102,7 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
 });
 export const getTransactionData = createAsyncThunk(
   'content/getTransactionData',
-  async (transactionData, thunkAPI) => {
+  async ({ transactionData, page = 1 }, thunkAPI) => {
     // const {
     //   startDate,
     //   endDate,
@@ -134,9 +134,9 @@ export const getTransactionData = createAsyncThunk(
         .replace(/\,/g, '&')
         .replace(/\"/g, '')
         .slice(1, -1);
-
+      console.log('page, setLink', page, '<><>', setLink);
       const { data } = await api.get(
-        `${BASE_URL}/api/payments?page=1&pageSize=100&includeTransactions=true&${setLink}`,
+        `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&${setLink}`,
         // `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&startDate=${startDate}&endDate=${endDate}&userId=${userId}&apiKeyId=${apiKeyId}&mode=${mode}&status=${status}&currency=${currency}&timezone=${timezone}&bankName=${bankName}`,
         {
           withCredentials: true,
@@ -150,9 +150,10 @@ export const getTransactionData = createAsyncThunk(
   }
 );
 
-export const getApiData = createAsyncThunk('content/getApiData', async (_, thunkAPI) => {
+export const getApiData = createAsyncThunk('content/getApiData', async (page = 1, thunkAPI) => {
   try {
-    const { data } = await api.get(`${BASE_URL}/api/api-keys?page=1&pageSize=100`, {
+    console.log('getApiData-Operations - page', page);
+    const { data } = await api.get(`${BASE_URL}/api/api-keys?page=${page}&pageSize=100`, {
       withCredentials: true,
     });
     return data;

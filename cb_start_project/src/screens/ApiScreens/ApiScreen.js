@@ -5,7 +5,7 @@ import { getApiInfo } from 'src/redux/content/selectors';
 import { StyleSheet, View, Dimensions, Image, TouchableOpacity, FlatList } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
-import Pagination from '@cherry-soft/react-native-basic-pagination';
+import Pagination from 'src/components/molecules/Pagination';
 import { useNavigation } from '@react-navigation/native';
 
 const deleteIcon = require('src/images/delete.png');
@@ -18,32 +18,35 @@ const editInactiveIcon = require('src/images/edit_inactive.png');
 const ApiScreen = (props) => {
   const dispatch = useDispatch();
   const apiData = useSelector(getApiInfo);
+
   const [data, setData] = useState(null);
+  const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState();
+  const [totalPages, setTotalPages] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { width } = Dimensions.get('window');
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(getApiData());
-  }, []);
+    dispatch(getApiData(currentPage));
+  }, [currentPage]);
 
   useEffect(() => {
     if (props.route.params && props.route.params.isRefresh) {
-      dispatch(getApiData());
+      dispatch(getApiData(currentPage));
     }
   }, [props.route.params]);
 
   useEffect(() => {
     if (apiData) {
-      setData(apiData);
+      console.log('totalCount', apiData.totalCount);
+      const pages = Math.ceil(apiData.totalCount / 100);
+      setTotalPages(pages);
+      setData(apiData.items);
     }
   }, [apiData]);
-
-  const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState();
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
-
-  const { width } = Dimensions.get('window');
 
   const handleExpandRow = (index) => {
     setIsAdditDataOpen((prev) => !prev);
@@ -227,13 +230,13 @@ const ApiScreen = (props) => {
         </View>
       </View>
       <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
-      <Pagination
-        totalItems={100}
-        pageSize={5}
-        currentPage={page}
-        // pagesToDisplay={2}
-        onPageChange={setPage}
-      />
+      {totalPages > 1 && (
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
     </View>
     // </ScrollView>
   );
