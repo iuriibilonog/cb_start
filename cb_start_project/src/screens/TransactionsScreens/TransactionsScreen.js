@@ -80,6 +80,10 @@ const TransactionsScreen = ({
     }
   }, [transactionInfo]);
 
+  useEffect(() => {
+    console.log('data', data);
+  }, [data]);
+
   const handleNextScreen = () => {
     // console.log('nextScreen>>');
     navigation.navigate('LoginScreen');
@@ -97,7 +101,6 @@ const TransactionsScreen = ({
   };
 
   const handleCardholderDataShow = (item) => {
-    console.log('ID>', item);
     navigation.navigate('CardholderScreen', { item: item });
   };
 
@@ -495,7 +498,14 @@ const TransactionsScreen = ({
           </SimpleText>
         </View>
       </View>
-      <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
+
+      {data && data.length > 0 ? (
+        <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
+      ) : (
+        <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
+          <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>Data not found</SimpleText>
+        </View>
+      )}
       {totalPages > 1 && (
         <Pagination
           totalPages={totalPages}
@@ -503,13 +513,6 @@ const TransactionsScreen = ({
           setCurrentPage={setCurrentPage}
         />
       )}
-      {/* <Pagination
-        totalItems={100}
-        pageSize={5}
-        currentPage={page}
-        // pagesToDisplay={2}
-        onPageChange={setPage}
-      /> */}
     </View>
     // </ScrollView>
   );
