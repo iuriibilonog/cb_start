@@ -229,7 +229,15 @@ const ApiScreen = (props) => {
           </SimpleText>
         </View>
       </View>
-      <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
+      {data && data.length > 0 ? (
+        <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
+      ) : (
+        <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
+          <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
+            Transaction not found
+          </SimpleText>
+        </View>
+      )}
       {totalPages > 1 && (
         <Pagination
           totalPages={totalPages}
