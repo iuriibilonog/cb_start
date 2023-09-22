@@ -31,7 +31,7 @@ const CalendarScreen = ({
   isFiltersVisible,
   filtersDots,
   isMerchApiKeyAvailable,
-  confirmReport,
+  confirmReport,balancePeriod,setBalancePeriod
 }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState();
@@ -41,7 +41,10 @@ const CalendarScreen = ({
   const reportType = route.params?.type?.value;
 
   useEffect(() => {
-    console.log('CALENDARSCREEN');
+    console.log('routee-params', route.params);
+    // LOG  routee-params {"balancePeriod":
+    // {"endDate": "2023-09-22", "startDate": "2023-09-22"},
+    // "getBalancePeriod": [Function getBalancePeriod], "isBalancePeriod": true}
     if (route.params?.isBalancePeriod) {
       setSelectedStartDay({ dateString: route.params.balancePeriod.startDate });
       setSelectedEndDay({ dateString: route.params.balancePeriod.endDate });
@@ -76,7 +79,6 @@ const CalendarScreen = ({
             filters: { startDate: start, endDate: end },
             value: `${start}, ${end}`,
           });
-          // setPaymentsFilter('date', { startDate: start, endDate: end });
 
           break;
         case 'Transactions':
@@ -94,14 +96,9 @@ const CalendarScreen = ({
 
   const handlePressDownload = () => {
     if (route.params?.isBalancePeriod) {
-      const { getBalancePeriod } = route.params;
-
       const start = selectedStartDay.dateString || selectedStartDay;
       const end = selectedEndDay.dateString || selectedEndDay;
-
-      getBalancePeriod({ startDate: start, endDate: end });
-
-      // navigation.navigate('DashboardScreen');
+      setBalancePeriod({ startDate: start, endDate: end });
     }
     confirmReport();
     setIsCalendarVisible(false);

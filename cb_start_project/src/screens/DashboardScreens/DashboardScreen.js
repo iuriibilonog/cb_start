@@ -17,7 +17,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 
-const DashboardScreen = ({ navigation }) => {
+const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
   // need for <Dropdown to close pressing out of as onBlur doesn`t work )
   const initialDate = new Date().toISOString().slice(0, 10);
   const [isDropdownOpen, setIsDropdownOpen] = useState();
@@ -32,10 +32,10 @@ const DashboardScreen = ({ navigation }) => {
 
   const [banksNames, setBanksNames] = useState([]);
   const [bankBalance, setBankBalance] = useState([]);
-  const [balancePeriod, setBalancePeriod] = useState({
-    startDate: initialDate,
-    endDate: initialDate,
-  });
+  // const [balancePeriod, setBalancePeriod] = useState({
+  //   startDate: initialDate,
+  //   endDate: initialDate,
+  // });
   const [currentBankConversion, setCurrentBankConversion] = useState({});
   const calendarIcon = require('src/images/calendar_icon.png');
 
@@ -105,15 +105,16 @@ const DashboardScreen = ({ navigation }) => {
   }, [selectedBank, initialBank]);
 
   useEffect(() => {
+    console.log('getBalancePeriod', balancePeriod);
     if (balancePeriod.startDate !== initialDate || balancePeriod.endDate !== initialDate) {
       const bankName = banksNames[selectedBank] || initialBank;
       getCurrentBankConversion(bankName);
     }
   }, [balancePeriod]);
 
-  const getBalancePeriod = (data) => {
-    setBalancePeriod(data);
-  };
+  // const getBalancePeriod = (data) => {
+  //   setBalancePeriod(data);
+  // };
 
   const getCurrentBankConversion = async (bankName) => {
     try {
@@ -167,7 +168,7 @@ const DashboardScreen = ({ navigation }) => {
               onPress={() =>
                 navigation.navigate('CalendarScreen', {
                   isBalancePeriod: true,
-                  getBalancePeriod,
+                  // getBalancePeriod,
                   balancePeriod,
                 })
               }

@@ -25,11 +25,14 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([]);
   const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
   const dispatch = useDispatch();
+  const [balancePeriod, setBalancePeriod] = useState({
+    startDate: initialDate,
+    endDate: initialDate,
+  });
 
   // useEffect(() => {
   //   console.log('genReportPaymentsFilters', genReportPaymentsFilters);
   // }, [genReportPaymentsFilters, genReportTransactionFilters]);
-
   const confirmReport = async () => {
     let str = '';
 
@@ -176,8 +179,17 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           ),
         }}
         name="DashboardScreen"
-        component={DashboardScreen}
-      />
+        // component={DashboardScreen}
+      >
+        {(props) => (
+          <DashboardScreen
+            {...props}
+            // getBalancePeriod={getBalancePeriod}
+            balancePeriod={balancePeriod}
+            setBalancePeriod={setBalancePeriod}
+          />
+        )}
+      </DashboardStack.Screen>
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
@@ -202,6 +214,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             paymentFilter={genReportPaymentsFilters}
             transactionFilter={genReportTransactionFilters}
             confirmReport={confirmReport}
+            balancePeriod={balancePeriod}
+            setBalancePeriod={setBalancePeriod}
           />
         )}
       </DashboardStack.Screen>
