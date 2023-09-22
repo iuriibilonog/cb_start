@@ -56,9 +56,11 @@ const Pagination = ({ totalPages = 20, currentPage = 1, setCurrentPage }) => {
   }, [totalPages]);
 
   useEffect(() => {
-    if (!isKeyboardVisible && inputValue) {
+    if (!isKeyboardVisible) {
       const numberValue = parseInt(inputValue);
-      setSelected(numberValue > totalPages ? totalPages : numberValue < 1 ? 1 : numberValue);
+      setSelected(
+        numberValue > totalPages ? totalPages : numberValue < 1 ? 1 : numberValue ? numberValue : 1
+      );
       setIsLeftShowInput(false);
       setIsRightShowInput(false);
       setInputValue('');
