@@ -70,14 +70,12 @@ const ApiScreen = (props) => {
   };
 
   const handleNavigate = () => {
-    console.log('props', props);
     navigation.navigate('UserScreen');
   };
 
   const flatListRenderModule = (item, index) => (
     <>
-      {/* <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}> */}
-      <TouchableOpacity activeOpacity={0.5}>
+      <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}>
         <View
           style={{
             ...styles.tableRow,
