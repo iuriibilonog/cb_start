@@ -86,12 +86,14 @@ const lang = {
   'common.message': 'Message',
   'common.filters': 'Filters',
   'common.user': 'User',
+  'common.users': 'Users',
   'common.edit': 'Edit',
   'common.del': 'Del',
   'common.delete': 'Delete',
   'common.delete_confirm': 'Are you sure  want delete?',
   'common.reset': 'Reset',
   'common.data_not_found': 'Data not found',
+  'common.role': 'Role',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />
