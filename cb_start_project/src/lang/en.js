@@ -76,6 +76,10 @@ const lang = {
 
   'api.edit_api': 'Edit API Key name',
 
+  //users=====
+  'users.reg_date':'Reg. Date',
+  'users.ledgers':'Ledgers',
+
   //common=====
   'common.date': 'Date',
   'common.email': 'email',
@@ -94,6 +98,9 @@ const lang = {
   'common.reset': 'Reset',
   'common.data_not_found': 'Data not found',
   'common.role': 'Role',
+  'common.merchant': 'Merchant',
+  'common.support': 'Support',
+  'common.admin': 'Admin',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

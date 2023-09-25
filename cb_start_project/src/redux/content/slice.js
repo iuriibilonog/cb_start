@@ -3,6 +3,7 @@ import {
   getAllBanks,
   getBankConversion,
   getAllUsers,
+  getUsersByPage,
   getBankBalance,
   getTransactionData,
   getMerchantsApiKeys,
@@ -75,6 +76,14 @@ const userSlice = createSlice({
       state.content.allUsers = action.payload.items;
     }),
       builder.addCase(getAllUsers.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+    builder.addCase(getUsersByPage.fulfilled, (state, action) => {
+      state.content.usersByPage = action.payload;
+    }),
+      builder.addCase(getUsersByPage.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };

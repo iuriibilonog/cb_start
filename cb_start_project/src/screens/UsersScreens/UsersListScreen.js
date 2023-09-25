@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getApiData } from 'src/redux/content/operations';
-import { getApiInfo } from 'src/redux/content/selectors';
+import { getUsersByPage } from 'src/redux/content/operations';
+import { usersByPage } from 'src/redux/content/selectors';
 import {
   StyleSheet,
   View,
@@ -25,7 +25,7 @@ const editInactiveIcon = require('src/images/edit_inactive.png');
 
 const UsersListScreen = (props) => {
   const dispatch = useDispatch();
-  const apiData = useSelector(getApiInfo);
+  const usersData = useSelector(usersByPage);
 
   const [data, setData] = useState(null);
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
@@ -38,23 +38,23 @@ const UsersListScreen = (props) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(getApiData(currentPage));
+    dispatch(getUsersByPage(currentPage));
   }, [currentPage]);
 
   useEffect(() => {
     if (props.route.params && props.route.params.isRefresh) {
-      dispatch(getApiData(currentPage));
+      dispatch(getUsersByPage(currentPage));
     }
   }, [props.route.params]);
 
   useEffect(() => {
-    if (apiData) {
-      console.log('totalCount', apiData.totalCount);
-      const pages = Math.ceil(apiData.totalCount / 100);
+    if (usersData) {
+      console.log('totalCount', usersData.totalCount);
+      const pages = Math.ceil(usersData.totalCount / 20);
       setTotalPages(pages);
-      setData(apiData.items);
+      setData(usersData.items);
     }
-  }, [apiData]);
+  }, [usersData]);
 
   const handleExpandRow = (index) => {
     setIsAdditDataOpen((prev) => !prev);
@@ -74,6 +74,10 @@ const UsersListScreen = (props) => {
     navigation.navigate('UserScreen');
   };
 
+  const showDate = (date) => {
+    return date.slice(0, 10).replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
+  };
+
   const flatListRenderModule = (item, index) => (
     <>
       {/* <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}> */}
@@ -90,30 +94,33 @@ const UsersListScreen = (props) => {
                 : index % 2 !== 0
                 ? '#FAFAFA'
                 : '#fff',
+            borderBottomWidth: isAdditDataOpen && selectedIndex === item.id ? 0 : 1,
           }}
         >
-          <View
-            style={{
-              ...styles.tableCell,
-              width: width / 6,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <View style={{ width: 20, marginRight: 5 }}>
-              <Image
-                source={isAdditDataOpen && selectedIndex === item.id ? arrowUp : arrowDown}
-                style={{ width: 20, height: 20 }}
-              />
-            </View>
-            <SimpleText
+          <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}>
+            <View
               style={{
-                fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
+                ...styles.tableCell,
+                width: width / 6,
+                flexDirection: 'row',
+                alignItems: 'center',
               }}
             >
-              {item.id}
-            </SimpleText>
-          </View>
+              <View style={{ width: 20, marginRight: 5 }}>
+                <Image
+                  source={isAdditDataOpen && selectedIndex === item.id ? arrowUp : arrowDown}
+                  style={{ width: 20, height: 20 }}
+                />
+              </View>
+              <SimpleText
+                style={{
+                  fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                {item.id}
+              </SimpleText>
+            </View>
+          </TouchableOpacity>
           <View style={{ ...styles.tableCell, flex: 1 }}>
             <Pressable onPress={handleNavigate}>
               <SimpleText
@@ -121,11 +128,11 @@ const UsersListScreen = (props) => {
                   fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
                 }}
               >
-                {item.name}
+                {item.username}
               </SimpleText>
             </Pressable>
           </View>
-         
+
           <TouchableOpacity
             activeOpacity={isAdditDataOpen && selectedIndex === item.id ? 0.5 : 1}
             onPress={() => isAdditDataOpen && selectedIndex === item.id && handleDelete(item)}
@@ -135,8 +142,6 @@ const UsersListScreen = (props) => {
                 ...styles.tableCell,
                 width: 100,
                 // height: 40,
-
-                backgroundColor: isAdditDataOpen && selectedIndex === item.id ? '#FFF0F0' : '#fff',
               }}
             >
               <SimpleText
@@ -144,7 +149,11 @@ const UsersListScreen = (props) => {
                   fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
                 }}
               >
-                Merchant
+                <FormattedMessage
+                  id={`common.${
+                    item.roleId === 1 ? 'merchant' : item.roleId === 2 ? 'support' : 'admin'
+                  }`}
+                />
               </SimpleText>
             </View>
           </TouchableOpacity>
@@ -162,12 +171,12 @@ const UsersListScreen = (props) => {
           <View style={{ ...styles.tableCell, width: width / 3, paddingVertical: 0 }}>
             <View style={styles.additDataCell}>
               <SimpleText>
-                <FormattedMessage id={'api.api_key_name'} />
+                <FormattedMessage id={'users.reg_date'} />
               </SimpleText>
             </View>
             <View style={styles.additDataCell}>
               <SimpleText>
-                <FormattedMessage id={'api.api_key'} />
+                <FormattedMessage id={'users.ledgers'} />
               </SimpleText>
             </View>
           </View>
@@ -178,10 +187,10 @@ const UsersListScreen = (props) => {
             }}
           >
             <View style={styles.additDataCellValues}>
-              <SimpleText>{item.name}</SimpleText>
+              <SimpleText>{showDate(item.createdAt)}</SimpleText>
             </View>
             <View style={{ ...styles.additDataCellValues, borderBottomWidth: 0 }}>
-              <SimpleText>{item.apiKey}</SimpleText>
+              <SimpleText></SimpleText>
             </View>
           </View>
         </View>
@@ -254,7 +263,11 @@ const styles = StyleSheet.create({
   titleWrapper: { marginTop: 30, marginBottom: 30, paddingLeft: 20 },
   titleText: { fontFamily: 'Mont_SB', fontSize: 34 },
   headerText: { fontFamily: 'Mont_SB', textAlign: 'center' },
-  tableRow: { height: 40, paddingHorizontal: 15 },
+  tableRow: {
+    height: 40,
+    paddingHorizontal: 10,
+    borderBottomColor: 'rgba(217, 217, 217, 0.70)',
+  },
   tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center' /* , borderWidth:1 */ },
   additDataCell: {
     height: 40,

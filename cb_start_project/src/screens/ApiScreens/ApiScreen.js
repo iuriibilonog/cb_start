@@ -88,6 +88,7 @@ const ApiScreen = (props) => {
                 : index % 2 !== 0
                 ? '#FAFAFA'
                 : '#fff',
+            borderBottomWidth: isAdditDataOpen && selectedIndex === item.id ? 0 : 1,
           }}
         >
           <View
@@ -274,7 +275,11 @@ const styles = StyleSheet.create({
   titleWrapper: { marginTop: 30, marginBottom: 30, paddingLeft: 20 },
   titleText: { fontFamily: 'Mont_SB', fontSize: 34 },
   headerText: { fontFamily: 'Mont_SB', textAlign: 'center' },
-  tableRow: { height: 40, paddingLeft: 15 },
+  tableRow: {
+    height: 40,
+    paddingLeft: 15,
+    borderBottomColor: 'rgba(217, 217, 217, 0.70)',
+  },
   tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center' },
   actionsCell: {
     flex: 1,
