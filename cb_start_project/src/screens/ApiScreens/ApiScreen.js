@@ -2,7 +2,15 @@ import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getApiData } from 'src/redux/content/operations';
 import { getApiInfo } from 'src/redux/content/selectors';
-import { StyleSheet, View, Dimensions, Image, TouchableOpacity, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Pressable,
+} from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from 'src/components/molecules/Pagination';
@@ -61,9 +69,15 @@ const ApiScreen = (props) => {
     navigation.navigate('DeleteScreen', { id, name });
   };
 
+  const handleNavigate = () => {
+    console.log('props', props);
+    navigation.navigate('UserScreen');
+  };
+
   const flatListRenderModule = (item, index) => (
     <>
-      <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}>
+      {/* <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}> */}
+      <TouchableOpacity activeOpacity={0.5}>
         <View
           style={{
             ...styles.tableRow,
@@ -101,13 +115,15 @@ const ApiScreen = (props) => {
             </SimpleText>
           </View>
           <View style={{ ...styles.tableCell, flex: 1 }}>
-            <SimpleText
-              style={{
-                fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
-              }}
-            >
-              {item.name}
-            </SimpleText>
+            <Pressable onPress={handleNavigate}>
+              <SimpleText
+                style={{
+                  fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
+                }}
+              >
+                {item.name}
+              </SimpleText>
+            </Pressable>
           </View>
           <TouchableOpacity
             activeOpacity={isAdditDataOpen && selectedIndex === item.id ? 0.5 : 1}

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from 'src/services/interceptor';
+import { decode as atob, encode as btoa } from 'base-64';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setDataToStorage, removeDataToStorage } from 'src/helpers/asyncStorageHelpers';
 
@@ -89,9 +90,8 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
       `${BASE_URL}/api/payments/export?${reportData}&exportFields=createdAt&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode`,
       {
         withCredentials: true,
-        headers: {
-          responseType: 'blob',
-        },
+
+        responseType: 'blob',
       }
     );
 
