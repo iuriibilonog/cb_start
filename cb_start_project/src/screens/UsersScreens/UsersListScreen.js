@@ -62,17 +62,9 @@ const UsersListScreen = (props) => {
     setSelectedIndex(index);
   };
 
-  const handleEdit = ({ id, name }) => {
-    navigation.navigate('EditScreen', { id, name });
-  };
-
-  const handleDelete = ({ id, name }) => {
-    navigation.navigate('DeleteScreen', { id, name });
-  };
-
-  const handleNavigate = () => {
-    console.log('props', props);
-    navigation.navigate('UserScreen');
+  const handleNavigate = (user) => {
+    console.log('props', user);
+    navigation.navigate('UserScreen', { user: user });
   };
 
   const showDate = (date) => {
@@ -123,7 +115,7 @@ const UsersListScreen = (props) => {
             </View>
           </TouchableOpacity>
           <View style={{ ...styles.tableCell, flex: 1 }}>
-            <Pressable onPress={handleNavigate}>
+            <Pressable onPress={() => handleNavigate(item)}>
               <SimpleText
                 style={{
                   fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',

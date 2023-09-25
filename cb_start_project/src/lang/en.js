@@ -80,6 +80,7 @@ const lang = {
   'users.reg_date': 'Reg. Date',
   'users.ledgers': 'Ledgers',
   'users.new_user': 'new user',
+  'users.personal_info': 'Personal information',
 
   //common=====
   'common.date': 'Date',
@@ -102,6 +103,7 @@ const lang = {
   'common.merchant': 'Merchant',
   'common.support': 'Support',
   'common.admin': 'Admin',
+  'common.balance': 'Balance',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

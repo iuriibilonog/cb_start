@@ -32,8 +32,8 @@ const EditScreen = (props) => {
   const submit = async () => {
     try {
       console.log('EDITED', value);
-      await dispatch(putApiKey({id:props.route.params.id, name:value}));
-      props.navigation.navigate('ApiScreen',{isRefresh:true});
+      await dispatch(putApiKey({ id: props.route.params.id, name: value }));
+      props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
     } catch (err) {
       console.log('err', err);
     }
@@ -56,7 +56,7 @@ const EditScreen = (props) => {
       >
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate('ApiScreen')}
+          onPress={() => props.navigation.navigate(props.route.params.parentScreen)}
           style={{
             marginRight: 'auto',
             backgroundColor: '#fff',

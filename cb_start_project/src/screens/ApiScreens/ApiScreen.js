@@ -62,11 +62,11 @@ const ApiScreen = (props) => {
   };
 
   const handleEdit = ({ id, name }) => {
-    navigation.navigate('EditScreen', { id, name });
+    navigation.navigate('EditScreen', { id, name, parentScreen: 'ApiScreen' });
   };
 
   const handleDelete = ({ id, name }) => {
-    navigation.navigate('DeleteScreen', { id, name });
+    navigation.navigate('DeleteScreen', { id, name, parentScreen: 'ApiScreen' });
   };
 
   const handleNavigate = () => {
