@@ -77,8 +77,9 @@ const lang = {
   'api.edit_api': 'Edit API Key name',
 
   //users=====
-  'users.reg_date':'Reg. Date',
-  'users.ledgers':'Ledgers',
+  'users.reg_date': 'Reg. Date',
+  'users.ledgers': 'Ledgers',
+  'users.new_user': 'new user',
 
   //common=====
   'common.date': 'Date',

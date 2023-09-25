@@ -14,6 +14,7 @@ import {
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from 'src/components/molecules/Pagination';
+import SimpleButton from 'src/components/atoms/SimpleButton';
 import { useNavigation } from '@react-navigation/native';
 
 const deleteIcon = require('src/images/delete.png');
@@ -206,6 +207,9 @@ const UsersListScreen = (props) => {
         <SimpleText style={styles.titleText}>
           <FormattedMessage id={'common.users'} />
         </SimpleText>
+        <TouchableOpacity activeOpacity={0.5}>
+          <SimpleButton plus text={<FormattedMessage id={'users.new_user'} />} />
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -260,7 +264,14 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     backgroundColor: '#fff',
   },
-  titleWrapper: { marginTop: 30, marginBottom: 30, paddingLeft: 20 },
+  titleWrapper: {
+    marginTop: 30,
+    marginBottom: 30,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   titleText: { fontFamily: 'Mont_SB', fontSize: 34 },
   headerText: { fontFamily: 'Mont_SB', textAlign: 'center' },
   tableRow: {
