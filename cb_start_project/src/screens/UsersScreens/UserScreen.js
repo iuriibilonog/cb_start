@@ -116,7 +116,6 @@ const UserScreen = (props) => {
                 : index % 2 !== 0
                 ? '#FAFAFA'
                 : '#fff',
-            borderBottomWidth: isAdditDataOpen && selectedIndex === item.id ? 0 : 1,
           }}
         >
           <View
@@ -194,41 +193,32 @@ const UserScreen = (props) => {
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
+      <View
+        style={{
+          paddingVertical: 10,
+          flex: 1,
+          alignItems: 'center',
+          borderBottomWidth: isAdditDataOpen && selectedIndex === item.id ? 0 : 1,
+          borderBottomColor: 'rgba(217, 217, 217, 0.70)',
+          backgroundColor:
+            isAdditDataOpen && selectedIndex === item.id
+              ? '#F4F4F4'
+              : index % 2 !== 0
+              ? '#FAFAFA'
+              : '#fff',
+        }}
+      >
+        <SimpleText>{item.apiKey}</SimpleText>
+      </View>
       {isAdditDataOpen && selectedIndex === item.id && (
         <View
           style={{
-            paddingLeft: 15,
-            flexDirection: 'row',
-            backgroundColor: '#F4F4F4',
+            paddingVertical: 10,
+            flex: 1,
             alignItems: 'center',
+            height: 100,
           }}
-        >
-          <View style={{ ...styles.tableCell, width: width / 3, paddingVertical: 0 }}>
-            <View style={styles.additDataCell}>
-              <SimpleText>
-                <FormattedMessage id={'api.api_key_name'} />
-              </SimpleText>
-            </View>
-            <View style={styles.additDataCell}>
-              <SimpleText>
-                <FormattedMessage id={'api.api_key'} />
-              </SimpleText>
-            </View>
-          </View>
-          <View
-            style={{
-              paddingVertical: 0,
-              flex: 1,
-            }}
-          >
-            <View style={styles.additDataCellValues}>
-              <SimpleText>{item.name}</SimpleText>
-            </View>
-            <View style={{ ...styles.additDataCellValues, borderBottomWidth: 0 }}>
-              <SimpleText>{item.apiKey}</SimpleText>
-            </View>
-          </View>
-        </View>
+        ></View>
       )}
     </>
   );
@@ -445,7 +435,6 @@ const styles = StyleSheet.create({
   tableRow: {
     height: 40,
     paddingLeft: 15,
-    borderBottomColor: 'rgba(217, 217, 217, 0.70)',
   },
   tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center' },
   userActionsCell: {
