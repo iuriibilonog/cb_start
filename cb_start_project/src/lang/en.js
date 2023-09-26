@@ -81,6 +81,15 @@ const lang = {
   'users.ledgers': 'Ledgers',
   'users.new_user': 'new user',
   'users.personal_info': 'Personal information',
+  'users.ledgers_not_found': 'Ledgers not found',
+  'users.payments_settings': 'Payments settings',
+  'users.settings_not_found': 'Settings not found',
+  'users.chains': 'Chains',
+  'users.use_balancer': 'Use balancer',
+  'users.validation_error': 'Validation failed (numeric string is expected)',
+  
+  
+
 
   //common=====
   'common.date': 'Date',

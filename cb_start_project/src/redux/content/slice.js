@@ -11,6 +11,7 @@ import {
   putApiKey,
   // getAllModes,
   // getAllCurrencies,
+  getLedgersData,
 } from './operations';
 
 const initialState = {
@@ -116,6 +117,15 @@ const userSlice = createSlice({
       // state.content.apiKey = action.payload;
     }),
       builder.addCase(putApiKey.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+
+    builder.addCase(getLedgersData.fulfilled, (state, action) => {
+      state.content.ledgersData = action.payload.items;
+    }),
+      builder.addCase(getLedgersData.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };
