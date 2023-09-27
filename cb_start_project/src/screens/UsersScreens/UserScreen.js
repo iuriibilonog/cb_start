@@ -85,15 +85,23 @@ const UserScreen = (props) => {
   };
 
   const handleUserEdit = () => {
-    navigation.navigate('EditUserScreen', { user: currentUser });
+    navigation.navigate('EditUserScreen', { user: currentUser, parentScreen: 'UserScreen' });
   };
 
   const handleUserDelete = () => {
-    navigation.navigate('DeleteUserScreen', { user: currentUser });
+    navigation.navigate('DeleteUserScreen', { user: currentUser, parentScreen: 'UserScreen' });
   };
 
   const handleNavigate = () => {
     navigation.navigate('UserScreen');
+  };
+
+  const handleLedgerEdit = () => {
+    navigation.navigate('EditLedgerScreen', { user: currentUser, parentScreen: 'UserScreen' });
+  };
+
+  const handleLedgerCreate = () => {
+    navigation.navigate('CreateLedgerScreen', { user: currentUser, parentScreen: 'UserScreen' });
   };
 
   const flatListRenderModule = (item, index) => (
@@ -224,10 +232,10 @@ const UserScreen = (props) => {
                 alignItems: 'center',
               }}
             >
-              <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserEdit()}>
+              <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerEdit()}>
                 <IconButton edit />
               </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserDelete()}>
+              <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerCreate()}>
                 <IconButton add />
               </TouchableOpacity>
             </View>

@@ -214,16 +214,41 @@ export const deleteApiKey = createAsyncThunk('content/deleteApiKey', async (id, 
   }
 });
 
-export const getLedgersData = createAsyncThunk('content/getLedgersData', async (userId, thunkAPI) => {
-  try {
-    const { data } = await api.get(`${BASE_URL}/api/ledgers?filter=${userId}`, {
-      withCredentials: true,
-    });
-    return data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const getLedgersData = createAsyncThunk(
+  'content/getLedgersData',
+  async (userId, thunkAPI) => {
+    try {
+      const { data } = await api.get(`${BASE_URL}/api/ledgers?filter=${userId}`, {
+        withCredentials: true,
+      });
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
+
+export const putEditUser = createAsyncThunk(
+  'content/putEditUser',
+  async (editingData, thunkAPI) => {
+    try {
+      //updatedData =
+      // email: "TestAppUser1@gmail.com"
+      // password: "1122"
+      // roleId: 1
+      // username: "TestAppUser111"
+      const { userId, updatedData } = editingData;
+      console.log('putEditUser>>', editingData);
+      const { data } = await api.put(`${BASE_URL}/api/users/${userId}`, updatedData, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 // export const getAllModes = createAsyncThunk('content/getAllModes', async (_, thunkAPI) => {
 //   try {
