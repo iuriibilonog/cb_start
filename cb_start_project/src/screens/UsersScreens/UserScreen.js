@@ -19,6 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import IconButton from 'src/components/atoms/IconButton';
 import SimpleCheckBox from '../../components/atoms/SimpleCheckBox';
+import SimpleButton from '../../components/atoms/SimpleButton';
 
 const deleteIcon = require('src/images/delete.png');
 const deleteInactiveIcon = require('src/images/delete_inactive.png');
@@ -77,23 +78,22 @@ const UserScreen = (props) => {
   };
 
   const handleApiEdit = ({ id, name }) => {
+    //done
     navigation.navigate('EditScreen', { id, name, parentScreen: 'UserScreen' });
   };
 
   const handleApiDelete = ({ id, name }) => {
+    //done
     navigation.navigate('DeleteScreen', { id, name, parentScreen: 'UserScreen' });
   };
 
   const handleUserEdit = () => {
+    //done
     navigation.navigate('EditUserScreen', { user: currentUser, parentScreen: 'UserScreen' });
   };
 
   const handleUserDelete = () => {
     navigation.navigate('DeleteUserScreen', { user: currentUser, parentScreen: 'UserScreen' });
-  };
-
-  const handleNavigate = () => {
-    navigation.navigate('UserScreen');
   };
 
   const handleLedgerEdit = () => {
@@ -102,6 +102,14 @@ const UserScreen = (props) => {
 
   const handleLedgerCreate = () => {
     navigation.navigate('CreateLedgerScreen', { user: currentUser, parentScreen: 'UserScreen' });
+  };
+
+  const handleNavigate = () => {
+    navigation.navigate('UserScreen');
+  };
+
+  const handleNewApiKey = () => {
+    navigation.navigate('CreateApiKeyScreen', { user: currentUser, parentScreen: 'UserScreen' });
   };
 
   const flatListRenderModule = (item, index) => (
@@ -356,7 +364,6 @@ const UserScreen = (props) => {
             <SimpleText style={{ fontFamily: 'Mont_SB', marginBottom: 14 }}>
               <FormattedMessage id={'common.balance'} />
             </SimpleText>
-            {console.log('BAAQLNCE>>>', balances)}
             {balances && initialBalance && (
               <ModalDropdown
                 options={balances}
@@ -471,6 +478,11 @@ const UserScreen = (props) => {
           <SimpleText style={styles.titleText}>
             <FormattedMessage id={'api.api_keys'} />
           </SimpleText>
+          <TouchableOpacity activeOpacity={0.5} onPress={handleNewApiKey}>
+            <FormattedMessage id={'api.new_api_key'}>
+              {(text) => <SimpleButton plus text={text} />}
+            </FormattedMessage>
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -525,7 +537,14 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     backgroundColor: '#fff',
   },
-  titleWrapper: { marginTop: 30, marginBottom: 30, paddingLeft: 20 },
+  titleWrapper: {
+    marginTop: 30,
+    marginBottom: 30,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   userBlockWrapper: { paddingHorizontal: 20 },
   titleText: { fontFamily: 'Mont_SB', fontSize: 34 },
   headerText: { fontFamily: 'Mont_SB', textAlign: 'center' },

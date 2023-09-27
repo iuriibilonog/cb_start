@@ -13,6 +13,7 @@ import {
   // getAllCurrencies,
   getLedgersData,
   putEditUser,
+  postApiKey,
 } from './operations';
 
 const initialState = {
@@ -134,6 +135,13 @@ const userSlice = createSlice({
 
     builder.addCase(putEditUser.fulfilled, (state, action) => {}),
       builder.addCase(putEditUser.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+
+      builder.addCase(postApiKey.fulfilled, (state, action) => {}),
+      builder.addCase(postApiKey.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };

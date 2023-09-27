@@ -202,6 +202,23 @@ export const putApiKey = createAsyncThunk('content/putApiKey', async ({ id, name
   }
 });
 
+export const postApiKey = createAsyncThunk('content/postApiKey', async (newKeyData, thunkAPI) => {
+  // {userId: 97, name: "aaatest"}
+  try {
+    const { data } = await api.post(
+      `${BASE_URL}/api/api-keys`,
+      newKeyData,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 export const deleteApiKey = createAsyncThunk('content/deleteApiKey', async (id, thunkAPI) => {
   try {
     const { data } = await api.delete(`${BASE_URL}/api/api-keys/${id}`, {

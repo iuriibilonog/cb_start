@@ -22,14 +22,32 @@ import { FormattedMessage } from 'react-intl';
 const arrowLeft = require('src/images/header_left.png');
 
 const EditScreen = (props) => {
-  const { isEdit, isCreate, isDelete, action, title, initialValue, helpText } = props;
+  const {
+    isEdit,
+    isCreate,
+    isDelete,
+    action,
+    title,
+    initialValue,
+    helpText,
+    placeholder = '',
+  } = props;
   const [value, setValue] = useState(initialValue);
+  const [isEmptyValue, setIsEmptyValue] = useState(false);
 
   const { width } = Dimensions.get('window');
 
   const submit = () => {
-    action(value);
+    if (action && value) {
+      action(value);
+    } else {
+      setIsEmptyValue(true);
+    }
   };
+
+  useEffect(() => {
+    setIsEmptyValue(false);
+  }, [value]);
 
   return (
     <View
@@ -66,6 +84,17 @@ const EditScreen = (props) => {
             </View>
             {helpText && <SimpleText style={styles.bottomPlaceholder}>{helpText}</SimpleText>}
           </>
+        )}
+        {isCreate && (
+          <TextInput
+            style={{
+              ...styles.input,
+              borderBottomColor: isEmptyValue ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
+            }}
+            placeholder={placeholder}
+            value={value}
+            onChangeText={(text) => setValue(text)}
+          />
         )}
         <TouchableOpacity activeOpacity={0.5} style={{ width: '100%' }} onPress={submit}>
           <View
@@ -104,6 +133,7 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     marginBottom: 40,
+    paddingBottom: 5,
     fontFamily: 'Mont',
     fontSize: 16,
     color: '#262626',
