@@ -18,23 +18,25 @@ import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
 import { putApiKey } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const arrowLeft = require('src/images/header_left.png');
 
 const EditScreen = (props) => {
   const [value, setValue] = useState(props.route.params.name);
-  useEffect(() => {
-    console.log('props', props.route.params);
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
 
   const submit = async () => {
     try {
+      setIsLoading(true);
       console.log('EDITED', value);
       await dispatch(putApiKey({ id: props.route.params.id, name: value }));
-      props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
+      setIsLoading(false);
+      await props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
     } catch (err) {
+      setIsLoading(false);
       console.log('err', err);
     }
   };
@@ -54,6 +56,7 @@ const EditScreen = (props) => {
           backgroundColor: '#fff',
         }}
       >
+        <MainLoader isVisible={isLoading} />
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => props.navigation.navigate(props.route.params.parentScreen)}

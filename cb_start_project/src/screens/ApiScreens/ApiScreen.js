@@ -10,11 +10,13 @@ import {
   TouchableOpacity,
   FlatList,
   Pressable,
+  RefreshControl,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from 'src/components/molecules/Pagination';
 import { useNavigation } from '@react-navigation/native';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const deleteIcon = require('src/images/delete.png');
 const deleteInactiveIcon = require('src/images/delete_inactive.png');
@@ -32,20 +34,27 @@ const ApiScreen = (props) => {
   const [selectedIndex, setSelectedIndex] = useState();
   const [totalPages, setTotalPages] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { width } = Dimensions.get('window');
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(getApiData(currentPage));
+    getApiKeys();
   }, [currentPage]);
 
   useEffect(() => {
     if (props.route.params && props.route.params.isRefresh) {
-      dispatch(getApiData(currentPage));
+      getApiKeys();
     }
   }, [props.route.params]);
+
+  const getApiKeys = async () => {
+    setIsLoading(true);
+    await dispatch(getApiData(currentPage));
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     if (apiData) {
@@ -244,8 +253,21 @@ const ApiScreen = (props) => {
           </SimpleText>
         </View>
       </View>
-      {data && data.length > 0 ? (
-        <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
+      {isLoading ? (
+        <MainLoader isVisible={isLoading} />
+      ) : data && data.length > 0 ? (
+        <FlatList
+          data={data}
+          refreshControl={
+            <RefreshControl
+              isRefreshing={isLoading}
+              onRefresh={getApiKeys}
+              colors={'transparent'} // for android
+              tintColor={'transparent'} // for ios
+            />
+          }
+          renderItem={({ item, index }) => flatListRenderModule(item, index)}
+        />
       ) : (
         <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
           <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>

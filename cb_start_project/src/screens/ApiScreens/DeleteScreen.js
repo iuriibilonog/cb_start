@@ -18,18 +18,24 @@ import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { deleteApiKey } from 'src/redux/content/operations';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const arrowLeft = require('src/images/header_left.png');
 
 const DeleteScreen = (props) => {
   const [value, setValue] = useState(props.route.params.name);
+  const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   const submit = async () => {
     try {
+      setIsLoading(true);
       await dispatch(deleteApiKey(props.route.params.id));
-      props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
+      await props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
+      setIsLoading(false);
     } catch (err) {
+      setIsLoading(false);
       console.log('err', err);
     }
   };
@@ -49,6 +55,7 @@ const DeleteScreen = (props) => {
           backgroundColor: '#fff',
         }}
       >
+        <MainLoader isVisible={isLoading} />
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => props.navigation.navigate(props.route.params.parentScreen)}

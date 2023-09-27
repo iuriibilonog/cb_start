@@ -16,6 +16,7 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import { getMerchantsApiKeys } from 'src/redux/content/operations';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const arrowRight = require('src/images/right.png');
 
@@ -35,6 +36,7 @@ const MerchantsApiKeyScreen = ({
   const dispatch = useDispatch();
   const [data, setData] = useState([{ value: 'All api keys' }]);
   const [merchId, setMerchId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
 
@@ -89,25 +91,27 @@ const MerchantsApiKeyScreen = ({
   }, [radioSelect]);
 
   const getMerchApiKeys = async (id) => {
-    if (id.toString() === merchId.toString()) return;
+    if (id?.toString() === merchId?.toString()) return;
 
     try {
+      setIsLoading(true);
       const data = await dispatch(getMerchantsApiKeys(id));
       const keys = data.payload.items.map((item) => ({
         ...item,
         value: item.name,
       }));
 
-      console.log('keys', keys);
-
       setData((prev) => [...prev, ...keys]);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.warn('Error:', error);
     }
   };
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible && (
         <TransactionsFilters
           isActive={'key'}

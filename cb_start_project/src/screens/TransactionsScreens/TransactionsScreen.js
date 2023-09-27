@@ -3,12 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
 import { getTransactionData } from 'src/redux/content/operations';
 import { getTransactionInfo } from 'src/redux/content/selectors';
-import { StyleSheet, View, Dimensions, Image, TouchableOpacity, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import { useNavigation } from '@react-navigation/native';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import Pagination from 'src/components/molecules/Pagination';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const close = require('src/images/delete.png');
 const arrowDown = require('src/images/arrow_down_small.png');
@@ -22,6 +31,7 @@ const TransactionsScreen = ({
   inactiveFilters,
   isMerchApiKeyAvailable,
   createTransactionRequestObject,
+  isTransactionsWithFilterLoading,
 }) => {
   const dispatch = useDispatch();
   const transactionInfo = useSelector(getTransactionInfo);
@@ -32,6 +42,7 @@ const TransactionsScreen = ({
   const [selectedIndex, setSelectedIndex] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { width } = Dimensions.get('window');
 
@@ -40,39 +51,27 @@ const TransactionsScreen = ({
   const route = useRoute();
 
   useEffect(() => {
-    console.log('TRANSACTIONSCREEN->', genReportTransactionFilters.length);
-
-    // dispatch(getTransactionData());
-  }, [genReportTransactionFilters]);
-
-  useEffect(() => {
-    // console.log('route.name', route.name);
-    if (route.name === 'TransactionsScreen') {
-      // console.log('genReportTransactionFilters>>>', genReportTransactionFilters);
-      const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
-      // console.log('transactionRequestObject', transactionRequestObject);
-      dispatch(
-        getTransactionData({ transactionData: transactionRequestObject, page: currentPage })
-      );
-    }
+    getTableData();
   }, [currentPage]);
 
   useEffect(() => {
     if (transactionInfo) {
-      console.log('totalCount', transactionInfo.totalCount);
       setTotalPages(Math.floor(transactionInfo.totalCount / 100));
       setData(transactionInfo.items);
     }
   }, [transactionInfo]);
 
-  // const handleNextScreen = () => {
-  //   // console.log('nextScreen>>');
-  //   navigation.navigate('LoginScreen');
-  // };
+  const getTableData = async () => {
+    if (route.name === 'TransactionsScreen') {
+      setIsLoading(true);
+      const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
 
-  //=================================
-  //=================================
-  const index = 1;
+      await dispatch(
+        getTransactionData({ transactionData: transactionRequestObject, page: currentPage })
+      );
+      setIsLoading(false);
+    }
+  };
 
   const handleExpandRow = (index) => {
     setIsAdditDataOpen((prev) => !prev);
@@ -514,9 +513,21 @@ const TransactionsScreen = ({
           </SimpleText>
         </View>
       </View>
-
-      {data && data.length > 0 ? (
-        <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
+      {isLoading || isTransactionsWithFilterLoading ? (
+        <MainLoader isVisible={true} />
+      ) : data && data.length > 0 ? (
+        <FlatList
+          data={data}
+          refreshControl={
+            <RefreshControl
+              isRefreshing={isLoading}
+              onRefresh={getTableData}
+              colors={'transparent'} // for android
+              tintColor={'transparent'} // for ios
+            />
+          }
+          renderItem={({ item, index }) => flatListRenderModule(item, index)}
+        />
       ) : (
         <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
           <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
