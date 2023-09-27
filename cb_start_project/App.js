@@ -8,6 +8,7 @@ import { store, persistor } from './src/redux/store';
 import * as Font from 'expo-font';
 import navigationHelper from 'src/helpers/navigationHelper';
 import { AxiosInterceptor } from 'src/services/interceptor';
+import FlashMessage from 'react-native-flash-message';
 
 import { IntlProvider } from 'react-intl';
 import UA from 'src/lang/ua.json';
@@ -77,6 +78,7 @@ export default function App() {
           >
             <AxiosInterceptor>
               <Routing />
+              <FlashMessage position="top" />
             </AxiosInterceptor>
           </NavigationContainer>
         </IntlProvider>
