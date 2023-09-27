@@ -80,6 +80,7 @@ const lang = {
   'users.reg_date': 'Reg. Date',
   'users.ledgers': 'Ledgers',
   'users.new_user': 'new user',
+  'users.edit_user': 'Edit user',
   'users.personal_info': 'Personal information',
   'users.ledgers_not_found': 'Ledgers not found',
   'users.payments_settings': 'Payments settings',
@@ -94,6 +95,8 @@ const lang = {
   //common=====
   'common.date': 'Date',
   'common.email': 'email',
+  'common.e_mail': 'E-Mail',
+  'common.user_name': 'User name',
   'common.password': 'password',
   'common.description': 'Description',
   'common.details': 'Details',
@@ -105,6 +108,7 @@ const lang = {
   'common.edit': 'Edit',
   'common.del': 'Del',
   'common.delete': 'Delete',
+  'common.create': 'Create',
   'common.delete_confirm': 'Are you sure  want delete?',
   'common.reset': 'Reset',
   'common.data_not_found': 'Data not found',
@@ -113,6 +117,7 @@ const lang = {
   'common.support': 'Support',
   'common.admin': 'Admin',
   'common.balance': 'Balance',
+  'common.add': 'Add',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

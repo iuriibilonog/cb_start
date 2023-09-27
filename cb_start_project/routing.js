@@ -147,15 +147,16 @@ export const Routing = () => {
           </MainStack.Screen>
           <MainStack.Screen
             options={{
-              headerTitle: 'Users',
-              headerTitleAlign: 'left',
-              headerRight: ({ size }) => (
-                <Image
-                  source={profileIcon}
-                  style={{ width: 25, height: 25, marginRight: 20 }}
-                  // onPress={() => navigation.navigate("registration")}
-                />
-              ),
+              headerShown: false,
+              // headerTitle: 'Users',
+              // headerTitleAlign: 'left',
+              // headerRight: ({ size }) => (
+              //   <Image
+              //     source={profileIcon}
+              //     style={{ width: 25, height: 25, marginRight: 20 }}
+              //     // onPress={() => navigation.navigate("registration")}
+              //   />
+              // ),
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
                   ? (image = require('src/images/users_active.png'))

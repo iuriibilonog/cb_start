@@ -12,6 +12,7 @@ import {
   // getAllModes,
   // getAllCurrencies,
   getLedgersData,
+  putEditUser,
 } from './operations';
 
 const initialState = {
@@ -126,6 +127,13 @@ const userSlice = createSlice({
       state.content.ledgersData = action.payload.items;
     }),
       builder.addCase(getLedgersData.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+
+    builder.addCase(putEditUser.fulfilled, (state, action) => {}),
+      builder.addCase(putEditUser.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };
