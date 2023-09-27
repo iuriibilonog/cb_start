@@ -3,6 +3,7 @@ import {
   getAllBanks,
   getBankConversion,
   getAllUsers,
+  getUsersByPage,
   getBankBalance,
   getTransactionData,
   getMerchantsApiKeys,
@@ -10,6 +11,7 @@ import {
   putApiKey,
   // getAllModes,
   // getAllCurrencies,
+  getLedgersData,
 } from './operations';
 
 const initialState = {
@@ -79,6 +81,14 @@ const userSlice = createSlice({
           message: action.payload,
         };
       });
+    builder.addCase(getUsersByPage.fulfilled, (state, action) => {
+      state.content.usersByPage = action.payload;
+    }),
+      builder.addCase(getUsersByPage.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
     builder.addCase(getMerchantsApiKeys.fulfilled, (state, action) => {
       state.content.merchantApiKeys = action.payload.items;
     }),
@@ -107,6 +117,15 @@ const userSlice = createSlice({
       // state.content.apiKey = action.payload;
     }),
       builder.addCase(putApiKey.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+
+    builder.addCase(getLedgersData.fulfilled, (state, action) => {
+      state.content.ledgersData = action.payload.items;
+    }),
+      builder.addCase(getLedgersData.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };

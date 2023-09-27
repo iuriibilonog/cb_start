@@ -76,6 +76,21 @@ const lang = {
 
   'api.edit_api': 'Edit API Key name',
 
+  //users=====
+  'users.reg_date': 'Reg. Date',
+  'users.ledgers': 'Ledgers',
+  'users.new_user': 'new user',
+  'users.personal_info': 'Personal information',
+  'users.ledgers_not_found': 'Ledgers not found',
+  'users.payments_settings': 'Payments settings',
+  'users.settings_not_found': 'Settings not found',
+  'users.chains': 'Chains',
+  'users.use_balancer': 'Use balancer',
+  'users.validation_error': 'Validation failed (numeric string is expected)',
+  
+  
+
+
   //common=====
   'common.date': 'Date',
   'common.email': 'email',
@@ -86,12 +101,18 @@ const lang = {
   'common.message': 'Message',
   'common.filters': 'Filters',
   'common.user': 'User',
+  'common.users': 'Users',
   'common.edit': 'Edit',
   'common.del': 'Del',
   'common.delete': 'Delete',
   'common.delete_confirm': 'Are you sure  want delete?',
   'common.reset': 'Reset',
   'common.data_not_found': 'Data not found',
+  'common.role': 'Role',
+  'common.merchant': 'Merchant',
+  'common.support': 'Support',
+  'common.admin': 'Admin',
+  'common.balance': 'Balance',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

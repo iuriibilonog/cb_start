@@ -198,6 +198,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
               <View
                 style={{ justifyContent: 'flex-start', width: 167, height: 42, marginBottom: 97 }}
               >
+                {console.log('BAAQLNCE>>>', banksNames)}
                 {banksNames && initialBank && (
                   <ModalDropdown
                     options={banksNames}

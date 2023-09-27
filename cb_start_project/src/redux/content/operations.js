@@ -19,6 +19,22 @@ export const getAllUsers = createAsyncThunk('content/getAllUsers', async (_, thu
     return thunkAPI.rejectWithValue(error);
   }
 });
+
+export const getUsersByPage = createAsyncThunk(
+  'content/getUsersByPage',
+  async (page = 1, thunkAPI) => {
+    try {
+      const { data } = await api.get(`${BASE_URL}/api/users?page=${page}&pageSize=20`, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const getBankBalance = createAsyncThunk('content/getBankBalance', async (bank, thunkAPI) => {
   try {
     const { data } = await api.get(`${BASE_URL}/api/banks/balance/${bank}`, {
@@ -197,6 +213,18 @@ export const deleteApiKey = createAsyncThunk('content/deleteApiKey', async (id, 
     return thunkAPI.rejectWithValue(error);
   }
 });
+
+export const getLedgersData = createAsyncThunk('content/getLedgersData', async (userId, thunkAPI) => {
+  try {
+    const { data } = await api.get(`${BASE_URL}/api/ledgers?filter=${userId}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 // export const getAllModes = createAsyncThunk('content/getAllModes', async (_, thunkAPI) => {
 //   try {
 //     // const { data } = await api.get(`${BASE_URL}/api/modes`, {

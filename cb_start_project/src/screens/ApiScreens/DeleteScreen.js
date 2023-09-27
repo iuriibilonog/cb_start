@@ -28,7 +28,7 @@ const DeleteScreen = (props) => {
   const submit = async () => {
     try {
       await dispatch(deleteApiKey(props.route.params.id));
-      props.navigation.navigate('ApiScreen', { isRefresh: true });
+      props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
     } catch (err) {
       console.log('err', err);
     }
@@ -51,7 +51,7 @@ const DeleteScreen = (props) => {
       >
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate('ApiScreen')}
+          onPress={() => props.navigation.navigate(props.route.params.parentScreen)}
           style={{
             marginRight: 'auto',
             backgroundColor: '#fff',
