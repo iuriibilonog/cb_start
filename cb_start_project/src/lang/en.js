@@ -73,7 +73,7 @@ const lang = {
   'api.api_keys': 'API keys',
   'api.api_key': 'API key',
   'api.api_key_name': 'API Key name',
-
+  'api.new_api_key': 'new API Key',
   'api.edit_api': 'Edit API Key name',
 
   //users=====
@@ -88,9 +88,6 @@ const lang = {
   'users.chains': 'Chains',
   'users.use_balancer': 'Use balancer',
   'users.validation_error': 'Validation failed (numeric string is expected)',
-  
-  
-
 
   //common=====
   'common.date': 'Date',

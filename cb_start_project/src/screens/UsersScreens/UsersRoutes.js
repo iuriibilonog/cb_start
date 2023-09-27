@@ -9,6 +9,7 @@ import EditLedgerScreen from './EditLedgerScreen';
 import CreateLedgerScreen from './CreateLedgerScreen';
 import EditUserScreen from './EditUserScreen';
 import DeleteUserScreen from './DeleteUserScreen';
+import CreateApiKeyScreen from './CreateApiKeyScreen';
 
 const profileIcon = require('src/images/profile_icon.png');
 const headerLeft = require('src/images/header_left.png');
@@ -117,6 +118,18 @@ const UsersRoutes = () => {
         name="DeleteUserScreen"
       >
         {(props) => <DeleteUserScreen {...props} />}
+      </UsersStack.Screen>
+      <UsersStack.Screen
+        options={{
+          headerBackTitleVisible: false,
+          headerLeft: null,
+          headerTitle: 'Users / Add new API Key',
+          headerTitleStyle: { fontSize: 14, fontFamily: 'Mont' },
+          headerTitleAlign: 'left',
+        }}
+        name="CreateApiKeyScreen"
+      >
+        {(props) => <CreateApiKeyScreen {...props} />}
       </UsersStack.Screen>
     </UsersStack.Navigator>
   );
