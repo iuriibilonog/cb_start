@@ -15,6 +15,7 @@ import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import api from 'src/services/interceptor';
 import ModalDropdown from 'react-native-modal-dropdown';
 import SimpleText from '../../components/atoms/SimpleText';
+import MainLoader from 'src/components/molecules/MainLoader';
 import { FormattedMessage } from 'react-intl';
 
 const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
@@ -32,6 +33,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
 
   const [banksNames, setBanksNames] = useState([]);
   const [bankBalance, setBankBalance] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   // const [balancePeriod, setBalancePeriod] = useState({
   //   startDate: initialDate,
   //   endDate: initialDate,
@@ -92,29 +94,36 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
   ];
   //=======
   useEffect(() => {
+    setIsLoading(true);
     getBanks();
   }, []);
 
   useEffect(() => {
-    if ((selectedBank || selectedBank === 0) && initialBank) {
-      const bankName = banksNames[selectedBank] || initialBank;
-
-      getBalance(bankName);
-      getCurrentBankConversion(bankName);
-    }
+    chackBalanceAndConversion();
   }, [selectedBank, initialBank]);
 
-  useEffect(() => {
-    console.log('getBalancePeriod', balancePeriod);
-    if (balancePeriod.startDate !== initialDate || balancePeriod.endDate !== initialDate) {
+  const chackBalanceAndConversion = async () => {
+    if ((selectedBank || selectedBank === 0) && initialBank) {
+      setIsLoading(true);
       const bankName = banksNames[selectedBank] || initialBank;
-      getCurrentBankConversion(bankName);
+
+      await getBalance(bankName);
+      await getCurrentBankConversion(bankName);
+      setIsLoading(false);
     }
+  };
+  useEffect(() => {
+    checkConversionOfPeriod();
   }, [balancePeriod]);
 
-  // const getBalancePeriod = (data) => {
-  //   setBalancePeriod(data);
-  // };
+  const checkConversionOfPeriod = async () => {
+    if (balancePeriod.startDate !== initialDate || balancePeriod.endDate !== initialDate) {
+      setIsLoading(true);
+      const bankName = banksNames[selectedBank] || initialBank;
+      await getCurrentBankConversion(bankName);
+      setIsLoading(false);
+    }
+  };
 
   const getCurrentBankConversion = async (bankName) => {
     try {
@@ -140,8 +149,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
         setBanks(data.payload);
         const name = data.payload.map((item) => item.name);
 
-        console.log('name', name);
-
         setBanksNames(name);
         setInitialBank(name[0]);
       }
@@ -152,6 +159,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
 
   return (
     <ScrollView style={styles.mainWrapper}>
+      <MainLoader isVisible={isLoading} />
       <TouchableWithoutFeedback
         onPress={() => {
           setIsDropdownOpen(false);
