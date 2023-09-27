@@ -23,6 +23,7 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
   const [genReportTransactionFilters, setGenReportTransactionFilters] = useState(initialFilters);
   const [filtersDots, setFiltersDots] = useState([]);
   const [isMerchApiKeyAvailable, setIsMerchApiKeyAvailable] = useState(false);
+  const [isTransactionsWithFilterLoading, setIsTransactionsWithFilterLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -86,10 +87,12 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
   const profileIcon = require('src/images/profile_icon.png');
   const closeIcon = require('src/images/delete.png');
 
-  const confirmTransactionFilters = () => {
+  const confirmTransactionFilters = async () => {
+    setIsTransactionsWithFilterLoading(true);
     navigation.navigate('TransactionsScreen');
     const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
-    dispatch(getTransactionData({ transactionData: transactionRequestObject, page: 1 }));
+    await dispatch(getTransactionData({ transactionData: transactionRequestObject, page: 1 }));
+    setIsTransactionsWithFilterLoading(false);
   };
 
   return (
@@ -120,6 +123,7 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
             genReportTransactionFilters={genReportTransactionFilters}
             setGenReportTransactionFilters={setGenReportTransactionFilters}
             createTransactionRequestObject={createTransactionRequestObject}
+            isTransactionsWithFilterLoading={isTransactionsWithFilterLoading}
           />
         )}
       </TransactionsStack.Screen>

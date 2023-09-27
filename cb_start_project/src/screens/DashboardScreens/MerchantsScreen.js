@@ -104,13 +104,6 @@ const MerchantsScreen = ({
       )}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
-          {/* <CheckBoxList
-            data={data}
-            onSelect={setCheckBoxSelect}
-            // defaultValue={[{ value: 'XXXX' }]}
-            styling={{ size: 18, spaceBetween: 34 }}
-            isFirstBoxAll={true}
-          /> */}
           <RadioList
             data={merchants}
             onSelect={setRadioSelect}
