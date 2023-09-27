@@ -14,6 +14,7 @@ import DashboardRoutes from 'src/screens/DashboardScreens/DashboardRoutes';
 import TransactionsRoutes from 'src/screens/TransactionsScreens/TransactionsRoutes';
 import ApiRoutes from 'src/screens/ApiScreens/ApiRoutes';
 import UsersRoutes from 'src/screens/UsersScreens/UsersRoutes';
+import MainLoader from './src/components/molecules/MainLoader';
 
 import { isLoggedIn } from 'src/redux/user/selectors';
 import { getUsers } from 'src/redux/content/selectors';
@@ -193,7 +194,7 @@ export const Routing = () => {
               },
             }}
             name="BalanceScreen"
-            component={DashboardScreen}
+            component={MainLoader}
           />
         </MainStack.Navigator>
       )}
