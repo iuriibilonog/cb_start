@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   FlatList,
   Pressable,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
@@ -212,58 +214,67 @@ const UsersListScreen = (props) => {
 
   return (
     // <ScrollView>
-
-    <View style={styles.wrapper}>
-      <View style={styles.titleWrapper}>
-        <SimpleText style={styles.titleText}>
-          <FormattedMessage id={'common.users'} />
-        </SimpleText>
-        <TouchableOpacity activeOpacity={0.5}>
-          <SimpleButton plus text={<FormattedMessage id={'users.new_user'} />} />
-        </TouchableOpacity>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        console.log('PRESS OUT');
+        Keyboard.dismiss();
+      }}
+    >
+      <View style={styles.wrapper}>
+        <View style={styles.titleWrapper}>
+          <SimpleText style={styles.titleText}>
+            <FormattedMessage id={'common.users'} />
+          </SimpleText>
+          <TouchableOpacity activeOpacity={0.5}>
+            <SimpleButton plus text={<FormattedMessage id={'users.new_user'} />} />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            height: 50,
+            paddingHorizontal: 15,
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderBottomWidth: 1,
+            borderBottomColor: 'rgba(217, 217, 217, 0.70)',
+            backgroundColor: '#F4F4F4',
+          }}
+        >
+          <View style={{ ...styles.tableCell, width: width / 6 }}>
+            <SimpleText style={styles.headerText}>ID</SimpleText>
+          </View>
+          <View style={{ ...styles.tableCell, flex: 1 }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'common.user'} />
+            </SimpleText>
+          </View>
+          <View style={{ ...styles.tableCell, width: 100 }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'common.role'} />
+            </SimpleText>
+          </View>
+        </View>
+        {data && data.length > 0 ? (
+          <FlatList
+            data={data}
+            renderItem={({ item, index }) => flatListRenderModule(item, index)}
+          />
+        ) : (
+          <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
+            <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
+              <FormattedMessage id={'common.data_not_found'} />
+            </SimpleText>
+          </View>
+        )}
+        {totalPages > 1 && (
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </View>
-      <View
-        style={{
-          height: 50,
-          paddingHorizontal: 15,
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderBottomWidth: 1,
-          borderBottomColor: 'rgba(217, 217, 217, 0.70)',
-          backgroundColor: '#F4F4F4',
-        }}
-      >
-        <View style={{ ...styles.tableCell, width: width / 6 }}>
-          <SimpleText style={styles.headerText}>ID</SimpleText>
-        </View>
-        <View style={{ ...styles.tableCell, flex: 1 }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'common.user'} />
-          </SimpleText>
-        </View>
-        <View style={{ ...styles.tableCell, width: 100 }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'common.role'} />
-          </SimpleText>
-        </View>
-      </View>
-      {data && data.length > 0 ? (
-        <FlatList data={data} renderItem={({ item, index }) => flatListRenderModule(item, index)} />
-      ) : (
-        <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
-          <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
-            <FormattedMessage id={'common.data_not_found'} />
-          </SimpleText>
-        </View>
-      )}
-      {totalPages > 1 && (
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
-    </View>
+    </TouchableWithoutFeedback>
     // </ScrollView>
   );
 };

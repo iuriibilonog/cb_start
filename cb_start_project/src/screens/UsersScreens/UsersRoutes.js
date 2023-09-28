@@ -128,7 +128,7 @@ const UsersRoutes = () => {
         }}
         name="UsersListScreen"
       >
-        {(props) => <UsersListScreen {...props} searchUser={searchUser} />}
+        {(props) => <UsersListScreen {...props} searchUser={searchUser}  />}
       </UsersStack.Screen>
       <UsersStack.Screen
         options={{
