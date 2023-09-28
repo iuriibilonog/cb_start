@@ -40,3 +40,6 @@ export const userLogout = createAsyncThunk('auth/logout', async (userData, thunk
     return thunkAPI.rejectWithValue(error);
   }
 });
+export const removeAuthError = createAsyncThunk('auth/removeAuthError', async (_, thunkAPI) => {
+  return { error: null };
+});
