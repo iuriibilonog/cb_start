@@ -19,6 +19,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { deleteApiKey } from 'src/redux/content/operations';
 import MainLoader from 'src/components/molecules/MainLoader';
+import { showMessage } from 'react-native-flash-message';
 
 const arrowLeft = require('src/images/header_left.png');
 
@@ -34,8 +35,26 @@ const DeleteScreen = (props) => {
       await dispatch(deleteApiKey(props.route.params.id));
       await props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
       setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Api key ${value} delete successfully`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'success',
+        });
+      }, 1000);
     } catch (err) {
       setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! Api key ${value} does't delete`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
       console.log('err', err);
     }
   };

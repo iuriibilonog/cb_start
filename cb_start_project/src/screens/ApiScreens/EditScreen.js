@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
+import { showMessage } from 'react-native-flash-message';
 import { putApiKey } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
 import MainLoader from 'src/components/molecules/MainLoader';
@@ -31,12 +32,27 @@ const EditScreen = (props) => {
   const submit = async () => {
     try {
       setIsLoading(true);
-      console.log('EDITED', value);
       await dispatch(putApiKey({ id: props.route.params.id, name: value }));
       setIsLoading(false);
       await props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
+      setTimeout(() => {
+        showMessage({
+          message: `Edit Api key ${value} successfully`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'success',
+        });
+      }, 1000);
     } catch (err) {
       setIsLoading(false);
+      showMessage({
+        message: `Something went wrong! Api key ${value} does't edit`,
+        titleStyle: {
+          textAlign: 'center',
+        },
+        type: 'success',
+      });
       console.log('err', err);
     }
   };
