@@ -205,13 +205,9 @@ export const putApiKey = createAsyncThunk('content/putApiKey', async ({ id, name
 export const postApiKey = createAsyncThunk('content/postApiKey', async (newKeyData, thunkAPI) => {
   // {userId: 97, name: "aaatest"}
   try {
-    const { data } = await api.post(
-      `${BASE_URL}/api/api-keys`,
-      newKeyData,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await api.post(`${BASE_URL}/api/api-keys`, newKeyData, {
+      withCredentials: true,
+    });
 
     return data;
   } catch (error) {
@@ -259,6 +255,31 @@ export const putEditUser = createAsyncThunk(
       const { data } = await api.put(`${BASE_URL}/api/users/${userId}`, updatedData, {
         withCredentials: true,
       });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const getSearchUsers = createAsyncThunk(
+  'content/getSearchUsers',
+  async (searchData, thunkAPI) => {
+    try {
+      //updatedData =
+      // email: "TestAppUser1@gmail.com"
+      // password: "1122"
+      // roleId: 1
+      // username: "TestAppUser111"
+      const { page = 1, searchText } = searchData;
+      console.log('searchData>>', searchData);
+      const { data } = await api.get(
+        `${BASE_URL}/api/users?page=${page}&pageSize=20&filter=${searchText}`,
+        {
+          withCredentials: true,
+        }
+      );
 
       return data;
     } catch (error) {

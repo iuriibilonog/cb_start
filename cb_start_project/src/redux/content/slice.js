@@ -14,6 +14,7 @@ import {
   getLedgersData,
   putEditUser,
   postApiKey,
+  getSearchUsers,
 } from './operations';
 
 const initialState = {
@@ -140,8 +141,17 @@ const userSlice = createSlice({
         };
       });
 
-      builder.addCase(postApiKey.fulfilled, (state, action) => {}),
+    builder.addCase(postApiKey.fulfilled, (state, action) => {}),
       builder.addCase(postApiKey.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+
+    builder.addCase(getSearchUsers.fulfilled, (state, action) => {
+      state.content.searchUsers = action.payload;
+    }),
+      builder.addCase(getSearchUsers.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };

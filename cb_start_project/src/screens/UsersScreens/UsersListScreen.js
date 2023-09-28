@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUsersByPage } from 'src/redux/content/operations';
-import { usersByPage } from 'src/redux/content/selectors';
+import { getUsersByPage, getSearchUsers } from 'src/redux/content/operations';
+import { usersByPage, searchUsers } from 'src/redux/content/selectors';
 import {
   StyleSheet,
   View,
@@ -27,6 +27,7 @@ const editInactiveIcon = require('src/images/edit_inactive.png');
 const UsersListScreen = (props) => {
   const dispatch = useDispatch();
   const usersData = useSelector(usersByPage);
+  const searchUsersData = useSelector(searchUsers);
 
   const [data, setData] = useState(null);
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
@@ -39,23 +40,41 @@ const UsersListScreen = (props) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(getUsersByPage(currentPage));
+    if (props.searchUser) {
+      dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
+    } else {
+      dispatch(getUsersByPage(currentPage));
+    }
   }, [currentPage]);
 
   useEffect(() => {
-    if (props.route.params && props.route.params.isRefresh) {
+    // console.log('SEARCH name:', props.searchUser);
+
+    if (props.searchUser) {
+      // page, searchText
+      dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
+    } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
+      dispatch(getUsersByPage(currentPage));
+    } else if (!props.searchUser) {
       dispatch(getUsersByPage(currentPage));
     }
-  }, [props.route.params]);
+  }, [props]);
 
   useEffect(() => {
     if (usersData) {
-      console.log('totalCount', usersData.totalCount);
       const pages = Math.ceil(usersData.totalCount / 20);
       setTotalPages(pages);
       setData(usersData.items);
     }
   }, [usersData]);
+
+  useEffect(() => {
+    if (searchUsersData) {
+      const pages = Math.ceil(searchUsersData.totalCount / 20);
+      setTotalPages(pages);
+      setData(searchUsersData.items);
+    }
+  }, [searchUsersData]);
 
   const handleExpandRow = (index) => {
     setIsAdditDataOpen((prev) => !prev);
