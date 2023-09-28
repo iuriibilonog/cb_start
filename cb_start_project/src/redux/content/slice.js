@@ -15,6 +15,7 @@ import {
   putEditUser,
   postApiKey,
   getSearchUsers,
+  deleteUser,
 } from './operations';
 
 const initialState = {
@@ -152,6 +153,13 @@ const userSlice = createSlice({
       state.content.searchUsers = action.payload;
     }),
       builder.addCase(getSearchUsers.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+
+    builder.addCase(deleteUser.fulfilled, (state, action) => {}),
+      builder.addCase(deleteUser.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };

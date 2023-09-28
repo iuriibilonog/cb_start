@@ -38,8 +38,10 @@ const EditScreen = (props) => {
   const { width } = Dimensions.get('window');
 
   const submit = () => {
-      if (action && value) {
+    if (action && value) {
       action(value);
+    } else if (isDelete) {
+      action();
     } else {
       setIsEmptyValue(true);
     }
@@ -73,7 +75,12 @@ const EditScreen = (props) => {
           {!isDelete && ` ${title}`}
         </SimpleText>
         {isEdit && (
-          <TextInput style={styles.input} value={value} placeholder={placeholder} onChangeText={(text) => setValue(text)} />
+          <TextInput
+            style={styles.input}
+            value={value}
+            placeholder={placeholder}
+            onChangeText={(text) => setValue(text)}
+          />
         )}
         {isDelete && (
           <>
@@ -127,7 +134,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     alignItems: 'center',
   },
-  title: { fontSize: 24, fontFamily: 'Mont_SB', marginBottom: 70 },
+  title: {
+    fontSize: 24,
+    fontFamily: 'Mont_SB',
+    marginBottom: 70,
+    lineHeight: 26,
+    textAlign: 'center',
+  },
   input: {
     width: '100%',
     marginBottom: 40,
@@ -151,6 +164,29 @@ const styles = StyleSheet.create({
     letterSpacing: 0.48,
     color: '#fff',
     fontFamily: 'Mont_SB',
+  },
+  bottomPlaceholder: {
+    width: '100%',
+    marginBottom: 40,
+    paddingHorizontal: 10,
+    paddingTop: 8,
+    textAlign: 'left',
+    color: 'rgba(0, 0, 0, 0.30)',
+    fontSize: 12,
+    letterSpacing: 0.24,
+  },
+  valueTextWrapper: {
+    width: '100%',
+
+    paddingBottom: 8,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.20)',
+  },
+  valueText: {
+    fontFamily: 'Mont',
+    fontSize: 16,
+    color: '#262626',
   },
 });
 
