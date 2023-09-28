@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getMerchantsApiKeys, getLedgersData } from 'src/redux/content/operations';
-import { getApiKeys, ledgersData } from 'src/redux/content/selectors';
+import { getApiKeys, ledgersData, getUsers } from 'src/redux/content/selectors';
 import {
   StyleSheet,
   View,
@@ -32,8 +32,9 @@ const UserScreen = (props) => {
   const dispatch = useDispatch();
   const apiData = useSelector(getApiKeys);
   const balanceData = useSelector(ledgersData);
+  const allUsers = useSelector(getUsers);
 
-  const [currentUser, setCurrentUser] = useState(props?.route?.params?.user);
+  const [currentUser, setCurrentUser] = useState();
   const [apiKeysData, setApiKeysData] = useState(null);
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
@@ -52,13 +53,12 @@ const UserScreen = (props) => {
   useEffect(() => {
     console.log('props-route', props.route);
     if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-      dispatch(getMerchantsApiKeys(currentUser.id));
-      dispatch(getLedgersData(currentUser.id));
+      dispatch(getMerchantsApiKeys(props.route.params.id));
+      dispatch(getLedgersData(props.route.params.id));
     }
   }, [props.route.params]);
 
   useEffect(() => {
-    const user = props?.route?.params?.user;
     if (apiData) {
       setApiKeysData(apiData);
     }
@@ -71,6 +71,13 @@ const UserScreen = (props) => {
       setInitialBalance(balanceData[0]?.name);
     }
   }, [balanceData]);
+
+  useEffect(() => {
+    if (allUsers && props.route.params.id) {
+      console.log('props.route.params.id', props.route.params.id);
+      setCurrentUser(allUsers.find((item) => item.id === +props.route.params.id));
+    }
+  }, [allUsers]);
 
   const handleExpandRow = (index) => {
     setIsAdditDataOpen((prev) => !prev);
@@ -344,7 +351,7 @@ const UserScreen = (props) => {
         <View style={styles.userBlockWrapper}>
           <View style={styles.userWrapper}>
             <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 24, maxWidth: width / 1.5 }}>
-              {currentUser.username}
+              {currentUser && currentUser.username}
             </SimpleText>
             <View
               style={{
@@ -460,7 +467,7 @@ const UserScreen = (props) => {
             </View>
           </TouchableOpacity>
 
-          {isPersonalOpen && (
+          {isPersonalOpen && currentUser && (
             <View style={styles.userPersonal}>
               <View style={styles.personalTitles}>
                 <SimpleText style={{ marginBottom: 12 }}>Name</SimpleText>

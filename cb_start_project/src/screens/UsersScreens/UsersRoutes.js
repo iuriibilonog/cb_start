@@ -84,44 +84,6 @@ const UsersRoutes = () => {
                 </View>
               )}
               <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
-              {/* {isSearchVisible && (
-                <View
-                  style={{
-                    top: 0,
-                    right: 20,
-                    position: 'absolute',
-                    width: width - 40,
-                    height: 30,
-                    borderWidth: 1,
-                    borderRadius: 2,
-                    borderColor: 'rgba(0, 0, 0, 0.20)',
-                    backgroundColor: '#fff',
-                    justifyContent: 'space-between',
-                    paddingLeft: 10,
-                    flexDirection: 'row',
-                  }}
-                >
-                  <TextInput
-                    value={searchUser}
-                    onChangeText={setSearchUser}
-                    placeholder={'Edit email or username for search'}
-                    style={{}}
-                  />
-                  <TouchableOpacity activeOpacity={0.5} onPress={() => setSearchUser('')}>
-                    <View
-                      style={{
-                        width: 30,
-                        height: 28,
-                        backgroundColor: 'rgba(0, 0, 0, 0.20)',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Image source={clear} style={{ width: 19, height: 19 }} />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )} */}
             </View>
           ),
         }}
@@ -141,7 +103,13 @@ const UsersRoutes = () => {
           headerTitle: 'User',
           headerTitleAlign: 'left',
           headerBackTitleVisible: false,
-          headerBackImage: () => <></>,
+          headerBackImage: () => (
+            <Image
+              source={headerLeft}
+              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              // onPress={() => navigation.navigate("registration")}
+            />
+          ),
         }}
         name="UserScreen"
       >

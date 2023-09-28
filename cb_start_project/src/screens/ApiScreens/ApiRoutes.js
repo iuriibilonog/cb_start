@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ApiScreen from './ApiScreen';
 import EditScreen from './EditScreen';
 import DeleteScreen from './DeleteScreen';
+import UserScreen from '../UsersScreens/UserScreen';
 
 import { Image, Pressable } from 'react-native';
 const headerLeft = require('src/images/header_left.png');
@@ -30,6 +31,24 @@ const ApiRoutes = ({ handlePressIconLogOut }) => {
         // component={TransactionsScreen}
       >
         {(props) => <ApiScreen {...props} />}
+      </ApiStack.Screen>
+      <ApiStack.Screen
+        options={{
+          // headerShown: false,
+          headerTitle: 'User',
+          headerTitleAlign: 'left',
+          headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <Image
+              source={headerLeft}
+              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              // onPress={() => navigation.navigate("registration")}
+            />
+          ),
+        }}
+        name="UserScreen"
+      >
+        {(props) => <UserScreen {...props} />}
       </ApiStack.Screen>
 
       <ApiStack.Screen
