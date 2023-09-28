@@ -227,6 +227,19 @@ export const deleteApiKey = createAsyncThunk('content/deleteApiKey', async (id, 
   }
 });
 
+export const deleteUser = createAsyncThunk('content/deleteUser', async (id, thunkAPI) => {
+  try {
+    const { data } = await api.delete(`${BASE_URL}/api/users/${id}`, {
+      withCredentials: true,
+    });
+
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+
 export const getLedgersData = createAsyncThunk(
   'content/getLedgersData',
   async (userId, thunkAPI) => {

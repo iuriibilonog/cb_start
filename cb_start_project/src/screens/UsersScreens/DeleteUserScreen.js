@@ -16,24 +16,21 @@ import {
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
-import { putApiKey } from 'src/redux/content/operations';
+import { deleteUser } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
+import ConfirmActionComponent from 'src/components/molecules/ConfirmActionComponent';
 
 const arrowLeft = require('src/images/header_left.png');
 
 const EditUserScreen = (props) => {
-  const [value, setValue] = useState(props.route.params.name);
-  useEffect(() => {
-    console.log('props', props.route.params);
-  }, []);
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
 
   const submit = async () => {
     try {
-      console.log('EDITED', value);
-      await dispatch(putApiKey({ id: props.route.params.id, name: value }));
-      props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
+      console.log(props.route.params);
+      await dispatch(deleteUser(props.route.params.user.id));
+      props.navigation.navigate('UsersListScreen', { isRefresh: true });
     } catch (err) {
       console.log('err', err);
     }
@@ -66,7 +63,7 @@ const EditUserScreen = (props) => {
         </TouchableOpacity>
         {/* </View> */}
 
-        <View style={styles.innerWrapper}>
+        {/* <View style={styles.innerWrapper}>
           <SimpleText style={styles.title}>
             <FormattedMessage id={'api.edit_api'} />
           </SimpleText>
@@ -78,7 +75,14 @@ const EditUserScreen = (props) => {
               </SimpleText>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
+
+        <ConfirmActionComponent
+          isDelete
+          helpText={'User name'}
+          initialValue={props.route.params?.user?.username || ''}
+          action={submit}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
