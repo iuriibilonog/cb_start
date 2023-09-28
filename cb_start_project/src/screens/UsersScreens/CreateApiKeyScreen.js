@@ -79,11 +79,7 @@ const CreateApiKeyScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  innerWrapper: {
-    marginTop: 56,
-    paddingHorizontal: 25,
-    alignItems: 'center',
-  },
+
   title: { fontSize: 24, fontFamily: 'Mont_SB', marginBottom: 70 },
   input: {
     width: '100%',

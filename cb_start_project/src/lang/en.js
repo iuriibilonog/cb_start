@@ -88,6 +88,8 @@ const lang = {
   'users.chains': 'Chains',
   'users.use_balancer': 'Use balancer',
   'users.validation_error': 'Validation failed (numeric string is expected)',
+  'users.ledger_name': 'Ledger name',
+  'users.add_new_ledger': 'Add new Ledger',
 
   //common=====
   'common.date': 'Date',
@@ -115,6 +117,7 @@ const lang = {
   'common.admin': 'Admin',
   'common.balance': 'Balance',
   'common.add': 'Add',
+  'common.currency': 'Currency',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

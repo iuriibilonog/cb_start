@@ -196,18 +196,22 @@ const EditUserScreen = (props) => {
                         width: '100%',
                       }}
                       dropdownStyle={{
-                        marginLeft: -16,
+                        marginLeft: -10,
                         marginTop: Platform.OS === 'ios' ? 12 : -12,
-                        paddingLeft: 11,
+                        paddingLeft: 5,
                         paddingRight: 2,
-                        width: '100%',
-                        // width: 167,
-                        // backgroundColor: '#F4F4F4',
-                        borderWidth: 0,
+                        // width: '100%',
+                        width: width - 90,
+                        height:160,
+                        borderWidth: 1,
+                        borderColor:'rgba(0, 0, 0, 0.20)',
+                        borderRadius:2,
                       }}
                       dropdownTextStyle={{
                         fontSize: 16,
+                        lineHeight:30,
                         fontWeight: '600',
+                        fontFamily: 'Mont',
                         // backgroundColor: '#F4F4F4',
                         color: 'rgba(38, 38, 38, 0.50)',
                       }}

@@ -31,7 +31,7 @@ const EditLedgerScreen = (props) => {
   const { width } = Dimensions.get('window');
 
   const handleEditLedger = async (data) => {
-    console.log('DATA', data)
+    console.log('DATA', data);
     try {
       console.log('EDITED', value);
       await dispatch(putApiKey({ id: props.route.params.id, name: value }));
@@ -40,7 +40,6 @@ const EditLedgerScreen = (props) => {
       console.log('err', err);
     }
   };
-
 
   return (
     <TouchableWithoutFeedback
@@ -68,13 +67,17 @@ const EditLedgerScreen = (props) => {
           <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
         {/* </View> */}
-
-        <ConfirmActionComponent
-          isEdit
-          title={'Ledger'}
-          initialValue={props.route.params.username}
-          action={handleEditLedger}
-        />
+        <FormattedMessage id={'users.ledger_name'}>
+          {(placeholder) => (
+            <ConfirmActionComponent
+              isEdit
+              title={'Ledger'}
+              initialValue={props.route.params.username}
+              action={handleEditLedger}
+              placeholder={placeholder[0]}
+            />
+          )}
+        </FormattedMessage>
       </View>
     </TouchableWithoutFeedback>
   );

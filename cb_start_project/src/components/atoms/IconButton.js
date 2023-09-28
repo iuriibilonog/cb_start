@@ -14,7 +14,7 @@ const IconButton = (props) => {
           : del
           ? '#FFF0F0'
           : edit
-          ? '#FFEFB4'
+          ? '#FFED8B'
           : addIcon,
         ...style,
       }}

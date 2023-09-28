@@ -38,7 +38,7 @@ const EditScreen = (props) => {
   const { width } = Dimensions.get('window');
 
   const submit = () => {
-    if (action && value) {
+      if (action && value) {
       action(value);
     } else {
       setIsEmptyValue(true);
@@ -53,8 +53,6 @@ const EditScreen = (props) => {
     <View
       style={{
         flex: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 20,
         justifyContent: 'flex-start',
         backgroundColor: '#fff',
       }}
@@ -75,7 +73,7 @@ const EditScreen = (props) => {
           {!isDelete && ` ${title}`}
         </SimpleText>
         {isEdit && (
-          <TextInput style={styles.input} value={value} onChangeText={(text) => setValue(text)} />
+          <TextInput style={styles.input} value={value} placeholder={placeholder} onChangeText={(text) => setValue(text)} />
         )}
         {isDelete && (
           <>
@@ -133,7 +131,8 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     marginBottom: 40,
-    paddingBottom: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     fontFamily: 'Mont',
     fontSize: 16,
     color: '#262626',
