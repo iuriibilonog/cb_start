@@ -53,11 +53,14 @@ const UsersListScreen = (props) => {
     // console.log('SEARCH name:', props.searchUser);
 
     if (props.searchUser) {
+      console.log('searchuser');
       // page, searchText
       dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
     } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-      dispatch(getUsersByPage(currentPage));
+      console.log('isrefresh');
+      dispatch(getUsersByPage(1));
     } else if (!props.searchUser) {
+      console.log('refresh');
       dispatch(getUsersByPage(currentPage));
     }
   }, [props]);

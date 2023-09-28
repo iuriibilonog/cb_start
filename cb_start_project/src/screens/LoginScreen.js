@@ -61,7 +61,7 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
     try {
       // dispatch(userLogin(inputValue));
       const data = await dispatch(
-        userLogin({ email: 'designerAdmin@designer.com', password: '1234599' })
+        userLogin({ email: 'designerAdmin@designer.com', password: '12345' })
       );
       console.log('data', data);
     } catch (error) {
