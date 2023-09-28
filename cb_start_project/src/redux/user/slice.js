@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { userLogin, userLogout } from './operations';
+import { userLogin, userLogout, removeAuthError } from './operations';
 
 const initialState = {
   userinfo: {
@@ -21,10 +21,11 @@ const userSlice = createSlice({
       state.token = action.payload.accessToken;
       state.refresh = action.payload.refreshToken;
       state.userinfo.isLoggedIn = true;
+      state.error = null;
     }),
       builder.addCase(userLogin.rejected, (state, action) => {
         state.error = {
-          message: action.payload,
+          message: action.payload.response.data.message,
         };
       });
     builder.addCase(userLogout.fulfilled, (state, action) => initialState),
@@ -34,6 +35,9 @@ const userSlice = createSlice({
           message: action.payload,
         };
       });
+    builder.addCase(removeAuthError.fulfilled, (state, action) => {
+      state.error = null;
+    });
   },
 });
 

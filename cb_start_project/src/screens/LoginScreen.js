@@ -16,12 +16,14 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useDispatch } from 'react-redux';
-import { userLogin } from 'src/redux/user/operations';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin, removeAuthError } from 'src/redux/user/operations';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { FormattedMessage } from 'react-intl';
 import SimpleText from '../components/atoms/SimpleText';
+import { getUserErrors } from 'src/redux/user/selectors';
+import { showMessage } from 'react-native-flash-message';
 
 const logoBack = require('src/images/logo_back.png');
 const boxEmpty = require('src/images/box_empty.png');
@@ -35,12 +37,35 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
 
   const dispatch = useDispatch();
 
-  const handleSubmit = () => {
+  const authErr = useSelector(getUserErrors);
+
+  useEffect(() => {
+    if (authErr) {
+      const msg = JSON.parse(authErr.message);
+
+      showMessage({
+        message: msg['message'],
+        titleStyle: {
+          textAlign: 'center',
+        },
+        type: 'danger',
+      });
+    }
+  }, [authErr]);
+
+  useEffect(() => {
+    if (authErr) dispatch(removeAuthError());
+  }, [inputValue]);
+
+  const handleSubmit = async () => {
     try {
       // dispatch(userLogin(inputValue));
-      dispatch(userLogin({ email: 'designerAdmin@designer.com', password: '12345' }));
+      const data = await dispatch(
+        userLogin({ email: 'designerAdmin@designer.com', password: '1234599' })
+      );
+      console.log('data', data);
     } catch (error) {
-      console.warn((err) => 'Error:', err);
+      console.warn((err) => 'Error:', error);
     }
 
     Keyboard.dismiss();
@@ -73,7 +98,11 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
             <FormattedMessage id={'common.email'}>
               {(msg) => (
                 <TextInput
-                  style={{ ...styles.input, marginBottom: 30 }}
+                  style={
+                    authErr
+                      ? { ...styles.inputWithError, marginBottom: 30 }
+                      : { ...styles.input, marginBottom: 30 }
+                  }
                   placeholder={msg[0]}
                   placeholderTextColor={'grey'}
                   value={inputValue?.name}
@@ -86,7 +115,11 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
                 {(msg) => {
                   return (
                     <TextInput
-                      style={{ ...styles.input, marginBottom: 60 }}
+                      style={
+                        authErr
+                          ? { ...styles.inputWithError, marginBottom: 60 }
+                          : { ...styles.input, marginBottom: 60 }
+                      }
                       placeholder={msg[0]}
                       placeholderTextColor={'grey'}
                       value={inputValue?.name}
@@ -156,6 +189,15 @@ const styles = StyleSheet.create({
     color: '#36D0BB',
     borderWidth: 1,
     borderColor: 'rgba(54, 208, 187, 0.20)',
+    borderRadius: 2,
+    textAlign: 'center',
+  },
+  inputWithError: {
+    width: '100%',
+    height: 50,
+    color: '#36D0BB',
+    borderWidth: 1,
+    borderColor: '#FC7270',
     borderRadius: 2,
     textAlign: 'center',
   },
