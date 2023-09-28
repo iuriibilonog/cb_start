@@ -85,7 +85,7 @@ const UsersListScreen = (props) => {
 
   const handleNavigate = (user) => {
     console.log('props', user);
-    navigation.navigate('UserScreen', { user: user });
+    navigation.navigate('UserScreen', { id: user.id });
   };
 
   const showDate = (date) => {

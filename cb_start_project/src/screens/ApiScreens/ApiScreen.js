@@ -78,8 +78,9 @@ const ApiScreen = (props) => {
     navigation.navigate('DeleteScreen', { id, name, parentScreen: 'ApiScreen' });
   };
 
-  const handleNavigate = () => {
-    navigation.navigate('UserScreen');
+  const handleNavigate = (apikey) => {
+    console.log('props', apikey);
+    navigation.navigate('UserScreen', { id: apikey.userId });
   };
 
   const flatListRenderModule = (item, index) => (
@@ -123,7 +124,7 @@ const ApiScreen = (props) => {
             </SimpleText>
           </View>
           <View style={{ ...styles.tableCell, flex: 1 }}>
-            <Pressable onPress={handleNavigate}>
+            <Pressable onPress={() => handleNavigate(item)}>
               <SimpleText
                 style={{
                   fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
