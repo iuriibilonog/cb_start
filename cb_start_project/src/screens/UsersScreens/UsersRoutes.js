@@ -9,6 +9,7 @@ import {
   View,
   TextInput,
   Dimensions,
+  Animated,
   TouchableWithoutFeedback,
 } from 'react-native';
 import EditScreen from '../ApiScreens/EditScreen';
@@ -28,6 +29,8 @@ const clear = require('src/images/delete.png');
 const UsersRoutes = () => {
   const [searchUser, setSearchUser] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [inputWidth, setInputWidth] = useState(new Animated.Value(0));
+
   const UsersStack = createStackNavigator();
 
   const { width } = Dimensions.get('window');
@@ -36,10 +39,33 @@ const UsersRoutes = () => {
     setSearchUser(data);
   };
 
+  const showInput = () => {
+    Animated.timing(inputWidth, {
+      toValue: 150,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+  };
+  const hideInput = () => {
+    Animated.timing(inputWidth, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const handleHideSearchInput = () => {
+    hideInput();
+    setTimeout(() => {
+      setIsSearchVisible(false);
+    }, 750);
+  };
+
   const handleFilter = debounce(handleSearchUserText, 500);
 
   const handleSearchUser = () => {
     setIsSearchVisible((prev) => !prev);
+    showInput();
   };
   return (
     <UsersStack.Navigator initialRouteName={UsersListScreen}>
@@ -69,19 +95,19 @@ const UsersRoutes = () => {
                 />
               </TouchableOpacity>
               {isSearchVisible && (
-                <View
+                <Animated.View
                   style={{
                     borderBottomWidth: 1,
                     borderColor: 'rgba(217, 217, 217, 0.70)',
                     height: 26,
-                    width: 150,
+                    width: inputWidth,
                     marginRight: 12,
                     paddingTop: 3,
                     paddingHorizontal: 5,
                   }}
                 >
                   <TextInput onChangeText={handleFilter} style={{}} />
-                </View>
+                </Animated.View>
               )}
               <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
             </View>
@@ -93,7 +119,7 @@ const UsersRoutes = () => {
           <UsersListScreen
             {...props}
             searchUser={searchUser}
-            setIsSearchVisible={setIsSearchVisible}
+            setIsSearchVisible={handleHideSearchInput}
           />
         )}
       </UsersStack.Screen>

@@ -14,6 +14,7 @@ import {
   Platform,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Animated,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,6 +35,7 @@ const eyeOn = require('src/images/eye_on.png');
 const RegistrationScreen = ({ navigation, setIsAuth }) => {
   const [inputValue, setInputValue] = useState('');
   const [isPassShown, setIsPassShown] = useState(false);
+  const [animation, setAnimation] = useState(new Animated.Value(0));
 
   const dispatch = useDispatch();
 
@@ -42,6 +44,7 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
   useEffect(() => {
     if (authErr) {
       const msg = JSON.parse(authErr.message);
+      startAnimation();
 
       showMessage({
         message: msg['message'],
@@ -49,6 +52,7 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
           textAlign: 'center',
         },
         type: 'danger',
+        duration: '3000',
       });
     }
   }, [authErr]);
@@ -57,11 +61,34 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
     if (authErr) dispatch(removeAuthError());
   }, [inputValue]);
 
+  const startAnimation = () => {
+    animation.setValue(0);
+    Animated.timing(animation, {
+      toValue: 1,
+      duration: 1500,
+      //   easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => {
+      animation.setValue(0);
+    });
+  };
+
+  const animatedStyles = {
+    transform: [
+      {
+        translateX: animation.interpolate({
+          inputRange: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+          outputRange: [0, 10, -10, 10, -10, 0, 0, 0, 0, 0, 0],
+        }),
+      },
+    ],
+  };
+
   const handleSubmit = async () => {
     try {
       // dispatch(userLogin(inputValue));
       const data = await dispatch(
-        userLogin({ email: 'designerAdmin@designer.com', password: '1234599' })
+        userLogin({ email: 'designerAdmin@designer.com', password: '12345' })
       );
       console.log('data', data);
     } catch (error) {
@@ -95,47 +122,49 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
       >
         <View style={styles.container}>
           <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
-            <FormattedMessage id={'common.email'}>
-              {(msg) => (
-                <TextInput
-                  style={
-                    authErr
-                      ? { ...styles.inputWithError, marginBottom: 30 }
-                      : { ...styles.input, marginBottom: 30 }
-                  }
-                  placeholder={msg[0]}
-                  placeholderTextColor={'grey'}
-                  value={inputValue?.name}
-                  onChangeText={(text) => handleInput({ email: text })}
-                />
-              )}
-            </FormattedMessage>
-            <View style={styles.passInputWrapper}>
-              <FormattedMessage id={'common.password'}>
-                {(msg) => {
-                  return (
-                    <TextInput
-                      style={
-                        authErr
-                          ? { ...styles.inputWithError, marginBottom: 60 }
-                          : { ...styles.input, marginBottom: 60 }
-                      }
-                      placeholder={msg[0]}
-                      placeholderTextColor={'grey'}
-                      value={inputValue?.name}
-                      onChangeText={(text) => handleInput({ password: text })}
-                      secureTextEntry={!isPassShown}
-                    />
-                  );
-                }}
+            <Animated.View style={animatedStyles}>
+              <FormattedMessage id={'common.email'}>
+                {(msg) => (
+                  <TextInput
+                    style={
+                      authErr
+                        ? { ...styles.inputWithError, marginBottom: 30 }
+                        : { ...styles.input, marginBottom: 30 }
+                    }
+                    placeholder={msg[0]}
+                    placeholderTextColor={'grey'}
+                    value={inputValue?.name}
+                    onChangeText={(text) => handleInput({ email: text })}
+                  />
+                )}
               </FormattedMessage>
+              <View style={styles.passInputWrapper}>
+                <FormattedMessage id={'common.password'}>
+                  {(msg) => {
+                    return (
+                      <TextInput
+                        style={
+                          authErr
+                            ? { ...styles.inputWithError, marginBottom: 60 }
+                            : { ...styles.input, marginBottom: 60 }
+                        }
+                        placeholder={msg[0]}
+                        placeholderTextColor={'grey'}
+                        value={inputValue?.name}
+                        onChangeText={(text) => handleInput({ password: text })}
+                        secureTextEntry={!isPassShown}
+                      />
+                    );
+                  }}
+                </FormattedMessage>
+              </View>
               <Pressable
                 onPress={handlePassShowBtn}
                 style={{ position: 'absolute', right: 20, top: 13 }}
               >
                 <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
               </Pressable>
-            </View>
+            </Animated.View>
             {/* <Pressable
             onPress={() => setIsRememberMe((prev) => !prev)}
             style={styles.rememberWrapper}
