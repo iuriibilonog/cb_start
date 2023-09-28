@@ -27,7 +27,6 @@ const clear = require('src/images/delete.png');
 
 const UsersRoutes = () => {
   const [searchUser, setSearchUser] = useState('');
-  const [filterText, setFilterText] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const UsersStack = createStackNavigator();
 
@@ -128,7 +127,13 @@ const UsersRoutes = () => {
         }}
         name="UsersListScreen"
       >
-        {(props) => <UsersListScreen {...props} searchUser={searchUser}  />}
+        {(props) => (
+          <UsersListScreen
+            {...props}
+            searchUser={searchUser}
+            setIsSearchVisible={setIsSearchVisible}
+          />
+        )}
       </UsersStack.Screen>
       <UsersStack.Screen
         options={{

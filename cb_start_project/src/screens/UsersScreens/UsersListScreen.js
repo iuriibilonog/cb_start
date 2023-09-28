@@ -92,6 +92,15 @@ const UsersListScreen = (props) => {
     return date.slice(0, 10).replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
   };
 
+  const handleBlur = () => {
+    console.log('PRESS OUT');
+    Keyboard.dismiss();
+    if (!props.searchUser) {
+      props.setIsSearchVisible(false);
+      dispatch(getUsersByPage(1));
+    }
+  };
+
   const flatListRenderModule = (item, index) => (
     <>
       {/* <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}> */}
@@ -214,12 +223,7 @@ const UsersListScreen = (props) => {
 
   return (
     // <ScrollView>
-    <TouchableWithoutFeedback
-      onPress={() => {
-        console.log('PRESS OUT');
-        Keyboard.dismiss();
-      }}
-    >
+    <TouchableWithoutFeedback onPress={handleBlur}>
       <View style={styles.wrapper}>
         <View style={styles.titleWrapper}>
           <SimpleText style={styles.titleText}>
