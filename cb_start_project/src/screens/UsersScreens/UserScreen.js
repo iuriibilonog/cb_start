@@ -4,6 +4,7 @@ import {
   getMerchantsApiKeys,
   getLedgersData,
   getLedgersByApiKeyID,
+  cleanUserLedgers,
 } from 'src/redux/content/operations';
 import { getApiKeys, ledgersData, getUsers, ledgersByApiKeyID } from 'src/redux/content/selectors';
 import {
@@ -58,7 +59,14 @@ const UserScreen = (props) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log('props-route', props.route);
+    // console.log('START', ledgersByApiData);
+    // console.log('-Selector-ledgersByApi', ledgersByApi);
+    dispatch(cleanUserLedgers());
+    setLedgersByApiData([]);
+  }, []);
+
+  useEffect(() => {
+    // console.log('props-route', props.route);
     if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
       dispatch(getMerchantsApiKeys(props.route.params.id));
       dispatch(getLedgersData(props.route.params.id));
@@ -73,14 +81,13 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (ledgersByApi && ledgersByApi.length > 0) {
-      // console.log('LEDGERS: ', ledgersByApi);
       setLedgersByApiData(ledgersByApi.map((item) => item.name));
-    }
+    } else setLedgersByApiData([]);
   }, [ledgersByApi]);
 
   useEffect(() => {
     if (balanceData) {
-      console.log('balanceData', balanceData);
+      // console.log('balanceData', balanceData);
       setBalances(balanceData.map((item) => item.name));
       setInitialBalance(balanceData[0]?.name);
     }
@@ -88,15 +95,22 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (allUsers && props.route.params.id) {
-      console.log('props.route.params.id', props.route.params.id);
+      // console.log('props.route.params.id', props.route.params.id);
       setCurrentUser(allUsers.find((item) => item.id === +props.route.params.id));
     }
   }, [allUsers]);
 
-  const handleExpandRow = (itemId) => {
+  const handleExpandRow = async (itemId) => {
+    if (!isAdditDataOpen) {
+      setSelectedIndex(itemId);
+      await dispatch(getLedgersByApiKeyID(itemId));
+      console.log('Dispatch');
+    } else {
+      setSelectedIndex('');
+      setLedgersByApiData([]);
+    }
+    console.log('open');
     setIsAdditDataOpen((prev) => !prev);
-    setSelectedIndex(itemId);
-    dispatch(getLedgersByApiKeyID(itemId));
   };
 
   const handleApiEdit = ({ id, name }) => {
@@ -245,8 +259,6 @@ const UserScreen = (props) => {
                   : '#fff',
             }}
           >
-            {console.log(ledgersByApiData.join(', '))}
-
             <SimpleText>{item.apiKey}</SimpleText>
           </View>
           <View
@@ -266,13 +278,15 @@ const UserScreen = (props) => {
                   alignItems: 'center',
                 }}
               >
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => handleLedgerEdit()}
-                  style={{ marginRight: 1 }}
-                >
-                  <IconButton edit />
-                </TouchableOpacity>
+                {ledgersByApiData.length !== 0 && (
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => handleLedgerEdit()}
+                    style={{ marginRight: 1 }}
+                  >
+                    <IconButton edit />
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerCreate()}>
                   <IconButton add />
                 </TouchableOpacity>
@@ -280,7 +294,7 @@ const UserScreen = (props) => {
             </View>
             <View
               style={{
-                borderBottomWidth: 1,
+                borderBottomWidth: ledgersByApiData.length === 0 ? 1 : 0,
                 borderColor: 'rgba(0, 0, 0, 0.10)',
                 // paddingBottom: 10,
                 marginBottom: 32,
@@ -293,6 +307,7 @@ const UserScreen = (props) => {
                 </SimpleText>
               ) : (
                 <>
+                  {console.log('array:', ledgersByApiData.join(', '))}
                   <ModalDropdown
                     options={ledgersByApiData}
                     defaultIndex={0}
@@ -300,26 +315,30 @@ const UserScreen = (props) => {
                     isFullWidth
                     animated={false}
                     onSelect={setSelectedLedger}
-                    textStyle={{ fontSize: 16, fontFamily: 'Mont' }}
+                    textStyle={{ fontSize: 16, fontFamily: 'Mont', fontWeight: '600' }}
                     style={{
-                      // backgroundColor: '#F4F4F4',
+                      backgroundColor: '#F4F4F4',
                       paddingHorizontal: 16,
                       // paddingVertical: 11,
+                      borderRadius: 2,
                       justifyContent: 'space-between',
                     }}
                     dropdownStyle={{
                       marginLeft: -16,
-                      // marginTop: Platform.OS === 'ios' ? 14 : -14,
+                      marginTop: Platform.OS === 'ios' ? 2 : -2,
                       paddingLeft: 11,
                       paddingRight: 2,
                       // width: 167,
-                      // backgroundColor: '#F4F4F4',
+                      width: width / 1.7,
+                      backgroundColor: '#F4F4F4',
                       borderWidth: 0,
+                      borderRadius: 2,
                     }}
                     dropdownTextStyle={{
                       fontSize: 16,
                       fontWeight: '600',
-                      // backgroundColor: '#F4F4F4',
+                      fontFamily: 'Mont',
+                      backgroundColor: '#F4F4F4',
                       color: 'rgba(38, 38, 38, 0.50)',
                     }}
                     renderRightComponent={() => (

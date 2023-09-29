@@ -239,7 +239,6 @@ export const deleteUser = createAsyncThunk('content/deleteUser', async (id, thun
   }
 });
 
-
 export const getLedgersData = createAsyncThunk(
   'content/getLedgersData',
   async (userId, thunkAPI) => {
@@ -285,7 +284,7 @@ export const getLedgersByApiKeyID = createAsyncThunk(
       const { data } = await api.get(`${BASE_URL}/api/ledgers?apiKeyId=${apiKeyId}`, {
         withCredentials: true,
       });
-
+      console.log('>>', apiKeyId, '<>', data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -318,7 +317,16 @@ export const getSearchUsers = createAsyncThunk(
   }
 );
 
-
+export const cleanUserLedgers = createAsyncThunk(
+  'content/cleanUserLedgers',
+  async (_, thunkAPI) => {
+    try {
+      return [];
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 // export const getAllModes = createAsyncThunk('content/getAllModes', async (_, thunkAPI) => {
 //   try {

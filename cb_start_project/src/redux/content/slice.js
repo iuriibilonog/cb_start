@@ -17,6 +17,7 @@ import {
   getSearchUsers,
   deleteUser,
   getLedgersByApiKeyID,
+  cleanUserLedgers,
 } from './operations';
 
 const initialState = {
@@ -174,6 +175,10 @@ const userSlice = createSlice({
           message: action.payload,
         };
       });
+
+    builder.addCase(cleanUserLedgers.fulfilled, (state, action) => {
+      state.content.ledgersByApiKeyID = [];
+    });
   },
 });
 
