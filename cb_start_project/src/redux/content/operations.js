@@ -276,6 +276,23 @@ export const putEditUser = createAsyncThunk(
   }
 );
 
+// /api/ledgers?apiKeyId=92
+
+export const getLedgersByApiKeyID = createAsyncThunk(
+  'content/getLedgersByApiKeyID',
+  async (apiKeyId, thunkAPI) => {
+    try {
+      const { data } = await api.get(`${BASE_URL}/api/ledgers?apiKeyId=${apiKeyId}`, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const getSearchUsers = createAsyncThunk(
   'content/getSearchUsers',
   async (searchData, thunkAPI) => {
@@ -300,6 +317,8 @@ export const getSearchUsers = createAsyncThunk(
     }
   }
 );
+
+
 
 // export const getAllModes = createAsyncThunk('content/getAllModes', async (_, thunkAPI) => {
 //   try {

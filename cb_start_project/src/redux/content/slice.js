@@ -16,6 +16,7 @@ import {
   postApiKey,
   getSearchUsers,
   deleteUser,
+  getLedgersByApiKeyID,
 } from './operations';
 
 const initialState = {
@@ -160,6 +161,15 @@ const userSlice = createSlice({
 
     builder.addCase(deleteUser.fulfilled, (state, action) => {}),
       builder.addCase(deleteUser.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+
+    builder.addCase(getLedgersByApiKeyID.fulfilled, (state, action) => {
+      state.content.ledgersByApiKeyID = action.payload.items;
+    }),
+      builder.addCase(getLedgersByApiKeyID.rejected, (state, action) => {
         state.error = {
           message: action.payload,
         };

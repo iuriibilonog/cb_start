@@ -6,6 +6,8 @@ export const getTransactionInfo = (state) => state.content.content.transactionDa
 export const getApiInfo = (state) => state.content.content.apiData;
 export const ledgersData = (state) => state.content.content.ledgersData;
 export const searchUsers = (state) => state.content.content.searchUsers;
+export const ledgersByApiKeyID = (state) => state.content.content.ledgersByApiKeyID;
+
 
 // export const getModes = (state) => state.content.content.modes;
 // export const getCurrencies = (state) => state.content.content.currencies;
