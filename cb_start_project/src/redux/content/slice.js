@@ -18,6 +18,7 @@ import {
   deleteUser,
   getLedgersByApiKeyID,
   cleanUserLedgers,
+  putEditLedger,
 } from './operations';
 
 const initialState = {
@@ -179,6 +180,13 @@ const userSlice = createSlice({
     builder.addCase(cleanUserLedgers.fulfilled, (state, action) => {
       state.content.ledgersByApiKeyID = [];
     });
+
+    builder.addCase(putEditLedger.fulfilled, (state, action) => {}),
+      builder.addCase(putEditLedger.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
   },
 });
 

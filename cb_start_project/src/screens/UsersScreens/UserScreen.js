@@ -87,7 +87,7 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (balanceData) {
-      // console.log('balanceData', balanceData);
+      console.log('balanceData>', balanceData);
       setBalances(balanceData.map((item) => item.name));
       setInitialBalance(balanceData[0]?.name);
     }
@@ -133,7 +133,13 @@ const UserScreen = (props) => {
   };
 
   const handleLedgerEdit = () => {
-    navigation.navigate('EditLedgerScreen', { user: currentUser, parentScreen: 'UserScreen' });
+    console.log('ledgersByApi', ledgersByApi[selectedLedger ? selectedLedger : 0]);
+    // console.log('selectedLedger', selectedLedger);
+    navigation.navigate('EditLedgerScreen', {
+      user: currentUser,
+      data: ledgersByApi[selectedLedger ? selectedLedger : 0],
+      parentScreen: 'UserScreen',
+    });
   };
 
   const handleLedgerCreate = () => {

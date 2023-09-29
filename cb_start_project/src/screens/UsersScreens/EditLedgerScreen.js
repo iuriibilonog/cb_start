@@ -16,14 +16,13 @@ import {
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
-import { putApiKey } from 'src/redux/content/operations';
+import { putEditLedger } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
 import ConfirmActionComponent from 'src/components/molecules/ConfirmActionComponent';
 
 const arrowLeft = require('src/images/header_left.png');
 
 const EditLedgerScreen = (props) => {
-  const [value, setValue] = useState(props.route.params.name);
   useEffect(() => {
     console.log('props', props.route.params);
   }, []);
@@ -33,9 +32,11 @@ const EditLedgerScreen = (props) => {
   const handleEditLedger = async (data) => {
     console.log('DATA', data);
     try {
-      console.log('EDITED', value);
-      await dispatch(putApiKey({ id: props.route.params.id, name: value }));
-      props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
+      await dispatch(putEditLedger({ ledgerId: props.route.params.data.id, name: data }));
+      props.navigation.navigate(props.route.params.parentScreen, {
+        isRefresh: true,
+        id: props.route.params.user.id,
+      });
     } catch (err) {
       console.log('err', err);
     }
@@ -72,7 +73,7 @@ const EditLedgerScreen = (props) => {
             <ConfirmActionComponent
               isEdit
               title={'Ledger'}
-              initialValue={props.route.params.username}
+              initialValue={props.route.params.data.name}
               action={handleEditLedger}
               placeholder={placeholder[0]}
             />

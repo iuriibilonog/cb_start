@@ -320,8 +320,37 @@ export const getSearchUsers = createAsyncThunk(
 export const cleanUserLedgers = createAsyncThunk(
   'content/cleanUserLedgers',
   async (_, thunkAPI) => {
+    console.log('CLEAN LEDGERS');
     try {
       return [];
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// /api/ledgers/51
+// {name: "317socialmedia.comm"}
+export const putEditLedger = createAsyncThunk(
+  'content/putEditLedger',
+  async (editingData, thunkAPI) => {
+    try {
+      //updatedData =
+      // email: "TestAppUser1@gmail.com"
+      // password: "1122"
+      // roleId: 1
+      // username: "TestAppUser111"
+      const { ledgerId, name } = editingData;
+      // console.log('putEditUser>>', editingData);
+      const { data } = await api.put(
+        `${BASE_URL}/api/ledgers/${ledgerId}`,
+        { name },
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
