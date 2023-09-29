@@ -212,128 +212,133 @@ const UserScreen = (props) => {
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
-      <View
-        style={{
-          paddingVertical: 10,
-          flex: 1,
-          alignItems: 'center',
-          borderBottomWidth: isAdditDataOpen && selectedIndex === item.id ? 0 : 1,
-          borderBottomColor: 'rgba(217, 217, 217, 0.70)',
-          backgroundColor:
-            isAdditDataOpen && selectedIndex === item.id
-              ? '#F4F4F4'
-              : index % 2 !== 0
-              ? '#FAFAFA'
-              : '#fff',
-        }}
-      >
-        <SimpleText>{item.apiKey}</SimpleText>
-      </View>
-      {isAdditDataOpen && selectedIndex === item.id && (
-        <View
-          style={{
-            paddingVertical: 40,
-            paddingHorizontal: 20,
-            flex: 1,
-          }}
-        >
-          <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
-            <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
-              <FormattedMessage id={'users.ledgers'} />
-            </SimpleText>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerEdit()}>
-                <IconButton edit />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerCreate()}>
-                <IconButton add />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderColor: 'rgba(0, 0, 0, 0.10)',
-              paddingBottom: 10,
-              marginBottom: 32,
-              width: width / 1.7,
-            }}
-          >
-            <SimpleText>
-              <FormattedMessage id={'users.ledgers_not_found'} />
-            </SimpleText>
-          </View>
-          <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
-            <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
-              <FormattedMessage id={'users.payments_settings'} />
-            </SimpleText>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserDelete()}>
-                <IconButton add />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderColor: 'rgba(0, 0, 0, 0.10)',
-              paddingBottom: 10,
-              marginBottom: 32,
-              width: width / 1.7,
-            }}
-          >
-            <SimpleText>
-              <FormattedMessage id={'users.settings_not_found'} />
-            </SimpleText>
-          </View>
 
-          <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
-            <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
-              <FormattedMessage id={'users.chains'} />
-            </SimpleText>
+      {isAdditDataOpen && selectedIndex === item.id && (
+        <>
+          <View
+            style={{
+              paddingVertical: 10,
+              flex: 1,
+              alignItems: 'center',
+              borderBottomWidth: isAdditDataOpen && selectedIndex === item.id ? 0 : 1,
+              borderBottomColor: 'rgba(217, 217, 217, 0.70)',
+              backgroundColor:
+                isAdditDataOpen && selectedIndex === item.id
+                  ? '#F4F4F4'
+                  : index % 2 !== 0
+                  ? '#FAFAFA'
+                  : '#fff',
+            }}
+          >
+            <SimpleText>{item.apiKey}</SimpleText>
           </View>
           <View
             style={{
-              paddingBottom: 10,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
+              paddingVertical: 40,
+              paddingHorizontal: 20,
+              flex: 1,
             }}
           >
-            <TouchableOpacity activeOpacity={0.5} onPress={() => setIsUseBalancer((prev) => !prev)}>
-              <SimpleCheckBox checked={isUseBalancer} style={{ marginRight: 13 }} />
-            </TouchableOpacity>
-            <SimpleText style={{ paddingTop: 4 }}>
-              <FormattedMessage id={'users.use_balancer'} />
-            </SimpleText>
-          </View>
-          {isUseBalancer && (
-            <View style={{ marginTop: 40 }}>
-              <SimpleText
+            <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
+              <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
+                <FormattedMessage id={'users.ledgers'} />
+              </SimpleText>
+              <View
                 style={{
-                  fontFamily: 'Mont_SB',
-                  fontSize: 20,
-                  color: '#FF6765',
-                  textAlign: 'center',
-                  letterSpacing: 1,
-                  lineHeight: 25,
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
-                <FormattedMessage id={'users.validation_error'} />
+                <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerEdit()}>
+                  <IconButton edit />
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerCreate()}>
+                  <IconButton add />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderColor: 'rgba(0, 0, 0, 0.10)',
+                paddingBottom: 10,
+                marginBottom: 32,
+                width: width / 1.7,
+              }}
+            >
+              <SimpleText>
+                <FormattedMessage id={'users.ledgers_not_found'} />
               </SimpleText>
             </View>
-          )}
-        </View>
+            <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
+              <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
+                <FormattedMessage id={'users.payments_settings'} />
+              </SimpleText>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserDelete()}>
+                  <IconButton add />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderColor: 'rgba(0, 0, 0, 0.10)',
+                paddingBottom: 10,
+                marginBottom: 32,
+                width: width / 1.7,
+              }}
+            >
+              <SimpleText>
+                <FormattedMessage id={'users.settings_not_found'} />
+              </SimpleText>
+            </View>
+            <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
+              <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
+                <FormattedMessage id={'users.chains'} />
+              </SimpleText>
+            </View>
+            <View
+              style={{
+                paddingBottom: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => setIsUseBalancer((prev) => !prev)}
+              >
+                <SimpleCheckBox checked={isUseBalancer} style={{ marginRight: 13 }} />
+              </TouchableOpacity>
+              <SimpleText style={{ paddingTop: 4 }}>
+                <FormattedMessage id={'users.use_balancer'} />
+              </SimpleText>
+            </View>
+            {isUseBalancer && (
+              <View style={{ marginTop: 40 }}>
+                <SimpleText
+                  style={{
+                    fontFamily: 'Mont_SB',
+                    fontSize: 20,
+                    color: '#FF6765',
+                    textAlign: 'center',
+                    letterSpacing: 1,
+                    lineHeight: 25,
+                  }}
+                >
+                  <FormattedMessage id={'users.validation_error'} />
+                </SimpleText>
+              </View>
+            )}
+          </View>
+        </>
       )}
     </>
   );
