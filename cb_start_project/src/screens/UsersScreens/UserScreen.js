@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getMerchantsApiKeys,
@@ -44,7 +44,7 @@ const UserScreen = (props) => {
   const [apiKeysData, setApiKeysData] = useState(null);
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
-  const [initialBalance, setInitialBalance] = useState();
+  const [initialBalance, setInitialBalance] = useState('');
   const [selectedBalance, setSelectedBalance] = useState('0');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPersonalOpen, setIsPersonalOpen] = useState(false);
@@ -57,6 +57,9 @@ const UserScreen = (props) => {
   const { width } = Dimensions.get('window');
 
   const navigation = useNavigation();
+
+  const refBalanceModal = useRef();
+  const refLedgersModal = useRef();
 
   useEffect(() => {
     // console.log('START', ledgersByApiData);
@@ -88,10 +91,19 @@ const UserScreen = (props) => {
   useEffect(() => {
     if (balanceData) {
       console.log('balanceData>', balanceData);
-      setBalances(balanceData.map((item) => item.name));
-      setInitialBalance(balanceData[0]?.name);
+      const data = balanceData.map((item) => item.name);
+      setBalances(data);
+      setInitialBalance(data[0]);
     }
   }, [balanceData]);
+
+  useEffect(() => {
+    refBalanceModal.current?.select(-1);
+  }, [initialBalance]);
+
+  useEffect(() => {
+    refLedgersModal.current?.select(-1);
+  }, [ledgersByApiData]);
 
   useEffect(() => {
     if (allUsers && props.route.params.id) {
@@ -315,6 +327,7 @@ const UserScreen = (props) => {
                 <>
                   {console.log('array:', ledgersByApiData.join(', '))}
                   <ModalDropdown
+                    ref={refLedgersModal}
                     options={ledgersByApiData}
                     defaultIndex={0}
                     defaultValue={ledgersByApiData[0]}
@@ -471,9 +484,11 @@ const UserScreen = (props) => {
             <SimpleText style={{ fontFamily: 'Mont_SB', marginBottom: 14 }}>
               <FormattedMessage id={'common.balance'} />
             </SimpleText>
+            {console.log('initialBalance', initialBalance)}
             {balances && initialBalance && (
               <ModalDropdown
                 options={balances}
+                ref={refBalanceModal}
                 defaultIndex={0}
                 defaultValue={initialBalance}
                 isFullWidth
