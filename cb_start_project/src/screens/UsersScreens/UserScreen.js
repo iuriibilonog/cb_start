@@ -1,7 +1,11 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMerchantsApiKeys, getLedgersData } from 'src/redux/content/operations';
-import { getApiKeys, ledgersData, getUsers } from 'src/redux/content/selectors';
+import {
+  getMerchantsApiKeys,
+  getLedgersData,
+  getLedgersByApiKeyID,
+} from 'src/redux/content/operations';
+import { getApiKeys, ledgersData, getUsers, ledgersByApiKeyID } from 'src/redux/content/selectors';
 import {
   StyleSheet,
   View,
@@ -33,6 +37,7 @@ const UserScreen = (props) => {
   const apiData = useSelector(getApiKeys);
   const balanceData = useSelector(ledgersData);
   const allUsers = useSelector(getUsers);
+  const ledgersByApi = useSelector(ledgersByApiKeyID);
 
   const [currentUser, setCurrentUser] = useState();
   const [apiKeysData, setApiKeysData] = useState(null);
@@ -43,6 +48,8 @@ const UserScreen = (props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPersonalOpen, setIsPersonalOpen] = useState(false);
   const [isUseBalancer, setIsUseBalancer] = useState(false);
+  const [ledgersByApiData, setLedgersByApiData] = useState([]);
+  const [selectedLedger, setSelectedLedger] = useState('');
 
   const [balances, setBalances] = useState([]);
 
@@ -65,6 +72,13 @@ const UserScreen = (props) => {
   }, [apiData]);
 
   useEffect(() => {
+    if (ledgersByApi && ledgersByApi.length > 0) {
+      // console.log('LEDGERS: ', ledgersByApi);
+      setLedgersByApiData(ledgersByApi.map((item) => item.name));
+    }
+  }, [ledgersByApi]);
+
+  useEffect(() => {
     if (balanceData) {
       console.log('balanceData', balanceData);
       setBalances(balanceData.map((item) => item.name));
@@ -79,9 +93,10 @@ const UserScreen = (props) => {
     }
   }, [allUsers]);
 
-  const handleExpandRow = (index) => {
+  const handleExpandRow = (itemId) => {
     setIsAdditDataOpen((prev) => !prev);
-    setSelectedIndex(index);
+    setSelectedIndex(itemId);
+    dispatch(getLedgersByApiKeyID(itemId));
   };
 
   const handleApiEdit = ({ id, name }) => {
@@ -180,7 +195,7 @@ const UserScreen = (props) => {
                 width: isAdditDataOpen && selectedIndex === item.id ? 52 : 46,
                 // width: 46,
                 // height: 40,
-                backgroundColor: isAdditDataOpen && selectedIndex === item.id ? '#FFEFB4' : '#fff',
+                backgroundColor: isAdditDataOpen && selectedIndex === item.id ? '#FFED8B' : '#fff',
               }}
             >
               <Image
@@ -213,7 +228,7 @@ const UserScreen = (props) => {
         </View>
       </TouchableOpacity>
 
-      {isAdditDataOpen && selectedIndex === item.id && (
+      {isAdditDataOpen && selectedIndex === item.id && ledgersByApiData && (
         <>
           <View
             style={{
@@ -230,6 +245,8 @@ const UserScreen = (props) => {
                   : '#fff',
             }}
           >
+            {console.log(ledgersByApiData.join(', '))}
+
             <SimpleText>{item.apiKey}</SimpleText>
           </View>
           <View
@@ -249,7 +266,11 @@ const UserScreen = (props) => {
                   alignItems: 'center',
                 }}
               >
-                <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerEdit()}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => handleLedgerEdit()}
+                  style={{ marginRight: 1 }}
+                >
                   <IconButton edit />
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => handleLedgerCreate()}>
@@ -261,14 +282,63 @@ const UserScreen = (props) => {
               style={{
                 borderBottomWidth: 1,
                 borderColor: 'rgba(0, 0, 0, 0.10)',
-                paddingBottom: 10,
+                // paddingBottom: 10,
                 marginBottom: 32,
                 width: width / 1.7,
               }}
             >
-              <SimpleText>
-                <FormattedMessage id={'users.ledgers_not_found'} />
-              </SimpleText>
+              {ledgersByApiData.length === 0 ? (
+                <SimpleText style={{ paddingBottom: 10 }}>
+                  <FormattedMessage id={'users.ledgers_not_found'} />
+                </SimpleText>
+              ) : (
+                <>
+                  <ModalDropdown
+                    options={ledgersByApiData}
+                    defaultIndex={0}
+                    defaultValue={ledgersByApiData[0]}
+                    isFullWidth
+                    animated={false}
+                    onSelect={setSelectedLedger}
+                    textStyle={{ fontSize: 16, fontFamily: 'Mont' }}
+                    style={{
+                      // backgroundColor: '#F4F4F4',
+                      paddingHorizontal: 16,
+                      // paddingVertical: 11,
+                      justifyContent: 'space-between',
+                    }}
+                    dropdownStyle={{
+                      marginLeft: -16,
+                      // marginTop: Platform.OS === 'ios' ? 14 : -14,
+                      paddingLeft: 11,
+                      paddingRight: 2,
+                      // width: 167,
+                      // backgroundColor: '#F4F4F4',
+                      borderWidth: 0,
+                    }}
+                    dropdownTextStyle={{
+                      fontSize: 16,
+                      fontWeight: '600',
+                      // backgroundColor: '#F4F4F4',
+                      color: 'rgba(38, 38, 38, 0.50)',
+                    }}
+                    renderRightComponent={() => (
+                      <Image
+                        source={
+                          isDropdownOpen
+                            ? require('src/images/arrow_up.png')
+                            : require('src/images/arrow_down.png')
+                        }
+                        style={{ width: 26, height: 36, marginLeft: 'auto' }}
+                      ></Image>
+                    )}
+                    renderRowProps={{ activeOpacity: 1 }}
+                    renderSeparator={() => <></>}
+                    onDropdownWillShow={() => setIsDropdownOpen(true)}
+                    onDropdownWillHide={() => setIsDropdownOpen(false)}
+                  />
+                </>
+              )}
             </View>
             <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
               <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
@@ -426,21 +496,23 @@ const UserScreen = (props) => {
           <View style={styles.userPayInOut}>
             <View style={styles.payInOutTitles}>
               <SimpleText style={{ ...styles.payInOutTitlesText, marginBottom: 12 }}>
-                PayIn:
+                <FormattedMessage id={'users.payin'} />:
               </SimpleText>
-              <SimpleText style={styles.payInOutTitlesText}>PayOut:</SimpleText>
+              <SimpleText style={styles.payInOutTitlesText}>
+                <FormattedMessage id={'users.payout'} />:
+              </SimpleText>
             </View>
             <View style={styles.payInOutValues}>
               <SimpleText style={{ ...styles.payInOutValuesText, marginBottom: 12 }}>
                 {balanceData && balanceData.length > 0 && balanceData[+selectedBalance]
-                  ? balanceData[+selectedBalance].payinAmount +
+                  ? balanceData[+selectedBalance].payinAmount.toFixed(2) +
                     ' ' +
                     balanceData[+selectedBalance].currency
                   : ''}
               </SimpleText>
               <SimpleText style={styles.payInOutValuesText}>
                 {balanceData && balanceData.length > 0 && balanceData[+selectedBalance]
-                  ? balanceData[+selectedBalance].payoutAmount +
+                  ? balanceData[+selectedBalance].payoutAmount.toFixed(2) +
                     ' ' +
                     balanceData[+selectedBalance].currency
                   : ''}

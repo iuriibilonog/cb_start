@@ -90,6 +90,8 @@ const lang = {
   'users.validation_error': 'Validation failed (numeric string is expected)',
   'users.ledger_name': 'Ledger name',
   'users.add_new_ledger': 'Add new Ledger',
+  'users.payin': 'PayIn',
+  'users.payout': 'PayOut',
 
   //common=====
   'common.date': 'Date',
