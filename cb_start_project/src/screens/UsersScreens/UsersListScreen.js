@@ -18,6 +18,7 @@ import { FormattedMessage } from 'react-intl';
 import Pagination from 'src/components/molecules/Pagination';
 import SimpleButton from 'src/components/atoms/SimpleButton';
 import { useNavigation } from '@react-navigation/native';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const deleteIcon = require('src/images/delete.png');
 const deleteInactiveIcon = require('src/images/delete_inactive.png');
@@ -36,31 +37,54 @@ const UsersListScreen = (props) => {
   const [selectedIndex, setSelectedIndex] = useState();
   const [totalPages, setTotalPages] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { width } = Dimensions.get('window');
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (props.searchUser) {
-      dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
-    } else {
-      dispatch(getUsersByPage(currentPage));
-    }
+    getCurrentPageData();
+    // if (props.searchUser) {
+    //   dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
+    // } else {
+    //   dispatch(getUsersByPage(currentPage));
+    // }
   }, [currentPage]);
 
-  useEffect(() => {
-    // console.log('SEARCH name:', props.searchUser);
-
+  const getCurrentPageData = async () => {
+    setIsLoading(true);
     if (props.searchUser) {
-      // page, searchText
+      await dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
+    } else {
+      await dispatch(getUsersByPage(currentPage));
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    // if (props.searchUser) {
+
+    //   dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
+    // } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
+    //   dispatch(getUsersByPage(1));
+    // } else if (!props.searchUser) {
+    //   dispatch(getUsersByPage(currentPage));
+    // }
+    getUserListData();
+  }, [props]);
+
+  const getUserListData = async () => {
+    setIsLoading(true);
+    if (props.searchUser) {
       dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
     } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
       dispatch(getUsersByPage(1));
     } else if (!props.searchUser) {
       dispatch(getUsersByPage(currentPage));
     }
-  }, [props]);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     if (usersData) {
@@ -92,12 +116,14 @@ const UsersListScreen = (props) => {
     return date.slice(0, 10).replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
   };
 
-  const handleBlur = () => {
+  const handleBlur = async () => {
     console.log('PRESS OUT');
     Keyboard.dismiss();
     if (!props.searchUser) {
+      setIsLoading(true);
       props.setIsSearchVisible(false);
-      dispatch(getUsersByPage(1));
+      await dispatch(getUsersByPage(1));
+      setIsLoading(false);
     }
   };
 
@@ -225,6 +251,7 @@ const UsersListScreen = (props) => {
     // <ScrollView>
     <TouchableWithoutFeedback onPress={handleBlur}>
       <View style={styles.wrapper}>
+        <MainLoader isVisible={isLoading} />
         <View style={styles.titleWrapper}>
           <SimpleText style={styles.titleText}>
             <FormattedMessage id={'common.users'} />
