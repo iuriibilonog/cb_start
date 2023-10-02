@@ -92,6 +92,13 @@ const lang = {
   'users.add_new_ledger': 'Add new Ledger',
   'users.payin': 'PayIn',
   'users.payout': 'PayOut',
+  'users.payment_method_name':'Payment method name',
+  'users.bank_name':'Bank name',
+  'users.setting_name':'Setting name',
+  'users.net_price':'Net price',
+  'users.fixed_net_price':'Fixed net price',
+  
+  
 
   //common=====
   'common.date': 'Date',
