@@ -5,8 +5,15 @@ import {
   getLedgersData,
   getLedgersByApiKeyID,
   cleanUserLedgers,
+  getUserPayments,
 } from 'src/redux/content/operations';
-import { getApiKeys, ledgersData, getUsers, ledgersByApiKeyID } from 'src/redux/content/selectors';
+import {
+  getApiKeys,
+  ledgersData,
+  getUsers,
+  ledgersByApiKeyID,
+  userPayments,
+} from 'src/redux/content/selectors';
 import {
   StyleSheet,
   View,
@@ -41,6 +48,7 @@ const UserScreen = (props) => {
   const balanceData = useSelector(ledgersData);
   const allUsers = useSelector(getUsers);
   const ledgersByApi = useSelector(ledgersByApiKeyID);
+  const userPaymentsData = useSelector(userPayments);
 
   const [currentUser, setCurrentUser] = useState();
   const [apiKeysData, setApiKeysData] = useState(null);
@@ -56,6 +64,8 @@ const UserScreen = (props) => {
   const [selectedLedger, setSelectedLedger] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [paymentsData, setPaymentsData] = useState([]);
+
+  const [chainIdOfCurrentLedger, setChainIdOfCurrentLedger] = useState([]);
 
   const [balances, setBalances] = useState([]);
 
@@ -110,6 +120,7 @@ const UserScreen = (props) => {
   useEffect(() => {
     if (ledgersByApi && ledgersByApi.length > 0) {
       const data = ledgersByApi.map((item) => item.name);
+      setChainIdOfCurrentLedger(ledgersByApi[0].id);
       setLedgersByApiData(data);
       setInitialLedger(data[0]);
     } else {
@@ -132,8 +143,19 @@ const UserScreen = (props) => {
   }, [initialBalance]);
 
   useEffect(() => {
+    if (initialLedger && chainIdOfCurrentLedger) {
+      console.log('BOOM');
+      dispatch(getUserPayments(chainIdOfCurrentLedger)).then((res) => {
+        console.log('res', res.payload.paymentMethodSettings);
+        setPaymentsData(
+          Array.isArray(res.payload.paymentMethodSettings)
+            ? res.payload.paymentMethodSettings
+            : [res.payload.paymentMethodSettings]
+        );
+      });
+    }
     refLedgersModal.current?.select(-1);
-  }, [initialLedger]);
+  }, [initialLedger, chainIdOfCurrentLedger]);
 
   useEffect(() => {
     if (allUsers && props.route.params.id) {
@@ -367,7 +389,10 @@ const UserScreen = (props) => {
                     defaultValue={initialLedger}
                     isFullWidth
                     animated={false}
-                    onSelect={setSelectedLedger}
+                    onSelect={(index, option) => {
+                      console.log(index, '<>', option);
+                      setSelectedLedger(index);
+                    }}
                     textStyle={{ fontSize: 16, fontFamily: 'Mont', fontWeight: '600' }}
                     style={{
                       backgroundColor: '#F4F4F4',
@@ -430,6 +455,16 @@ const UserScreen = (props) => {
             {paymentsData && paymentsData.length > 0 ? (
               <View
                 style={{
+                  marginVertical: 40,
+                }}
+              >
+                {paymentsData.map((item, index) => (
+                  <UserPaymentSimpleData key={index} item={item} index={index} />
+                ))}
+              </View>
+            ) : (
+              <View
+                style={{
                   borderBottomWidth: 1,
                   borderColor: 'rgba(0, 0, 0, 0.10)',
                   paddingBottom: 10,
@@ -440,18 +475,6 @@ const UserScreen = (props) => {
                 <SimpleText>
                   <FormattedMessage id={'users.settings_not_found'} />
                 </SimpleText>
-              </View>
-            ) : (
-              <View
-                style={{
-                  marginVertical: 40,
-                }}
-              >
-                {[{ id: 1, fixed_price: 30, price: 14 }, { id: 2 }, { id: 3 }].map(
-                  (item, index) => (
-                    <UserPaymentSimpleData key={index} item={item} />
-                  )
-                )}
               </View>
             )}
             <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 53 }}>

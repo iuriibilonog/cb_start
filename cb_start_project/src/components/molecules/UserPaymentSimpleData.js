@@ -1,6 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
+import { getBanks } from 'src/redux/content/selectors';
 
 import { StyleSheet, View, Dimensions, Image, TouchableOpacity } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
@@ -11,12 +12,29 @@ const arrowDown = require('src/images/arrow_down_small.png');
 const arrowUp = require('src/images/arrow_up.png');
 const editInactive = require('src/images/edit_inactive.png');
 
-const UserPaymentSimpleData = ({ item }) => {
+const UserPaymentSimpleData = ({ item, index }) => {
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
 
+  const banks = useSelector(getBanks);
+
   const { width } = Dimensions.get('window');
+
+  const getRestrictedCountries = (countries) => {
+    return Array.isArray(countries) && countries.length === 0 ? (
+      <FormattedMessage id={'common.empty'} />
+    ) : (
+      'not empty :)'
+    );
+  };
+  const getRestrictedBrands = (brands) => {
+    return Array.isArray(brands) && brands.length === 0 ? (
+      <FormattedMessage id={'common.empty'} />
+    ) : (
+      'not empty :)'
+    );
+  };
 
   return (
     <>
@@ -39,8 +57,9 @@ const UserPaymentSimpleData = ({ item }) => {
             marginRight: 14,
           }}
         />
+        {console.log('INDEX', index)}
         <SimpleText style={{ color: '#fff', fontSize: 12, fontFamily: 'Mont_SB' }}>
-          {item.id} payments
+          {index + 1} <FormattedMessage id={'common.payments'} />
         </SimpleText>
       </View>
       <View
@@ -123,52 +142,56 @@ const UserPaymentSimpleData = ({ item }) => {
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.id}</SimpleText>
+            <SimpleText>{item.paymentMethod?.name}</SimpleText>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.orderId}</SimpleText>
+            <SimpleText>{item.id}</SimpleText>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.orderId}</SimpleText>
+            {banks && item.paymentMethod && (
+              <SimpleText>
+                {banks.find((bank) => bank.id === item.paymentMethod?.bankId)?.name}
+              </SimpleText>
+            )}
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.name}</SimpleText>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.price}</SimpleText>
+            <SimpleText>{item.netPrice}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.fixedNetPrice}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
 
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.minAmount}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.maxAmount}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.minCommission}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.limit}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.rateCommission}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{getRestrictedCountries(item.restrictedCountries)}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{getRestrictedBrands(item.restrictedBrands)}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
         </View>

@@ -19,6 +19,7 @@ import {
   getLedgersByApiKeyID,
   cleanUserLedgers,
   putEditLedger,
+  getUserPayments
 } from './operations';
 
 const initialState = {
@@ -187,6 +188,17 @@ const userSlice = createSlice({
           message: action.payload,
         };
       });
+
+      builder.addCase(getUserPayments.fulfilled, (state, action) => {
+        state.content.userPayments = action.payload.paymentMethodSettings;
+      }),
+        builder.addCase(getUserPayments.rejected, (state, action) => {
+          state.error = {
+            message: action.payload,
+          };
+        });
+
+      
   },
 });
 
