@@ -5,6 +5,7 @@ import { useRoute } from '@react-navigation/native';
 import { StyleSheet, View, Dimensions, Image, TouchableOpacity } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
+import { useNavigation } from '@react-navigation/native';
 
 const close = require('src/images/delete.png');
 const arrowDown = require('src/images/arrow_down_small.png');
@@ -17,6 +18,7 @@ const UserPaymentSimpleData = ({ item }) => {
   const [selectedIndex, setSelectedIndex] = useState();
 
   const { width } = Dimensions.get('window');
+  const navigation = useNavigation();
 
   return (
     <>
@@ -101,11 +103,31 @@ const UserPaymentSimpleData = ({ item }) => {
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'Net Price',
+                  value: item.price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.fixed_price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'Fixed Price',
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

@@ -74,6 +74,7 @@ const EditScreen = (props) => {
           />
           {!isDelete && ` ${title}`}
         </SimpleText>
+
         {isEdit && (
           <TextInput
             style={styles.input}

@@ -30,16 +30,15 @@ const EditPaymentsSettingsScreen = (props) => {
   const { width } = Dimensions.get('window');
 
   const handleEditLedger = async (data) => {
-    // console.log('DATA', data);
-    try {
-      await dispatch(putEditLedger({ ledgerId: props.route.params.data.id, name: data }));
-      props.navigation.navigate(props.route.params.parentScreen, {
-        isRefresh: true,
-        id: props.route.params.data.apiKeyId,
-      });
-    } catch (err) {
-      console.log('err', err);
-    }
+    // try {
+    //   await dispatch(putEditLedger({ ledgerId: props.route.params.data.id, name: data }));
+    //   props.navigation.navigate(props.route.params.parentScreen, {
+    //     isRefresh: true,
+    //     id: props.route.params.data.apiKeyId,
+    //   });
+    // } catch (err) {
+    //   console.log('err', err);
+    // }
   };
 
   return (
@@ -68,14 +67,15 @@ const EditPaymentsSettingsScreen = (props) => {
           <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
         {/* </View> */}
+
         <FormattedMessage id={'users.ledger_name'}>
           {(placeholder) => (
             <ConfirmActionComponent
               isEdit
-              title={'Ledger'}
-              initialValue={props.route.params.data.name}
+              title={`${props.route.params.name}`}
+              initialValue={props.route.params.value}
               action={handleEditLedger}
-              placeholder={placeholder[0]}
+              placeholder={`${props.route.params.name}`}
             />
           )}
         </FormattedMessage>

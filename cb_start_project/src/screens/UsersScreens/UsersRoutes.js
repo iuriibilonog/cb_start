@@ -19,6 +19,7 @@ import CreateLedgerScreen from './CreateLedgerScreen';
 import EditUserScreen from './EditUserScreen';
 import DeleteUserScreen from './DeleteUserScreen';
 import CreateApiKeyScreen from './CreateApiKeyScreen';
+import EditPaymentsSettingsScreen from './EditPaymentsSettingsScreen';
 import debounce from 'lodash.debounce';
 
 const profileIcon = require('src/images/profile_icon.png');
@@ -204,6 +205,18 @@ const UsersRoutes = () => {
         name="CreateApiKeyScreen"
       >
         {(props) => <CreateApiKeyScreen {...props} />}
+      </UsersStack.Screen>
+      <UsersStack.Screen
+        options={{
+          headerBackTitleVisible: false,
+          headerLeft: null,
+          headerTitle: 'Users / Edit payments settings',
+          headerTitleStyle: { fontSize: 14, fontFamily: 'Mont' },
+          headerTitleAlign: 'left',
+        }}
+        name="EditPaymentsSettingsScreen"
+      >
+        {(props) => <EditPaymentsSettingsScreen {...props} />}
       </UsersStack.Screen>
     </UsersStack.Navigator>
   );
