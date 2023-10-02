@@ -67,16 +67,24 @@ const UserScreen = (props) => {
     // console.log('-Selector-ledgersByApi', ledgersByApi);
     dispatch(cleanUserLedgers());
     setLedgersByApiData([]);
+    // if(!props.route.params.isRefresh)
+    // setCurrentUser()
   }, []);
 
   useEffect(() => {
-    // console.log('props-route', props.route);
-    if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-      dispatch(getMerchantsApiKeys(props.route.params.id));
-      dispatch(getLedgersData(props.route.params.id));
-      dispatch(getLedgersByApiKeyID(props.route.params.id));
+    // console.log('props-route-params', props.route.params);
+
+    if (
+      currentUser &&
+      ((props.route.params && props.route.params.isRefresh) || props.route.params)
+    ) {
+      dispatch(getMerchantsApiKeys(currentUser.id));
+      dispatch(getLedgersData(currentUser.id));
+      if (props.route.params.isRefresh) {
+        dispatch(getLedgersByApiKeyID(props.route.params.id));
+      }
     }
-  }, [props.route.params]);
+  }, [props.route.params, currentUser]);
 
   useEffect(() => {
     if (apiData) {
@@ -97,7 +105,7 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (balanceData) {
-      console.log('balanceData>', balanceData);
+      // console.log('balanceData>', balanceData);
       const data = balanceData.map((item) => item.name);
       setBalances(data);
       setInitialBalance(data[0]);
@@ -120,15 +128,16 @@ const UserScreen = (props) => {
   }, [allUsers]);
 
   const handleExpandRow = async (itemId) => {
+    // console.log('Dispatch - id', itemId);
     if (!isAdditDataOpen) {
       setSelectedIndex(itemId);
       await dispatch(getLedgersByApiKeyID(itemId));
-      console.log('Dispatch');
+      // console.log('Dispatch');
     } else {
       setSelectedIndex('');
       setLedgersByApiData([]);
     }
-    console.log('open');
+    // console.log('open');
     setIsAdditDataOpen((prev) => !prev);
   };
 
