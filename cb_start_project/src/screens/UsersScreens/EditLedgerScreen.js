@@ -23,19 +23,19 @@ import ConfirmActionComponent from 'src/components/molecules/ConfirmActionCompon
 const arrowLeft = require('src/images/header_left.png');
 
 const EditLedgerScreen = (props) => {
-  useEffect(() => {
-    console.log('props', props.route.params);
-  }, []);
+  // useEffect(() => {
+  //   console.log('props', props.route.params);
+  // }, []);
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
 
   const handleEditLedger = async (data) => {
-    console.log('DATA', data);
+    // console.log('DATA', data);
     try {
       await dispatch(putEditLedger({ ledgerId: props.route.params.data.id, name: data }));
       props.navigation.navigate(props.route.params.parentScreen, {
         isRefresh: true,
-        id: props.route.params.user.id,
+        id: props.route.params.data.apiKeyId,
       });
     } catch (err) {
       console.log('err', err);

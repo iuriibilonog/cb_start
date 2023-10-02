@@ -65,10 +65,11 @@ const UserScreen = (props) => {
   const refLedgersModal = useRef();
 
   useEffect(() => {
+    // console.log('START', ledgersByApiData);
+    // console.log('-Selector-ledgersByApi', ledgersByApi);
     handleCleanUserLedgers();
-
-    // dispatch(cleanUserLedgers());
-    // setLedgersByApiData([]);
+    // if(!props.route.params.isRefresh)
+    // setCurrentUser()
   }, []);
 
   const handleCleanUserLedgers = async () => {
@@ -79,23 +80,24 @@ const UserScreen = (props) => {
   };
 
   const handleGetData = async () => {
-    if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
+    if (
+      currentUser &&
+      ((props.route.params && props.route.params.isRefresh) || props.route.params)
+    ) {
       setIsLoading(true);
-      await dispatch(getMerchantsApiKeys(props.route.params.id));
-      await dispatch(getLedgersData(props.route.params.id));
-      await dispatch(getLedgersByApiKeyID(props.route.params.id));
+      await dispatch(getMerchantsApiKeys(currentUser.id));
+      await dispatch(getLedgersData(currentUser.id));
+      if (props.route.params.isRefresh) {
+        await dispatch(getLedgersByApiKeyID(props.route.params.id));
+      }
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    // console.log('props-route-params', props.route.params);
     handleGetData();
-    // if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-    //   dispatch(getMerchantsApiKeys(props.route.params.id));
-    //   dispatch(getLedgersData(props.route.params.id));
-    //   dispatch(getLedgersByApiKeyID(props.route.params.id));
-    // }
-  }, [props.route.params]);
+  }, [props.route.params, currentUser]);
 
   useEffect(() => {
     if (apiData) {
@@ -116,7 +118,7 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (balanceData) {
-      console.log('balanceData>', balanceData);
+      // console.log('balanceData>', balanceData);
       const data = balanceData.map((item) => item.name);
       setBalances(data);
       setInitialBalance(data[0]);
@@ -139,17 +141,19 @@ const UserScreen = (props) => {
   }, [allUsers]);
 
   const handleExpandRow = async (itemId) => {
+    // console.log('Dispatch - id', itemId);
     if (!isAdditDataOpen) {
       setIsLoading(true);
       setSelectedIndex(itemId);
       await dispatch(getLedgersByApiKeyID(itemId));
+      // console.log('Dispatch');
       setIsLoading(false);
       console.log('Dispatch');
     } else {
       setSelectedIndex('');
       setLedgersByApiData([]);
     }
-    console.log('open');
+    // console.log('open');
     setIsAdditDataOpen((prev) => !prev);
   };
 
