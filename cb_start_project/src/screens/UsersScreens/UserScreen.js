@@ -45,6 +45,7 @@ const UserScreen = (props) => {
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
   const [initialBalance, setInitialBalance] = useState('');
+  const [initialLedger, setInitialLedger] = useState('');
   const [selectedBalance, setSelectedBalance] = useState('0');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPersonalOpen, setIsPersonalOpen] = useState(false);
@@ -73,6 +74,7 @@ const UserScreen = (props) => {
     if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
       dispatch(getMerchantsApiKeys(props.route.params.id));
       dispatch(getLedgersData(props.route.params.id));
+      dispatch(getLedgersByApiKeyID(props.route.params.id));
     }
   }, [props.route.params]);
 
@@ -84,8 +86,13 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (ledgersByApi && ledgersByApi.length > 0) {
-      setLedgersByApiData(ledgersByApi.map((item) => item.name));
-    } else setLedgersByApiData([]);
+      const data = ledgersByApi.map((item) => item.name);
+      setLedgersByApiData(data);
+      setInitialLedger(data[0]);
+    } else {
+      setLedgersByApiData([]);
+      setInitialLedger('');
+    }
   }, [ledgersByApi]);
 
   useEffect(() => {
@@ -103,7 +110,7 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     refLedgersModal.current?.select(-1);
-  }, [ledgersByApiData]);
+  }, [initialLedger]);
 
   useEffect(() => {
     if (allUsers && props.route.params.id) {
@@ -330,7 +337,7 @@ const UserScreen = (props) => {
                     ref={refLedgersModal}
                     options={ledgersByApiData}
                     defaultIndex={0}
-                    defaultValue={ledgersByApiData[0]}
+                    defaultValue={initialLedger}
                     isFullWidth
                     animated={false}
                     onSelect={setSelectedLedger}
