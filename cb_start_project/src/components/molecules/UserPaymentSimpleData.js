@@ -6,6 +6,7 @@ import { getBanks } from 'src/redux/content/selectors';
 import { StyleSheet, View, Dimensions, Image, TouchableOpacity } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
+import { useNavigation } from '@react-navigation/native';
 
 const close = require('src/images/delete.png');
 const arrowDown = require('src/images/arrow_down_small.png');
@@ -20,6 +21,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
   const banks = useSelector(getBanks);
 
   const { width } = Dimensions.get('window');
+  const navigation = useNavigation();
 
   const getRestrictedCountries = (countries) => {
     return Array.isArray(countries) && countries.length === 0 ? (
@@ -158,12 +160,32 @@ const UserPaymentSimpleData = ({ item, index }) => {
             <SimpleText>{item.name}</SimpleText>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.netPrice}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <SimpleText>{item.price}</SimpleText>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'Net Price',
+                  value: item.price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixedNetPrice}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <SimpleText>{item.fixed_price}</SimpleText>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'Fixed Price',
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
 
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
