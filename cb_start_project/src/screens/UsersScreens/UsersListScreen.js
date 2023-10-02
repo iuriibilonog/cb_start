@@ -12,6 +12,7 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Keyboard,
+  RefreshControl,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
@@ -290,6 +291,14 @@ const UsersListScreen = (props) => {
         {data && data.length > 0 ? (
           <FlatList
             data={data}
+            refreshControl={
+              <RefreshControl
+                isRefreshing={isLoading}
+                onRefresh={getCurrentPageData}
+                colors={['transparent']} // for android
+                tintColor={'transparent'} // for ios
+              />
+            }
             renderItem={({ item, index }) => flatListRenderModule(item, index)}
           />
         ) : (
