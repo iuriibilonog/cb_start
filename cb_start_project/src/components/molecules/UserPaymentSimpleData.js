@@ -51,7 +51,9 @@ const UserPaymentSimpleData = ({ item }) => {
           alignItems: 'center',
         }}
       >
-        <View style={{ ...styles.tableCell, width: width / 3, paddingVertical: 0 }}>
+        <View
+          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0, marginBottom: 40 }}
+        >
           <View style={styles.additDataCell}>
             <SimpleText>
               <FormattedMessage id={'users.payment_method_name'} />
@@ -80,30 +82,95 @@ const UserPaymentSimpleData = ({ item }) => {
               <FormattedMessage id={'users.fixed_net_price'} />
             </SimpleText>
           </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.min_amount'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.max_amount'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.min_commission'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.limit'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.rate_commission'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.restricted_countries'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.restricted_brands'} />
+            </SimpleText>
+          </View>
         </View>
         <View
           style={{
             ...styles.tableCellStatus,
             paddingVertical: 0,
+            marginBottom: 40,
           }}
         >
-          <View style={styles.additDataCellValues}>
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.id}</SimpleText>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.orderId}</SimpleText>
           </View>
-          <View style={styles.additDataCellValues}>
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.orderId}</SimpleText>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.name}</SimpleText>
           </View>
-          <View style={styles.additDataCellValues}>
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.price}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={styles.additDataCellValues}>
+            <SimpleText>{item.fixed_price}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
+            <SimpleText>{item.fixed_price}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={styles.additDataCellValues}>
+            <SimpleText>{item.fixed_price}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
+            <SimpleText>{item.fixed_price}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={styles.additDataCellValues}>
+            <SimpleText>{item.fixed_price}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
+            <SimpleText>{item.fixed_price}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={styles.additDataCellValues}>
+            <SimpleText>{item.fixed_price}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.fixed_price}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
@@ -128,7 +195,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 5,
     // alignItems: 'center',
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     borderColor: 'rgba(217, 217, 217, 0.70)',
   },
   tableCellStatus: { flex: 1, lineHeight: 20, paddingLeft: 15, paddingVertical: 15 },

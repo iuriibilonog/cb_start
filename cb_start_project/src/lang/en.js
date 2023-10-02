@@ -97,6 +97,15 @@ const lang = {
   'users.setting_name':'Setting name',
   'users.net_price':'Net price',
   'users.fixed_net_price':'Fixed net price',
+
+  'users.min_amount':'Min amount',
+  'users.max_amount':'Max amount',
+  'users.min_commission':'Min commission',
+  'users.limit':'Limit',
+  'users.rate_commission':'Rate commission',
+  'users.restricted_countries':'Restricted countries',
+  'users.restricted_brands':'Restricted brands',
+  
   
   
 
