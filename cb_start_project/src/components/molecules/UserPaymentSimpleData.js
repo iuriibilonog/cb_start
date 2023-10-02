@@ -51,9 +51,7 @@ const UserPaymentSimpleData = ({ item }) => {
           alignItems: 'center',
         }}
       >
-        <View
-          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0, marginBottom: 40 }}
-        >
+        <View style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}>
           <View style={styles.additDataCell}>
             <SimpleText>
               <FormattedMessage id={'users.payment_method_name'} />
@@ -122,7 +120,6 @@ const UserPaymentSimpleData = ({ item }) => {
           style={{
             ...styles.tableCellStatus,
             paddingVertical: 0,
-            marginBottom: 40,
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
@@ -172,6 +169,112 @@ const UserPaymentSimpleData = ({ item }) => {
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.fixed_price}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.subTitle}>
+        <SimpleText style={{ fontFamily: 'Mont_SB' }}>MasterCard</SimpleText>
+      </View>
+
+      <View
+        style={{
+          ...styles.tableRow,
+          flexDirection: 'row',
+
+          alignItems: 'center',
+        }}
+      >
+        <View
+          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0, marginBottom: 40 }}
+        >
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.net_price'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.fixed_net_price'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.min_commission'} />
+            </SimpleText>
+          </View>
+        </View>
+        <View
+          style={{
+            ...styles.tableCellStatus,
+            paddingVertical: 0,
+            marginBottom: 40,
+          }}
+        >
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
+            <SimpleText>{item.id}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={styles.additDataCellValues}>
+            <SimpleText>{item.orderId}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
+            <SimpleText>{item.orderId}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.subTitle}>
+        <SimpleText style={{ fontFamily: 'Mont_SB' }}>Visa</SimpleText>
+      </View>
+
+      <View
+        style={{
+          ...styles.tableRow,
+          flexDirection: 'row',
+
+          alignItems: 'center',
+        }}
+      >
+        <View
+          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0, marginBottom: 40 }}
+        >
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.net_price'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.fixed_net_price'} />
+            </SimpleText>
+          </View>
+          <View style={styles.additDataCell}>
+            <SimpleText>
+              <FormattedMessage id={'users.min_commission'} />
+            </SimpleText>
+          </View>
+        </View>
+        <View
+          style={{
+            ...styles.tableCellStatus,
+            paddingVertical: 0,
+            marginBottom: 40,
+          }}
+        >
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
+            <SimpleText>{item.id}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={styles.additDataCellValues}>
+            <SimpleText>{item.orderId}</SimpleText>
+            <Image source={editInactive} style={styles.editInactivePic} />
+          </View>
+          <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
+            <SimpleText>{item.orderId}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
         </View>
@@ -233,6 +336,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   editInactivePic: { width: 19, height: 19 },
+  subTitle: { alignItems: 'center', marginTop: 40, marginBottom: 16 },
 });
 
 export default UserPaymentSimpleData;

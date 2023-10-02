@@ -136,6 +136,7 @@ const lang = {
   'common.balance': 'Balance',
   'common.add': 'Add',
   'common.currency': 'Currency',
+  
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />
