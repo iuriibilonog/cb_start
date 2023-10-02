@@ -17,6 +17,7 @@ import {
   Pressable,
   ScrollView,
 } from 'react-native';
+import MainLoader from 'src/components/molecules/MainLoader';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from 'src/components/molecules/Pagination';
@@ -52,6 +53,7 @@ const UserScreen = (props) => {
   const [isUseBalancer, setIsUseBalancer] = useState(false);
   const [ledgersByApiData, setLedgersByApiData] = useState([]);
   const [selectedLedger, setSelectedLedger] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [balances, setBalances] = useState([]);
 
@@ -65,25 +67,36 @@ const UserScreen = (props) => {
   useEffect(() => {
     // console.log('START', ledgersByApiData);
     // console.log('-Selector-ledgersByApi', ledgersByApi);
-    dispatch(cleanUserLedgers());
-    setLedgersByApiData([]);
+    handleCleanUserLedgers();
     // if(!props.route.params.isRefresh)
     // setCurrentUser()
   }, []);
 
-  useEffect(() => {
-    // console.log('props-route-params', props.route.params);
+  const handleCleanUserLedgers = async () => {
+    setIsLoading(true);
+    await dispatch(cleanUserLedgers());
+    setLedgersByApiData([]);
+    setIsLoading(false);
+  };
 
+  const handleGetData = async () => {
     if (
       currentUser &&
       ((props.route.params && props.route.params.isRefresh) || props.route.params)
     ) {
-      dispatch(getMerchantsApiKeys(currentUser.id));
-      dispatch(getLedgersData(currentUser.id));
+      setIsLoading(true);
+      await dispatch(getMerchantsApiKeys(currentUser.id));
+      await dispatch(getLedgersData(currentUser.id));
       if (props.route.params.isRefresh) {
-        dispatch(getLedgersByApiKeyID(props.route.params.id));
+        await dispatch(getLedgersByApiKeyID(props.route.params.id));
       }
+      setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
+    // console.log('props-route-params', props.route.params);
+    handleGetData();
   }, [props.route.params, currentUser]);
 
   useEffect(() => {
@@ -130,9 +143,12 @@ const UserScreen = (props) => {
   const handleExpandRow = async (itemId) => {
     // console.log('Dispatch - id', itemId);
     if (!isAdditDataOpen) {
+      setIsLoading(true);
       setSelectedIndex(itemId);
       await dispatch(getLedgersByApiKeyID(itemId));
       // console.log('Dispatch');
+      setIsLoading(false);
+      console.log('Dispatch');
     } else {
       setSelectedIndex('');
       setLedgersByApiData([]);
@@ -470,6 +486,7 @@ const UserScreen = (props) => {
   return (
     // <ScrollView>
     <ScrollView>
+      <MainLoader isVisible={isLoading} />
       <View style={styles.wrapper}>
         <View style={styles.titleWrapper}>
           <SimpleText style={styles.titleText}>
