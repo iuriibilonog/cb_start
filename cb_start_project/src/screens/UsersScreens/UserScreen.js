@@ -24,8 +24,9 @@ import Pagination from 'src/components/molecules/Pagination';
 import { useNavigation } from '@react-navigation/native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import IconButton from 'src/components/atoms/IconButton';
-import SimpleCheckBox from '../../components/atoms/SimpleCheckBox';
-import SimpleButton from '../../components/atoms/SimpleButton';
+import SimpleCheckBox from 'src/components/atoms/SimpleCheckBox';
+import SimpleButton from 'src/components/atoms/SimpleButton';
+import UserPaymentSimpleData from 'src/components/molecules/UserPaymentSimpleData';
 
 const deleteIcon = require('src/images/delete.png');
 const deleteInactiveIcon = require('src/images/delete_inactive.png');
@@ -54,6 +55,7 @@ const UserScreen = (props) => {
   const [ledgersByApiData, setLedgersByApiData] = useState([]);
   const [selectedLedger, setSelectedLedger] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentsData, setPaymentsData] = useState([]);
 
   const [balances, setBalances] = useState([]);
 
@@ -425,20 +427,34 @@ const UserScreen = (props) => {
                 </TouchableOpacity>
               </View>
             </View>
-            <View
-              style={{
-                borderBottomWidth: 1,
-                borderColor: 'rgba(0, 0, 0, 0.10)',
-                paddingBottom: 10,
-                marginBottom: 32,
-                width: width / 1.7,
-              }}
-            >
-              <SimpleText>
-                <FormattedMessage id={'users.settings_not_found'} />
-              </SimpleText>
-            </View>
-            <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
+            {paymentsData && paymentsData.length > 0 ? (
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderColor: 'rgba(0, 0, 0, 0.10)',
+                  paddingBottom: 10,
+                  marginVertical: 40,
+                  width: width / 1.7,
+                }}
+              >
+                <SimpleText>
+                  <FormattedMessage id={'users.settings_not_found'} />
+                </SimpleText>
+              </View>
+            ) : (
+              <View
+                style={{
+                  marginVertical: 40,
+                }}
+              >
+                {[{ id: 1, fixed_price: 30, price: 14 }, { id: 2 }, { id: 3 }].map(
+                  (item, index) => (
+                    <UserPaymentSimpleData key={index} item={item} />
+                  )
+                )}
+              </View>
+            )}
+            <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 53 }}>
               <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.chains'} />
               </SimpleText>
@@ -461,22 +477,21 @@ const UserScreen = (props) => {
                 <FormattedMessage id={'users.use_balancer'} />
               </SimpleText>
             </View>
-            {isUseBalancer && (
-              <View style={{ marginTop: 40 }}>
-                <SimpleText
-                  style={{
-                    fontFamily: 'Mont_SB',
-                    fontSize: 20,
-                    color: '#FF6765',
-                    textAlign: 'center',
-                    letterSpacing: 1,
-                    lineHeight: 25,
-                  }}
-                >
-                  <FormattedMessage id={'users.validation_error'} />
-                </SimpleText>
-              </View>
-            )}
+
+            <View style={{ marginTop: 40 }}>
+              <SimpleText
+                style={{
+                  fontFamily: 'Mont_SB',
+                  fontSize: 20,
+                  color: '#FF6765',
+                  textAlign: 'center',
+                  letterSpacing: 1,
+                  lineHeight: 25,
+                }}
+              >
+                <FormattedMessage id={'users.validation_error'} />
+              </SimpleText>
+            </View>
           </View>
         </>
       )}
@@ -517,7 +532,6 @@ const UserScreen = (props) => {
             <SimpleText style={{ fontFamily: 'Mont_SB', marginBottom: 14 }}>
               <FormattedMessage id={'common.balance'} />
             </SimpleText>
-            {console.log('initialBalance', initialBalance)}
             {balances && initialBalance && (
               <ModalDropdown
                 options={balances}
