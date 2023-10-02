@@ -29,7 +29,6 @@ const clear = require('src/images/delete.png');
 const UsersRoutes = () => {
   const [searchUser, setSearchUser] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [inputWidth, setInputWidth] = useState(new Animated.Value(0));
 
   const UsersStack = createStackNavigator();
 
@@ -39,33 +38,14 @@ const UsersRoutes = () => {
     setSearchUser(data);
   };
 
-  const showInput = () => {
-    Animated.timing(inputWidth, {
-      toValue: 150,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-  };
-  const hideInput = () => {
-    Animated.timing(inputWidth, {
-      toValue: 0,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-  };
-
   const handleHideSearchInput = () => {
-    hideInput();
-    setTimeout(() => {
-      setIsSearchVisible(false);
-    }, 750);
+    setIsSearchVisible(false);
   };
 
   const handleFilter = debounce(handleSearchUserText, 500);
 
   const handleSearchUser = () => {
     setIsSearchVisible((prev) => !prev);
-    showInput();
   };
   return (
     <UsersStack.Navigator initialRouteName={UsersListScreen}>
@@ -95,19 +75,19 @@ const UsersRoutes = () => {
                 />
               </TouchableOpacity>
               {isSearchVisible && (
-                <Animated.View
+                <View
                   style={{
                     borderBottomWidth: 1,
                     borderColor: 'rgba(217, 217, 217, 0.70)',
                     height: 26,
-                    width: inputWidth,
+                    width: 150,
                     marginRight: 12,
                     paddingTop: 3,
                     paddingHorizontal: 5,
                   }}
                 >
-                  <TextInput onChangeText={handleFilter} style={{}} />
-                </Animated.View>
+                  <TextInput onChangeText={handleFilter} style={{}} autoFocus={true} />
+                </View>
               )}
               <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
             </View>

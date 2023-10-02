@@ -263,7 +263,7 @@ const ApiScreen = (props) => {
             <RefreshControl
               isRefreshing={isLoading}
               onRefresh={getApiKeys}
-              colors={'transparent'} // for android
+              colors={['transparent']} // for android
               tintColor={'transparent'} // for ios
             />
           }

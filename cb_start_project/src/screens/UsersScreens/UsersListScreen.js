@@ -88,9 +88,11 @@ const UsersListScreen = (props) => {
 
   useEffect(() => {
     if (usersData) {
+      setIsLoading(true);
       const pages = Math.ceil(usersData.totalCount / 20);
       setTotalPages(pages);
       setData(usersData.items);
+      setIsLoading(false);
     }
   }, [usersData]);
 
