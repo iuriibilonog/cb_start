@@ -4,10 +4,10 @@
     "slug": "cb_start_project",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logoiPhone.png",
+    "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash_screen.png",
+      "image": "./assets/images/splash_screen.png",
       "resizeMode": "contain",
       "backgroundColor": "#242834"
     },
@@ -17,12 +17,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logoAndroid.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#242834"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/images/favicon.png"
     }
   }
 }

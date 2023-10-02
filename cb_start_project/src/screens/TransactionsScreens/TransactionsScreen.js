@@ -522,7 +522,7 @@ const TransactionsScreen = ({
             <RefreshControl
               isRefreshing={isLoading}
               onRefresh={getTableData}
-              colors={'transparent'} // for android
+              colors={['transparent']} // for android
               tintColor={'transparent'} // for ios
             />
           }
