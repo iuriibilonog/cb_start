@@ -48,7 +48,8 @@ const UserPaymentSimpleData = ({ item, index }) => {
           backgroundColor: '#898989',
           width: 198,
           height: 31,
-          marginBottom: 36,
+          marginVertical: 40,
+          marginHorizontal:-20,
         }}
       >
         <View
@@ -232,7 +233,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
         }}
       >
         <View
-          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0, marginBottom: 40 }}
+          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}
         >
           <View style={styles.additDataCell}>
             <SimpleText>
@@ -254,7 +255,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
           style={{
             ...styles.tableCellStatus,
             paddingVertical: 0,
-            marginBottom: 40,
+        
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
@@ -285,7 +286,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
         }}
       >
         <View
-          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0, marginBottom: 40 }}
+          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}
         >
           <View style={styles.additDataCell}>
             <SimpleText>
@@ -307,7 +308,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
           style={{
             ...styles.tableCellStatus,
             paddingVertical: 0,
-            marginBottom: 40,
+       
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
@@ -355,13 +356,14 @@ const styles = StyleSheet.create({
   additDataCellValues: {
     height: 40,
     paddingLeft: 23,
-    paddingRight: 10,
+    paddingRight: 20,
     backgroundColor: '#fff',
     borderBottomColor: 'rgba(217, 217, 217, 0.40);',
     borderBottomWidth: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
+    marginRight:-20,
   },
   additDataHeader: {
     height: 40,
@@ -381,7 +383,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   editInactivePic: { width: 19, height: 19 },
-  subTitle: { alignItems: 'center', marginTop: 40, marginBottom: 16 },
+  subTitle: { alignItems: 'center', marginTop: 40, marginBottom:16 },
 });
 
 export default UserPaymentSimpleData;

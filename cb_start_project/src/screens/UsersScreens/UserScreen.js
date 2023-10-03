@@ -453,11 +453,7 @@ const UserScreen = (props) => {
               </View>
             </View>
             {paymentsData && paymentsData.length > 0 ? (
-              <View
-                style={{
-                  marginVertical: 40,
-                }}
-              >
+              <View>
                 {paymentsData.map((item, index) => (
                   <UserPaymentSimpleData key={index} item={item} index={index} />
                 ))}
