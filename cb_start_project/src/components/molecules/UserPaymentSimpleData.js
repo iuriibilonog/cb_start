@@ -20,6 +20,10 @@ const UserPaymentSimpleData = ({ item }) => {
   const { width } = Dimensions.get('window');
   const navigation = useNavigation();
 
+  const settingName = (key) => {
+    return;
+  };
+
   return (
     <>
       <View
@@ -138,11 +142,13 @@ const UserPaymentSimpleData = ({ item }) => {
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.price}</SimpleText>
+
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: 'Net Price',
+
+                  name: 'users.net_price',
                   value: item.price.toString(),
                 })
               }
@@ -156,7 +162,7 @@ const UserPaymentSimpleData = ({ item }) => {
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: 'Fixed Price',
+                  name: <FormattedMessage id={'users.fixed_net_price'} />,
                   value: item.fixed_price.toString(),
                 })
               }
@@ -167,31 +173,101 @@ const UserPaymentSimpleData = ({ item }) => {
 
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.fixed_price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: <FormattedMessage id={'users.min_amount'} />,
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.fixed_price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: <FormattedMessage id={'users.max_amount'} />,
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.fixed_price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: <FormattedMessage id={'users.min_commission'} />,
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.fixed_price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: <FormattedMessage id={'users.limit'} />,
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.fixed_price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: <FormattedMessage id={'users.rate_commission'} />,
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.fixed_price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: <FormattedMessage id={'users.restricted_countries'} />,
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.fixed_price}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: <FormattedMessage id={'users.restricted_brands'} />,
+                  value: item.fixed_price.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
