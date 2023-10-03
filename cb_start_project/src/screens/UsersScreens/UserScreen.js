@@ -473,10 +473,21 @@ const UserScreen = (props) => {
                 </SimpleText>
               </View>
             )}
+
+            <View style={{ alignItems: 'center', marginTop: 40 }}>
+              <SimpleButton
+                text={'common.edit'}
+                style={{ backgroundColor: '#FFE13A', width: 174 }}
+                textStyle={{ color: '#262626' }}
+              />
+            </View>
             <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 53 }}>
-              <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
-                <FormattedMessage id={'users.chains'} />
+              <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
+                <FormattedMessage id={'users.current_chains'} />
               </SimpleText>
+              <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+                <IconButton edit />
+              </TouchableOpacity>
             </View>
             <View
               style={{
@@ -669,9 +680,7 @@ const UserScreen = (props) => {
             <FormattedMessage id={'api.api_keys'} />
           </SimpleText>
           <TouchableOpacity activeOpacity={0.5} onPress={handleNewApiKey}>
-            <FormattedMessage id={'api.new_api_key'}>
-              {(text) => <SimpleButton plus text={text} />}
-            </FormattedMessage>
+            <SimpleButton plus text={'api.new_api_key'} />
           </TouchableOpacity>
         </View>
         <View

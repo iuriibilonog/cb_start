@@ -106,6 +106,8 @@ const lang = {
   'users.rate_commission':'Rate commission',
   'users.restricted_countries':'Restricted countries',
   'users.restricted_brands':'Restricted brands',
+  'users.current_chains':' Current chains :',
+ 
   
   
   

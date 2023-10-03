@@ -260,7 +260,7 @@ const UsersListScreen = (props) => {
             <FormattedMessage id={'common.users'} />
           </SimpleText>
           <TouchableOpacity activeOpacity={0.5}>
-            <SimpleButton plus text={<FormattedMessage id={'users.new_user'} />} />
+            <SimpleButton plus text={'users.new_user'} />
           </TouchableOpacity>
         </View>
         <View
