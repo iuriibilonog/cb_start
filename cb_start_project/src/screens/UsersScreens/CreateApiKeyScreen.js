@@ -67,7 +67,7 @@ const CreateApiKeyScreen = (props) => {
           {(placeholder) => (
             <ConfirmActionComponent
               isCreate
-              title={'new API Key'}
+              title={'api.new_api_key'}
               action={handleCreateApiKey}
               placeholder={placeholder[0]}
             />

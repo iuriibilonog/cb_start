@@ -72,7 +72,7 @@ const EditScreen = (props) => {
                 : 'common.edit'
             }
           />
-          {!isDelete && ` ${title}`}
+          {/* {!isDelete && ` ${title}`} */} {!isDelete && <FormattedMessage id={title} />}
         </SimpleText>
 
         {isEdit && (
@@ -88,7 +88,11 @@ const EditScreen = (props) => {
             <View style={styles.valueTextWrapper}>
               <SimpleText style={styles.valueText}>{value}</SimpleText>
             </View>
-            {helpText && <SimpleText style={styles.bottomPlaceholder}>{helpText}</SimpleText>}
+            {helpText && (
+              <SimpleText style={styles.bottomPlaceholder}>
+                <FormattedMessage id={helpText} />
+              </SimpleText>
+            )}
           </>
         )}
         {isCreate && (

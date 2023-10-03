@@ -79,6 +79,7 @@ const lang = {
   //users=====
   'users.reg_date': 'Reg. Date',
   'users.ledgers': 'Ledgers',
+  'users.ledger': 'Ledger',
   'users.new_user': 'new user',
   'users.edit_user': 'Edit user',
   'users.personal_info': 'Personal information',
