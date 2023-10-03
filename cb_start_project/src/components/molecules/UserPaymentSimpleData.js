@@ -7,6 +7,8 @@ import { StyleSheet, View, Dimensions, Image, TouchableOpacity } from 'react-nat
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import { useNavigation } from '@react-navigation/native';
+import SimpleCheckBox from 'src/components/atoms/SimpleCheckBox';
+import SimpleButton from 'src/components/atoms/SimpleButton';
 
 const close = require('src/images/delete.png');
 const arrowDown = require('src/images/arrow_down_small.png');
@@ -17,6 +19,9 @@ const UserPaymentSimpleData = ({ item, index }) => {
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
+  const [isUseWhiteList, setIsUseWhiteList] = useState(false);
+  const [isUseAcive, setIsUseAcive] = useState(false);
+  const [minConfirmation, setMinConfirmation] = useState(1);
 
   const banks = useSelector(getBanks);
 
@@ -24,10 +29,34 @@ const UserPaymentSimpleData = ({ item, index }) => {
   const navigation = useNavigation();
 
   const getRestrictedCountries = (countries) => {
+    // countries = [
+    //   'WS',
+    //   'SM',
+    //   'ST',
+    //   'SA',
+    //   'SN',
+    //   'RS',
+    //   'SC',
+    //   'SL',
+    //   'SG',
+    //   'SX',
+    //   'SB',
+    //   'SO',
+    //   'ZA',
+    //   'GS',
+    //   'SS',
+    //   'LK',
+    //   'SD',
+    //   'SR',
+    //   'SJ',
+    //   'SZ',
+    //   'SY',
+    //   'TW',
+    // ];
     return Array.isArray(countries) && countries.length === 0 ? (
       <FormattedMessage id={'common.empty'} />
     ) : (
-      'not empty :)'
+      countries.join(', ')
     );
   };
   const getRestrictedBrands = (brands) => {
@@ -49,7 +78,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
           width: 198,
           height: 31,
           marginVertical: 40,
-          marginHorizontal:-20,
+          marginHorizontal: -20,
         }}
       >
         <View
@@ -210,7 +239,9 @@ const UserPaymentSimpleData = ({ item, index }) => {
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{getRestrictedCountries(item.restrictedCountries)}</SimpleText>
+            <SimpleText style={{ borderWidth: 1, width: '80%' }}>
+              {getRestrictedCountries(item.restrictedCountries)}
+            </SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
@@ -232,9 +263,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
           alignItems: 'center',
         }}
       >
-        <View
-          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}
-        >
+        <View style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}>
           <View style={styles.additDataCell}>
             <SimpleText>
               <FormattedMessage id={'users.net_price'} />
@@ -255,7 +284,6 @@ const UserPaymentSimpleData = ({ item, index }) => {
           style={{
             ...styles.tableCellStatus,
             paddingVertical: 0,
-        
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
@@ -285,9 +313,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
           alignItems: 'center',
         }}
       >
-        <View
-          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}
-        >
+        <View style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}>
           <View style={styles.additDataCell}>
             <SimpleText>
               <FormattedMessage id={'users.net_price'} />
@@ -308,7 +334,6 @@ const UserPaymentSimpleData = ({ item, index }) => {
           style={{
             ...styles.tableCellStatus,
             paddingVertical: 0,
-       
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
@@ -325,6 +350,102 @@ const UserPaymentSimpleData = ({ item, index }) => {
           </View>
         </View>
       </View>
+      {/* ============================================== */}
+      <View
+        style={{
+          marginTop: 40,
+          marginBottom: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+        }}
+      >
+        <TouchableOpacity activeOpacity={0.5} onPress={() => setIsUseWhiteList((prev) => !prev)}>
+          <SimpleCheckBox checked={isUseWhiteList} style={{ marginRight: 13 }} />
+        </TouchableOpacity>
+        <SimpleText style={{ paddingTop: 4 }}>
+          <FormattedMessage id={'users.use_whitelist'} />
+        </SimpleText>
+      </View>
+      {isUseWhiteList && (
+        <View
+          style={{
+            // marginTop: 24,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            marginBottom: 15,
+          }}
+        >
+          <SimpleText>
+            <FormattedMessage id={'users.min_confirmation'} /> :
+          </SimpleText>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              backgroundColor: '#FAFAFA',
+              height: 40,
+              marginLeft: 24,
+              width: width / 3,
+              // flex: 1,
+            }}
+          >
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => setMinConfirmation((prev) => prev + 1)}
+            >
+              <SimpleText>+</SimpleText>
+            </TouchableOpacity>
+            <SimpleText>{minConfirmation}</SimpleText>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => setMinConfirmation((prev) => (prev !== 1 ? prev - 1 : 1))}
+            >
+              <SimpleText>-</SimpleText>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+        }}
+      >
+        <TouchableOpacity activeOpacity={0.5} onPress={() => setIsUseAcive((prev) => !prev)}>
+          <SimpleCheckBox checked={isUseAcive} style={{ marginRight: 13 }} />
+        </TouchableOpacity>
+        <SimpleText style={{ paddingTop: 4 }}>
+          <FormattedMessage id={'common.active'} />
+        </SimpleText>
+      </View>
+      <View
+        style={{
+          marginTop: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <SimpleText style={{ paddingTop: 4, width: width / 2.5 }}>
+          <FormattedMessage id={'common.chance'} />, % :
+        </SimpleText>
+        <SimpleText style={{ paddingTop: 4, textAlign: 'center', flex: 1 }}>{'100'}</SimpleText>
+      </View>
+
+      {/* ============================================== */}
+      <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+        <View style={{ alignItems: 'center', marginTop: 40 }}>
+          <SimpleButton
+            text={'common.edit'}
+            style={{ backgroundColor: '#FFE13A', width: 174 }}
+            textStyle={{ color: '#262626' }}
+          />
+        </View>
+      </TouchableOpacity>
     </>
   );
 };
@@ -355,7 +476,7 @@ const styles = StyleSheet.create({
   },
   additDataCellValues: {
     height: 40,
-    paddingLeft: 23,
+    paddingLeft: 14,
     paddingRight: 20,
     backgroundColor: '#fff',
     borderBottomColor: 'rgba(217, 217, 217, 0.40);',
@@ -363,7 +484,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    marginRight:-20,
+    marginRight: -20,
   },
   additDataHeader: {
     height: 40,
@@ -383,7 +504,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   editInactivePic: { width: 19, height: 19 },
-  subTitle: { alignItems: 'center', marginTop: 40, marginBottom:16 },
+  subTitle: { alignItems: 'center', marginTop: 40, marginBottom: 16 },
 });
 
 export default UserPaymentSimpleData;

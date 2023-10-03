@@ -66,13 +66,13 @@ const UserScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentsData, setPaymentsData] = useState([]);
 
-  const [minConfirmation, setMinConfirmation] = useState(1);
+  // const [minConfirmation, setMinConfirmation] = useState(1);
 
   const [chainIdOfCurrentLedger, setChainIdOfCurrentLedger] = useState([]);
 
   const [balances, setBalances] = useState([]);
-  const [isUseWhiteList, setIsUseWhiteList] = useState(false);
-  const [isUseAcive, setIsUseAcive] = useState(false);
+  // const [isUseWhiteList, setIsUseWhiteList] = useState(false);
+  // const [isUseAcive, setIsUseAcive] = useState(false);
 
   const { width } = Dimensions.get('window');
 
@@ -479,6 +479,7 @@ const UserScreen = (props) => {
               </View>
             )}
             {/* ============================================== */}
+            {/*
             <View
               style={{
                 marginTop: 40,
@@ -569,14 +570,15 @@ const UserScreen = (props) => {
               </SimpleText>
             </View>
 
-            {/* ============================================== */}
+            
             <View style={{ alignItems: 'center', marginTop: 40 }}>
               <SimpleButton
                 text={'common.edit'}
                 style={{ backgroundColor: '#FFE13A', width: 174 }}
                 textStyle={{ color: '#262626' }}
               />
-            </View>
+            </View> */}
+            {/* ============================================== */}
             <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 53 }}>
               <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.current_chains'} />
