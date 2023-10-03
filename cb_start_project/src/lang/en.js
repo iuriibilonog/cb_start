@@ -108,7 +108,8 @@ const lang = {
   'users.restricted_brands': 'Restricted brands',
   'users.current_chains': ' Current chains :',
   'users.use_whitelist': 'Use whitelist',
-  'users.use_whitelist': 'Use whitelist',
+  'users.min_confirmation': 'Min confirmation',
+  
 
   //common=====
   'common.date': 'Date',

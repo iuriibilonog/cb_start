@@ -62,8 +62,11 @@ const UserScreen = (props) => {
   const [isUseBalancer, setIsUseBalancer] = useState(false);
   const [ledgersByApiData, setLedgersByApiData] = useState([]);
   const [selectedLedger, setSelectedLedger] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const [paymentsData, setPaymentsData] = useState([]);
+
+  const [minConfirmation, setMinConfirmation] = useState(1);
 
   const [chainIdOfCurrentLedger, setChainIdOfCurrentLedger] = useState([]);
 
@@ -495,6 +498,47 @@ const UserScreen = (props) => {
                 <FormattedMessage id={'users.use_whitelist'} />
               </SimpleText>
             </View>
+            {isUseWhiteList && (
+              <View
+                style={{
+                  // marginTop: 24,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  marginBottom: 15,
+                }}
+              >
+                <SimpleText>
+                  <FormattedMessage id={'users.min_confirmation'} /> :
+                </SimpleText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    backgroundColor: '#FAFAFA',
+                    height: 40,
+                    marginLeft: 24,
+                    width: width / 3,
+                    // flex: 1,
+                  }}
+                >
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => setMinConfirmation((prev) => prev + 1)}
+                  >
+                    <SimpleText>+</SimpleText>
+                  </TouchableOpacity>
+                  <SimpleText>{minConfirmation}</SimpleText>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => setMinConfirmation((prev) => (prev !== 1 ? prev - 1 : 1))}
+                  >
+                    <SimpleText>-</SimpleText>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
             <View
               style={{
                 flexDirection: 'row',
