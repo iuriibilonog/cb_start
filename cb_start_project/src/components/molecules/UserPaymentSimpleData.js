@@ -59,7 +59,6 @@ const UserPaymentSimpleData = ({ item, index }) => {
             marginRight: 14,
           }}
         />
-        {console.log('INDEX', index)}
         <SimpleText style={{ color: '#fff', fontSize: 12, fontFamily: 'Mont_SB' }}>
           {index + 1} <FormattedMessage id={'common.payments'} />
         </SimpleText>
@@ -144,15 +143,16 @@ const UserPaymentSimpleData = ({ item, index }) => {
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.paymentMethod?.name}</SimpleText>
+            <SimpleText>{item?.paymentMethod?.name}</SimpleText>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.id}</SimpleText>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            {banks && item.paymentMethod && (
+            {/* {console.log('banks', banks)} */}
+            {banks && item && item.paymentMethod && (
               <SimpleText>
-                {banks.find((bank) => bank.id === item.paymentMethod?.bankId)?.name}
+                {banks.find((bank) => bank.id === item.paymentMethod.bankId).name}
               </SimpleText>
             )}
           </View>
@@ -160,7 +160,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
             <SimpleText>{item.name}</SimpleText>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.price}</SimpleText>
+            <SimpleText>{item.netPrice}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
@@ -174,7 +174,7 @@ const UserPaymentSimpleData = ({ item, index }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.fixedNetPrice}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
@@ -258,15 +258,15 @@ const UserPaymentSimpleData = ({ item, index }) => {
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.id}</SimpleText>
+            <SimpleText>{item?.commissions?.MasterCard?.netPrice}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.orderId}</SimpleText>
+            <SimpleText>{item?.commissions?.MasterCard?.fixedNetPrice}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.orderId}</SimpleText>
+            <SimpleText>{item?.commissions?.MasterCard?.minCommission}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
         </View>
@@ -311,15 +311,15 @@ const UserPaymentSimpleData = ({ item, index }) => {
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.id}</SimpleText>
+            <SimpleText>{item?.commissions?.Visa?.netPrice}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.orderId}</SimpleText>
+            <SimpleText>{item?.commissions?.Visa?.fixedNetPrice}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.orderId}</SimpleText>
+            <SimpleText>{item?.commissions?.Visa?.minCommission}</SimpleText>
             <Image source={editInactive} style={styles.editInactivePic} />
           </View>
         </View>

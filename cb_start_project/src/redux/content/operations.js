@@ -352,7 +352,7 @@ export const getUserPayments = createAsyncThunk(
   'content/getUserPayments',
   async (apiKey, thunkAPI) => {
     try {
-      console.log('getUserPayments -> apiKey>>', apiKey);
+      console.log('getUserPaymentsCHAIN -> apiKey>>', apiKey);
       const { data } = await api.get(
         `${BASE_URL}/api/paymethod-chains/${apiKey}`,
         {

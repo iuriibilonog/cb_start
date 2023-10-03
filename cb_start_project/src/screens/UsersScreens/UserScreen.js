@@ -120,7 +120,7 @@ const UserScreen = (props) => {
   useEffect(() => {
     if (ledgersByApi && ledgersByApi.length > 0) {
       const data = ledgersByApi.map((item) => item.name);
-      setChainIdOfCurrentLedger(ledgersByApi[0].id);
+      setChainIdOfCurrentLedger(ledgersByApi[0].payMethodChainsId);
       setLedgersByApiData(data);
       setInitialLedger(data[0]);
     } else {
