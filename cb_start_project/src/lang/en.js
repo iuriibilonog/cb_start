@@ -79,6 +79,7 @@ const lang = {
   //users=====
   'users.reg_date': 'Reg. Date',
   'users.ledgers': 'Ledgers',
+  'users.ledger': 'Ledger',
   'users.new_user': 'new user',
   'users.edit_user': 'Edit user',
   'users.personal_info': 'Personal information',
@@ -92,21 +93,22 @@ const lang = {
   'users.add_new_ledger': 'Add new Ledger',
   'users.payin': 'PayIn',
   'users.payout': 'PayOut',
-  'users.payment_method_name':'Payment method name',
-  'users.bank_name':'Bank name',
-  'users.setting_name':'Setting name',
-  'users.net_price':'Net price',
-  'users.fixed_net_price':'Fixed net price',
 
-  'users.min_amount':'Min amount',
-  'users.max_amount':'Max amount',
-  'users.min_commission':'Min commission',
-  'users.limit':'Limit',
-  'users.rate_commission':'Rate commission',
-  'users.restricted_countries':'Restricted countries',
-  'users.restricted_brands':'Restricted brands',
-  
-  
+  'users.payment_method_name': 'Payment method name',
+  'users.bank_name': 'Bank name',
+  'users.setting_name': 'Setting name',
+  'users.net_price': 'Net price',
+  'users.fixed_net_price': 'Fixed net price',
+  'users.min_amount': 'Min amount',
+  'users.max_amount': 'Max amount',
+  'users.min_commission': 'Min commission',
+  'users.limit': 'Limit',
+  'users.rate_commission': 'Rate commission',
+  'users.restricted_countries': 'Restricted countries',
+  'users.restricted_brands': 'Restricted brands',
+  'users.current_chains': ' Current chains :',
+  'users.use_whitelist': 'Use whitelist',
+  'users.min_confirmation': 'Min confirmation',
   
 
   //common=====
@@ -136,7 +138,10 @@ const lang = {
   'common.balance': 'Balance',
   'common.add': 'Add',
   'common.currency': 'Currency',
-  
+  'common.payments': 'payments',
+  'common.empty': 'Empty',
+  'common.active': 'Active',
+  'common.chance': 'Chance',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

@@ -296,11 +296,6 @@ export const getSearchUsers = createAsyncThunk(
   'content/getSearchUsers',
   async (searchData, thunkAPI) => {
     try {
-      //updatedData =
-      // email: "TestAppUser1@gmail.com"
-      // password: "1122"
-      // roleId: 1
-      // username: "TestAppUser111"
       const { page = 1, searchText } = searchData;
       console.log('searchData>>', searchData);
       const { data } = await api.get(
@@ -335,16 +330,31 @@ export const putEditLedger = createAsyncThunk(
   'content/putEditLedger',
   async (editingData, thunkAPI) => {
     try {
-      //updatedData =
-      // email: "TestAppUser1@gmail.com"
-      // password: "1122"
-      // roleId: 1
-      // username: "TestAppUser111"
       const { ledgerId, name } = editingData;
       // console.log('putEditUser>>', editingData);
       const { data } = await api.put(
         `${BASE_URL}/api/ledgers/${ledgerId}`,
         { name },
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// /api/paymethod-chains/15
+export const getUserPayments = createAsyncThunk(
+  'content/getUserPayments',
+  async (apiKey, thunkAPI) => {
+    try {
+      console.log('getUserPaymentsCHAIN -> apiKey>>', apiKey);
+      const { data } = await api.get(
+        `${BASE_URL}/api/paymethod-chains/${apiKey}`,
         {
           withCredentials: true,
         }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
+import { getBanks } from 'src/redux/content/selectors';
 
 import { StyleSheet, View, Dimensions, Image, TouchableOpacity } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
@@ -12,16 +13,29 @@ const arrowDown = require('src/images/arrow_down_small.png');
 const arrowUp = require('src/images/arrow_up.png');
 const editInactive = require('src/images/edit_inactive.png');
 
-const UserPaymentSimpleData = ({ item }) => {
+const UserPaymentSimpleData = ({ item, index }) => {
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
 
+  const banks = useSelector(getBanks);
+
   const { width } = Dimensions.get('window');
   const navigation = useNavigation();
 
-  const settingName = (key) => {
-    return;
+  const getRestrictedCountries = (countries) => {
+    return Array.isArray(countries) && countries.length === 0 ? (
+      <FormattedMessage id={'common.empty'} />
+    ) : (
+      'not empty :)'
+    );
+  };
+  const getRestrictedBrands = (brands) => {
+    return Array.isArray(brands) && brands.length === 0 ? (
+      <FormattedMessage id={'common.empty'} />
+    ) : (
+      'not empty :)'
+    );
   };
 
   return (
@@ -34,7 +48,8 @@ const UserPaymentSimpleData = ({ item }) => {
           backgroundColor: '#898989',
           width: 198,
           height: 31,
-          marginBottom: 36,
+          marginVertical: 40,
+          marginHorizontal: -20,
         }}
       >
         <View
@@ -46,7 +61,7 @@ const UserPaymentSimpleData = ({ item }) => {
           }}
         />
         <SimpleText style={{ color: '#fff', fontSize: 12, fontFamily: 'Mont_SB' }}>
-          {item.id} payments
+          {index + 1} <FormattedMessage id={'common.payments'} />
         </SimpleText>
       </View>
       <View
@@ -129,27 +144,31 @@ const UserPaymentSimpleData = ({ item }) => {
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.id}</SimpleText>
+            <SimpleText>{item?.paymentMethod?.name}</SimpleText>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.orderId}</SimpleText>
+            <SimpleText>{item.id}</SimpleText>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.orderId}</SimpleText>
+            {/* {console.log('banks', banks)} */}
+            {banks && item && item.paymentMethod && (
+              <SimpleText>
+                {banks.find((bank) => bank.id === item.paymentMethod.bankId).name}
+              </SimpleText>
+            )}
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.name}</SimpleText>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.price}</SimpleText>
-
+            <SimpleText>{item.netPrice}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
 
                   name: 'users.net_price',
-                  value: item.price.toString(),
+                  value: item.netPrice.toString(),
                 })
               }
             >
@@ -157,13 +176,13 @@ const UserPaymentSimpleData = ({ item }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.fixedNetPrice}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: <FormattedMessage id={'users.fixed_net_price'} />,
-                  value: item.fixed_price.toString(),
+                  name: 'users.fixed_net_price',
+                  value: item.fixedNetPrice.toString(),
                 })
               }
             >
@@ -172,13 +191,13 @@ const UserPaymentSimpleData = ({ item }) => {
           </View>
 
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.minAmount}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: <FormattedMessage id={'users.min_amount'} />,
-                  value: item.fixed_price.toString(),
+                  name: 'users.min_amount',
+                  value: item.minAmount.toString(),
                 })
               }
             >
@@ -186,13 +205,13 @@ const UserPaymentSimpleData = ({ item }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.maxAmount}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: <FormattedMessage id={'users.max_amount'} />,
-                  value: item.fixed_price.toString(),
+                  name: 'users.max_amount',
+                  value: item.maxAmount.toString(),
                 })
               }
             >
@@ -200,13 +219,13 @@ const UserPaymentSimpleData = ({ item }) => {
             </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.minCommission}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: <FormattedMessage id={'users.min_commission'} />,
-                  value: item.fixed_price.toString(),
+                  name: 'users.min_commission',
+                  value: item.minCommission.toString(),
                 })
               }
             >
@@ -214,13 +233,13 @@ const UserPaymentSimpleData = ({ item }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.limit}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: <FormattedMessage id={'users.limit'} />,
-                  value: item.fixed_price.toString(),
+                  name: 'users.limit',
+                  value: item.limit.toString(),
                 })
               }
             >
@@ -228,13 +247,13 @@ const UserPaymentSimpleData = ({ item }) => {
             </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{item.rateCommission}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: <FormattedMessage id={'users.rate_commission'} />,
-                  value: item.fixed_price.toString(),
+                  name: 'users.rate_commission',
+                  value: item.rateCommission.toString(),
                 })
               }
             >
@@ -242,13 +261,13 @@ const UserPaymentSimpleData = ({ item }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{getRestrictedCountries(item.restrictedCountries)}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: <FormattedMessage id={'users.restricted_countries'} />,
-                  value: item.fixed_price.toString(),
+                  name: 'users.restricted_countries',
+                  value: getRestrictedCountries(item.restrictedCountries),
                 })
               }
             >
@@ -256,13 +275,13 @@ const UserPaymentSimpleData = ({ item }) => {
             </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.fixed_price}</SimpleText>
+            <SimpleText>{getRestrictedBrands(item.restrictedBrands)}</SimpleText>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: <FormattedMessage id={'users.restricted_brands'} />,
-                  value: item.fixed_price.toString(),
+                  name: 'users.restricted_brands',
+                  value: getRestrictedBrands(item.restrictedBrands),
                 })
               }
             >
@@ -284,9 +303,7 @@ const UserPaymentSimpleData = ({ item }) => {
           alignItems: 'center',
         }}
       >
-        <View
-          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0, marginBottom: 40 }}
-        >
+        <View style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}>
           <View style={styles.additDataCell}>
             <SimpleText>
               <FormattedMessage id={'users.net_price'} />
@@ -307,20 +324,49 @@ const UserPaymentSimpleData = ({ item }) => {
           style={{
             ...styles.tableCellStatus,
             paddingVertical: 0,
-            marginBottom: 40,
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.id}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <SimpleText>{item?.commissions?.MasterCard?.netPrice}</SimpleText>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.net_price',
+                  value: item?.commissions?.MasterCard?.netPrice?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.orderId}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <SimpleText>{item?.commissions?.MasterCard?.fixedNetPrice}</SimpleText>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.fixed_net_price',
+                  value: item?.commissions?.MasterCard?.fixedNetPrice?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.orderId}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <SimpleText>{item?.commissions?.MasterCard?.minCommission}</SimpleText>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.min_commission',
+                  value: item?.commissions?.MasterCard?.minCommission?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -337,9 +383,7 @@ const UserPaymentSimpleData = ({ item }) => {
           alignItems: 'center',
         }}
       >
-        <View
-          style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0, marginBottom: 40 }}
-        >
+        <View style={{ ...styles.tableCell, width: width / 2.5, paddingVertical: 0 }}>
           <View style={styles.additDataCell}>
             <SimpleText>
               <FormattedMessage id={'users.net_price'} />
@@ -360,20 +404,49 @@ const UserPaymentSimpleData = ({ item }) => {
           style={{
             ...styles.tableCellStatus,
             paddingVertical: 0,
-            marginBottom: 40,
           }}
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.id}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <SimpleText>{item?.commissions?.Visa?.netPrice}</SimpleText>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.net_price',
+                  value: item?.commissions?.Visa?.netPrice?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText>{item.orderId}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <SimpleText>{item?.commissions?.Visa?.fixedNetPrice}</SimpleText>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.fixed_net_price',
+                  value: item?.commissions?.Visa?.fixedNetPrice?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-            <SimpleText>{item.orderId}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <SimpleText>{item?.commissions?.Visa?.minCommission}</SimpleText>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.min_commission',
+                  value: item?.commissions?.Visa?.minCommission?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -408,13 +481,14 @@ const styles = StyleSheet.create({
   additDataCellValues: {
     height: 40,
     paddingLeft: 23,
-    paddingRight: 10,
+    paddingRight: 20,
     backgroundColor: '#fff',
     borderBottomColor: 'rgba(217, 217, 217, 0.40);',
     borderBottomWidth: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
+    marginRight: -20,
   },
   additDataHeader: {
     height: 40,

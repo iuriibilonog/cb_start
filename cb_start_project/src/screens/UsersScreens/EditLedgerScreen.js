@@ -72,7 +72,7 @@ const EditLedgerScreen = (props) => {
           {(placeholder) => (
             <ConfirmActionComponent
               isEdit
-              title={'Ledger'}
+              title={'users.ledger'}
               initialValue={props.route.params.data.name}
               action={handleEditLedger}
               placeholder={placeholder[0]}

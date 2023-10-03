@@ -79,7 +79,7 @@ const EditUserScreen = (props) => {
 
         <ConfirmActionComponent
           isDelete
-          helpText={'User name'}
+          helpText={'common.user_name'}
           initialValue={props.route.params?.user?.username || ''}
           action={submit}
         />
