@@ -195,8 +195,9 @@ const UserPaymentSimpleData = ({ item, index }) => {
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: 'Net Price',
-                  value: item.price.toString(),
+
+                  name: 'users.net_price',
+                  value: item.netPrice.toString(),
                 })
               }
             >
@@ -209,8 +210,8 @@ const UserPaymentSimpleData = ({ item, index }) => {
               onPress={() =>
                 navigation.navigate('EditPaymentsSettingsScreen', {
                   parentScreen: 'UserScreen',
-                  name: 'Fixed Price',
-                  value: item.fixed_price.toString(),
+                  name: 'users.fixed_net_price',
+                  value: item.fixedNetPrice.toString(),
                 })
               }
             >
@@ -220,33 +221,103 @@ const UserPaymentSimpleData = ({ item, index }) => {
 
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.minAmount}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.min_amount',
+                  value: item.minAmount.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.maxAmount}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.max_amount',
+                  value: item.maxAmount.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.minCommission}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.min_commission',
+                  value: item.minCommission.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item.limit}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.limit',
+                  value: item.limit.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item.rateCommission}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.rate_commission',
+                  value: item.rateCommission.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
-            <SimpleText style={{ borderWidth: 1, width: '80%' }}>
+            <SimpleText style={{ width: '80%' }}>
               {getRestrictedCountries(item.restrictedCountries)}
             </SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.restricted_countries',
+                  value: getRestrictedCountries(item.restrictedCountries),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{getRestrictedBrands(item.restrictedBrands)}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.restricted_brands',
+                  value: getRestrictedBrands(item.restrictedBrands),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -288,15 +359,45 @@ const UserPaymentSimpleData = ({ item, index }) => {
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item?.commissions?.MasterCard?.netPrice}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.net_price',
+                  value: item?.commissions?.MasterCard?.netPrice?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item?.commissions?.MasterCard?.fixedNetPrice}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.fixed_net_price',
+                  value: item?.commissions?.MasterCard?.fixedNetPrice?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item?.commissions?.MasterCard?.minCommission}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.min_commission',
+                  value: item?.commissions?.MasterCard?.minCommission?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -338,15 +439,45 @@ const UserPaymentSimpleData = ({ item, index }) => {
         >
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item?.commissions?.Visa?.netPrice}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.net_price',
+                  value: item?.commissions?.Visa?.netPrice?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={styles.additDataCellValues}>
             <SimpleText>{item?.commissions?.Visa?.fixedNetPrice}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.fixed_net_price',
+                  value: item?.commissions?.Visa?.fixedNetPrice?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
           <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
             <SimpleText>{item?.commissions?.Visa?.minCommission}</SimpleText>
-            <Image source={editInactive} style={styles.editInactivePic} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EditPaymentsSettingsScreen', {
+                  parentScreen: 'UserScreen',
+                  name: 'users.min_commission',
+                  value: item?.commissions?.Visa?.minCommission?.toString(),
+                })
+              }
+            >
+              <Image source={editInactive} style={styles.editInactivePic} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

@@ -66,16 +66,16 @@ const EditPaymentsSettingsScreen = (props) => {
         >
           <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
-        {/* </View> */}
 
-        <FormattedMessage id={'users.ledger_name'}>
+        <FormattedMessage id={`${props.route.params.name}`}>
           {(placeholder) => (
             <ConfirmActionComponent
               isEdit
-              title={`${props.route.params.name}`}
+              editPayments
+              title={props.route.params.name}
               initialValue={props.route.params.value}
               action={handleEditLedger}
-              placeholder={`${props.route.params.name}`}
+              placeholder={placeholder[0]}
             />
           )}
         </FormattedMessage>
