@@ -68,6 +68,8 @@ const UserScreen = (props) => {
   const [chainIdOfCurrentLedger, setChainIdOfCurrentLedger] = useState([]);
 
   const [balances, setBalances] = useState([]);
+  const [isUseWhiteList, setIsUseWhiteList] = useState(false);
+  const [isUseAcive, setIsUseAcive] = useState(false);
 
   const { width } = Dimensions.get('window');
 
@@ -473,7 +475,57 @@ const UserScreen = (props) => {
                 </SimpleText>
               </View>
             )}
+            {/* ============================================== */}
+            <View
+              style={{
+                marginTop: 40,
+                marginBottom: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => setIsUseWhiteList((prev) => !prev)}
+              >
+                <SimpleCheckBox checked={isUseWhiteList} style={{ marginRight: 13 }} />
+              </TouchableOpacity>
+              <SimpleText style={{ paddingTop: 4 }}>
+                <FormattedMessage id={'users.use_whitelist'} />
+              </SimpleText>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <TouchableOpacity activeOpacity={0.5} onPress={() => setIsUseAcive((prev) => !prev)}>
+                <SimpleCheckBox checked={isUseAcive} style={{ marginRight: 13 }} />
+              </TouchableOpacity>
+              <SimpleText style={{ paddingTop: 4 }}>
+                <FormattedMessage id={'common.active'} />
+              </SimpleText>
+            </View>
+            <View
+              style={{
+                marginTop: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <SimpleText style={{ paddingTop: 4, width: width / 2.5 }}>
+                <FormattedMessage id={'common.chance'} />, % :
+              </SimpleText>
+              <SimpleText style={{ paddingTop: 4, textAlign: 'center', flex: 1 }}>
+                {'100'}
+              </SimpleText>
+            </View>
 
+            {/* ============================================== */}
             <View style={{ alignItems: 'center', marginTop: 40 }}>
               <SimpleButton
                 text={'common.edit'}
