@@ -71,13 +71,13 @@ const UserScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentsData, setPaymentsData] = useState([]);
 
-  const [minConfirmation, setMinConfirmation] = useState(1);
+  // const [minConfirmation, setMinConfirmation] = useState(1);
 
   const [chainIdOfCurrentLedger, setChainIdOfCurrentLedger] = useState([]);
 
   const [balances, setBalances] = useState([]);
-  const [isUseWhiteList, setIsUseWhiteList] = useState(false);
-  const [isUseAcive, setIsUseAcive] = useState(false);
+  // const [isUseWhiteList, setIsUseWhiteList] = useState(false);
+  // const [isUseAcive, setIsUseAcive] = useState(false);
 
   const { width } = Dimensions.get('window');
 
@@ -576,102 +576,17 @@ const UserScreen = (props) => {
                 </SimpleText>
               </View>
             )}
-            {/* ============================================== */}
-            <View
-              style={{
-                marginTop: 40,
-                marginBottom: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={() => setIsUseWhiteList((prev) => !prev)}
-              >
-                <SimpleCheckBox checked={isUseWhiteList} style={{ marginRight: 13 }} />
-              </TouchableOpacity>
-              <SimpleText style={{ paddingTop: 4 }}>
-                <FormattedMessage id={'users.use_whitelist'} />
-              </SimpleText>
-            </View>
-            {isUseWhiteList && (
-              <View
-                style={{
-                  // marginTop: 24,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  marginBottom: 15,
-                }}
-              >
-                <SimpleText>
-                  <FormattedMessage id={'users.min_confirmation'} /> :
-                </SimpleText>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-around',
-                    backgroundColor: '#FAFAFA',
-                    height: 40,
-                    marginLeft: 24,
-                    width: width / 3,
-                    // flex: 1,
-                  }}
-                >
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => setMinConfirmation((prev) => prev + 1)}
-                  >
-                    <SimpleText>+</SimpleText>
-                  </TouchableOpacity>
-                  <SimpleText>{minConfirmation}</SimpleText>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => setMinConfirmation((prev) => (prev !== 1 ? prev - 1 : 1))}
-                  >
-                    <SimpleText>-</SimpleText>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <TouchableOpacity activeOpacity={0.5} onPress={() => setIsUseAcive((prev) => !prev)}>
-                <SimpleCheckBox checked={isUseAcive} style={{ marginRight: 13 }} />
-              </TouchableOpacity>
-              <SimpleText style={{ paddingTop: 4 }}>
-                <FormattedMessage id={'common.active'} />
-              </SimpleText>
-            </View>
-            <View
-              style={{
-                marginTop: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <SimpleText style={{ paddingTop: 4, width: width / 2.5 }}>
-                <FormattedMessage id={'common.chance'} />, % :
-              </SimpleText>
-              <SimpleText style={{ paddingTop: 4, textAlign: 'center', flex: 1 }}>
-                {'100'}
-              </SimpleText>
-            </View>
 
             {/* ============================================== */}
 
             <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 53 }}>
               <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.current_chains'} />
+              </SimpleText>
+              <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
+                {paymentsData &&
+                  paymentsData.length > 0 &&
+                  paymentsData.map((item) => item.id).join(', ')}
               </SimpleText>
               <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
                 <IconButton edit />

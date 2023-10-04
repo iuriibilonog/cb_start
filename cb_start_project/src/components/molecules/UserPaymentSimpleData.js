@@ -3,12 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
 import { getBanks } from 'src/redux/content/selectors';
 
-import { StyleSheet, View, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Dimensions, Image, TouchableOpacity, Text } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import { useNavigation } from '@react-navigation/native';
 import { getEditedPaymentsSettings } from 'src/redux/content/selectors';
 import { skipEditedPaymentsSettings } from 'src/redux/content/operations';
+import SimpleCheckBox from 'src/components/atoms/SimpleCheckBox';
+import SimpleButton from 'src/components/atoms/SimpleButton';
 
 const close = require('src/images/delete.png');
 const arrowDown = require('src/images/arrow_down_small.png');
@@ -26,6 +28,11 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue }) => {
       dispatch(skipEditedPaymentsSettings());
     };
   }, []);
+  const [isUseWhiteList, setIsUseWhiteList] = useState(false);
+  const [isUseAcive, setIsUseAcive] = useState(true);
+  const [minConfirmation, setMinConfirmation] = useState(1);
+  const [isCountriesOpen, setIsCountriesOpen] = useState(false);
+  const [isBrandsOpen, setIsBrandsOpen] = useState(false);
 
   const banks = useSelector(getBanks);
   const editedPayments = useSelector(getEditedPaymentsSettings);
@@ -34,10 +41,34 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue }) => {
   const navigation = useNavigation();
 
   const getRestrictedCountries = (countries) => {
+    // countries = [
+    //   'WS',
+    //   'SM',
+    //   'ST',
+    //   'SA',
+    //   'SN',
+    //   'RS',
+    //   'SC',
+    //   'SL',
+    //   'SG',
+    //   'SX',
+    //   'SB',
+    //   'SO',
+    //   'ZA',
+    //   'GS',
+    //   'SS',
+    //   'LK',
+    //   'SD',
+    //   'SR',
+    //   'SJ',
+    //   'SZ',
+    //   'SY',
+    //   'TW',
+    // ];
     return Array.isArray(countries) && countries.length === 0 ? (
       <FormattedMessage id={'common.empty'} />
     ) : (
-      'not empty :)'
+      countries.join(', ')
     );
   };
   const getRestrictedBrands = (brands) => {
@@ -79,7 +110,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue }) => {
           style={{
             ...styles.tableRow,
             flexDirection: 'row',
-
+            zIndex: 1,
             alignItems: 'center',
           }}
         >
@@ -148,6 +179,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue }) => {
               </SimpleText>
             </View>
           </View>
+
           <View
             style={{
               ...styles.tableCellStatus,
@@ -430,38 +462,158 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue }) => {
                 <Image source={editInactive} style={styles.editInactivePic} />
               </TouchableOpacity>
             </View>
-            <View style={styles.additDataCellValues}>
-              <SimpleText>{getRestrictedCountries(item.restrictedCountries)}</SimpleText>
+            <View style={{ ...styles.additDataCellValues, position: 'relative', zIndex: 1 }}>
+              <Text
+                numberOfLines={2}
+                style={{
+                  width: '80%',
+                  fontFamily: 'Mont',
+                  fontSize: 16,
+                  color: '#262626',
+                  flex: 1,
+                }}
+              >
+                {getRestrictedCountries(item.restrictedCountries)}
+              </Text>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('EditPaymentsSettingsScreen', {
-                    parentScreen: 'UserScreen',
-                    name: 'users.restricted_countries',
-                    value: getRestrictedCountries(item.restrictedCountries),
-                  })
+                  item.restrictedCountries && item.restrictedCountries.length > 6
+                    ? setIsCountriesOpen((prev) => !prev)
+                    : navigation.navigate('EditPaymentsSettingsScreen', {
+                        parentScreen: 'UserScreen',
+                        name: 'users.restricted_countries',
+                        value: getRestrictedCountries(item.restrictedCountries),
+                      })
                 }
               >
-                <Image source={editInactive} style={styles.editInactivePic} />
+                <Image
+                  source={
+                    item.restrictedCountries &&
+                    item.restrictedCountries.length > 6 &&
+                    !isCountriesOpen
+                      ? arrowDown
+                      : item.restrictedCountries &&
+                        item.restrictedCountries.length > 6 &&
+                        isCountriesOpen
+                      ? arrowUp
+                      : editInactive
+                  }
+                  style={styles.editInactivePic}
+                />
               </TouchableOpacity>
+              {isCountriesOpen && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 40,
+                    left: 0,
+                    width: '120%',
+                    minHeight: 100,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    backgroundColor: '#fff',
+                    paddingVertical: 5,
+                    paddingLeft: 13,
+                    paddingRight: 18,
+                    borderColor: 'rgba(217, 217, 217, 0.40)',
+                    borderRadius: 2,
+                    borderWidth: 1,
+                  }}
+                >
+                  <SimpleText style={{ width: '85%' }}>
+                    {getRestrictedCountries(item.restrictedCountries)}
+                  </SimpleText>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('EditPaymentsSettingsScreen', {
+                        parentScreen: 'UserScreen',
+                        name: 'users.restricted_countries',
+                        value: getRestrictedCountries(item.restrictedCountries),
+                      })
+                    }
+                  >
+                    <Image source={editInactive} style={styles.editInactivePic} />
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
-            <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-              <SimpleText>{getRestrictedBrands(item.restrictedBrands)}</SimpleText>
+            <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA', zIndex: 0 }}>
+              <Text
+                numberOfLines={2}
+                style={{
+                  width: '80%',
+                  fontFamily: 'Mont',
+                  fontSize: 16,
+                  color: '#262626',
+                  flex: 1,
+                }}
+              >
+                {getRestrictedBrands(item.restrictedBrands)}
+              </Text>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('EditPaymentsSettingsScreen', {
-                    parentScreen: 'UserScreen',
-                    name: 'users.restricted_brands',
-                    value: getRestrictedBrands(item.restrictedBrands),
-                  })
+                  item.restrictedBrands && item.restrictedBrands.length > 6
+                    ? setIsBrandsOpen((prev) => !prev)
+                    : navigation.navigate('EditPaymentsSettingsScreen', {
+                        parentScreen: 'UserScreen',
+                        name: 'users.restricted_brands',
+                        value: getRestrictedBrands(item.restrictedBrands),
+                      })
                 }
               >
-                <Image source={editInactive} style={styles.editInactivePic} />
+                <Image
+                  source={
+                    item.restrictedBrands && item.restrictedBrands.length > 6 && !isBrandsOpen
+                      ? arrowDown
+                      : item.restrictedBrands && item.restrictedBrands.length > 6 && isBrandsOpen
+                      ? arrowUp
+                      : editInactive
+                  }
+                  style={styles.editInactivePic}
+                />
               </TouchableOpacity>
+              {isBrandsOpen && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 40,
+                    left: 0,
+                    width: '120%',
+                    minHeight: 100,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    backgroundColor: '#fff',
+                    paddingVertical: 5,
+                    paddingLeft: 13,
+                    paddingRight: 18,
+                    borderColor: 'rgba(217, 217, 217, 0.40)',
+                    borderRadius: 2,
+                    borderWidth: 1,
+                  }}
+                >
+                  <SimpleText style={{ width: '85%' }}>
+                    {getRestrictedBrands(item.restrictedBrands)}
+                  </SimpleText>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('EditPaymentsSettingsScreen', {
+                        parentScreen: 'UserScreen',
+                        name: 'users.restricted_brands',
+                        value: getRestrictedBrands(item.restrictedBrands),
+                      })
+                    }
+                  >
+                    <Image source={editInactive} style={styles.editInactivePic} />
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
         </View>
 
-        <View style={styles.subTitle}>
+        <View style={{ ...styles.subTitle, zIndex: 0 }}>
           <SimpleText style={{ fontFamily: 'Mont_SB' }}>MasterCard</SimpleText>
         </View>
 
@@ -620,6 +772,92 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue }) => {
             </View>
           </View>
         </View>
+
+        {/* ============================================== */}
+        <View
+          style={{
+            marginTop: 40,
+            marginBottom: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <TouchableOpacity activeOpacity={0.5} onPress={() => setIsUseWhiteList((prev) => !prev)}>
+            <SimpleCheckBox checked={isUseWhiteList} style={{ marginRight: 13 }} />
+          </TouchableOpacity>
+          <SimpleText style={{ paddingTop: 4 }}>
+            <FormattedMessage id={'users.use_whitelist'} />
+          </SimpleText>
+        </View>
+        {isUseWhiteList && (
+          <View
+            style={{
+              // marginTop: 24,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              marginBottom: 15,
+            }}
+          >
+            <SimpleText>
+              <FormattedMessage id={'users.min_confirmation'} /> :
+            </SimpleText>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-around',
+                backgroundColor: '#FAFAFA',
+                height: 40,
+                marginLeft: 24,
+                width: width / 3,
+                // flex: 1,
+              }}
+            >
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => setMinConfirmation((prev) => prev + 1)}
+              >
+                <SimpleText>+</SimpleText>
+              </TouchableOpacity>
+              <SimpleText>{minConfirmation}</SimpleText>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => setMinConfirmation((prev) => (prev !== 1 ? prev - 1 : 1))}
+              >
+                <SimpleText>-</SimpleText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <TouchableOpacity activeOpacity={0.5} onPress={() => setIsUseAcive((prev) => !prev)}>
+            <SimpleCheckBox checked={isUseAcive} style={{ marginRight: 13 }} />
+          </TouchableOpacity>
+          <SimpleText style={{ paddingTop: 4 }}>
+            <FormattedMessage id={'common.active'} />
+          </SimpleText>
+        </View>
+        <View
+          style={{
+            marginTop: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <SimpleText style={{ paddingTop: 4, width: width / 2.5 }}>
+            <FormattedMessage id={'common.chance'} />, % :
+          </SimpleText>
+          <SimpleText style={{ paddingTop: 4, textAlign: 'center', flex: 1 }}>{'100'}</SimpleText>
+        </View>
       </>
     )
   );
@@ -646,14 +884,14 @@ const styles = StyleSheet.create({
   tableCellStatus: { flex: 1, lineHeight: 20, paddingLeft: 15, paddingVertical: 15 },
   additDataCell: {
     height: 40,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     justifyContent: 'center',
   },
   additDataCellValues: {
     height: 40,
-    paddingLeft: 23,
+    paddingLeft: 14,
     paddingRight: 20,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     borderBottomColor: 'rgba(217, 217, 217, 0.40);',
     borderBottomWidth: 1,
     justifyContent: 'space-between',
@@ -680,6 +918,12 @@ const styles = StyleSheet.create({
   },
   editInactivePic: { width: 19, height: 19 },
   subTitle: { alignItems: 'center', marginTop: 40, marginBottom: 16 },
+  //   overflow: hidden;
+  // text-overflow: ellipsis;
+  // display: -webkit-box;
+  // -webkit-line-clamp: 3;
+  // -webkit-box-orient: vertical;
+  wrapText: { overflow: 'hidden' },
 });
 
 export default UserPaymentSimpleData;
