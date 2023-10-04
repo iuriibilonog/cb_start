@@ -8,7 +8,7 @@ export const ledgersData = (state) => state.content.content.ledgersData;
 export const searchUsers = (state) => state.content.content.searchUsers;
 export const ledgersByApiKeyID = (state) => state.content.content.ledgersByApiKeyID;
 export const userPayments = (state) => state.content.content.userPayments;
-
+export const getEditedPaymentsSettings = (state) => state.content.content.editedPaymentsSettings;
 
 // export const getModes = (state) => state.content.content.modes;
 // export const getCurrencies = (state) => state.content.content.currencies;

@@ -14,8 +14,10 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
+import { getEditedPaymentsSettings } from 'src/redux/content/selectors';
+import { setEditedPaymentsSettings } from 'src/redux/content/operations';
 import SimpleText from 'src/components/atoms/SimpleText';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { putEditLedger } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
 import ConfirmActionComponent from 'src/components/molecules/ConfirmActionComponent';
@@ -28,17 +30,24 @@ const EditPaymentsSettingsScreen = (props) => {
   // }, []);
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
+  const { dataName, id } = props.route.params;
+  const paymentSettings = useSelector(getEditedPaymentsSettings);
 
-  const handleEditLedger = async (data) => {
-    // try {
-    //   await dispatch(putEditLedger({ ledgerId: props.route.params.data.id, name: data }));
-    //   props.navigation.navigate(props.route.params.parentScreen, {
-    //     isRefresh: true,
-    //     id: props.route.params.data.apiKeyId,
-    //   });
-    // } catch (err) {
-    //   console.log('err', err);
-    // }
+  // console.log('data', data);
+
+  const handleEditLedger = async (value) => {
+    getNewPaymentValue(id, dataName, value);
+  };
+
+  const getNewPaymentValue = async (id, dataName, value) => {
+    const data = paymentSettings.map((item) => {
+      if (item.id === id) {
+        return { ...item, [dataName]: value };
+      }
+      return item;
+    });
+    await dispatch(setEditedPaymentsSettings(data));
+    props.navigation.navigate('UserScreen');
   };
 
   return (

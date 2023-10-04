@@ -19,7 +19,10 @@ import {
   getLedgersByApiKeyID,
   cleanUserLedgers,
   putEditLedger,
-  getUserPayments
+  getUserPayments,
+  setEditedPaymentsSettings,
+  skipEditedPaymentsSettings,
+  confirmUserPaymentData,
 } from './operations';
 
 const initialState = {
@@ -31,6 +34,7 @@ const initialState = {
     apiData: [],
     merchantApiKeys: [],
     error: null,
+    editedPaymentsSettings: [],
   },
 };
 
@@ -189,16 +193,28 @@ const userSlice = createSlice({
         };
       });
 
-      builder.addCase(getUserPayments.fulfilled, (state, action) => {
-        state.content.userPayments = action.payload.paymentMethodSettings;
-      }),
-        builder.addCase(getUserPayments.rejected, (state, action) => {
-          state.error = {
-            message: action.payload,
-          };
-        });
-
-      
+    builder.addCase(getUserPayments.fulfilled, (state, action) => {
+      state.content.userPayments = action.payload.paymentMethodSettings;
+    }),
+      builder.addCase(getUserPayments.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+    builder.addCase(confirmUserPaymentData.fulfilled, (state, action) => {
+      state.content.editedPaymentsSettings = [];
+    }),
+      builder.addCase(confirmUserPaymentData.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
+    builder.addCase(setEditedPaymentsSettings.fulfilled, (state, action) => {
+      state.content.editedPaymentsSettings = action.payload;
+    });
+    builder.addCase(skipEditedPaymentsSettings.fulfilled, (state, action) => {
+      state.content.editedPaymentsSettings = [];
+    });
   },
 });
 

@@ -353,17 +353,45 @@ export const getUserPayments = createAsyncThunk(
   async (apiKey, thunkAPI) => {
     try {
       console.log('getUserPaymentsCHAIN -> apiKey>>', apiKey);
-      const { data } = await api.get(
-        `${BASE_URL}/api/paymethod-chains/${apiKey}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await api.get(`${BASE_URL}/api/paymethod-chains/${apiKey}`, {
+        withCredentials: true,
+      });
 
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
+  }
+);
+
+export const confirmUserPaymentData = createAsyncThunk(
+  'content/confirmUserPaymentData',
+  async (data, thunkAPI) => {
+    const { paymentData, id } = data;
+    console.log('data', data);
+    console.log('id', id);
+    try {
+      const { data } = await api.put(`${BASE_URL}/api/paymethod-settings/${id}`, paymentData, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const setEditedPaymentsSettings = createAsyncThunk(
+  'content/setEditedPaymentsSettings',
+  async (data, thunkAPI) => {
+    return data;
+  }
+);
+export const skipEditedPaymentsSettings = createAsyncThunk(
+  'content/skipEditedPaymentsSettings',
+  async (data, thunkAPI) => {
+    return [];
   }
 );
 

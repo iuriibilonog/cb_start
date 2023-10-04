@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
 import {
   getMerchantsApiKeys,
   getLedgersData,
   getLedgersByApiKeyID,
   cleanUserLedgers,
   getUserPayments,
+  setEditedPaymentsSettings,
+  confirmUserPaymentData,
 } from 'src/redux/content/operations';
 import {
   getApiKeys,
@@ -13,7 +16,9 @@ import {
   getUsers,
   ledgersByApiKeyID,
   userPayments,
+  getEditedPaymentsSettings,
 } from 'src/redux/content/selectors';
+
 import {
   StyleSheet,
   View,
@@ -89,6 +94,82 @@ const UserScreen = (props) => {
     // setCurrentUser()
   }, []);
 
+  // useEffect(() => {
+  //   console.log('editedPaymentData99', editedPaymentData);
+  // }, [editedPaymentData]);
+  const allPaymentData = useSelector(getEditedPaymentsSettings);
+
+  const confirmEditPayment = async (id) => {
+    setIsLoading(true);
+    const currentPaymentData = allPaymentData.filter((item) => item.id === id)[0];
+
+    const paymentData = {
+      name: currentPaymentData.name,
+      netPrice: +currentPaymentData.netPrice,
+      fixedNetPrice: +currentPaymentData.fixedNetPrice,
+      minCommission: +currentPaymentData.minCommission,
+      limit: +currentPaymentData.limit,
+      minAmount: +currentPaymentData.minAmount,
+      maxAmount: +currentPaymentData.maxAmount,
+      // restrictedCountries: creatingArrayRestrictedCountries(),
+      active: currentPaymentData.active,
+      chance: currentPaymentData.chance,
+      rateCommission: currentPaymentData.rateCommission,
+      // restrictedBrands:
+      //   selectBrand === 'Empty'
+      //     ? []
+      //     : selectBrand === 'Visa and MasterCard'
+      //     ? ['Visa', 'MasterCard']
+      //     : [selectBrand],
+      useWhitelist: currentPaymentData.whitelist,
+      minConfirmations: currentPaymentData.minConfirmations,
+    };
+
+    const commissionsData = {};
+    // if (netPriceMaster > 0 || fixedNetPriceMaster > 0 || minCommissionMaster > 0) {
+    //   commissionsData.MasterCard = {
+    //     netPrice: netPriceMaster ? +netPriceMaster : 0,
+    //     fixedNetPrice: fixedNetPriceMaster ? +fixedNetPriceMaster : 0,
+    //     minCommission: minCommissionMaster ? +minCommissionMaster : 0,
+    //   };
+    // }
+    // if (netPriceVisa > 0 || fixedNetPriceVisa > 0 || minCommissionVisa > 0) {
+    //   commissionsData.Visa = {
+    //     netPrice: netPriceVisa ? +netPriceVisa : 0,
+    //     fixedNetPrice: fixedNetPriceVisa ? +fixedNetPriceVisa : 0,
+    //     minCommission: minCommissionVisa ? +minCommissionVisa : 0,
+    //   };
+    // }
+
+    if (Object.keys(commissionsData).length !== 0) {
+      paymentData.commissions = commissionsData;
+    } else {
+      paymentData.commissions = {};
+    }
+
+    try {
+      await dispatch(confirmUserPaymentData({ paymentData, id }));
+      await dispatch(getUserPayments(chainIdOfCurrentLedger)).then((res) => {
+        setPaymentsData(
+          Array.isArray(res.payload.paymentMethodSettings)
+            ? res.payload.paymentMethodSettings
+            : [res.payload.paymentMethodSettings]
+        );
+        dispatch(
+          setEditedPaymentsSettings(
+            Array.isArray(res.payload.paymentMethodSettings)
+              ? res.payload.paymentMethodSettings
+              : [res.payload.paymentMethodSettings]
+          )
+        );
+      });
+    } catch (error) {
+      console.warn('Error:', error);
+    }
+
+    setIsLoading(false);
+  };
+
   const handleCleanUserLedgers = async () => {
     setIsLoading(true);
     await dispatch(cleanUserLedgers());
@@ -151,11 +232,17 @@ const UserScreen = (props) => {
     if (initialLedger && chainIdOfCurrentLedger) {
       console.log('BOOM');
       dispatch(getUserPayments(chainIdOfCurrentLedger)).then((res) => {
-        console.log('res', res.payload.paymentMethodSettings);
         setPaymentsData(
           Array.isArray(res.payload.paymentMethodSettings)
             ? res.payload.paymentMethodSettings
             : [res.payload.paymentMethodSettings]
+        );
+        dispatch(
+          setEditedPaymentsSettings(
+            Array.isArray(res.payload.paymentMethodSettings)
+              ? res.payload.paymentMethodSettings
+              : [res.payload.paymentMethodSettings]
+          )
         );
       });
     }
@@ -163,7 +250,7 @@ const UserScreen = (props) => {
   }, [initialLedger, chainIdOfCurrentLedger]);
 
   useEffect(() => {
-    if (allUsers && props.route.params.id) {
+    if (allUsers && props.route.params?.id) {
       // console.log('props.route.params.id', props.route.params.id);
       setCurrentUser(allUsers.find((item) => item.id === +props.route.params.id));
     }
@@ -460,7 +547,18 @@ const UserScreen = (props) => {
             {paymentsData && paymentsData.length > 0 ? (
               <View>
                 {paymentsData.map((item, index) => (
-                  <UserPaymentSimpleData key={index} item={item} index={index} />
+                  <View key={index}>
+                    <UserPaymentSimpleData item={item} index={index} id={item.id} />
+                    <View style={{ alignItems: 'center', marginTop: 40 }}>
+                      <TouchableOpacity onPress={() => confirmEditPayment(item.id)}>
+                        <SimpleButton
+                          text={'common.edit'}
+                          style={{ backgroundColor: '#FFE13A', width: 174 }}
+                          textStyle={{ color: '#262626' }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 ))}
               </View>
             ) : (
@@ -570,13 +668,7 @@ const UserScreen = (props) => {
             </View>
 
             {/* ============================================== */}
-            <View style={{ alignItems: 'center', marginTop: 40 }}>
-              <SimpleButton
-                text={'common.edit'}
-                style={{ backgroundColor: '#FFE13A', width: 174 }}
-                textStyle={{ color: '#262626' }}
-              />
-            </View>
+
             <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 53 }}>
               <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.current_chains'} />
