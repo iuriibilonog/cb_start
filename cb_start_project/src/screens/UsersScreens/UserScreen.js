@@ -548,8 +548,9 @@ const UserScreen = (props) => {
               <View>
                 {paymentsData.map((item, index) => (
                   <View key={index}>
-                    <UserPaymentSimpleData item={item} index={index} id={item.id} />
-                    <View style={{ alignItems: 'center', marginTop: 40 }}>
+                    <UserPaymentSimpleData item={item} index={index} id={item?.id} confirmEditPayment={confirmEditPayment} />
+
+                    {/* <View style={{ alignItems: 'center', marginTop: 40 }}>
                       <TouchableOpacity onPress={() => confirmEditPayment(item.id)}>
                         <SimpleButton
                           text={'common.edit'}
@@ -557,7 +558,7 @@ const UserScreen = (props) => {
                           textStyle={{ color: '#262626' }}
                         />
                       </TouchableOpacity>
-                    </View>
+                    </View> */}
                   </View>
                 ))}
               </View>
@@ -579,14 +580,14 @@ const UserScreen = (props) => {
 
             {/* ============================================== */}
             <View
-            style={{
-              height: 1,
-              // width: 30,
-              backgroundColor: 'rgba(0, 0, 0, 0.40)',
-              // marginRight: 14,
-              marginTop: 45,
-            }}
-          />
+              style={{
+                height: 1,
+                // width: 30,
+                backgroundColor: 'rgba(0, 0, 0, 0.40)',
+                // marginRight: 14,
+                marginTop: 45,
+              }}
+            />
             <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 45 }}>
               <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.current_chains'} />
