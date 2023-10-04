@@ -75,7 +75,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue }) => {
     return Array.isArray(brands) && brands.length === 0 ? (
       <FormattedMessage id={'common.empty'} />
     ) : (
-      'not empty :)'
+      brands.join(', ')
     );
   };
 

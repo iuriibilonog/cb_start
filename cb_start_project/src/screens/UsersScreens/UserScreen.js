@@ -578,8 +578,16 @@ const UserScreen = (props) => {
             )}
 
             {/* ============================================== */}
-
-            <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 53 }}>
+            <View
+            style={{
+              height: 1,
+              // width: 30,
+              backgroundColor: 'rgba(0, 0, 0, 0.40)',
+              // marginRight: 14,
+              marginTop: 45,
+            }}
+          />
+            <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 45 }}>
               <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.current_chains'} />
               </SimpleText>
@@ -611,7 +619,7 @@ const UserScreen = (props) => {
               </SimpleText>
             </View>
 
-            <View style={{ marginTop: 40 }}>
+            {/* <View style={{ marginTop: 40 }}>
               <SimpleText
                 style={{
                   fontFamily: 'Mont_SB',
@@ -624,7 +632,7 @@ const UserScreen = (props) => {
               >
                 <FormattedMessage id={'users.validation_error'} />
               </SimpleText>
-            </View>
+            </View> */}
           </View>
         </>
       )}
