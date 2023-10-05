@@ -228,9 +228,12 @@ const UserScreen = (props) => {
     refBalanceModal.current?.select(-1);
   }, [initialBalance]);
 
+  //************************************************************************* */
+
   useEffect(() => {
+    // console.log('BOo', initialLedger);
     if (initialLedger && chainIdOfCurrentLedger) {
-      console.log('BOOM');
+      // console.log('BOOM');
       dispatch(getUserPayments(chainIdOfCurrentLedger)).then((res) => {
         setPaymentsData(
           Array.isArray(res.payload.paymentMethodSettings)
@@ -256,6 +259,17 @@ const UserScreen = (props) => {
     }
   }, [allUsers]);
 
+  useEffect(() => {
+    if (selectedLedger !== '') {
+      // console.log('selectedLedger', selectedLedger);
+      // console.log('ledgersByApi', ledgersByApi);
+      setInitialLedger(ledgersByApi[selectedLedger].name);
+      setChainIdOfCurrentLedger(ledgersByApi[selectedLedger].payMethodChainsId);
+    }
+  }, [selectedLedger]);
+
+  //************************************************************************* */
+
   const handleExpandRow = async (itemId) => {
     // console.log('Dispatch - id', itemId);
     if (!isAdditDataOpen) {
@@ -264,7 +278,7 @@ const UserScreen = (props) => {
       await dispatch(getLedgersByApiKeyID(itemId));
       // console.log('Dispatch');
       setIsLoading(false);
-      console.log('Dispatch');
+      // console.log('Dispatch');
     } else {
       setSelectedIndex('');
       setLedgersByApiData([]);
@@ -548,7 +562,12 @@ const UserScreen = (props) => {
               <View>
                 {paymentsData.map((item, index) => (
                   <View key={index}>
-                    <UserPaymentSimpleData item={item} index={index} id={item?.id} confirmEditPayment={confirmEditPayment} />
+                    <UserPaymentSimpleData
+                      item={item}
+                      index={index}
+                      id={item?.id}
+                      confirmEditPayment={confirmEditPayment}
+                    />
 
                     {/* <View style={{ alignItems: 'center', marginTop: 40 }}>
                       <TouchableOpacity onPress={() => confirmEditPayment(item.id)}>
