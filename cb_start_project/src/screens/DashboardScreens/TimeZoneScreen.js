@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
 import { FormattedMessage } from 'react-intl';
@@ -23,7 +17,7 @@ const TimeZoneScreen = ({
   confirmReport,
   isFiltersVisible,
   filtersDots,
-  isMerchApiKeyAvailable
+  isMerchApiKeyAvailable,
 }) => {
   const reportType = route.params.type.value;
 
@@ -77,6 +71,10 @@ const TimeZoneScreen = ({
       value: '(UTC+5) Tashkent, Yekaterinburg',
       code: 'Asia/Tashkent',
     },
+    {
+      value: '(UTC +5.5) Mumbai, New Delhi, Sri Lanka',
+      code: 'Asia/Kolkata',
+    },
     { value: '(UTC+6) Astana, Omsk', code: 'Asia/Omsk' },
   ];
 
@@ -84,7 +82,13 @@ const TimeZoneScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && <TransactionsFilters isActive={'timezone'} filtersDots={filtersDots} isMerchApiKeyAvailable={isMerchApiKeyAvailable}/>}
+      {isFiltersVisible && (
+        <TransactionsFilters
+          isActive={'timezone'}
+          filtersDots={filtersDots}
+          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+        />
+      )}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList

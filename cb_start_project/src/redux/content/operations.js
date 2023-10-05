@@ -82,6 +82,18 @@ export const getBankConversion = createAsyncThunk(
     startDate = startDate ? startDate : initialDate;
     endDate = endDate ? endDate : initialDate;
 
+    console.log('Date-getBankConversion ', data);
+
+    // UTC+0 - UTC+5.5, UTC+6 //
+    // timezone = Europe / London;
+    // timezone = Europe / Paris;
+    // Europe / Riga;
+    // Europe / Moscow;
+    // Asia / Baku;
+    // Asia / Tashkent;
+    // Asia / Kolkata;
+    // Asia / Omsk;
+
     try {
       const { data } = await api.get(
         `${BASE_URL}/api/banks/conversion/${bankName}?startDate=${startDate}&endDate=${endDate}&timezone=Europe/Riga`,
@@ -119,46 +131,54 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
 export const getTransactionData = createAsyncThunk(
   'content/getTransactionData',
   async ({ transactionData, page = 1 }, thunkAPI) => {
-    // const {
-    //   startDate,
-    //   endDate,
-    //   userId,
-    //   apiKeyId,
-    //   mode,
-    //   status,
-    //   currency,
-    //   timezone,
-    //   bankName,
-    //   page = 1,
-    // } = transactionData;
     try {
-      //https://dev.cashbulls.io/api/payments
+      let setLink;
+      let timezone;
+      // console.log('-1', transactionData);
+      if (transactionData.timezone) {
+        // UTC+0 - UTC+5.5, UTC+6 //
+        // timezone = Europe / London;
+        // timezone = Europe / Paris;
+        // Europe / Riga;
+        // Europe / Moscow;
+        // Asia / Baku;
+        // Asia / Tashkent;
+        // Asia / Kolkata;
+        // Asia / Omsk;
 
-      // ?page=1&pageSize=100
-      // &includeTransactions=true
-      // &startDate=2023-09-20
-      // &endDate=2023-09-20
-      // &userId=36
-      // &apiKeyId=48
-      // &mode=payin
-      // &status=declined
-      // &currency=EUR
-      // &timezone=Etc/UTC
-      // &bankName=Royal
+        timezone =
+          transactionData.timezone.indexOf('+0') > 0
+            ? 'Europe/London'
+            : transactionData.timezone.indexOf('+1') > 0
+            ? 'Europe/Paris'
+            : transactionData.timezone.indexOf('+2') > 0
+            ? 'Europe/Riga'
+            : transactionData.timezone.indexOf('+3') > 0
+            ? 'Europe/Moscow'
+            : transactionData.timezone.indexOf('+4') > 0
+            ? 'Asia/Baku'
+            : transactionData.timezone.indexOf('+5.5') > 0
+            ? 'Asia/Kolkata'
+            : transactionData.timezone.indexOf('+5') > 0
+            ? 'Asia/Tashkent'
+            : transactionData.timezone.indexOf('+6') > 0
+            ? 'Asia/Omsk'
+            : '';
 
-      //startDate=2023-09-22&endDate=2023-09-22
+        transactionData.timezone = timezone;
+      }
+      setLink = JSON.stringify(transactionData);
 
-      let setLink = JSON.stringify(transactionData)
-        .replace(/:/g, '=')
-        .replace(/\,/g, '&')
-        .replace(/\"/g, '')
-        .slice(1, -1);
+      // console.log('-2', timezone);
+      // console.log('-3', setLink);
+
+      setLink = setLink.replace(/:/g, '=').replace(/\,/g, '&').replace(/\"/g, '').slice(1, -1);
       if (!setLink.includes('endDate')) {
         const initialDate = new Date().toISOString().slice(0, 10);
 
-        setLink = `startDate=${initialDate}&endDate=${initialDate}` + setLink;
+        setLink = `startDate=${initialDate}&endDate=${initialDate}&` + setLink;
       }
-      console.log('page, setLink', page, '<><>', setLink);
+      console.log('page,setLink', page, '<><>', setLink);
       const { data } = await api.get(
         `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&${setLink}`,
         // `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&startDate=${startDate}&endDate=${endDate}&userId=${userId}&apiKeyId=${apiKeyId}&mode=${mode}&status=${status}&currency=${currency}&timezone=${timezone}&bankName=${bankName}`,
