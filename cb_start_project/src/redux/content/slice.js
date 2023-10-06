@@ -23,6 +23,7 @@ import {
   setEditedPaymentsSettings,
   skipEditedPaymentsSettings,
   confirmUserPaymentData,
+  getPaymentsMethods
 } from './operations';
 
 const initialState = {
@@ -215,6 +216,15 @@ const userSlice = createSlice({
     builder.addCase(skipEditedPaymentsSettings.fulfilled, (state, action) => {
       state.content.editedPaymentsSettings = [];
     });
+
+    builder.addCase(getPaymentsMethods.fulfilled, (state, action) => {
+      state.content.paymentsMethods = action.payload.items;
+    }),
+      builder.addCase(getPaymentsMethods.rejected, (state, action) => {
+        state.error = {
+          message: action.payload,
+        };
+      });
   },
 });
 

@@ -20,6 +20,7 @@ import EditUserScreen from './EditUserScreen';
 import DeleteUserScreen from './DeleteUserScreen';
 import CreateApiKeyScreen from './CreateApiKeyScreen';
 import EditPaymentsSettingsScreen from './EditPaymentsSettingsScreen';
+import CreatePaymentsSettingsScreen from './CreatePaymentsSettingsScreen';
 import debounce from 'lodash.debounce';
 
 const profileIcon = require('src/images/profile_icon.png');
@@ -217,6 +218,18 @@ const UsersRoutes = () => {
         name="EditPaymentsSettingsScreen"
       >
         {(props) => <EditPaymentsSettingsScreen {...props} />}
+      </UsersStack.Screen>
+      <UsersStack.Screen
+        options={{
+          headerBackTitleVisible: false,
+          headerLeft: null,
+          headerTitle: 'Users / Add new payments settings',
+          headerTitleStyle: { fontSize: 14, fontFamily: 'Mont' },
+          headerTitleAlign: 'left',
+        }}
+        name="CreatePaymentsSettingsScreen"
+      >
+        {(props) => <CreatePaymentsSettingsScreen {...props} />}
       </UsersStack.Screen>
     </UsersStack.Navigator>
   );

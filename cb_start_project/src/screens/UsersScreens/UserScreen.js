@@ -325,6 +325,13 @@ const UserScreen = (props) => {
     navigation.navigate('DeleteUserScreen', { user: currentUser, parentScreen: 'UserScreen' });
   };
 
+  const handlePaymentsCreate = () => {
+    navigation.navigate('CreatePaymentsSettingsScreen', {
+      user: currentUser,
+      parentScreen: 'UserScreen',
+    });
+  };
+
   const handleLedgerEdit = () => {
     console.log('ledgersByApi', ledgersByApi[selectedLedger ? selectedLedger : 0]);
     // console.log('selectedLedger', selectedLedger);
@@ -576,7 +583,7 @@ const UserScreen = (props) => {
                   alignItems: 'center',
                 }}
               >
-                <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserDelete()}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => handlePaymentsCreate()}>
                   <IconButton add />
                 </TouchableOpacity>
               </View>
@@ -637,7 +644,7 @@ const UserScreen = (props) => {
               <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
                 {paymentsData &&
                   paymentsData.length > 0 &&
-                  paymentsData.map((item) => item.id).join(', ')}
+                  paymentsData.map((item) => item?.id).join(', ')}
               </SimpleText>
               <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
                 <IconButton edit />
