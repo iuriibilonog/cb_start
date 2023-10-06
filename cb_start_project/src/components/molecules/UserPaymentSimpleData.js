@@ -32,6 +32,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setIsUseAcive(item.active);
     return () => {
       dispatch(skipEditedPaymentsSettings());
     };
@@ -907,9 +908,25 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
               <SimpleText style={{ paddingTop: 4, width: width / 2.5 }}>
                 <FormattedMessage id={'common.chance'} />, % :
               </SimpleText>
-              <SimpleText style={{ paddingTop: 4, textAlign: 'center', flex: 1 }}>
-                {'100'}
-              </SimpleText>
+              <View
+                style={{
+                  marginRight: 'auto',
+                  width: 126,
+                  height: 40,
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                  backgroundColor: '#FAFAFA',
+                }}
+              >
+                <SimpleText
+                  style={{
+                    textAlign: 'center',
+                    width: 126,
+                  }}
+                >
+                  {item.chance}
+                </SimpleText>
+              </View>
             </View>
             <View
               style={{
