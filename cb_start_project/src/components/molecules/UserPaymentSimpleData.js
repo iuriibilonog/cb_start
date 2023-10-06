@@ -21,7 +21,7 @@ import SimpleCheckBox from 'src/components/atoms/SimpleCheckBox';
 import SimpleButton from 'src/components/atoms/SimpleButton';
 
 const close = require('src/images/delete.png');
-const arrowDown = require('src/images/arrow_down_small.png');
+const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
 const editInactive = require('src/images/edit_inactive.png');
 
@@ -1033,6 +1033,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   editInactivePic: { width: 19, height: 19 },
+  editChevron: { width: 26, height: 26 },
   subTitle: { alignItems: 'center', marginTop: 40, marginBottom: 16 },
   //   overflow: hidden;
   // text-overflow: ellipsis;

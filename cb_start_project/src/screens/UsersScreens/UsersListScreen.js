@@ -23,7 +23,7 @@ import MainLoader from 'src/components/molecules/MainLoader';
 
 const deleteIcon = require('src/images/delete.png');
 const deleteInactiveIcon = require('src/images/delete_inactive.png');
-const arrowDown = require('src/images/arrow_down_small.png');
+const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
 const editIcon = require('src/images/edit.png');
 const editInactiveIcon = require('src/images/edit_inactive.png');
@@ -158,10 +158,10 @@ const UsersListScreen = (props) => {
                 alignItems: 'center',
               }}
             >
-              <View style={{ width: 20, marginRight: 5 }}>
+              <View style={{marginRight: 4 }}>
                 <Image
                   source={isAdditDataOpen && selectedIndex === item.id ? arrowUp : arrowDown}
-                  style={{ width: 20, height: 20 }}
+                  style={{ width: 26, height: 26 }}
                 />
               </View>
               <SimpleText
