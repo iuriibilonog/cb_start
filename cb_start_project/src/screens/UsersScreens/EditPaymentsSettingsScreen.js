@@ -48,8 +48,17 @@ const EditPaymentsSettingsScreen = (props) => {
   const getNewPaymentValue = async (id, dataName, value) => {
     const data = paymentSettings.map((item) => {
       if (item.id === id) {
-        return { ...item, [dataName]: dataName === 'restrictedCountries' ? [value] : value };
+        switch (dataName) {
+          case 'NetPriceMasterCard':
+            item.commissions.MasterCard.netPrice = value;
+            const obj = { ...item.commissions.MasterCard, netPrice: value };
+            return { ...item, ['commissions']: { ...item.commissions, MasterCard: obj } };
+
+          default:
+            return { ...item, [dataName]: dataName === 'restrictedCountries' ? [value] : value };
+        }
       }
+
       return item;
     });
 

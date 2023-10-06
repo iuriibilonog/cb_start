@@ -715,13 +715,37 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                   }}
                 >
                   <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-                    <SimpleText>{item?.commissions?.MasterCard?.netPrice}</SimpleText>
+                    <SimpleText>
+                      {editedPayments[index].commissions?.MasterCard?.netPrice &&
+                      +editedPayments[index].commissions?.MasterCard?.netPrice !==
+                        item?.commissions?.MasterCard?.netPrice
+                        ? editedPayments[index].commissions?.MasterCard?.netPrice
+                        : item?.commissions?.MasterCard?.netPrice}
+                    </SimpleText>
+                    {editedPayments[index].commissions?.MasterCard?.netPrice &&
+                      +editedPayments[index].commissions?.MasterCard?.netPrice !==
+                        item?.commissions?.MasterCard?.netPrice && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            backgroundColor: '#36D0BB',
+                            borderRadius: 5,
+                          }}
+                        />
+                      )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
                           parentScreen: 'UserScreen',
                           name: 'users.net_price',
                           value: item?.commissions?.MasterCard?.netPrice?.toString(),
+                          index,
+                          id,
+                          dataName: 'NetPriceMasterCard',
                         })
                       }
                     >
