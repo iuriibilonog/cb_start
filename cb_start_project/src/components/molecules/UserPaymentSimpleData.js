@@ -488,8 +488,25 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                       flex: 1,
                     }}
                   >
-                    {getRestrictedCountries(item.restrictedCountries)}
+                    {editedPayments[index]['restrictedCountries'] &&
+                    editedPayments[index]['restrictedCountries'] !== item.restrictedCountries
+                      ? getRestrictedCountries(editedPayments[index]['restrictedCountries'])
+                      : getRestrictedCountries(item.restrictedCountries)}
                   </Text>
+                  {editedPayments[index]['restrictedCountries'] &&
+                    editedPayments[index]['restrictedCountries'] !== item.restrictedCountries && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                   <TouchableOpacity
                     onPress={() =>
                       item.restrictedCountries && item.restrictedCountries.length > 6
@@ -498,6 +515,9 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                             parentScreen: 'UserScreen',
                             name: 'users.restricted_countries',
                             value: getRestrictedCountries(item.restrictedCountries),
+                            index,
+                            id,
+                            dataName: 'restrictedCountries',
                           })
                     }
                   >
@@ -537,7 +557,10 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                       }}
                     >
                       <SimpleText style={{ width: '85%' }}>
-                        {getRestrictedCountries(item.restrictedCountries)}
+                        {editedPayments[index]['restrictedCountries'] &&
+                        editedPayments[index]['restrictedCountries'] !== item.restrictedCountries
+                          ? getRestrictedCountries(editedPayments[index]['restrictedCountries'])
+                          : getRestrictedCountries(item.restrictedCountries)}
                       </SimpleText>
                       <TouchableOpacity
                         onPress={() =>
@@ -545,6 +568,9 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                             parentScreen: 'UserScreen',
                             name: 'users.restricted_countries',
                             value: getRestrictedCountries(item.restrictedCountries),
+                            index,
+                            id,
+                            dataName: 'restrictedCountries',
                           })
                         }
                       >
@@ -576,6 +602,9 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                             parentScreen: 'UserScreen',
                             name: 'users.restricted_brands',
                             value: getRestrictedBrands(item.restrictedBrands),
+                            index,
+                            id,
+                            dataName: 'restrictedBrands',
                           })
                     }
                   >
@@ -621,6 +650,9 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                             parentScreen: 'UserScreen',
                             name: 'users.restricted_brands',
                             value: getRestrictedBrands(item.restrictedBrands),
+                            index,
+                            id,
+                            dataName: 'restrictedBrands',
                           })
                         }
                       >

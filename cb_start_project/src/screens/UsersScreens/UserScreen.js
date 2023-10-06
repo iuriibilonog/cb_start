@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { showMessage } from 'react-native-flash-message';
 
 import {
   getMerchantsApiKeys,
@@ -163,11 +164,29 @@ const UserScreen = (props) => {
           )
         );
       });
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Edit settings successfully`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'success',
+        });
+      }, 1000);
     } catch (error) {
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! Settings does't edit`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
       console.warn('Error:', error);
     }
-
-    setIsLoading(false);
   };
 
   const handleCleanUserLedgers = async () => {

@@ -14,6 +14,7 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
+
 import { getEditedPaymentsSettings } from 'src/redux/content/selectors';
 import { setEditedPaymentsSettings } from 'src/redux/content/operations';
 import SimpleText from 'src/components/atoms/SimpleText';
@@ -21,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { putEditLedger } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
 import ConfirmActionComponent from 'src/components/molecules/ConfirmActionComponent';
+import ConfirmActionComponentRadioList from 'src/components/molecules/ConfirmActionComponentRadioList';
 
 const arrowLeft = require('src/images/header_left.png');
 
@@ -28,12 +30,16 @@ const EditPaymentsSettingsScreen = (props) => {
   // useEffect(() => {
   //   console.log('props', props.route.params);
   // }, []);
+
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
   const { dataName, id } = props.route.params;
   const paymentSettings = useSelector(getEditedPaymentsSettings);
 
   // console.log('data', data);
+  useEffect(() => {
+    console.log('props.route', props.route.params);
+  }, []);
 
   const handleEditLedger = async (value) => {
     getNewPaymentValue(id, dataName, value);
@@ -42,10 +48,11 @@ const EditPaymentsSettingsScreen = (props) => {
   const getNewPaymentValue = async (id, dataName, value) => {
     const data = paymentSettings.map((item) => {
       if (item.id === id) {
-        return { ...item, [dataName]: value };
+        return { ...item, [dataName]: dataName === 'restrictedCountries' ? [value] : value };
       }
       return item;
     });
+
     await dispatch(setEditedPaymentsSettings(data));
     props.navigation.navigate('UserScreen');
   };
@@ -76,18 +83,33 @@ const EditPaymentsSettingsScreen = (props) => {
           <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
 
-        <FormattedMessage id={`${props.route.params.name}`}>
-          {(placeholder) => (
-            <ConfirmActionComponent
-              isEdit
-              editPayments
-              title={props.route.params.name}
-              initialValue={props.route.params.value}
-              action={handleEditLedger}
-              placeholder={placeholder[0]}
-            />
-          )}
-        </FormattedMessage>
+        {dataName === 'restrictedBrands' ? (
+          <FormattedMessage id={`${props.route.params.name}`}>
+            {(placeholder) => (
+              <ConfirmActionComponentRadioList
+                isEdit
+                editPayments
+                title={props.route.params.name}
+                initialValue={props.route.params.value}
+                action={handleEditLedger}
+                placeholder={placeholder[0]}
+              />
+            )}
+          </FormattedMessage>
+        ) : (
+          <FormattedMessage id={`${props.route.params.name}`}>
+            {(placeholder) => (
+              <ConfirmActionComponent
+                isEdit
+                editPayments
+                title={props.route.params.name}
+                initialValue={props.route.params.value}
+                action={handleEditLedger}
+                placeholder={placeholder[0]}
+              />
+            )}
+          </FormattedMessage>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
