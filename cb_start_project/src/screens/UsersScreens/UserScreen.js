@@ -42,7 +42,7 @@ import UserPaymentSimpleData from 'src/components/molecules/UserPaymentSimpleDat
 
 const deleteIcon = require('src/images/delete.png');
 const deleteInactiveIcon = require('src/images/delete_inactive.png');
-const arrowDown = require('src/images/arrow_down_small.png');
+const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
 const editIcon = require('src/images/edit.png');
 const editInactiveIcon = require('src/images/edit_inactive.png');
@@ -354,10 +354,10 @@ const UserScreen = (props) => {
               alignItems: 'center',
             }}
           >
-            <View style={{ width: 20, marginRight: 5 }}>
+            <View style={{ marginRight: 5 }}>
               <Image
                 source={isAdditDataOpen && selectedIndex === item.id ? arrowUp : arrowDown}
-                style={{ width: 20, height: 20 }}
+                style={{ width: 26, height: 26 }}
               />
             </View>
             <SimpleText
@@ -486,61 +486,65 @@ const UserScreen = (props) => {
                   <FormattedMessage id={'users.ledgers_not_found'} />
                 </SimpleText>
               ) : (
-                <>
-                  {console.log('array:', ledgersByApiData.join(', '))}
-                  <ModalDropdown
-                    ref={refLedgersModal}
-                    options={ledgersByApiData}
-                    defaultIndex={0}
-                    defaultValue={initialLedger}
-                    isFullWidth
-                    animated={false}
-                    onSelect={(index, option) => {
-                      console.log(index, '<>', option);
-                      setSelectedLedger(index);
-                    }}
-                    textStyle={{ fontSize: 16, fontFamily: 'Mont', fontWeight: '600' }}
-                    style={{
-                      backgroundColor: '#F4F4F4',
-                      paddingHorizontal: 16,
-                      // paddingVertical: 11,
-                      borderRadius: 2,
-                      justifyContent: 'space-between',
-                    }}
-                    dropdownStyle={{
-                      marginLeft: -16,
-                      marginTop: Platform.OS === 'ios' ? 2 : -2,
-                      paddingLeft: 11,
-                      paddingRight: 2,
-                      // width: 167,
-                      width: width / 1.7,
-                      backgroundColor: '#F4F4F4',
-                      borderWidth: 0,
-                      borderRadius: 2,
-                    }}
-                    dropdownTextStyle={{
-                      fontSize: 16,
-                      fontWeight: '600',
-                      fontFamily: 'Mont',
-                      backgroundColor: '#F4F4F4',
-                      color: 'rgba(38, 38, 38, 0.50)',
-                    }}
-                    renderRightComponent={() => (
-                      <Image
-                        source={
-                          isDropdownOpen
-                            ? require('src/images/arrow_up.png')
-                            : require('src/images/arrow_down.png')
-                        }
-                        style={{ width: 26, height: 36, marginLeft: 'auto' }}
-                      ></Image>
-                    )}
-                    renderRowProps={{ activeOpacity: 1 }}
-                    renderSeparator={() => <></>}
-                    onDropdownWillShow={() => setIsDropdownOpen(true)}
-                    onDropdownWillHide={() => setIsDropdownOpen(false)}
-                  />
-                </>
+                <ModalDropdown
+                  ref={refLedgersModal}
+                  options={ledgersByApiData}
+                  defaultIndex={0}
+                  defaultValue={initialLedger}
+                  isFullWidth
+                  animated={false}
+                  onSelect={(index, option) => {
+                    // console.log(index, '<>', option);
+                    setSelectedLedger(index);
+                  }}
+                  textStyle={{
+                    fontSize: 16,
+                    fontFamily: 'Mont',
+                    fontWeight: '600',
+                    lineHeight: 16,
+                  }}
+                  style={{
+                    backgroundColor: '#F4F4F4',
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    borderRadius: 2,
+                    justifyContent: 'space-between',
+                    // height:40,
+                  }}
+                  dropdownStyle={{
+                    marginLeft: -16,
+                    marginTop: Platform.OS === 'ios' ? 14 : -14,
+                    paddingLeft: 11,
+                    paddingRight: 2,
+                    // width: 167,
+                    width: width / 1.7,
+                    backgroundColor: '#F4F4F4',
+                    borderWidth: 0,
+                    borderRadius: 2,
+                  }}
+                  dropdownTextStyle={{
+                    fontSize: 16,
+                    lineHeight: 16,
+                    fontWeight: '600',
+                    fontFamily: 'Mont',
+                    backgroundColor: '#F4F4F4',
+                    color: 'rgba(38, 38, 38, 0.50)',
+                  }}
+                  renderRightComponent={() => (
+                    <Image
+                      source={
+                        isDropdownOpen
+                          ? require('src/images/arrow_up.png')
+                          : require('src/images/arrow_down.png')
+                      }
+                      style={{ width: 26, height: 26, marginLeft: 'auto' }}
+                    ></Image>
+                  )}
+                  renderRowProps={{ activeOpacity: 1 }}
+                  renderSeparator={() => <></>}
+                  onDropdownWillShow={() => setIsDropdownOpen(true)}
+                  onDropdownWillHide={() => setIsDropdownOpen(false)}
+                />
               )}
             </View>
             <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
@@ -702,11 +706,11 @@ const UserScreen = (props) => {
                 isFullWidth
                 animated={false}
                 onSelect={setSelectedBalance}
-                textStyle={{ fontSize: 16, fontFamily: 'Mont' }}
+                textStyle={{ fontSize: 16, fontFamily: 'Mont', lineHeight: 16 }}
                 style={{
                   backgroundColor: '#F4F4F4',
                   paddingHorizontal: 16,
-                  paddingVertical: 11,
+                  paddingVertical: 12,
                   justifyContent: 'space-between',
                 }}
                 dropdownStyle={{
@@ -720,6 +724,7 @@ const UserScreen = (props) => {
                 }}
                 dropdownTextStyle={{
                   fontSize: 16,
+                  lineHeight: 16,
                   fontWeight: '600',
                   backgroundColor: '#F4F4F4',
                   color: 'rgba(38, 38, 38, 0.50)',
@@ -731,7 +736,7 @@ const UserScreen = (props) => {
                         ? require('src/images/arrow_up.png')
                         : require('src/images/arrow_down.png')
                     }
-                    style={{ width: 26, height: 36, marginLeft: 'auto' }}
+                    style={{ width: 26, height: 26, marginLeft: 'auto' }}
                   ></Image>
                 )}
                 renderRowProps={{ activeOpacity: 1 }}
@@ -783,10 +788,10 @@ const UserScreen = (props) => {
               >
                 <FormattedMessage id={'users.personal_info'} />
               </SimpleText>
-              <View style={{ width: 20, marginRight: 26 }}>
+              <View style={{ marginRight: 26 }}>
                 <Image
                   source={isPersonalOpen ? arrowUp : arrowDown}
-                  style={{ width: 34, height: 34 }}
+                  style={{ width: 26, height: 26 }}
                 />
               </View>
             </View>
