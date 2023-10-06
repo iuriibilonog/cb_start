@@ -42,6 +42,9 @@ const EditPaymentsSettingsScreen = (props) => {
   }, []);
 
   const handleEditLedger = async (value) => {
+    console.log('getNewPaymentValue - id', id);
+    console.log('getNewPaymentValue - dataName', dataName);
+    console.log('getNewPaymentValue - VALUEE', value);
     getNewPaymentValue(id, dataName, value);
   };
 
