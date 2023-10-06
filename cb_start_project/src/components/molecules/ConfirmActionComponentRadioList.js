@@ -34,7 +34,7 @@ const EditScreen = (props) => {
     helpText,
     placeholder = '',
   } = props;
-  const [radioSelect, setRadioSelect] = useState({ value: 'Epmty' });
+  const [radioSelect, setRadioSelect] = useState({ value: initialValue ? initialValue : 'Epmty' });
 
   // const [isEmptyValue, setIsEmptyValue] = useState(false);
 
@@ -48,14 +48,10 @@ const EditScreen = (props) => {
   ];
 
   const submit = () => {
-    if (action && value) {
-      action(value);
-    } else if (isDelete) {
-      action();
+    console.log('radioSelect', radioSelect);
+    if (action && radioSelect) {
+      action(radioSelect.value);
     }
-    // else {
-    //   setIsEmptyValue(true);
-    // }
   };
 
   // useEffect(() => {
@@ -85,13 +81,14 @@ const EditScreen = (props) => {
           />
           {/* {!isDelete && ` ${title}`} */} {!isDelete && <FormattedMessage id={title} />}
         </SimpleText>
-
-        <RadioList
-          data={restrictedBrandsArr}
-          onSelect={setRadioSelect}
-          defaultValue={radioSelect}
-          styling={{ size: 18, spaceBetween: 34 }}
-        />
+        <View style={{ alignItems: 'flex-start' }}>
+          <RadioList
+            data={restrictedBrandsArr}
+            onSelect={setRadioSelect}
+            defaultValue={radioSelect}
+            styling={{ spaceBetween: 34 }}
+          />
+        </View>
         <TouchableOpacity activeOpacity={0.5} style={{ width: '100%' }} onPress={submit}>
           <View
             style={{
@@ -122,13 +119,13 @@ const EditScreen = (props) => {
 const styles = StyleSheet.create({
   innerWrapper: {
     marginTop: 56,
-    paddingHorizontal: 25,
-    alignItems: 'center',
+    // paddingHorizontal: 25,
+    // alignItems: 'center',
   },
   title: {
     fontSize: 24,
     fontFamily: 'Mont_SB',
-    marginBottom: 70,
+    marginBottom: 62,
     lineHeight: 26,
     textAlign: 'center',
   },
@@ -144,7 +141,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.20)',
   },
   btn: {
-    width: '100%',
+    // width: '100%',
+    marginHorizontal: 25,
     height: 42,
     backgroundColor: '#FFE13A',
     borderRadius: 2,

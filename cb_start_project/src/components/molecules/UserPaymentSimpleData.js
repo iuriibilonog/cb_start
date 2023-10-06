@@ -84,8 +84,10 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
   const getRestrictedBrands = (brands) => {
     return Array.isArray(brands) && brands.length === 0 ? (
       <FormattedMessage id={'common.empty'} />
-    ) : (
+    ) : Array.isArray(brands) && brands.length > 0 ? (
       brands.join(', ')
+    ) : (
+      brands
     );
   };
   const handleOnBlur = () => {
@@ -607,8 +609,13 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         flex: 1,
                       }}
                     >
-                      {getRestrictedBrands(item.restrictedBrands)}
+                      {editedPayments[index]['restrictedBrands'] &&
+                      editedPayments[index]['restrictedBrands'] !== item.restrictedBrands
+                        ? getRestrictedBrands(editedPayments[index]['restrictedBrands'])
+                        : getRestrictedBrands(item.restrictedBrands)}
+                      {/* {getRestrictedBrands(item.restrictedBrands)} */}
                     </Text>
+
                     <TouchableOpacity
                       onPress={() =>
                         item.restrictedBrands && item.restrictedBrands.length > 6
