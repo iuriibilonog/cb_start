@@ -91,10 +91,13 @@ const lang = {
   'users.validation_error': 'Validation failed (numeric string is expected)',
   'users.ledger_name': 'Ledger name',
   'users.add_new_ledger': 'Add new Ledger',
+  'users.add_new_payments_settings': 'Add new Payments Settings',
+  
   'users.payin': 'PayIn',
   'users.payout': 'PayOut',
 
   'users.payment_method_name': 'Payment method name',
+  'users.payment_method': 'Payment method',
   'users.bank_name': 'Bank name',
   'users.setting_name': 'Setting name',
   'users.net_price': 'Net price',

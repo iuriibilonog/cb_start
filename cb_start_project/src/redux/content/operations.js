@@ -415,27 +415,18 @@ export const skipEditedPaymentsSettings = createAsyncThunk(
   }
 );
 
-// export const getAllModes = createAsyncThunk('content/getAllModes', async (_, thunkAPI) => {
-//   try {
-//     // const { data } = await api.get(`${BASE_URL}/api/modes`, {
-//     //   withCredentials: true,
-//     // });
-//     // return data;
-//   } catch (error) {
-//     // return thunkAPI.rejectWithValue(error);
-//   }
-// });
+export const getPaymentsMethods = createAsyncThunk(
+  'content/getPaymentsMethods',
+  async (bankId, thunkAPI) => {
+    try {
+      console.log('getPaymentsMethods -> bankId>>', bankId);
+      const { data } = await api.get(`${BASE_URL}/api/payment-methods?page=1&pageSize=100&filter=${bankId}`, {
+        withCredentials: true,
+      });
 
-// export const getAllCurrencies = createAsyncThunk(
-//   'content/getAllCurrencies',
-//   async (_, thunkAPI) => {
-//     try {
-//       // const { data } = await api.get(`${BASE_URL}/api/currencies`, {
-//       //   withCredentials: true,
-//       // });
-//       // return data;
-//     } catch (error) {
-//       // return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
