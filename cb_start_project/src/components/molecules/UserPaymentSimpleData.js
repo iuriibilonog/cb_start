@@ -82,13 +82,11 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
     );
   };
   const getRestrictedBrands = (brands) => {
-    return Array.isArray(brands) && brands.length === 0 ? (
-      <FormattedMessage id={'common.empty'} />
-    ) : Array.isArray(brands) && brands.length > 0 ? (
-      brands.join(', ')
-    ) : (
-      brands
-    );
+    return Array.isArray(brands) && brands.length === 0
+      ? 'Empty'
+      : Array.isArray(brands) && brands.length > 0
+      ? brands.join(', ')
+      : brands;
   };
   const handleOnBlur = () => {
     setIsCountriesOpen(false);
@@ -615,6 +613,20 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         : getRestrictedBrands(item.restrictedBrands)}
                       {/* {getRestrictedBrands(item.restrictedBrands)} */}
                     </Text>
+                    {editedPayments[index]['restrictedBrands'] &&
+                      editedPayments[index]['restrictedBrands'] !== item.restrictedBrands && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            backgroundColor: '#36D0BB',
+                            borderRadius: 5,
+                          }}
+                        />
+                      )}
 
                     <TouchableOpacity
                       onPress={() =>
@@ -726,7 +738,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                       {editedPayments[index].commissions?.MasterCard?.netPrice &&
                       +editedPayments[index].commissions?.MasterCard?.netPrice !==
                         item?.commissions?.MasterCard?.netPrice
-                        ? editedPayments[index].commissions?.MasterCard?.netPrice
+                        ? +editedPayments[index].commissions?.MasterCard?.netPrice
                         : item?.commissions?.MasterCard?.netPrice}
                     </SimpleText>
                     {editedPayments[index].commissions?.MasterCard?.netPrice &&
@@ -760,13 +772,38 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                     </TouchableOpacity>
                   </View>
                   <View style={styles.additDataCellValues}>
-                    <SimpleText>{item?.commissions?.MasterCard?.fixedNetPrice}</SimpleText>
+                    <SimpleText>
+                      {editedPayments[index].commissions?.MasterCard?.fixedNetPrice &&
+                      +editedPayments[index].commissions?.MasterCard?.fixedNetPrice !==
+                        item?.commissions?.MasterCard?.fixedNetPrice
+                        ? +editedPayments[index].commissions?.MasterCard?.fixedNetPrice
+                        : item?.commissions?.MasterCard?.fixedNetPrice}
+                    </SimpleText>
+                    {editedPayments[index].commissions?.MasterCard?.fixedNetPrice &&
+                      +editedPayments[index].commissions?.MasterCard?.fixedNetPrice !==
+                        item?.commissions?.MasterCard?.fixedNetPrice && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            backgroundColor: '#36D0BB',
+                            borderRadius: 5,
+                          }}
+                        />
+                      )}
+
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
                           parentScreen: 'UserScreen',
                           name: 'users.fixed_net_price',
                           value: item?.commissions?.MasterCard?.fixedNetPrice?.toString(),
+                          index,
+                          id,
+                          dataName: 'fixedNetPriceMasterCard',
                         })
                       }
                     >
@@ -774,13 +811,37 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                     </TouchableOpacity>
                   </View>
                   <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-                    <SimpleText>{item?.commissions?.MasterCard?.minCommission}</SimpleText>
+                    <SimpleText>
+                      {editedPayments[index].commissions?.MasterCard?.minCommission &&
+                      +editedPayments[index].commissions?.MasterCard?.minCommission !==
+                        item?.commissions?.MasterCard?.minCommission
+                        ? +editedPayments[index].commissions?.MasterCard?.minCommission
+                        : item?.commissions?.MasterCard?.minCommission}
+                    </SimpleText>
+                    {editedPayments[index].commissions?.MasterCard?.minCommission &&
+                      +editedPayments[index].commissions?.MasterCard?.minCommission !==
+                        item?.commissions?.MasterCard?.minCommission && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            backgroundColor: '#36D0BB',
+                            borderRadius: 5,
+                          }}
+                        />
+                      )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
                           parentScreen: 'UserScreen',
                           name: 'users.min_commission',
                           value: item?.commissions?.MasterCard?.minCommission?.toString(),
+                          index,
+                          id,
+                          dataName: 'minCommissionMasterCard',
                         })
                       }
                     >
@@ -826,13 +887,37 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                   }}
                 >
                   <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-                    <SimpleText>{item?.commissions?.Visa?.netPrice}</SimpleText>
+                    <SimpleText>
+                      {editedPayments[index].commissions?.Visa?.netPrice &&
+                      +editedPayments[index].commissions?.Visa?.netPrice !==
+                        item?.commissions?.Visa?.netPrice
+                        ? +editedPayments[index].commissions?.Visa?.netPrice
+                        : item?.commissions?.Visa?.netPrice}
+                    </SimpleText>
+                    {editedPayments[index].commissions?.Visa?.netPrice &&
+                      +editedPayments[index].commissions?.Visa?.netPrice !==
+                        item?.commissions?.Visa?.netPrice && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            backgroundColor: '#36D0BB',
+                            borderRadius: 5,
+                          }}
+                        />
+                      )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
                           parentScreen: 'UserScreen',
                           name: 'users.net_price',
                           value: item?.commissions?.Visa?.netPrice?.toString(),
+                          index,
+                          id,
+                          dataName: 'NetPriceVisa',
                         })
                       }
                     >
@@ -840,13 +925,37 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                     </TouchableOpacity>
                   </View>
                   <View style={styles.additDataCellValues}>
-                    <SimpleText>{item?.commissions?.Visa?.fixedNetPrice}</SimpleText>
+                    <SimpleText>
+                      {editedPayments[index].commissions?.Visa?.fixedNetPrice &&
+                      +editedPayments[index].commissions?.Visa?.fixedNetPrice !==
+                        item?.commissions?.Visa?.fixedNetPrice
+                        ? +editedPayments[index].commissions?.Visa?.fixedNetPrice
+                        : item?.commissions?.Visa?.fixedNetPrice}
+                    </SimpleText>
+                    {editedPayments[index].commissions?.Visa?.fixedNetPrice &&
+                      +editedPayments[index].commissions?.Visa?.fixedNetPrice !==
+                        item?.commissions?.Visa?.fixedNetPrice && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            backgroundColor: '#36D0BB',
+                            borderRadius: 5,
+                          }}
+                        />
+                      )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
                           parentScreen: 'UserScreen',
                           name: 'users.fixed_net_price',
                           value: item?.commissions?.Visa?.fixedNetPrice?.toString(),
+                          index,
+                          id,
+                          dataName: 'fixedNetPriceVisa',
                         })
                       }
                     >
@@ -854,13 +963,37 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                     </TouchableOpacity>
                   </View>
                   <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-                    <SimpleText>{item?.commissions?.Visa?.minCommission}</SimpleText>
+                    <SimpleText>
+                      {editedPayments[index].commissions?.Visa?.minCommission &&
+                      +editedPayments[index].commissions?.Visa?.minCommission !==
+                        item?.commissions?.Visa?.minCommission
+                        ? +editedPayments[index].commissions?.Visa?.minCommission
+                        : item?.commissions?.Visa?.minCommission}
+                    </SimpleText>
+                    {editedPayments[index].commissions?.Visa?.minCommission &&
+                      +editedPayments[index].commissions?.Visa?.minCommission !==
+                        item?.commissions?.Visa?.minCommission && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            backgroundColor: '#36D0BB',
+                            borderRadius: 5,
+                          }}
+                        />
+                      )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
                           parentScreen: 'UserScreen',
                           name: 'users.min_commission',
                           value: item?.commissions?.Visa?.minCommission?.toString(),
+                          index,
+                          id,
+                          dataName: 'minCommissionVisa',
                         })
                       }
                     >

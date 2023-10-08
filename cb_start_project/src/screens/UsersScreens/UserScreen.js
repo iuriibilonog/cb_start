@@ -103,6 +103,7 @@ const UserScreen = (props) => {
   const confirmEditPayment = async (id) => {
     setIsLoading(true);
     const currentPaymentData = allPaymentData.filter((item) => item.id === id)[0];
+    console.log('currentPaymentData', currentPaymentData);
 
     const paymentData = {
       name: currentPaymentData.name,
@@ -112,35 +113,42 @@ const UserScreen = (props) => {
       limit: +currentPaymentData.limit,
       minAmount: +currentPaymentData.minAmount,
       maxAmount: +currentPaymentData.maxAmount,
-      // restrictedCountries: creatingArrayRestrictedCountries(),
+      restrictedCountries: currentPaymentData.restrictedCountries,
       active: currentPaymentData.active,
       chance: currentPaymentData.chance,
       rateCommission: currentPaymentData.rateCommission,
-      // restrictedBrands:
-      //   selectBrand === 'Empty'
-      //     ? []
-      //     : selectBrand === 'Visa and MasterCard'
-      //     ? ['Visa', 'MasterCard']
-      //     : [selectBrand],
+      restrictedBrands:
+        currentPaymentData.restrictedBrands === 'Empty'
+          ? []
+          : currentPaymentData.restrictedBrands === 'Visa and MasterCard'
+          ? ['Visa', 'MasterCard']
+          : [currentPaymentData.restrictedBrands],
       useWhitelist: currentPaymentData.whitelist,
       minConfirmations: currentPaymentData.minConfirmations,
     };
 
     const commissionsData = {};
-    // if (netPriceMaster > 0 || fixedNetPriceMaster > 0 || minCommissionMaster > 0) {
-    //   commissionsData.MasterCard = {
-    //     netPrice: netPriceMaster ? +netPriceMaster : 0,
-    //     fixedNetPrice: fixedNetPriceMaster ? +fixedNetPriceMaster : 0,
-    //     minCommission: minCommissionMaster ? +minCommissionMaster : 0,
-    //   };
-    // }
-    // if (netPriceVisa > 0 || fixedNetPriceVisa > 0 || minCommissionVisa > 0) {
-    //   commissionsData.Visa = {
-    //     netPrice: netPriceVisa ? +netPriceVisa : 0,
-    //     fixedNetPrice: fixedNetPriceVisa ? +fixedNetPriceVisa : 0,
-    //     minCommission: minCommissionVisa ? +minCommissionVisa : 0,
-    //   };
-    // }
+    const netPriceMaster = currentPaymentData.commissions.MasterCard.netPrice;
+    const fixedNetPriceMaster = currentPaymentData.commissions.MasterCard.fixedNetPrice;
+    const minCommissionMaster = currentPaymentData.commissions.MasterCard.minCommission;
+    const netPriceVisa = currentPaymentData.commissions.Visa.netPrice;
+    const fixedNetPriceVisa = currentPaymentData.commissions.Visa.fixedNetPrice;
+    const minCommissionVisa = currentPaymentData.commissions.Visa.minCommission;
+
+    if (netPriceMaster > 0 || fixedNetPriceMaster > 0 || minCommissionMaster > 0) {
+      commissionsData.MasterCard = {
+        netPrice: netPriceMaster ? +netPriceMaster : 0,
+        fixedNetPrice: fixedNetPriceMaster ? +fixedNetPriceMaster : 0,
+        minCommission: minCommissionMaster ? +minCommissionMaster : 0,
+      };
+    }
+    if (netPriceVisa > 0 || fixedNetPriceVisa > 0 || minCommissionVisa > 0) {
+      commissionsData.Visa = {
+        netPrice: netPriceVisa ? +netPriceVisa : 0,
+        fixedNetPrice: fixedNetPriceVisa ? +fixedNetPriceVisa : 0,
+        minCommission: minCommissionVisa ? +minCommissionVisa : 0,
+      };
+    }
 
     if (Object.keys(commissionsData).length !== 0) {
       paymentData.commissions = commissionsData;

@@ -42,9 +42,6 @@ const EditPaymentsSettingsScreen = (props) => {
   }, []);
 
   const handleEditLedger = async (value) => {
-    console.log('getNewPaymentValue - id', id);
-    console.log('getNewPaymentValue - dataName', dataName);
-    console.log('getNewPaymentValue - VALUEE', value);
     getNewPaymentValue(id, dataName, value);
   };
 
@@ -53,9 +50,28 @@ const EditPaymentsSettingsScreen = (props) => {
       if (item.id === id) {
         switch (dataName) {
           case 'NetPriceMasterCard':
-            item.commissions.MasterCard.netPrice = value;
-            const obj = { ...item.commissions.MasterCard, netPrice: value };
+            let obj = { ...item.commissions.MasterCard, netPrice: value };
             return { ...item, ['commissions']: { ...item.commissions, MasterCard: obj } };
+
+          case 'fixedNetPriceMasterCard':
+            obj = { ...item.commissions.MasterCard, fixedNetPrice: value };
+            return { ...item, ['commissions']: { ...item.commissions, MasterCard: obj } };
+
+          case 'minCommissionMasterCard':
+            obj = { ...item.commissions.MasterCard, minCommission: value };
+            return { ...item, ['commissions']: { ...item.commissions, MasterCard: obj } };
+
+          case 'NetPriceVisa':
+            obj = { ...item.commissions.Visa, netPrice: value };
+            return { ...item, ['commissions']: { ...item.commissions, Visa: obj } };
+
+          case 'fixedNetPriceVisa':
+            obj = { ...item.commissions.Visa, fixedNetPrice: value };
+            return { ...item, ['commissions']: { ...item.commissions, Visa: obj } };
+
+          case 'minCommissionVisa':
+            obj = { ...item.commissions.Visa, minCommission: value };
+            return { ...item, ['commissions']: { ...item.commissions, Visa: obj } };
 
           default:
             return { ...item, [dataName]: dataName === 'restrictedCountries' ? [value] : value };
