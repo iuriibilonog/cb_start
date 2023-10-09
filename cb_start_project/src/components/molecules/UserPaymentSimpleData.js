@@ -93,6 +93,13 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
     setIsBrandsOpen(false);
   };
 
+  const getCardsData = (item, index) => {
+    +editedPayments[index].commissions?.MasterCard?.fixedNetPrice !==
+    item?.commissions?.MasterCard?.fixedNetPrice
+      ? +editedPayments[index].commissions?.MasterCard?.fixedNetPrice
+      : item?.commissions?.MasterCard?.fixedNetPrice;
+  };
+
   return (
     editedPayments.length > 0 && (
       <TouchableWithoutFeedback onPress={() => handleOnBlur()}>
@@ -245,20 +252,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? editedPayments[index]['netPrice']
                         : item.netPrice}
                     </SimpleText>
-                    {editedPayments[index]['netPrice'] &&
-                      +editedPayments[index]['netPrice'] !== item?.netPrice && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index]['netPrice'] !== item?.netPrice && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
 
                     <TouchableOpacity
                       onPress={() =>
@@ -282,20 +288,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? editedPayments[index]['fixedNetPrice']
                         : item.fixedNetPrice}
                     </SimpleText>
-                    {editedPayments[index]['fixedNetPrice'] &&
-                      +editedPayments[index]['fixedNetPrice'] !== +item.fixedNetPrice && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index]['fixedNetPrice'] !== +item.fixedNetPrice && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -319,20 +324,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? editedPayments[index]['minAmount']
                         : item.minAmount}
                     </SimpleText>
-                    {editedPayments[index]['minAmount'] &&
-                      +editedPayments[index]['minAmount'] !== +item.minAmount && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index]['minAmount'] !== +item.minAmount && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -355,20 +359,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? editedPayments[index]['maxAmount']
                         : item.maxAmount}
                     </SimpleText>
-                    {editedPayments[index]['maxAmount'] &&
-                      +editedPayments[index]['maxAmount'] !== +item.maxAmount && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index]['maxAmount'] !== +item.maxAmount && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -391,20 +394,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? editedPayments[index]['minCommission']
                         : item.minCommission}
                     </SimpleText>
-                    {editedPayments[index]['minCommission'] &&
-                      +editedPayments[index]['minCommission'] !== +item.minCommission && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index]['minCommission'] !== +item.minCommission && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -427,20 +429,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? editedPayments[index]['limit']
                         : item.limit}
                     </SimpleText>
-                    {editedPayments[index]['limit'] &&
-                      +editedPayments[index]['limit'] !== +item.limit && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index]['limit'] !== +item.limit && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -463,20 +464,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? editedPayments[index]['rateCommission']
                         : item.rateCommission}
                     </SimpleText>
-                    {editedPayments[index]['rateCommission'] &&
-                      +editedPayments[index]['rateCommission'] !== +item.rateCommission && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index]['rateCommission'] !== +item.rateCommission && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -508,20 +508,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? getRestrictedCountries(editedPayments[index]['restrictedCountries'])
                         : getRestrictedCountries(item.restrictedCountries)}
                     </Text>
-                    {editedPayments[index]['restrictedCountries'] &&
-                      editedPayments[index]['restrictedCountries'] !== item.restrictedCountries && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {editedPayments[index]['restrictedCountries'] !== item.restrictedCountries && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         item.restrictedCountries && item.restrictedCountries.length > 6
@@ -613,20 +612,19 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         : getRestrictedBrands(item.restrictedBrands)}
                       {/* {getRestrictedBrands(item.restrictedBrands)} */}
                     </Text>
-                    {editedPayments[index]['restrictedBrands'] &&
-                      editedPayments[index]['restrictedBrands'] !== item.restrictedBrands && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {editedPayments[index]['restrictedBrands'] !== item.restrictedBrands && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
 
                     <TouchableOpacity
                       onPress={() =>
@@ -741,21 +739,20 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.MasterCard?.netPrice
                         : item?.commissions?.MasterCard?.netPrice}
                     </SimpleText>
-                    {editedPayments[index].commissions?.MasterCard?.netPrice &&
-                      +editedPayments[index].commissions?.MasterCard?.netPrice !==
-                        item?.commissions?.MasterCard?.netPrice && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index].commissions?.MasterCard?.netPrice !==
+                      item?.commissions?.MasterCard?.netPrice && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -779,21 +776,21 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.MasterCard?.fixedNetPrice
                         : item?.commissions?.MasterCard?.fixedNetPrice}
                     </SimpleText>
-                    {editedPayments[index].commissions?.MasterCard?.fixedNetPrice &&
-                      +editedPayments[index].commissions?.MasterCard?.fixedNetPrice !==
-                        item?.commissions?.MasterCard?.fixedNetPrice && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+
+                    {+editedPayments[index].commissions?.MasterCard?.fixedNetPrice !==
+                      item?.commissions?.MasterCard?.fixedNetPrice && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
 
                     <TouchableOpacity
                       onPress={() =>
@@ -816,23 +813,24 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                       +editedPayments[index].commissions?.MasterCard?.minCommission !==
                         item?.commissions?.MasterCard?.minCommission
                         ? +editedPayments[index].commissions?.MasterCard?.minCommission
-                        : item?.commissions?.MasterCard?.minCommission}
+                        : item?.commissions?.MasterCard?.minCommission
+                        ? item?.commissions?.MasterCard?.minCommission
+                        : ''}
                     </SimpleText>
-                    {editedPayments[index].commissions?.MasterCard?.minCommission &&
-                      +editedPayments[index].commissions?.MasterCard?.minCommission !==
-                        item?.commissions?.MasterCard?.minCommission && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index].commissions?.MasterCard?.minCommission !==
+                      item?.commissions?.MasterCard?.minCommission && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -894,21 +892,20 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.Visa?.netPrice
                         : item?.commissions?.Visa?.netPrice}
                     </SimpleText>
-                    {editedPayments[index].commissions?.Visa?.netPrice &&
-                      +editedPayments[index].commissions?.Visa?.netPrice !==
-                        item?.commissions?.Visa?.netPrice && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index].commissions?.Visa?.netPrice !==
+                      item?.commissions?.Visa?.netPrice && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -932,21 +929,20 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.Visa?.fixedNetPrice
                         : item?.commissions?.Visa?.fixedNetPrice}
                     </SimpleText>
-                    {editedPayments[index].commissions?.Visa?.fixedNetPrice &&
-                      +editedPayments[index].commissions?.Visa?.fixedNetPrice !==
-                        item?.commissions?.Visa?.fixedNetPrice && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index].commissions?.Visa?.fixedNetPrice !==
+                      item?.commissions?.Visa?.fixedNetPrice && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
@@ -970,21 +966,20 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.Visa?.minCommission
                         : item?.commissions?.Visa?.minCommission}
                     </SimpleText>
-                    {editedPayments[index].commissions?.Visa?.minCommission &&
-                      +editedPayments[index].commissions?.Visa?.minCommission !==
-                        item?.commissions?.Visa?.minCommission && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            backgroundColor: '#36D0BB',
-                            borderRadius: 5,
-                          }}
-                        />
-                      )}
+                    {+editedPayments[index].commissions?.Visa?.minCommission !==
+                      item?.commissions?.Visa?.minCommission && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          backgroundColor: '#36D0BB',
+                          borderRadius: 5,
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('EditPaymentsSettingsScreen', {
