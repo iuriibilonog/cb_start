@@ -261,168 +261,184 @@ const CreatePaymentsSettingsScreen = (props) => {
                     />
                   )}
                 </View>
-                <View style={{ ...styles.itemWrapper, flexDirection: 'row' }}>
-                  <View style={{ width: 65 }}>
-                    <SimpleText style={{ ...styles.boldText, marginBottom: 12 }}>
-                      <FormattedMessage id={'transactions.mode'} />:
-                    </SimpleText>
-                    <SimpleText style={styles.boldText}>
-                      <FormattedMessage id={'common.type'} />:
-                    </SimpleText>
+                <View
+                  style={{
+                    pointerEvents: isMethodsDropdownOpen || isBanksDropdownOpen ? 'none' : 'all',
+                    opacity: isMethodsDropdownOpen || isBanksDropdownOpen ? 0.5 : 1,
+                  }}
+                >
+                  <View style={{ ...styles.itemWrapper, flexDirection: 'row' }}>
+                    <View style={{ width: 65 }}>
+                      <SimpleText style={{ ...styles.boldText, marginBottom: 12 }}>
+                        <FormattedMessage id={'transactions.mode'} />:
+                      </SimpleText>
+                      <SimpleText style={styles.boldText}>
+                        <FormattedMessage id={'common.type'} />:
+                      </SimpleText>
+                    </View>
+                    <View>
+                      <SimpleText style={{ ...styles.boldText, marginBottom: 12 }}>
+                        {methodsList &&
+                          selectedMethod &&
+                          methodsList.find((i) => i.name === selectedMethod)?.mode}
+                      </SimpleText>
+                      <SimpleText style={styles.boldText}>
+                        {methodsList &&
+                          selectedMethod &&
+                          methodsList.find((i) => i.name === selectedMethod)?.type}
+                      </SimpleText>
+                    </View>
                   </View>
-                  <View>
-                    <SimpleText style={{ ...styles.boldText, marginBottom: 12 }}>payin</SimpleText>
-                    <SimpleText style={styles.boldText}>card</SimpleText>
+                  <View style={styles.itemWrapper}>
+                    <View style={styles.itemTitle}>
+                      <SimpleText style={styles.itemTextTitle}>
+                        <FormattedMessage id={'users.setting_name'} />
+                      </SimpleText>
+                    </View>
+                    <FormattedMessage id={'users.setting_name'}>
+                      {(placeholder) => (
+                        <TextInput
+                          style={{ ...styles.textInput, width: width - 40 }}
+                          value={inputsData.settingsName}
+                          onChangeText={(text) => {
+                            setInputsData((prev) => ({ ...prev, settingsName: text }));
+                          }}
+                          placeholder={placeholder[0]}
+                        />
+                      )}
+                    </FormattedMessage>
                   </View>
-                </View>
-                <View style={styles.itemWrapper}>
-                  <View style={styles.itemTitle}>
-                    <SimpleText style={styles.itemTextTitle}>
-                      <FormattedMessage id={'users.setting_name'} />
-                    </SimpleText>
-                  </View>
-                  <FormattedMessage id={'users.setting_name'}>
-                    {(placeholder) => (
-                      <TextInput
-                        style={{ ...styles.textInput, width: width - 40 }}
-                        value={inputsData.settingsName}
-                        onChangeText={(text) => {
-                          setInputsData((prev) => ({ ...prev, settingsName: text }));
-                        }}
-                        placeholder={placeholder[0]}
+                  <View style={styles.digitBlockWrapper}>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.net_price'}
+                        name={'netPrice'}
+                        setDigitsValues={handleSetInputsValues}
                       />
-                    )}
-                  </FormattedMessage>
-                </View>
-                <View style={styles.digitBlockWrapper}>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.net_price'}
-                      name={'netPrice'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.fixed_net_price'}
-                      name={'fixedNetPrice'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.min_commission'}
-                      name={'minCommission'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.limit'}
-                      name={'limit'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.min_amount'}
-                      name={'minAmount'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.max_amount'}
-                      name={'maxAmount'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.rate_commission'}
-                      name={'rateCommission'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.restricted_brands'}
-                      name={'restrictedBrands'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                </View>
-                <View style={{ marginBottom: 60 }}>
-                  <View style={styles.itemTitle}>
-                    <SimpleText style={styles.itemTextTitle}>
-                      <FormattedMessage id={'users.restricted_countries'} />
-                    </SimpleText>
-                  </View>
-                  <FormattedMessage id={'users.restricted_countries'}>
-                    {(placeholder) => (
-                      <TextInput
-                        style={{ ...styles.textInput, width: width - 40 }}
-                        value={inputsData.restrtictedCountries}
-                        onChangeText={(text) => {
-                          setInputsData((prev) => ({ ...prev, restrtictedCountries: text }));
-                        }}
-                        placeholder={placeholder[0]}
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.fixed_net_price'}
+                        name={'fixedNetPrice'}
+                        setDigitsValues={handleSetInputsValues}
                       />
-                    )}
-                  </FormattedMessage>
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.min_commission'}
+                        name={'minCommission'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.limit'}
+                        name={'limit'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.min_amount'}
+                        name={'minAmount'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.max_amount'}
+                        name={'maxAmount'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.rate_commission'}
+                        name={'rateCommission'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.restricted_brands'}
+                        name={'restrictedBrands'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                  </View>
+                  <View style={{ marginBottom: 60 }}>
+                    <View style={styles.itemTitle}>
+                      <SimpleText style={styles.itemTextTitle}>
+                        <FormattedMessage id={'users.restricted_countries'} />
+                      </SimpleText>
+                    </View>
+                    <FormattedMessage id={'users.restricted_countries'}>
+                      {(placeholder) => (
+                        <TextInput
+                          style={{ ...styles.textInput, width: width - 40 }}
+                          value={inputsData.restrtictedCountries}
+                          onChangeText={(text) => {
+                            setInputsData((prev) => ({ ...prev, restrtictedCountries: text }));
+                          }}
+                          placeholder={placeholder[0]}
+                        />
+                      )}
+                    </FormattedMessage>
+                  </View>
+                  <View style={{ marginBottom: 60 }}>
+                    <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
+                      <FormattedMessage id={'users.addit_setting_mastercard'} />
+                    </SimpleText>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.net_price'}
+                        name={'mastercard_netPrice'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.fixed_net_price'}
+                        name={'mastercard_fixedNetPrice'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
+                      <DecrementIncrement
+                        title={'users.max_amount'}
+                        name={'mastercard_maxAmount'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                  </View>
+                  <View style={{ marginBottom: 50 }}>
+                    <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
+                      <FormattedMessage id={'users.addit_setting_visa'} />
+                    </SimpleText>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.net_price'}
+                        name={'visa_netPrice'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={styles.digitItemWrapper}>
+                      <DecrementIncrement
+                        title={'users.fixed_net_price'}
+                        name={'visa_fixedNetPrice'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                    <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
+                      <DecrementIncrement
+                        title={'users.max_amount'}
+                        name={'visa_maxAmount'}
+                        setDigitsValues={handleSetInputsValues}
+                      />
+                    </View>
+                  </View>
                 </View>
-                <View style={{ marginBottom: 60 }}>
-                  <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
-                    <FormattedMessage id={'users.addit_setting_mastercard'} />
-                  </SimpleText>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.net_price'}
-                      name={'mastercard_netPrice'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.fixed_net_price'}
-                      name={'mastercard_fixedNetPrice'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
-                    <DecrementIncrement
-                      title={'users.max_amount'}
-                      name={'mastercard_maxAmount'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                </View>
-                <View style={{ marginBottom: 50 }}>
-                  <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
-                    <FormattedMessage id={'users.addit_setting_visa'} />
-                  </SimpleText>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.net_price'}
-                      name={'visa_netPrice'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={styles.digitItemWrapper}>
-                    <DecrementIncrement
-                      title={'users.fixed_net_price'}
-                      name={'visa_fixedNetPrice'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                  <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
-                    <DecrementIncrement
-                      title={'users.max_amount'}
-                      name={'visa_maxAmount'}
-                      setDigitsValues={handleSetInputsValues}
-                    />
-                  </View>
-                </View>
+                {/*  */}
               </View>
             </View>
             <TouchableOpacity activeOpacity={0.5} onPress={handleSubmit}>
