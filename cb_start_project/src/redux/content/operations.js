@@ -82,7 +82,7 @@ export const getBankConversion = createAsyncThunk(
     startDate = startDate ? startDate : initialDate;
     endDate = endDate ? endDate : initialDate;
 
-    console.log('Date-getBankConversion ', data);
+    // console.log('Date-getBankConversion ', data);
 
     // UTC+0 - UTC+5.5, UTC+6 //
     // timezone = Europe / London;
@@ -178,7 +178,7 @@ export const getTransactionData = createAsyncThunk(
 
         setLink = `startDate=${initialDate}&endDate=${initialDate}&` + setLink;
       }
-      console.log('page,setLink', page, '<><>', setLink);
+      // console.log('page,setLink', page, '<><>', setLink);
       const { data } = await api.get(
         `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&${setLink}`,
         // `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&startDate=${startDate}&endDate=${endDate}&userId=${userId}&apiKeyId=${apiKeyId}&mode=${mode}&status=${status}&currency=${currency}&timezone=${timezone}&bankName=${bankName}`,
@@ -196,7 +196,7 @@ export const getTransactionData = createAsyncThunk(
 
 export const getApiData = createAsyncThunk('content/getApiData', async (page = 1, thunkAPI) => {
   try {
-    console.log('getApiData-Operations - page', page);
+    // console.log('getApiData-Operations - page', page);
     const { data } = await api.get(`${BASE_URL}/api/api-keys?page=${page}&pageSize=100`, {
       withCredentials: true,
     });
@@ -283,7 +283,7 @@ export const putEditUser = createAsyncThunk(
       // roleId: 1
       // username: "TestAppUser111"
       const { userId, updatedData } = editingData;
-      console.log('putEditUser>>', editingData);
+      // console.log('putEditUser>>', editingData);
       const { data } = await api.put(`${BASE_URL}/api/users/${userId}`, updatedData, {
         withCredentials: true,
       });
@@ -304,7 +304,7 @@ export const getLedgersByApiKeyID = createAsyncThunk(
       const { data } = await api.get(`${BASE_URL}/api/ledgers?apiKeyId=${apiKeyId}`, {
         withCredentials: true,
       });
-      console.log('>>', apiKeyId, '<>', data);
+      // console.log('>>', apiKeyId, '<>', data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -317,7 +317,7 @@ export const getSearchUsers = createAsyncThunk(
   async (searchData, thunkAPI) => {
     try {
       const { page = 1, searchText } = searchData;
-      console.log('searchData>>', searchData);
+      // console.log('searchData>>', searchData);
       const { data } = await api.get(
         `${BASE_URL}/api/users?page=${page}&pageSize=20&filter=${searchText}`,
         {
@@ -335,7 +335,6 @@ export const getSearchUsers = createAsyncThunk(
 export const cleanUserLedgers = createAsyncThunk(
   'content/cleanUserLedgers',
   async (_, thunkAPI) => {
-    console.log('CLEAN LEDGERS');
     try {
       return [];
     } catch (error) {
@@ -372,7 +371,7 @@ export const getUserPayments = createAsyncThunk(
   'content/getUserPayments',
   async (apiKey, thunkAPI) => {
     try {
-      console.log('getUserPaymentsCHAIN -> apiKey>>', apiKey);
+      // console.log('getUserPaymentsCHAIN -> apiKey>>', apiKey);
       const { data } = await api.get(`${BASE_URL}/api/paymethod-chains/${apiKey}`, {
         withCredentials: true,
       });
@@ -388,8 +387,8 @@ export const confirmUserPaymentData = createAsyncThunk(
   'content/confirmUserPaymentData',
   async (data, thunkAPI) => {
     const { paymentData, id } = data;
-    console.log('data', data);
-    console.log('id', id);
+    // console.log('data', data);
+    // console.log('id', id);
     try {
       const { data } = await api.put(`${BASE_URL}/api/paymethod-settings/${id}`, paymentData, {
         withCredentials: true,
@@ -419,8 +418,44 @@ export const getPaymentsMethods = createAsyncThunk(
   'content/getPaymentsMethods',
   async (bankId, thunkAPI) => {
     try {
-      console.log('getPaymentsMethods -> bankId>>', bankId);
-      const { data } = await api.get(`${BASE_URL}/api/payment-methods?page=1&pageSize=100&filter=${bankId}`, {
+      // console.log('getPaymentsMethods -> bankId>>', bankId);
+      const { data } = await api.get(
+        `${BASE_URL}/api/payment-methods?page=1&pageSize=100&filter=${bankId}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const postNewPaymentsSettings = createAsyncThunk(
+  'content/postNewPaymentsSettings',
+  async (paymentsData, thunkAPI) => {
+    // console.log('OPERATIONS> postSettings> :', paymentsData);
+    try {
+      const { data } = await api.post(`${BASE_URL}/api/paymethod-settings`, paymentsData, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const putNewPaymentsChain = createAsyncThunk(
+  'content/putNewPaymentsChain',
+  async ({ key, chainData }, thunkAPI) => {
+    try {
+      // console.log('putNewPaymentsChain -> key>>', key);
+      // console.log('putNewPaymentsChain -> data>>', chainData);
+      const { data } = await api.put(`${BASE_URL}/api/paymethod-chains/${key}`, chainData, {
         withCredentials: true,
       });
 
