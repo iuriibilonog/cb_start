@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   Text,
   TouchableWithoutFeedback,
+  Pressable,
+  TextInput,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
@@ -91,13 +93,6 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
   const handleOnBlur = () => {
     setIsCountriesOpen(false);
     setIsBrandsOpen(false);
-  };
-
-  const getCardsData = (item, index) => {
-    +editedPayments[index].commissions?.MasterCard?.fixedNetPrice !==
-    item?.commissions?.MasterCard?.fixedNetPrice
-      ? +editedPayments[index].commissions?.MasterCard?.fixedNetPrice
-      : item?.commissions?.MasterCard?.fixedNetPrice;
   };
 
   return (
@@ -606,6 +601,8 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         flex: 1,
                       }}
                     >
+                      {/* {console.log('first', editedPayments[index]['restrictedBrands'])}
+                      {console.log('first', item.restrictedBrands)} */}
                       {editedPayments[index]['restrictedBrands'] &&
                       editedPayments[index]['restrictedBrands'] !== item.restrictedBrands
                         ? getRestrictedBrands(editedPayments[index]['restrictedBrands'])
@@ -739,7 +736,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.MasterCard?.netPrice
                         : item?.commissions?.MasterCard?.netPrice}
                     </SimpleText>
-                    {+editedPayments[index].commissions?.MasterCard?.netPrice !==
+                    {editedPayments[index].commissions?.MasterCard?.netPrice !==
                       item?.commissions?.MasterCard?.netPrice && (
                       <View
                         style={{
@@ -777,7 +774,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         : item?.commissions?.MasterCard?.fixedNetPrice}
                     </SimpleText>
 
-                    {+editedPayments[index].commissions?.MasterCard?.fixedNetPrice !==
+                    {editedPayments[index].commissions?.MasterCard?.fixedNetPrice !==
                       item?.commissions?.MasterCard?.fixedNetPrice && (
                       <View
                         style={{
@@ -813,11 +810,9 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                       +editedPayments[index].commissions?.MasterCard?.minCommission !==
                         item?.commissions?.MasterCard?.minCommission
                         ? +editedPayments[index].commissions?.MasterCard?.minCommission
-                        : item?.commissions?.MasterCard?.minCommission
-                        ? item?.commissions?.MasterCard?.minCommission
-                        : ''}
+                        : item?.commissions?.MasterCard?.minCommission}
                     </SimpleText>
-                    {+editedPayments[index].commissions?.MasterCard?.minCommission !==
+                    {editedPayments[index].commissions?.MasterCard?.minCommission !==
                       item?.commissions?.MasterCard?.minCommission && (
                       <View
                         style={{
@@ -892,7 +887,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.Visa?.netPrice
                         : item?.commissions?.Visa?.netPrice}
                     </SimpleText>
-                    {+editedPayments[index].commissions?.Visa?.netPrice !==
+                    {editedPayments[index].commissions?.Visa?.netPrice !==
                       item?.commissions?.Visa?.netPrice && (
                       <View
                         style={{
@@ -929,7 +924,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.Visa?.fixedNetPrice
                         : item?.commissions?.Visa?.fixedNetPrice}
                     </SimpleText>
-                    {+editedPayments[index].commissions?.Visa?.fixedNetPrice !==
+                    {editedPayments[index].commissions?.Visa?.fixedNetPrice !==
                       item?.commissions?.Visa?.fixedNetPrice && (
                       <View
                         style={{
@@ -966,7 +961,8 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                         ? +editedPayments[index].commissions?.Visa?.minCommission
                         : item?.commissions?.Visa?.minCommission}
                     </SimpleText>
-                    {+editedPayments[index].commissions?.Visa?.minCommission !==
+
+                    {editedPayments[index].commissions?.Visa?.minCommission !==
                       item?.commissions?.Visa?.minCommission && (
                       <View
                         style={{
@@ -1095,25 +1091,54 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
               <SimpleText style={{ paddingTop: 4, width: width / 2.5 }}>
                 <FormattedMessage id={'common.chance'} />, % :
               </SimpleText>
-              <View
-                style={{
-                  marginRight: 'auto',
-                  width: 126,
-                  height: 40,
-                  alignItems: 'flex-start',
-                  justifyContent: 'center',
-                  backgroundColor: '#FAFAFA',
-                }}
+
+              <TouchableOpacity
+                style={{ marginRight: 'auto' }}
+                onPress={() =>
+                  navigation.navigate('EditPaymentsSettingsScreen', {
+                    parentScreen: 'UserScreen',
+                    name: 'common.chance',
+                    value: item?.chance?.toString(),
+                    index,
+                    id,
+                    dataName: 'chance',
+                  })
+                }
               >
-                <SimpleText
+                <View
                   style={{
-                    textAlign: 'center',
                     width: 126,
+                    height: 40,
+                    alignItems: 'flex-start',
+                    justifyContent: 'center',
+                    backgroundColor: '#FAFAFA',
                   }}
                 >
-                  {item.chance}
-                </SimpleText>
-              </View>
+                  <SimpleText
+                    style={{
+                      textAlign: 'center',
+                      width: 126,
+                    }}
+                  >
+                    {editedPayments[index].chance && +editedPayments[index].chance !== item?.chance
+                      ? +editedPayments[index].chance
+                      : item?.chance}
+                  </SimpleText>
+                  {editedPayments[index].chance !== item?.chance && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: -5,
+                        right: -5,
+                        width: 10,
+                        height: 10,
+                        backgroundColor: '#36D0BB',
+                        borderRadius: 5,
+                      }}
+                    />
+                  )}
+                </View>
+              </TouchableOpacity>
             </View>
             <View
               style={{

@@ -92,7 +92,7 @@ const lang = {
   'users.ledger_name': 'Ledger name',
   'users.add_new_ledger': 'Add new Ledger',
   'users.add_new_payments_settings': 'Add new Payments Settings',
-  
+
   'users.payin': 'PayIn',
   'users.payout': 'PayOut',
 

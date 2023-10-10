@@ -396,6 +396,7 @@ export const confirmUserPaymentData = createAsyncThunk(
 
       return data;
     } catch (error) {
+      console.log('secondErr');
       return thunkAPI.rejectWithValue(error);
     }
   }

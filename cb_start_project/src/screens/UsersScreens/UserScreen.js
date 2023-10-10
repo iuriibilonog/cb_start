@@ -100,6 +100,23 @@ const UserScreen = (props) => {
   // }, [editedPaymentData]);
   const allPaymentData = useSelector(getEditedPaymentsSettings);
 
+  const getBrands = (data) => {
+    if (Array.isArray(data) && data.includes('Visa') && data.includes('MasterCard'))
+      data = 'Visa and MasterCard';
+
+    switch (data) {
+      case 'Empty':
+        return [];
+      case []:
+        return [];
+      case 'Visa and MasterCard':
+        return ['Visa', 'MasterCard'];
+
+      default:
+        return Array.isArray(data) ? data : [data];
+    }
+  };
+
   const confirmEditPayment = async (id) => {
     setIsLoading(true);
     const currentPaymentData = allPaymentData.filter((item) => item.id === id)[0];
@@ -115,25 +132,20 @@ const UserScreen = (props) => {
       maxAmount: +currentPaymentData.maxAmount,
       restrictedCountries: currentPaymentData.restrictedCountries,
       active: currentPaymentData.active,
-      chance: currentPaymentData.chance,
+      chance: +currentPaymentData.chance,
       rateCommission: currentPaymentData.rateCommission,
-      restrictedBrands:
-        currentPaymentData.restrictedBrands === 'Empty'
-          ? []
-          : currentPaymentData.restrictedBrands === 'Visa and MasterCard'
-          ? ['Visa', 'MasterCard']
-          : [currentPaymentData.restrictedBrands],
-      useWhitelist: currentPaymentData.whitelist,
+      restrictedBrands: getBrands(currentPaymentData.restrictedBrands),
+      useWhitelist: currentPaymentData.useWhitelist,
       minConfirmations: currentPaymentData.minConfirmations,
     };
 
     const commissionsData = {};
-    const netPriceMaster = currentPaymentData.commissions.MasterCard.netPrice;
-    const fixedNetPriceMaster = currentPaymentData.commissions.MasterCard.fixedNetPrice;
-    const minCommissionMaster = currentPaymentData.commissions.MasterCard.minCommission;
-    const netPriceVisa = currentPaymentData.commissions.Visa.netPrice;
-    const fixedNetPriceVisa = currentPaymentData.commissions.Visa.fixedNetPrice;
-    const minCommissionVisa = currentPaymentData.commissions.Visa.minCommission;
+    const netPriceMaster = currentPaymentData.commissions?.MasterCard?.netPrice || 0;
+    const fixedNetPriceMaster = currentPaymentData.commissions?.MasterCard?.fixedNetPrice || 0;
+    const minCommissionMaster = currentPaymentData.commissions?.MasterCard?.minCommission || 0;
+    const netPriceVisa = currentPaymentData.commissions?.Visa?.netPrice || 0;
+    const fixedNetPriceVisa = currentPaymentData.commissions?.Visa?.fixedNetPrice || 0;
+    const minCommissionVisa = currentPaymentData.commissions?.Visa?.minCommission || 0;
 
     if (netPriceMaster > 0 || fixedNetPriceMaster > 0 || minCommissionMaster > 0) {
       commissionsData.MasterCard = {
@@ -157,21 +169,23 @@ const UserScreen = (props) => {
     }
 
     try {
-      await dispatch(confirmUserPaymentData({ paymentData, id }));
-      await dispatch(getUserPayments(chainIdOfCurrentLedger)).then((res) => {
-        setPaymentsData(
-          Array.isArray(res.payload.paymentMethodSettings)
-            ? res.payload.paymentMethodSettings
-            : [res.payload.paymentMethodSettings]
-        );
-        dispatch(
-          setEditedPaymentsSettings(
-            Array.isArray(res.payload.paymentMethodSettings)
-              ? res.payload.paymentMethodSettings
-              : [res.payload.paymentMethodSettings]
-          )
-        );
-      });
+      const confirm = await dispatch(confirmUserPaymentData({ paymentData, id })).unwrap();
+
+      const update = await dispatch(getUserPayments(chainIdOfCurrentLedger)).unwrap();
+      // console.log('update', update.paymentMethodSettings[0]);
+      setPaymentsData(
+        Array.isArray(update.paymentMethodSettings)
+          ? update.paymentMethodSettings
+          : [update.paymentMethodSettings]
+      );
+      dispatch(
+        setEditedPaymentsSettings(
+          Array.isArray(update.paymentMethodSettings)
+            ? update.paymentMethodSettings
+            : [update.paymentMethodSettings]
+        )
+      );
+
       setIsLoading(false);
       setTimeout(() => {
         showMessage({
@@ -199,9 +213,23 @@ const UserScreen = (props) => {
 
   const handleCleanUserLedgers = async () => {
     setIsLoading(true);
-    await dispatch(cleanUserLedgers());
-    setLedgersByApiData([]);
-    setIsLoading(false);
+    try {
+      const clean = await dispatch(cleanUserLedgers()).unwrap();
+      setLedgersByApiData([]);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Ooops, something went wrong!`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
   };
 
   const handleGetData = async () => {
@@ -210,12 +238,26 @@ const UserScreen = (props) => {
       ((props.route.params && props.route.params.isRefresh) || props.route.params)
     ) {
       setIsLoading(true);
-      await dispatch(getMerchantsApiKeys(currentUser.id));
-      await dispatch(getLedgersData(currentUser.id));
-      if (props.route.params.isRefresh) {
-        await dispatch(getLedgersByApiKeyID(props.route.params.id));
+      try {
+        const merchApi = await dispatch(getMerchantsApiKeys(currentUser.id)).unwrap();
+        const ledger = await dispatch(getLedgersData(currentUser.id)).unwrap();
+        if (props.route.params.isRefresh) {
+          const byApiKey = await dispatch(getLedgersByApiKeyID(props.route.params.id)).unwrap();
+        }
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        setTimeout(() => {
+          showMessage({
+            message: `Ooops, something went wrong!`,
+            titleStyle: {
+              textAlign: 'center',
+            },
+            type: 'danger',
+          });
+        }, 1000);
+        console.warn('Error:', error);
       }
-      setIsLoading(false);
     }
   };
 
@@ -257,24 +299,43 @@ const UserScreen = (props) => {
 
   //************************************************************************* */
 
+  const getPaymentsData = async () => {
+    setIsLoading(true);
+    try {
+      const payments = await dispatch(getUserPayments(chainIdOfCurrentLedger)).unwrap();
+      setPaymentsData(
+        Array.isArray(payments.paymentMethodSettings)
+          ? payments.paymentMethodSettings
+          : [payments.paymentMethodSettings]
+      );
+      const edited = await dispatch(
+        setEditedPaymentsSettings(
+          Array.isArray(payments.paymentMethodSettings)
+            ? payments.paymentMethodSettings
+            : [payments.paymentMethodSettings]
+        )
+      ).unwrap();
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Ooops, something went wrong!`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
+  };
+
   useEffect(() => {
     // console.log('BOo', initialLedger);
     if (initialLedger && chainIdOfCurrentLedger) {
       // console.log('BOOM');
-      dispatch(getUserPayments(chainIdOfCurrentLedger)).then((res) => {
-        setPaymentsData(
-          Array.isArray(res.payload.paymentMethodSettings)
-            ? res.payload.paymentMethodSettings
-            : [res.payload.paymentMethodSettings]
-        );
-        dispatch(
-          setEditedPaymentsSettings(
-            Array.isArray(res.payload.paymentMethodSettings)
-              ? res.payload.paymentMethodSettings
-              : [res.payload.paymentMethodSettings]
-          )
-        );
-      });
+      getPaymentsData();
     }
     refLedgersModal.current?.select(-1);
   }, [initialLedger, chainIdOfCurrentLedger]);
@@ -302,9 +363,24 @@ const UserScreen = (props) => {
     if (!isAdditDataOpen) {
       setIsLoading(true);
       setSelectedIndex(itemId);
-      await dispatch(getLedgersByApiKeyID(itemId));
+      try {
+        const data = await dispatch(getLedgersByApiKeyID(itemId)).unwrap();
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        setTimeout(() => {
+          showMessage({
+            message: `Ooops, something went wrong!`,
+            titleStyle: {
+              textAlign: 'center',
+            },
+            type: 'danger',
+          });
+        }, 1000);
+        console.warn('Error:', error);
+      }
       // console.log('Dispatch');
-      setIsLoading(false);
+
       // console.log('Dispatch');
     } else {
       setSelectedIndex('');
