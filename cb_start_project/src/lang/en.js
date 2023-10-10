@@ -92,7 +92,7 @@ const lang = {
   'users.ledger_name': 'Ledger name',
   'users.add_new_ledger': 'Add new Ledger',
   'users.add_new_payments_settings': 'Add new Payments Settings',
-  
+
   'users.payin': 'PayIn',
   'users.payout': 'PayOut',
 
@@ -112,7 +112,6 @@ const lang = {
   'users.current_chains': ' Current chains :',
   'users.use_whitelist': 'Use whitelist',
   'users.min_confirmation': 'Min confirmation',
-  
 
   //common=====
   'common.date': 'Date',

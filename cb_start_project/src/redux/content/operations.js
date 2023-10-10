@@ -388,8 +388,7 @@ export const confirmUserPaymentData = createAsyncThunk(
   'content/confirmUserPaymentData',
   async (data, thunkAPI) => {
     const { paymentData, id } = data;
-    console.log('data', data);
-    console.log('id', id);
+
     try {
       const { data } = await api.put(`${BASE_URL}/api/paymethod-settings/${id}`, paymentData, {
         withCredentials: true,
@@ -397,6 +396,7 @@ export const confirmUserPaymentData = createAsyncThunk(
 
       return data;
     } catch (error) {
+      console.log('secondErr');
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -420,9 +420,12 @@ export const getPaymentsMethods = createAsyncThunk(
   async (bankId, thunkAPI) => {
     try {
       console.log('getPaymentsMethods -> bankId>>', bankId);
-      const { data } = await api.get(`${BASE_URL}/api/payment-methods?page=1&pageSize=100&filter=${bankId}`, {
-        withCredentials: true,
-      });
+      const { data } = await api.get(
+        `${BASE_URL}/api/payment-methods?page=1&pageSize=100&filter=${bankId}`,
+        {
+          withCredentials: true,
+        }
+      );
 
       return data;
     } catch (error) {
