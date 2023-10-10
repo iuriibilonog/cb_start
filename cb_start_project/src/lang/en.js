@@ -112,6 +112,11 @@ const lang = {
   'users.current_chains': ' Current chains :',
   'users.use_whitelist': 'Use whitelist',
   'users.min_confirmation': 'Min confirmation',
+  'users.setting_name': 'Setting name',
+  'users.addit_setting_mastercard': 'Additional settings for MasterCard',
+  'users.addit_setting_visa': 'Additional settings for Visa',
+  
+  
 
   //common=====
   'common.date': 'Date',
@@ -144,6 +149,7 @@ const lang = {
   'common.empty': 'Empty',
   'common.active': 'Active',
   'common.chance': 'Chance',
+  'common.type': 'Type',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />
