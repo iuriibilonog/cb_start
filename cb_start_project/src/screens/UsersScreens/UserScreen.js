@@ -10,11 +10,11 @@ import {
   getUserPayments,
   setEditedPaymentsSettings,
   confirmUserPaymentData,
+  getAllUsers,
 } from 'src/redux/content/operations';
 import {
   getApiKeys,
   ledgersData,
-  getUsers,
   ledgersByApiKeyID,
   userPayments,
   getEditedPaymentsSettings,
@@ -52,10 +52,10 @@ const UserScreen = (props) => {
   const dispatch = useDispatch();
   const apiData = useSelector(getApiKeys);
   const balanceData = useSelector(ledgersData);
-  const allUsers = useSelector(getUsers);
   const ledgersByApi = useSelector(ledgersByApiKeyID);
   const userPaymentsData = useSelector(userPayments);
 
+  const [allUsers, setAllUsers] = useState();
   const [currentUser, setCurrentUser] = useState();
   const [apiKeysData, setApiKeysData] = useState(null);
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
@@ -233,17 +233,19 @@ const UserScreen = (props) => {
   };
 
   const handleGetData = async () => {
-    if (
-      currentUser &&
-      ((props.route.params && props.route.params.isRefresh) || props.route.params)
-    ) {
+    // console.log('currentUser', currentUser);
+    // console.log('ID', props.route.params.id);
+
+    if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
       setIsLoading(true);
       try {
-        const merchApi = await dispatch(getMerchantsApiKeys(currentUser.id)).unwrap();
-        const ledger = await dispatch(getLedgersData(currentUser.id)).unwrap();
+        const merchApi = await dispatch(getMerchantsApiKeys(props.route.params.id)).unwrap();
+        const ledger = await dispatch(getLedgersData(props.route.params.id)).unwrap();
         if (props.route.params.isRefresh) {
           const byApiKey = await dispatch(getLedgersByApiKeyID(props.route.params.id)).unwrap();
         }
+        // console.log('-(merchApi)- ', merchApi);
+        // console.log('-(ledger)- ', ledger);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
@@ -262,7 +264,7 @@ const UserScreen = (props) => {
   };
 
   useEffect(() => {
-    // console.log('props-route-params', props.route.params);
+    // console.log('props-route-params-USER-LIST', props.route.params);
     handleGetData();
   }, [props.route.params, currentUser]);
 
@@ -341,11 +343,16 @@ const UserScreen = (props) => {
   }, [initialLedger, chainIdOfCurrentLedger]);
 
   useEffect(() => {
-    if (allUsers && props.route.params?.id) {
-      // console.log('props.route.params.id', props.route.params.id);
-      setCurrentUser(allUsers.find((item) => item.id === +props.route.params.id));
-    }
-  }, [allUsers]);
+    // console.log('allUsers', allUsers);
+    dispatch(getAllUsers()).then((res) => {
+      // console.log('<res>', res);
+      setAllUsers(res.payload.items);
+      if (props.route.params.id) {
+        // console.log('props.route.params.id_USERSSCREEN', props.route.params.id);
+        setCurrentUser(res.payload.items.find((item) => item.id === +props.route.params.id));
+      }
+    });
+  }, [props.route.params.id]);
 
   useEffect(() => {
     if (selectedLedger !== '') {

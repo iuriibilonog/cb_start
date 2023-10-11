@@ -39,6 +39,7 @@ const UsersListScreen = (props) => {
   const [totalPages, setTotalPages] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const { width } = Dimensions.get('window');
 
@@ -54,6 +55,20 @@ const UsersListScreen = (props) => {
     //   dispatch(getUsersByPage(currentPage));
     // }
   }, [currentPage]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   const getCurrentPageData = async () => {
     setIsLoading(true);
@@ -132,7 +147,7 @@ const UsersListScreen = (props) => {
   };
 
   const handleNavigate = (user) => {
-    console.log('props', user);
+    console.log('props>userID', user);
     navigation.navigate('UserScreen', { id: user.id });
   };
 
@@ -145,13 +160,13 @@ const UsersListScreen = (props) => {
   };
 
   const handleBlur = async () => {
-    console.log('PRESS OUT');
-    Keyboard.dismiss();
-    if (!props.searchUser) {
+    // console.log('PRESS OUT', props.searchUser, isKeyboardVisible);
+    if (!props.searchUser && isKeyboardVisible) {
       setIsLoading(true);
       props.setIsSearchVisible(false);
       await dispatch(getUsersByPage(1));
       setIsLoading(false);
+      Keyboard.dismiss();
     }
   };
 
