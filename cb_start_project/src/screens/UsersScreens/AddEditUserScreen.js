@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux';
 import { putEditUser, postNewUser } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
 import { showMessage } from 'react-native-flash-message';
+import { checkValidation } from 'src/utils/errorsValidation';
 
 const arrowLeft = require('src/images/header_left.png');
 const eyeOff = require('src/images/eye_inactive_dark.png');
@@ -61,16 +62,24 @@ const AddEditUserScreen = (props) => {
     if (!inputValue.password) {
       errors.password = 'required';
     }
-    // console.log('isError', errors);
+
     setErrors(errors);
     return Object.keys(errors).length > 0;
   };
 
   const submit = async () => {
-    if (checkErrors()) {
+    const validationParams = ['email', 'password', 'username'];
+    const validationAnswer = checkValidation(inputValue, validationParams);
+
+    if (Object.keys(validationAnswer).length > 0) {
+      setErrors(validationAnswer);
       return;
     }
-    // console.log(props.new ? 'CREATE' : 'EDIT');
+
+    // if (checkErrors()) {
+    //   return;
+    // }
+
     try {
       const updatedData = inputValue.password
         ? {
@@ -161,8 +170,7 @@ const AddEditUserScreen = (props) => {
                       marginBottom: 30,
                       // borderWidth: errors.email && errors.email === 'required' ? 1 : 0,
                       // borderBottomWidth: 1,
-                      borderColor:
-                        errors.email && errors.email === 'required' ? 'red' : 'rgba(0, 0, 0, 0.20)',
+                      borderColor: errors.email ? 'red' : 'rgba(0, 0, 0, 0.20)',
                     }}
                     placeholder={msg[0]}
                     placeholderTextColor={'grey'}
@@ -172,9 +180,9 @@ const AddEditUserScreen = (props) => {
                 </View>
               )}
             </FormattedMessage>
-            {errors.email && errors.email === 'required' && (
+            {errors.email && (
               <SimpleText style={styles.error}>
-                <FormattedMessage id={'errors.required_field'} />
+                <FormattedMessage id={`errors.${errors.email}`} />
               </SimpleText>
             )}
           </View>
@@ -185,10 +193,7 @@ const AddEditUserScreen = (props) => {
                   style={{
                     ...styles.input,
                     marginBottom: 30,
-                    borderColor:
-                      errors.username && errors.username === 'required'
-                        ? 'red'
-                        : 'rgba(0, 0, 0, 0.20)',
+                    borderColor: errors.username ? 'red' : 'rgba(0, 0, 0, 0.20)',
                   }}
                   placeholder={msg[0]}
                   placeholderTextColor={'grey'}
@@ -197,9 +202,9 @@ const AddEditUserScreen = (props) => {
                 />
               )}
             </FormattedMessage>
-            {errors.username && errors.username === 'required' && (
+            {errors.username && (
               <SimpleText style={styles.error}>
-                <FormattedMessage id={'errors.required_field'} />
+                <FormattedMessage id={`errors.${errors.username}`} />
               </SimpleText>
             )}
           </View>
@@ -211,10 +216,7 @@ const AddEditUserScreen = (props) => {
                     style={{
                       ...styles.input,
                       marginBottom: 30,
-                      borderColor:
-                        errors.password && errors.password === 'required'
-                          ? 'red'
-                          : 'rgba(0, 0, 0, 0.20)',
+                      borderColor: errors.password ? 'red' : 'rgba(0, 0, 0, 0.20)',
                     }}
                     placeholder={msg[0]}
                     placeholderTextColor={'grey'}
@@ -240,9 +242,9 @@ const AddEditUserScreen = (props) => {
                 style={{ width: 25, height: 25 }}
               />
             </Pressable>
-            {errors.password && errors.password === 'required' && (
+            {errors.password && (
               <SimpleText style={styles.error}>
-                <FormattedMessage id={'errors.required_field'} />
+                <FormattedMessage id={`errors.${errors.password}`} />
               </SimpleText>
             )}
           </View>

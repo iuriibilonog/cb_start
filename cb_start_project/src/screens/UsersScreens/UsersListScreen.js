@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUsersByPage, getSearchUsers } from 'src/redux/content/operations';
 import { usersByPage, searchUsers } from 'src/redux/content/selectors';
@@ -44,6 +44,8 @@ const UsersListScreen = (props) => {
 
   const navigation = useNavigation();
 
+  const scrollRef = useRef();
+
   useEffect(() => {
     getCurrentPageData();
     // if (props.searchUser) {
@@ -76,7 +78,6 @@ const UsersListScreen = (props) => {
   }, [props]);
 
   const getUserListData = async () => {
-    console.log('props.route.params', props.route.params);
     setIsLoading(true);
     if (props.searchUser) {
       await dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
@@ -84,6 +85,11 @@ const UsersListScreen = (props) => {
       if (props.route.params?.isNewUserCreated) {
         const page = Math.ceil((usersData.totalCount + 1) / 20);
         await dispatch(getUsersByPage(page));
+
+        scrollRef.current?.scrollToOffset({
+          offset: Dimensions.get('window').height,
+          animated: true,
+        });
       } else {
         await dispatch(getUsersByPage(1));
       }
@@ -102,6 +108,15 @@ const UsersListScreen = (props) => {
       setIsLoading(false);
     }
   }, [usersData]);
+
+  useEffect(() => {
+    if (data?.length > 0 && props.route.params?.isNewUserCreated) {
+      scrollRef.current?.scrollToOffset({
+        offset: 1000,
+        animated: true,
+      });
+    }
+  }, [data]);
 
   useEffect(() => {
     if (searchUsersData) {
@@ -301,6 +316,7 @@ const UsersListScreen = (props) => {
         {data && data.length > 0 ? (
           <FlatList
             data={data}
+            ref={scrollRef}
             refreshControl={
               <RefreshControl
                 isRefreshing={isLoading}

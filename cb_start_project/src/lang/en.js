@@ -116,9 +116,10 @@ const lang = {
   'users.setting_name': 'Setting name',
   'users.addit_setting_mastercard': 'Additional settings for MasterCard',
   'users.addit_setting_visa': 'Additional settings for Visa',
-  
+
   //errors=====
   'errors.required_field': 'required field',
+  'errors.email_not_valid': 'email must be an email',
 
   //common=====
   'common.date': 'Date',
