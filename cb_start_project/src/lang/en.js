@@ -116,7 +116,8 @@ const lang = {
   'users.addit_setting_mastercard': 'Additional settings for MasterCard',
   'users.addit_setting_visa': 'Additional settings for Visa',
   
-  
+  //errors=====
+  'errors.required_field': 'required field',
 
   //common=====
   'common.date': 'Date',
