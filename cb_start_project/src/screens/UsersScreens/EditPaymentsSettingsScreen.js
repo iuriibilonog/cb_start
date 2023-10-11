@@ -33,7 +33,7 @@ const EditPaymentsSettingsScreen = (props) => {
 
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
-  const { dataName, id } = props.route.params;
+  const { dataName, id, keyBoard } = props.route.params;
   const paymentSettings = useSelector(getEditedPaymentsSettings);
 
   // console.log('data', data);
@@ -134,6 +134,7 @@ const EditPaymentsSettingsScreen = (props) => {
                 initialValue={props.route.params.value}
                 action={handleEditLedger}
                 placeholder={placeholder[0]}
+                keyBoard={keyBoard}
               />
             )}
           </FormattedMessage>

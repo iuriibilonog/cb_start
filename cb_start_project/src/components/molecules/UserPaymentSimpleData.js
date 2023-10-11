@@ -270,6 +270,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'netPrice',
+                          keyBoard: 'numeric',
                         })
                       }
                     >
@@ -1144,8 +1145,8 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
               style={{
                 alignItems: 'center',
                 marginVertical: 40,
-                opacity: isUseAcive ? 1 : 0.4,
-                pointerEvents: isUseAcive ? 'all' : 'none',
+                // opacity: isUseAcive ? 1 : 0.4,
+                // pointerEvents: isUseAcive ? 'all' : 'none',
               }}
             >
               <TouchableOpacity onPress={() => confirmEditPayment(item.id)}>
