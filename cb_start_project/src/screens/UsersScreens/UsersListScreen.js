@@ -132,7 +132,7 @@ const UsersListScreen = (props) => {
   };
 
   const handleNavigate = (user) => {
-    console.log('props', user);
+    console.log('props>userID', user);
     navigation.navigate('UserScreen', { id: user.id });
   };
 
