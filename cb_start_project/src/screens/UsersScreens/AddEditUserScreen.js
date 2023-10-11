@@ -91,7 +91,7 @@ const AddEditUserScreen = (props) => {
           : putEditUser({ userId: props.route.params.user.id, updatedData })
       ).unwrap();
 
-      props.navigation.navigate('UsersListScreen', { isRefresh: true });
+      props.navigation.navigate('UsersListScreen', { isRefresh: true, isNewUserCreated: true });
     } catch (error) {
       setTimeout(() => {
         showMessage({

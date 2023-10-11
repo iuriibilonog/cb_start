@@ -91,13 +91,19 @@ const UsersListScreen = (props) => {
   }, [props]);
 
   const getUserListData = async () => {
+    console.log('props.route.params', props.route.params);
     setIsLoading(true);
     if (props.searchUser) {
-      dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
+      await dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
     } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-      dispatch(getUsersByPage(1));
+      if (props.route.params?.isNewUserCreated) {
+        const page = Math.ceil((usersData.totalCount + 1) / 20);
+        await dispatch(getUsersByPage(page));
+      } else {
+        await dispatch(getUsersByPage(1));
+      }
     } else if (!props.searchUser) {
-      dispatch(getUsersByPage(currentPage));
+      await dispatch(getUsersByPage(currentPage));
     }
     setIsLoading(false);
   };

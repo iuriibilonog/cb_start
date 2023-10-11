@@ -31,6 +31,7 @@ const EditScreen = (props) => {
     initialValue,
     helpText,
     placeholder = '',
+    keyBoard,
   } = props;
   const [value, setValue] = useState(initialValue);
   const [isEmptyValue, setIsEmptyValue] = useState(false);
@@ -49,6 +50,8 @@ const EditScreen = (props) => {
 
   useEffect(() => {
     setIsEmptyValue(false);
+    // if (value && value.includes(',')) value.replace(/\,/g, '.');
+    // setValue(...value);
   }, [value]);
 
   return (
@@ -74,13 +77,14 @@ const EditScreen = (props) => {
           />
           {/* {!isDelete && ` ${title}`} */} {!isDelete && <FormattedMessage id={title} />}
         </SimpleText>
-
+        {console.log('keyBoard', keyBoard)}
         {isEdit && (
           <TextInput
             style={styles.input}
             value={value}
             placeholder={placeholder}
             onChangeText={(text) => setValue(text)}
+            keyboardType={keyBoard === 'numeric' ? 'numeric' : 'default'}
           />
         )}
         {isDelete && (
