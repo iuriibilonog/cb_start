@@ -295,6 +295,21 @@ export const putEditUser = createAsyncThunk(
   }
 );
 
+export const postNewUser = createAsyncThunk(
+  'content/postNewUser',
+  async (updatedData, thunkAPI) => {
+    try {
+      const { data } = await api.post(`${BASE_URL}/api/users`, updatedData, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 // /api/ledgers?apiKeyId=92
 
 export const getLedgersByApiKeyID = createAsyncThunk(

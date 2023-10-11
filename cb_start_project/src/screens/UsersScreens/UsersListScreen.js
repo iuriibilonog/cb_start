@@ -115,6 +115,10 @@ const UsersListScreen = (props) => {
     navigation.navigate('UserScreen', { id: user.id });
   };
 
+  const handleAddUser = () => {
+    navigation.navigate('AddNewUserScreen', { parentScreen: 'UsersListScreen' });
+  };
+
   const showDate = (date) => {
     return date.slice(0, 10).replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
   };
@@ -158,7 +162,7 @@ const UsersListScreen = (props) => {
                 alignItems: 'center',
               }}
             >
-              <View style={{marginRight: 4 }}>
+              <View style={{ marginRight: 4 }}>
                 <Image
                   source={isAdditDataOpen && selectedIndex === item.id ? arrowUp : arrowDown}
                   style={{ width: 26, height: 26 }}
@@ -259,7 +263,7 @@ const UsersListScreen = (props) => {
           <SimpleText style={styles.titleText}>
             <FormattedMessage id={'common.users'} />
           </SimpleText>
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity activeOpacity={0.5} onPress={handleAddUser}>
             <SimpleButton plus text={'users.new_user'} />
           </TouchableOpacity>
         </View>
