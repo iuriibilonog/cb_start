@@ -16,7 +16,7 @@ import EditScreen from '../ApiScreens/EditScreen';
 import DeleteScreen from '../ApiScreens/DeleteScreen';
 import EditLedgerScreen from './EditLedgerScreen';
 import CreateLedgerScreen from './CreateLedgerScreen';
-import EditUserScreen from './EditUserScreen';
+import AddEditUserScreen from './AddEditUserScreen';
 import DeleteUserScreen from './DeleteUserScreen';
 import CreateApiKeyScreen from './CreateApiKeyScreen';
 import EditPaymentsSettingsScreen from './EditPaymentsSettingsScreen';
@@ -181,7 +181,19 @@ const UsersRoutes = () => {
         }}
         name="EditUserScreen"
       >
-        {(props) => <EditUserScreen {...props} />}
+        {(props) => <AddEditUserScreen {...props} />}
+      </UsersStack.Screen>
+      <UsersStack.Screen
+        options={{
+          headerBackTitleVisible: false,
+          headerLeft: null,
+          headerTitle: 'Users / Add new user',
+          headerTitleStyle: { fontSize: 14, fontFamily: 'Mont' },
+          headerTitleAlign: 'left',
+        }}
+        name="AddNewUserScreen"
+      >
+        {(props) => <AddEditUserScreen {...props} new />}
       </UsersStack.Screen>
       <UsersStack.Screen
         options={{

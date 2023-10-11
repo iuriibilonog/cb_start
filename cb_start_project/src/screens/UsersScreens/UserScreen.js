@@ -120,6 +120,7 @@ const UserScreen = (props) => {
   const confirmEditPayment = async (id) => {
     setIsLoading(true);
     const currentPaymentData = allPaymentData.filter((item) => item.id === id)[0];
+    // console.log('currentPaymentData', currentPaymentData);
 
     const paymentData = {
       name: currentPaymentData.name,
@@ -409,14 +410,17 @@ const UserScreen = (props) => {
   };
 
   const handlePaymentsCreate = () => {
+    const paymentsChainIDs = paymentsData.map((item) => item.id);
     navigation.navigate('CreatePaymentsSettingsScreen', {
       user: currentUser,
+      chainId: chainIdOfCurrentLedger,
+      chainIDs: paymentsChainIDs,
       parentScreen: 'UserScreen',
     });
   };
 
   const handleLedgerEdit = () => {
-    console.log('ledgersByApi', ledgersByApi[selectedLedger ? selectedLedger : 0]);
+    // console.log('ledgersByApi', ledgersByApi[selectedLedger ? selectedLedger : 0]);
     // console.log('selectedLedger', selectedLedger);
     navigation.navigate('EditLedgerScreen', {
       user: currentUser,
@@ -724,7 +728,14 @@ const UserScreen = (props) => {
               <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.current_chains'} />
               </SimpleText>
-              <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
+              <SimpleText
+                style={{
+                  fontFamily: 'Mont_SB',
+                  maxWidth: width / 1.5,
+                  paddingRight: 40,
+                  paddingLeft: 10,
+                }}
+              >
                 {paymentsData &&
                   paymentsData.length > 0 &&
                   paymentsData.map((item) => item?.id).join(', ')}
@@ -1027,7 +1038,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  userWrapper: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  userWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   userBalance: { marginTop: 37 },
   userPayInOut: {
     flexDirection: 'row',

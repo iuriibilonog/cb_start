@@ -82,6 +82,7 @@ const lang = {
   'users.ledger': 'Ledger',
   'users.new_user': 'new user',
   'users.edit_user': 'Edit user',
+  'users.add_new_user': 'Add new user',
   'users.personal_info': 'Personal information',
   'users.ledgers_not_found': 'Ledgers not found',
   'users.payments_settings': 'Payments settings',
@@ -116,7 +117,8 @@ const lang = {
   'users.addit_setting_mastercard': 'Additional settings for MasterCard',
   'users.addit_setting_visa': 'Additional settings for Visa',
   
-  
+  //errors=====
+  'errors.required_field': 'required field',
 
   //common=====
   'common.date': 'Date',

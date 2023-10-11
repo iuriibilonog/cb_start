@@ -16,9 +16,14 @@ import {
   ScrollViewBase,
 } from 'react-native';
 import { getBanks, paymentsMethods } from 'src/redux/content/selectors';
+import { showMessage } from 'react-native-flash-message';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPaymentsMethods } from 'src/redux/content/operations';
+import {
+  getPaymentsMethods,
+  postNewPaymentsSettings,
+  putNewPaymentsChain,
+} from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
 import ModalDropdown from 'react-native-modal-dropdown';
 import ConfirmActionComponent from 'src/components/molecules/ConfirmActionComponent';
@@ -35,10 +40,22 @@ const CreatePaymentsSettingsScreen = (props) => {
   const [methodsList, setMethodsList] = useState();
   const [inputsData, setInputsData] = useState({});
 
+  const restrictedBrands = ['empty', 'Visa', 'MasterCard', 'Visa and MasterCard'];
+  const [selectedRestrictedBrand, setSelectedRestrictedBrand] = useState(restrictedBrands[0]);
+  const [isBrandsDropdownOpen, setIsBrandsDropdownOpen] = useState(false);
+  const [errors, setErrors] = useState({});
+
   const banksList = useSelector(getBanks);
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
   const refMethods = useRef();
+  const scrollRef = useRef();
+  const currentChainId = props.route.params.chainId;
+  const currentChainIDs = props.route.params.chainIDs;
+
+  // useEffect(() => {
+  //   console.log('PROPS-chainIdOfCurrentLedger', currentChainId);
+  // }, []);
 
   useEffect(() => {
     setSelectedBank(banksList[0].name);
@@ -52,13 +69,22 @@ const CreatePaymentsSettingsScreen = (props) => {
   const preparePaymentsMethodsList = async (bankId) => {
     try {
       // {userId: 97, name: "aaatest"}
-      const methodsListByBank = await dispatch(getPaymentsMethods(bankId));
+      const methodsListByBank = await dispatch(getPaymentsMethods(bankId)).unwrap();
       // console.log('methodsListByBank', methodsListByBank.payload.items);
-      setMethodsList(methodsListByBank.payload.items);
-      setSelectedMethod(methodsListByBank.payload.items[0].name);
+      setMethodsList(methodsListByBank.items);
+      setSelectedMethod(methodsListByBank.items[0].name);
       refMethods.current?.select(-1);
-    } catch (err) {
-      console.log('CreatePaymentSettingsScreen -err', err);
+    } catch (error) {
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! Payments methods were not loaded properly`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
     }
   };
 
@@ -68,11 +94,201 @@ const CreatePaymentsSettingsScreen = (props) => {
   };
 
   const handleSetInputsValues = (data) => {
+    setErrors({});
     setInputsData((prev) => ({ ...prev, ...data }));
   };
 
-  const handleSubmit = () => {
-    console.log('SUBMIT:', inputsData);
+  const prepareCommissionsMasterCard = (gatheredData) => {
+    if (
+      (gatheredData.mastercard_netPrice && gatheredData.mastercard_netPrice !== 0) ||
+      (gatheredData.mastercard_fixedNetPrice && gatheredData.mastercard_fixedNetPrice !== 0) ||
+      (gatheredData.mastercard_minCommission && gatheredData.mastercard_minCommission !== 0)
+    ) {
+      gatheredData['commissions'] = !gatheredData['commissions'] && {};
+      gatheredData['commissions']['MasterCard'] = !gatheredData['commissions']['MasterCard'] && {};
+    } else {
+      delete gatheredData?.mastercard_netPrice;
+      delete gatheredData?.mastercard_fixedNetPrice;
+      delete gatheredData?.mastercard_minCommission;
+      return gatheredData;
+    }
+
+    gatheredData['commissions']['MasterCard']['netPrice'] = gatheredData.mastercard_netPrice
+      ? gatheredData.mastercard_netPrice
+      : 0;
+
+    gatheredData['commissions']['MasterCard']['fixedNetPrice'] =
+      gatheredData.mastercard_fixedNetPrice ? gatheredData.mastercard_fixedNetPrice : 0;
+
+    gatheredData['commissions']['MasterCard']['minCommission'] =
+      gatheredData.mastercard_minCommission ? gatheredData.mastercard_minCommission : 0;
+
+    delete gatheredData?.mastercard_netPrice;
+    delete gatheredData?.mastercard_fixedNetPrice;
+    delete gatheredData?.mastercard_minCommission;
+
+    return gatheredData;
+  };
+
+  const prepareCommissionsVisa = (gatheredData) => {
+    if (
+      (gatheredData.visa_netPrice && gatheredData.visa_netPrice !== 0) ||
+      (gatheredData.visa_fixedNetPrice && gatheredData.visa_fixedNetPrice !== 0) ||
+      (gatheredData.visa_minCommission && gatheredData.visa_minCommission !== 0)
+    ) {
+      gatheredData['commissions'] = !gatheredData['commissions'] ? {} : gatheredData['commissions'];
+      gatheredData['commissions']['Visa'] = !gatheredData['commissions']['Visa']
+        ? {}
+        : gatheredData['commissions']['Visa'];
+    } else {
+      delete gatheredData?.visa_netPrice;
+      delete gatheredData?.visa_fixedNetPrice;
+      delete gatheredData?.visa_minCommission;
+      return gatheredData;
+    }
+
+    gatheredData['commissions']['Visa']['netPrice'] = gatheredData.visa_netPrice
+      ? gatheredData.visa_netPrice
+      : 0;
+
+    gatheredData['commissions']['Visa']['fixedNetPrice'] = gatheredData.visa_fixedNetPrice
+      ? gatheredData.visa_fixedNetPrice
+      : 0;
+
+    gatheredData['commissions']['Visa']['minCommission'] = gatheredData.visa_minCommission
+      ? gatheredData.visa_minCommission
+      : 0;
+
+    delete gatheredData?.visa_netPrice;
+    delete gatheredData?.visa_fixedNetPrice;
+    delete gatheredData?.visa_minCommission;
+
+    return gatheredData;
+  };
+
+  const checkErrors = () => {
+    if (!inputsData.name) {
+      setErrors({ name: 'required' });
+      return true;
+    }
+  };
+  const handleSubmit = async () => {
+    if (checkErrors()) {
+      scrollRef.current?.scrollTo({
+        y: 0,
+        animated: true,
+      });
+      return;
+    }
+    // console.log('SUBMIT:', inputsData);
+    let gatheredData = { ...inputsData };
+    gatheredData.restrictedBrands =
+      selectedRestrictedBrand === 'empty' ? [] : [selectedRestrictedBrand];
+    gatheredData.restrictedCountries = gatheredData.restrictedCountries
+      ? gatheredData.restrictedCountries.split(',')
+      : [];
+
+    const paymentMethodId = methodsList.find((item) => item.name === selectedMethod).id;
+    gatheredData.paymentMethodId = paymentMethodId;
+    gatheredData = prepareCommissionsMasterCard(gatheredData);
+    // console.log('<1>', gatheredData);
+    gatheredData = prepareCommissionsVisa(gatheredData);
+
+    // console.log('RESULT - - -SUBMIT:', gatheredData);
+
+    try {
+      const postResult = await dispatch(postNewPaymentsSettings(gatheredData)).unwrap();
+      // console.log('SUBMIT - postResult', postResult.payload);
+      if (postResult && postResult.id) {
+        const putResult = await dispatch(
+          putNewPaymentsChain({
+            key: currentChainId,
+            chainData: { methods: [...currentChainIDs, postResult.id] },
+          })
+        ).unwrap();
+        props.navigation.navigate(props.route.params.parentScreen);
+      }
+    } catch (error) {
+      setTimeout(() => {
+        showMessage({
+          message: `Attention! New Payment Settings were not added properly!`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
+  };
+
+  const handleBrandSelect = (select) => {
+    setSelectedRestrictedBrand(select);
+  };
+
+  const showRestrictedBrands = () => {
+    return (
+      <ModalDropdown
+        // ref={refLedgersModal}
+        options={restrictedBrands}
+        defaultIndex={0}
+        defaultValue={selectedRestrictedBrand}
+        // isFullWidth
+        animated={false}
+        onSelect={(index, option) => {
+          // console.log(index, '<>', option);
+          handleBrandSelect(option);
+        }}
+        textStyle={{
+          fontSize: 16,
+          fontFamily: 'Mont',
+          fontWeight: '600',
+          lineHeight: 16,
+        }}
+        style={{
+          backgroundColor: '#F4F4F4',
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderRadius: 2,
+          justifyContent: 'space-between',
+          // height:40,
+          width: width - 40,
+        }}
+        dropdownStyle={{
+          marginLeft: -16,
+          marginTop: Platform.OS === 'ios' ? 14 : -14,
+          paddingLeft: 11,
+          paddingRight: 2,
+          width: width - 40,
+          backgroundColor: '#F4F4F4',
+          borderWidth: 0,
+          borderRadius: 2,
+          height: 150,
+        }}
+        dropdownTextStyle={{
+          fontSize: 16,
+          lineHeight: 16,
+          fontWeight: '600',
+          fontFamily: 'Mont',
+          backgroundColor: '#F4F4F4',
+          color: 'rgba(38, 38, 38, 0.50)',
+        }}
+        renderRightComponent={() => (
+          <Image
+            source={
+              isBrandsDropdownOpen
+                ? require('src/images/arrow_up.png')
+                : require('src/images/arrow_down.png')
+            }
+            style={{ width: 26, height: 26, marginLeft: 'auto' }}
+          ></Image>
+        )}
+        renderRowProps={{ activeOpacity: 1 }}
+        renderSeparator={() => <></>}
+        onDropdownWillShow={() => setIsBrandsDropdownOpen(true)}
+        onDropdownWillHide={() => setIsBrandsDropdownOpen(false)}
+      />
+    );
   };
 
   return (
@@ -102,7 +318,7 @@ const CreatePaymentsSettingsScreen = (props) => {
             <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>
         </View>
-        <ScrollView>
+        <ScrollView ref={scrollRef}>
           <View
             style={{
               flex: 1,
@@ -298,15 +514,39 @@ const CreatePaymentsSettingsScreen = (props) => {
                     <FormattedMessage id={'users.setting_name'}>
                       {(placeholder) => (
                         <TextInput
-                          style={{ ...styles.textInput, width: width - 40 }}
+                          style={{
+                            ...styles.textInput,
+                            width: width - 40,
+                            borderWidth: 1,
+                            borderColor:
+                              errors.name && errors.name === 'required' ? 'red' : '#F4F4F4',
+                          }}
                           value={inputsData.settingsName}
                           onChangeText={(text) => {
-                            setInputsData((prev) => ({ ...prev, settingsName: text }));
+                            if (errors.name) {
+                              setErrors({});
+                            }
+                            setInputsData((prev) => ({ ...prev, name: text }));
                           }}
                           placeholder={placeholder[0]}
                         />
                       )}
                     </FormattedMessage>
+                    {errors.name && errors.name === 'required' && (
+                      <SimpleText
+                        style={{
+                          position: 'absolute',
+                          top: 68,
+                          left: 0,
+                          color: 'red',
+                          marginTop: 5,
+                          fontSize: 12,
+                          letterSpacing: 1,
+                        }}
+                      >
+                        <FormattedMessage id={'errors.required_field'} />
+                      </SimpleText>
+                    )}
                   </View>
                   <View style={styles.digitBlockWrapper}>
                     <View style={styles.digitItemWrapper}>
@@ -358,32 +598,40 @@ const CreatePaymentsSettingsScreen = (props) => {
                         setDigitsValues={handleSetInputsValues}
                       />
                     </View>
+
                     <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
+                      <View style={styles.itemTitle}>
+                        <SimpleText style={styles.itemTextTitle}>
+                          <FormattedMessage id={'users.restricted_brands'} /> :
+                        </SimpleText>
+                      </View>
+                      {selectedRestrictedBrand && showRestrictedBrands()}
+                      {/* <DecrementIncrement
                         title={'users.restricted_brands'}
                         name={'restrictedBrands'}
                         setDigitsValues={handleSetInputsValues}
-                      />
+                      /> */}
                     </View>
-                  </View>
-                  <View style={{ marginBottom: 60 }}>
-                    <View style={styles.itemTitle}>
-                      <SimpleText style={styles.itemTextTitle}>
-                        <FormattedMessage id={'users.restricted_countries'} />
-                      </SimpleText>
+
+                    <View style={{ marginBottom: 60 }}>
+                      <View style={styles.itemTitle}>
+                        <SimpleText style={styles.itemTextTitle}>
+                          <FormattedMessage id={'users.restricted_countries'} />
+                        </SimpleText>
+                      </View>
+                      <FormattedMessage id={'users.restricted_countries'}>
+                        {(placeholder) => (
+                          <TextInput
+                            style={{ ...styles.textInput, width: width - 40 }}
+                            value={inputsData.restrictedCountries}
+                            onChangeText={(text) => {
+                              setInputsData((prev) => ({ ...prev, restrictedCountries: text }));
+                            }}
+                            placeholder={placeholder[0]}
+                          />
+                        )}
+                      </FormattedMessage>
                     </View>
-                    <FormattedMessage id={'users.restricted_countries'}>
-                      {(placeholder) => (
-                        <TextInput
-                          style={{ ...styles.textInput, width: width - 40 }}
-                          value={inputsData.restrtictedCountries}
-                          onChangeText={(text) => {
-                            setInputsData((prev) => ({ ...prev, restrtictedCountries: text }));
-                          }}
-                          placeholder={placeholder[0]}
-                        />
-                      )}
-                    </FormattedMessage>
                   </View>
                   <View style={{ marginBottom: 60 }}>
                     <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
@@ -405,8 +653,8 @@ const CreatePaymentsSettingsScreen = (props) => {
                     </View>
                     <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
                       <DecrementIncrement
-                        title={'users.max_amount'}
-                        name={'mastercard_maxAmount'}
+                        title={'users.min_commission'}
+                        name={'mastercard_minCommission'}
                         setDigitsValues={handleSetInputsValues}
                       />
                     </View>
@@ -431,8 +679,8 @@ const CreatePaymentsSettingsScreen = (props) => {
                     </View>
                     <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
                       <DecrementIncrement
-                        title={'users.max_amount'}
-                        name={'visa_maxAmount'}
+                        title={'users.min_commission'}
+                        name={'visa_minCommission'}
                         setDigitsValues={handleSetInputsValues}
                       />
                     </View>
@@ -469,7 +717,7 @@ const styles = StyleSheet.create({
   },
   itemWrapper: { marginBottom: 36 },
   digitItemWrapper: { marginBottom: 32 },
-  digitBlockWrapper: { marginTop: 14, marginBottom: 32 },
+  digitBlockWrapper: { marginTop: 14 },
   itemTitle: { marginBottom: 12 },
   itemTextTitle: { fontSize: 14 },
   boldText: { letterSpacing: 0.8, fontFamily: 'Mont_SB' },
