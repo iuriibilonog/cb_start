@@ -266,6 +266,7 @@ export const getLedgersData = createAsyncThunk(
       const { data } = await api.get(`${BASE_URL}/api/ledgers?filter=${userId}`, {
         withCredentials: true,
       });
+      console.log('DADA->', data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
