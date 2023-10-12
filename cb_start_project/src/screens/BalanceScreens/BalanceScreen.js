@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
-import { getAllUsers, getLedgersData } from 'src/redux/content/operations';
+import { getAllUsers, getLedgersData, getBalanceLogs } from 'src/redux/content/operations';
 import { getUsers } from 'src/redux/content/selectors';
 
 import {
@@ -73,23 +73,25 @@ const BalanceScreen = (props) => {
   }, [allUsers]);
 
   const getLedgersByMechantId = async (userId) => {
-    console.log('ID', userId);
     try {
       const ledgers = await dispatch(getLedgersData(userId)).unwrap();
       if (ledgers.items && ledgers.items.length > 0) {
-        console.log('allledgers', ledgers.items);
         setLedgersList(ledgers.items);
         setSelectedLedger(ledgers.items[0].name);
         setSelectedBalanceName(ledgers.items[0].name);
         setSelectedBalanceObject(ledgers.items[0]);
         refLedgersModal.current?.select(-1);
         refBalanceModal.current?.select(-1);
+        const logs = await dispatch(getBalanceLogs(ledgers.items[0].id)).unwrap();
+        console.log('logs', logs);
+        setBalanceLogs(logs.items);
       } else {
         setLedgersList([' ']);
         setSelectedLedger(' ');
         setSelectedBalanceName(' ');
         refLedgersModal.current?.select(-1);
         refBalanceModal.current?.select(-1);
+        setBalanceLogs([]);
       }
     } catch (error) {
       setIsLoading(false);
@@ -158,35 +160,25 @@ const BalanceScreen = (props) => {
         key={index}
         style={{
           ...styles.tableRow,
+          backgroundColor: index % 2 === 0 ? '#FAFAFA' : '#fff',
         }}
       >
         <View
           style={{
             ...styles.tableCell,
+            paddingRight: 0,
             width: width / 4,
           }}
         >
-          <SimpleText
-            style={{
-              fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
-            }}
-          >
-            28/08/2023
-          </SimpleText>
+          <SimpleText>28/08/2023</SimpleText>
         </View>
         <View
           style={{
             ...styles.tableCell,
-            width: width / 4,
+            width: width / 5,
           }}
         >
-          <SimpleText
-            style={{
-              fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
-            }}
-          >
-            20:58:00
-          </SimpleText>
+          <SimpleText>20:58:00</SimpleText>
         </View>
         <View
           style={{
@@ -194,27 +186,16 @@ const BalanceScreen = (props) => {
             flex: 1,
           }}
         >
-          <SimpleText
-            style={{
-              fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
-            }}
-          >
-            220 650 000.00
-          </SimpleText>
+          <SimpleText>220 650 000.00</SimpleText>
         </View>
         <View
           style={{
             ...styles.tableCell,
-            width: width / 6,
+            paddingRight: 0,
+            width: 52,
           }}
         >
-          <SimpleText
-            style={{
-              fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
-            }}
-          >
-            KZT
-          </SimpleText>
+          <SimpleText>KZT</SimpleText>
         </View>
       </View>
     </>
@@ -531,34 +512,42 @@ const BalanceScreen = (props) => {
         <View
           style={{
             height: 50,
-            paddingLeft: 15,
-            flexDirection: 'row',
             alignItems: 'center',
             borderBottomWidth: 1,
             borderBottomColor: 'rgba(217, 217, 217, 0.70)',
             backgroundColor: '#F4F4F4',
             marginTop: 35,
+            paddingHorizontal: 20,
+            marginHorizontal: -20,
           }}
         >
-          <View style={{ ...styles.tableCell, width: width / 5 }}>
-            <SimpleText style={styles.headerText}>
-              <FormattedMessage id={'common.date'} />
-            </SimpleText>
-          </View>
-          <View style={{ ...styles.tableCell, flex: 1 }}>
-            <SimpleText style={styles.headerText}>
-              <FormattedMessage id={'users.payout'} />
-            </SimpleText>
-          </View>
-          {/* <View style={{ ...styles.tableCell, width: width / 5 }}>
+          <View
+            style={{
+              height: 50,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <View style={{ ...styles.tableCell, width: width / 2.22 }}>
+              <SimpleText style={styles.headerText}>
+                <FormattedMessage id={'common.date'} />
+              </SimpleText>
+            </View>
+            <View style={{ ...styles.tableCell, flex: 1 }}>
+              <SimpleText style={styles.headerText}>
+                <FormattedMessage id={'users.payout'} />
+              </SimpleText>
+            </View>
+            {/* <View style={{ ...styles.tableCell, width: width / 5 }}>
             <SimpleText style={styles.headerText}>
               <FormattedMessage id={'users.payin'} />
             </SimpleText>
           </View> */}
-          <View style={{ ...styles.tableCell, width: 52 }}>
-            <SimpleText style={styles.headerText}>
-              {selectedBalanceObject && selectedBalanceObject.currency}
-            </SimpleText>
+            <View style={{ ...styles.tableCell, width: 52 }}>
+              <SimpleText style={styles.headerText}>
+                {selectedBalanceObject && selectedBalanceObject.currency}
+              </SimpleText>
+            </View>
           </View>
         </View>
         {balanceLogs && balanceLogs.length > 0 ? (
@@ -629,6 +618,13 @@ const styles = StyleSheet.create({
   payInOutValuesText: { fontSize: 24, lineHeight: 31, fontFamily: 'Mont_SB' },
 
   tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center' },
+  tableRow: {
+    height: 40,
+    // paddingLeft: 15,
+    // marginHorizontal: -20,
+    flexDirection: 'row',
+  },
+  tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center', borderWidth: 1 },
 });
 
 export default BalanceScreen;
