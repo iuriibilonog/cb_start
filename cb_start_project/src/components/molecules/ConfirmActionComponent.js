@@ -35,7 +35,7 @@ const EditScreen = (props) => {
     keyBoard,
     dataName,
   } = props;
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(initialValue || '');
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -50,6 +50,8 @@ const EditScreen = (props) => {
   const submit = () => {
     const validationParams = [dataName];
     const validationAnswer = checkValidation(value, validationParams);
+
+    console.log('validationAnswer', validationAnswer);
 
     if (Object.keys(validationAnswer).length > 0) {
       setErrors(validationAnswer);
@@ -128,15 +130,27 @@ const EditScreen = (props) => {
           </>
         )}
         {isCreate && (
-          <TextInput
-            style={{
-              ...styles.input,
-              borderBottomColor: isEmptyValue ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
-            }}
-            placeholder={placeholder}
-            value={value}
-            onChangeText={(text) => setValue(text)}
-          />
+          <View style={{ position: 'relative', width: '100%' }}>
+            <TextInput
+              style={{
+                ...styles.input,
+                borderBottomColor: isEmptyValue
+                  ? '#FC7270'
+                  : errors[dataName]
+                  ? 'red'
+                  : 'rgba(0, 0, 0, 0.20)',
+                // borderColor: errors[dataName] ? 'red' : 'rgba(0, 0, 0, 0.20)',
+              }}
+              placeholder={placeholder}
+              value={value}
+              onChangeText={(text) => setValue(text)}
+            />
+            {errors[dataName] && (
+              <SimpleText style={styles.error}>
+                <FormattedMessage id={`errors.${errors[dataName]}`} />
+              </SimpleText>
+            )}
+          </View>
         )}
         <TouchableOpacity activeOpacity={0.5} style={{ width: '100%' }} onPress={submit}>
           <View

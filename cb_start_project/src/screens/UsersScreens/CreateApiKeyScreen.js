@@ -54,7 +54,11 @@ const CreateApiKeyScreen = (props) => {
       >
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate(props.route.params.parentScreen)}
+          onPress={() =>
+            props.navigation.navigate(props.route.params.parentScreen, {
+              id: props.route.params.user?.id,
+            })
+          }
           style={{
             marginRight: 'auto',
             backgroundColor: '#fff',
@@ -70,6 +74,7 @@ const CreateApiKeyScreen = (props) => {
               title={'api.new_api_key'}
               action={handleCreateApiKey}
               placeholder={placeholder[0]}
+              dataName={'apiKey'}
             />
           )}
         </FormattedMessage>
@@ -79,7 +84,6 @@ const CreateApiKeyScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-
   title: { fontSize: 24, fontFamily: 'Mont_SB', marginBottom: 70 },
   input: {
     width: '100%',
