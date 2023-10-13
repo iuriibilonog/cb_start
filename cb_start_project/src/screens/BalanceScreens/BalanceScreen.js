@@ -209,79 +209,61 @@ const BalanceScreen = (props) => {
     } else return false;
   };
 
-  // const chechErrors = () => {
-  //   const validationParams = ['amount', 'password', 'username'];
-  //   const validationAnswer = checkValidation(inputValue, validationParams);
+  const getDate = (createdAt) => {
+    createdAt = createdAt.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
+    return createdAt;
+  };
 
-  //   if (Object.keys(validationAnswer).length > 0) {
-  //     setErrors(validationAnswer);
-  //     return;
-  //   }
-  // }
-
-  // const getAllMerchants = async () => {
-  //   try {
-  //     const allUsers = await dispatch(getAllUsers()).unwrap();
-  //   } catch (error) {
-  //     setIsLoading(false);
-  //     setTimeout(() => {
-  //       showMessage({
-  //         message: `Something went wrong! All merchands loading error`,
-  //         titleStyle: {
-  //           textAlign: 'center',
-  //         },
-  //         type: 'danger',
-  //       });
-  //     }, 1000);
-  //     console.warn('Error:', error);
-  //   }
-  // };
+  const getTime = (createdAt) => {
+    createdAt = createdAt.split('T')[1].slice(0, 8);
+    return createdAt;
+  };
 
   const flatListRenderRow = (item, index) => (
-    <>
+    <View
+      key={index}
+      style={{
+        ...styles.tableRow,
+        backgroundColor: item.diffPayoutAmount
+          ? 'rgba(11, 163, 154, 0.15)'
+          : item.diffPayinAmount
+          ? 'rgba(255, 199, 0, 0.15)'
+          : '#fff',
+      }}
+    >
       <View
-        key={index}
         style={{
-          ...styles.tableRow,
-          backgroundColor: index % 2 === 0 ? '#FAFAFA' : '#fff',
+          ...styles.tableCell,
+          paddingRight: 0,
+          width: width / 4,
         }}
       >
-        <View
-          style={{
-            ...styles.tableCell,
-            paddingRight: 0,
-            width: width / 4,
-          }}
-        >
-          <SimpleText>28/08/2023</SimpleText>
-        </View>
-        <View
-          style={{
-            ...styles.tableCell,
-            width: width / 5,
-          }}
-        >
-          <SimpleText>20:58:00</SimpleText>
-        </View>
-        <View
-          style={{
-            ...styles.tableCell,
-            flex: 1,
-          }}
-        >
-          <SimpleText>220 650 000.00</SimpleText>
-        </View>
-        <View
-          style={{
-            ...styles.tableCell,
-            paddingRight: 0,
-            width: 52,
-          }}
-        >
-          <SimpleText>KZT</SimpleText>
-        </View>
+        <SimpleText>{getDate(item.createdAt)}</SimpleText>
       </View>
-    </>
+      <View
+        style={{
+          ...styles.tableCell,
+          width: width / 5,
+        }}
+      >
+        <SimpleText>{getTime(item.createdAt)}</SimpleText>
+      </View>
+      <View
+        style={{
+          ...styles.tableCell,
+          paddingLeft: 10,
+          flex: 1,
+        }}
+      >
+        <SimpleText>
+          {item.diffPayoutAmount
+            ? item.diffPayoutAmount.toFixed(2)
+            : item.diffPayinAmount
+            ? item.diffPayinAmount.toFixed(2)
+            : ''}
+        </SimpleText>
+      </View>
+    </View>
   );
 
   return (
@@ -483,7 +465,7 @@ const BalanceScreen = (props) => {
           <TouchableOpacity activeOpacity={0.5} onPress={acceptPayIn}>
             <SimpleButton
               text={'users.payin'}
-              style={{ width: width / 2 - 30 }}
+              style={{ width: width / 2 - 30, backgroundColor: '#FFC700' }}
               // textStyle={{ color: '#262626' }}
             />
           </TouchableOpacity>
@@ -618,16 +600,7 @@ const BalanceScreen = (props) => {
             </View>
             <View style={{ ...styles.tableCell, flex: 1 }}>
               <SimpleText style={styles.headerText}>
-                <FormattedMessage id={'users.payout'} />
-              </SimpleText>
-            </View>
-            {/* <View style={{ ...styles.tableCell, width: width / 5 }}>
-            <SimpleText style={styles.headerText}>
-              <FormattedMessage id={'users.payin'} />
-            </SimpleText>
-          </View> */}
-            <View style={{ ...styles.tableCell, width: 52 }}>
-              <SimpleText style={styles.headerText}>
+                <FormattedMessage id={'transactions.amount'} />,{' '}
                 {selectedBalanceObject && selectedBalanceObject.currency}
               </SimpleText>
             </View>
@@ -654,6 +627,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
+    marginBottom:30,
   },
   itemWrapper: { marginBottom: 36 },
   itemTitle: { marginBottom: 12 },
@@ -704,10 +678,13 @@ const styles = StyleSheet.create({
   tableRow: {
     height: 40,
     // paddingLeft: 15,
-    // marginHorizontal: -20,
+    marginHorizontal: -20,
+    paddingHorizontal: 20,
     flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(217, 217, 217, 0.40)',
   },
-  tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center', borderWidth: 1 },
+  tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center' /* borderWidth: 1 */ },
 });
 
 export default BalanceScreen;
