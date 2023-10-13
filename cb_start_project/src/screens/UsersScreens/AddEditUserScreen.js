@@ -36,6 +36,8 @@ const AddEditUserScreen = (props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState();
   const [errors, setErrors] = useState({});
 
+  const { id } = props.route.params.user;
+
   useEffect(() => {
     const roles = ['Merchant', 'Support', 'Admin'];
     if (props.route.params && props.route.params.user) {
@@ -146,7 +148,7 @@ const AddEditUserScreen = (props) => {
       >
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate(props.route.params.parentScreen)}
+          onPress={() => props.navigation.navigate(props.route.params.parentScreen, { id })}
           style={{
             marginRight: 'auto',
             backgroundColor: '#fff',

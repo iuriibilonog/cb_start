@@ -28,7 +28,7 @@ const searchIcon = require('src/images/search_dark.png');
 const headerLeft = require('src/images/header_left.png');
 const clear = require('src/images/delete.png');
 
-const UsersRoutes = () => {
+const UsersRoutes = ({ handlePressIconLogOut }) => {
   const [searchUser, setSearchUser] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
@@ -91,7 +91,10 @@ const UsersRoutes = () => {
                   <TextInput onChangeText={handleFilter} style={{}} autoFocus={true} />
                 </View>
               )}
-              <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
+
+              <Pressable onPress={handlePressIconLogOut}>
+                <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
+              </Pressable>
             </View>
           ),
         }}

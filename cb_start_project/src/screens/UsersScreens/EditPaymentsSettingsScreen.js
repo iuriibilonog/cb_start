@@ -33,7 +33,7 @@ const EditPaymentsSettingsScreen = (props) => {
 
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
-  const { dataName, id, keyBoard } = props.route.params;
+  const { dataName, id, keyBoard, currentUser } = props.route.params;
   const paymentSettings = useSelector(getEditedPaymentsSettings);
 
   // console.log('data', data);
@@ -102,7 +102,9 @@ const EditPaymentsSettingsScreen = (props) => {
       >
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate(props.route.params.parentScreen)}
+          onPress={() =>
+            props.navigation.navigate(props.route.params.parentScreen, { id: currentUser.id })
+          }
           style={{
             marginRight: 'auto',
             backgroundColor: '#fff',
@@ -135,6 +137,7 @@ const EditPaymentsSettingsScreen = (props) => {
                 action={handleEditLedger}
                 placeholder={placeholder[0]}
                 keyBoard={keyBoard}
+                dataName={dataName}
               />
             )}
           </FormattedMessage>

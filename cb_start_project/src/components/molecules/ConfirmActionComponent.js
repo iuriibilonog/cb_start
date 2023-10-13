@@ -18,6 +18,7 @@ import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
 import { putApiKey } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
+import { checkValidation } from 'src/utils/errorsValidation';
 
 const arrowLeft = require('src/images/header_left.png');
 
@@ -32,13 +33,29 @@ const EditScreen = (props) => {
     helpText,
     placeholder = '',
     keyBoard,
+    dataName,
   } = props;
   const [value, setValue] = useState(initialValue);
   const [isEmptyValue, setIsEmptyValue] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const { width } = Dimensions.get('window');
 
+  useEffect(() => {
+    return () => {
+      setErrors({});
+    };
+  }, []);
+
   const submit = () => {
+    const validationParams = [dataName];
+    const validationAnswer = checkValidation(value, validationParams);
+
+    if (Object.keys(validationAnswer).length > 0) {
+      setErrors(validationAnswer);
+      return;
+    }
+
     if (action && value) {
       action(value);
     } else if (isDelete) {
@@ -77,15 +94,26 @@ const EditScreen = (props) => {
           />
           {/* {!isDelete && ` ${title}`} */} {!isDelete && <FormattedMessage id={title} />}
         </SimpleText>
-        {console.log('keyBoard', keyBoard)}
+
         {isEdit && (
-          <TextInput
-            style={styles.input}
-            value={value}
-            placeholder={placeholder}
-            onChangeText={(text) => setValue(text)}
-            keyboardType={keyBoard === 'numeric' ? 'numeric' : 'default'}
-          />
+          <View style={{ position: 'relative', width: '100%' }}>
+            <TextInput
+              style={{
+                ...styles.input,
+
+                borderColor: errors[dataName] ? 'red' : 'rgba(0, 0, 0, 0.20)',
+              }}
+              value={value}
+              placeholder={placeholder}
+              onChangeText={(text) => setValue(text)}
+              keyboardType={keyBoard === 'numeric' ? 'numeric' : 'default'}
+            />
+            {errors[dataName] && (
+              <SimpleText style={styles.error}>
+                <FormattedMessage id={`errors.${errors[dataName]}`} />
+              </SimpleText>
+            )}
+          </View>
         )}
         {isDelete && (
           <>
@@ -159,7 +187,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#262626',
     borderBottomWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.20)',
   },
   btn: {
     width: '100%',
@@ -196,6 +223,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Mont',
     fontSize: 16,
     color: '#262626',
+  },
+  error: {
+    position: 'absolute',
+    top: 38,
+    left: 0,
+    color: 'red',
+    marginTop: 5,
+    fontSize: 12,
+    letterSpacing: 1,
   },
 });
 
