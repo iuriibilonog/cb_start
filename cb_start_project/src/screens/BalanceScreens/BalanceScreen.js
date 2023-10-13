@@ -86,10 +86,11 @@ const BalanceScreen = (props) => {
         setSelectedLedger(ledgers.items[0].name);
         setSelectedBalanceName(ledgers.items[0].name);
         setSelectedBalanceObject(ledgers.items[0]);
+        // console.log('setSelectedBalanceObject', ledgers.items[0]);
         refLedgersModal.current?.select(-1);
         refBalanceModal.current?.select(-1);
         const logs = await dispatch(getBalanceLogs(ledgers.items[0].id)).unwrap();
-        console.log('logs', logs);
+        // console.log('logs', logs);
         setBalanceLogs(logs.items);
       } else {
         setLedgersList([' ']);
@@ -132,7 +133,7 @@ const BalanceScreen = (props) => {
   }, [selectedBalanceName]);
 
   const handleBalanceSelect = (text) => {
-    console.log('Text', text);
+    // console.log('Text', text);
     setSelectedBalanceName(text);
     setSelectedBalanceObject(ledgersList.find((item) => item.name === text));
     // getLedgersByMechantId(merchantsList.find((item) => item.username === text).id);
@@ -154,18 +155,26 @@ const BalanceScreen = (props) => {
     }
   };
 
-  const putDeposit = (type) => {
+  const putDeposit = async (type) => {
     try {
       const ledgerId = ledgersList.find((item) => item.name === selectedLedger).id;
-      const depositResult = dispatch(
+      const depositResult = await dispatch(
         putBalanceDeposit({
           id: ledgerId,
           amountData: {
-            payinAmount: type === 'payout' ? 0 : amount,
-            payoutAmount: type === 'payout' ? amount : 0,
+            payinAmount: type === 'payout' ? 0 : +amount,
+            payoutAmount: type === 'payout' ? +amount : 0,
           },
         })
       ).unwrap();
+      const selectedMerchantId = merchantsList.find(
+        (item) => item.username === selectedMerchant
+      ).id;
+      // console.log('merchantsList', merchantsList);
+      // console.log('selectedMerchantId', selectedMerchantId);
+      await getLedgersByMechantId(
+        merchantsList.find((item) => item.username === selectedMerchant).id
+      );
       setTimeout(() => {
         showMessage({
           message: `Deposit successfully added`,
@@ -439,13 +448,12 @@ const BalanceScreen = (props) => {
               borderRadius: 2,
               borderColor: errors.amount ? '#FC7270' : '#F4F4F4',
             }}
-            value={amount}
+            value={'' + amount}
             onChangeText={(text) => {
               if (errors.amount) {
                 setErrors({});
               }
-              console.log('text', text);
-              setAmount(+text);
+              setAmount(text);
             }}
           />
 

@@ -262,10 +262,12 @@ export const deleteUser = createAsyncThunk('content/deleteUser', async (id, thun
 export const getLedgersData = createAsyncThunk(
   'content/getLedgersData',
   async (userId, thunkAPI) => {
+    console.log('getLedgersData-userId', userId);
     try {
       const { data } = await api.get(`${BASE_URL}/api/ledgers?filter=${userId}`, {
         withCredentials: true,
       });
+      console.log('getLedgersData-data', data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
