@@ -430,6 +430,7 @@ const BalanceScreen = (props) => {
               borderRadius: 2,
               borderColor: errors.amount ? '#FC7270' : '#F4F4F4',
             }}
+            keyboardType="numeric"
             value={'' + amount}
             onChangeText={(text) => {
               if (errors.amount) {
@@ -627,7 +628,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
-    marginBottom:30,
+    marginBottom: 30,
   },
   itemWrapper: { marginBottom: 36 },
   itemTitle: { marginBottom: 12 },
