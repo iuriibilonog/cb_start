@@ -445,7 +445,10 @@ const UserScreen = (props) => {
   };
 
   const handleNewApiKey = () => {
-    navigation.navigate('CreateApiKeyScreen', { user: currentUser, parentScreen: 'UserScreen' });
+    navigation.navigate('CreateApiKeyScreen', {
+      user: currentUser,
+      parentScreen: 'UserScreen',
+    });
   };
 
   const flatListRenderModule = (item, index) => (

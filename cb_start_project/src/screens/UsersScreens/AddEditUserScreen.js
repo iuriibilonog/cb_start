@@ -36,8 +36,6 @@ const AddEditUserScreen = (props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState();
   const [errors, setErrors] = useState({});
 
-  const { id } = props.route.params.user;
-
   useEffect(() => {
     const roles = ['Merchant', 'Support', 'Admin'];
     if (props.route.params && props.route.params.user) {
@@ -53,22 +51,6 @@ const AddEditUserScreen = (props) => {
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
 
-  const checkErrors = () => {
-    let errors = {};
-    if (!inputValue.email) {
-      errors.email = 'required';
-    }
-    if (!inputValue.username) {
-      errors.username = 'required';
-    }
-    if (!inputValue.password) {
-      errors.password = 'required';
-    }
-
-    setErrors(errors);
-    return Object.keys(errors).length > 0;
-  };
-
   const submit = async () => {
     const validationParams = ['email', 'password', 'username'];
     const validationAnswer = checkValidation(inputValue, validationParams);
@@ -77,10 +59,6 @@ const AddEditUserScreen = (props) => {
       setErrors(validationAnswer);
       return;
     }
-
-    // if (checkErrors()) {
-    //   return;
-    // }
 
     try {
       const updatedData = inputValue.password
@@ -148,7 +126,11 @@ const AddEditUserScreen = (props) => {
       >
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate(props.route.params.parentScreen, { id })}
+          onPress={() =>
+            props.navigation.navigate(props.route.params.parentScreen, {
+              id: props.route.params.user?.id,
+            })
+          }
           style={{
             marginRight: 'auto',
             backgroundColor: '#fff',

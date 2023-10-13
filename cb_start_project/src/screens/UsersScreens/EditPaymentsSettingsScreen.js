@@ -36,11 +36,6 @@ const EditPaymentsSettingsScreen = (props) => {
   const { dataName, id, keyBoard, currentUser } = props.route.params;
   const paymentSettings = useSelector(getEditedPaymentsSettings);
 
-  // console.log('data', data);
-  useEffect(() => {
-    console.log('props.route', props.route.params);
-  }, []);
-
   const handleEditLedger = async (value) => {
     getNewPaymentValue(id, dataName, value);
   };
@@ -82,7 +77,7 @@ const EditPaymentsSettingsScreen = (props) => {
     });
 
     await dispatch(setEditedPaymentsSettings(data));
-    props.navigation.navigate('UserScreen');
+    props.navigation.navigate('UserScreen', { id: props.route.params?.currentUser?.id });
   };
 
   return (

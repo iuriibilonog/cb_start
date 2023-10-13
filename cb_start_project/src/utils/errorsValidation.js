@@ -1,5 +1,7 @@
 export const checkValidation = (data, validationParams) => {
   let errors = {};
+  console.log('data', data);
+  console.log('validationParams', validationParams);
   const emailSchema =
     /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -17,7 +19,11 @@ export const checkValidation = (data, validationParams) => {
         break;
 
       default:
-        if (!data[item]) errors[item] = 'required_field';
+        if (typeof data === 'string') {
+          if (!data) errors[item] = 'required_field';
+        } else {
+          if (!data[item]) errors[item] = 'required_field';
+        }
         break;
     }
   });

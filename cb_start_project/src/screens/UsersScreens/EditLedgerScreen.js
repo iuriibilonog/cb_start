@@ -59,7 +59,11 @@ const EditLedgerScreen = (props) => {
       >
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate(props.route.params.parentScreen)}
+          onPress={() =>
+            props.navigation.navigate(props.route.params.parentScreen, {
+              id: props.route.params?.user?.id,
+            })
+          }
           style={{
             marginRight: 'auto',
             backgroundColor: '#fff',

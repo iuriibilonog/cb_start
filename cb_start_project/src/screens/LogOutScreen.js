@@ -21,7 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { userLogout } from 'src/redux/user/operations';
-import { getUser, getRefresh } from '../redux/user/selectors';
+import { getUser, getRefresh, getToken } from '../redux/user/selectors';
 import SimpleText from '../components/atoms/SimpleText';
 const logoBack = require('src/images/logo_back.png');
 
@@ -29,6 +29,8 @@ const LogOutScreen = ({ setIsShowLogOut, navigation, setIsAuth }) => {
   const dispatch = useDispatch();
   const user = useSelector(getUser);
   const refresh = useSelector(getRefresh);
+  const token = useSelector(getToken);
+  console.log('token', token);
 
   const handleLogoutSubmit = () => {
     try {
