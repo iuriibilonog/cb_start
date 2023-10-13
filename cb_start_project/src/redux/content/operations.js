@@ -262,10 +262,12 @@ export const deleteUser = createAsyncThunk('content/deleteUser', async (id, thun
 export const getLedgersData = createAsyncThunk(
   'content/getLedgersData',
   async (userId, thunkAPI) => {
+    console.log('getLedgersData-userId', userId);
     try {
       const { data } = await api.get(`${BASE_URL}/api/ledgers?filter=${userId}`, {
         withCredentials: true,
       });
+      console.log('getLedgersData-data', data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -475,6 +477,40 @@ export const putNewPaymentsChain = createAsyncThunk(
         withCredentials: true,
       });
 
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// https://dev.cashbulls.io/api/balance-logs?ledgerId=5&page=1&pageSize=10000
+export const getBalanceLogs = createAsyncThunk('content/getBalanceLogs', async (id, thunkAPI) => {
+  try {
+    // console.log('putNewPaymentsChain -> key>>', key);
+    // console.log('putNewPaymentsChain -> data>>', chainData);
+    const { data } = await api.get(
+      `${BASE_URL}/api/balance-logs?page=1&pageSize=10000&ledgerId=${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+// https://dev.cashbulls.io/api/ledgers/53/deposit
+export const putBalanceDeposit = createAsyncThunk(
+  'content/putBalanceDeposit',
+  async ({ id, amountData }, thunkAPI) => {
+    try {
+      // console.log('putNewPaymentsChain -> key>>', key);
+      // console.log('putNewPaymentsChain -> data>>', chainData);
+      const { data } = await api.put(`${BASE_URL}/api/ledgers/${id}/deposit`, amountData, {
+        withCredentials: true,
+      });
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
