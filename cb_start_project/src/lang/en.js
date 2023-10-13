@@ -122,6 +122,7 @@ const lang = {
 
   //errors=====
   'errors.required_field': 'required field',
+  'errors.invalid_data': 'invalid data',
   'errors.email_not_valid': 'email must be an email',
 
   //common=====

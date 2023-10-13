@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
-import { getAllUsers, getLedgersData, getBalanceLogs } from 'src/redux/content/operations';
+import {
+  getAllUsers,
+  getLedgersData,
+  getBalanceLogs,
+  putBalanceDeposit,
+} from 'src/redux/content/operations';
 import { getUsers } from 'src/redux/content/selectors';
 
 import {
@@ -25,6 +30,7 @@ import IconButton from 'src/components/atoms/IconButton';
 import SimpleCheckBox from 'src/components/atoms/SimpleCheckBox';
 import SimpleButton from 'src/components/atoms/SimpleButton';
 import UserPaymentSimpleData from 'src/components/molecules/UserPaymentSimpleData';
+import { checkValidation } from 'src/utils/errorsValidation';
 
 const deleteIcon = require('src/images/delete.png');
 const deleteInactiveIcon = require('src/images/delete_inactive.png');
@@ -132,9 +138,77 @@ const BalanceScreen = (props) => {
     // getLedgersByMechantId(merchantsList.find((item) => item.username === text).id);
   };
 
-  const acceptPayIn = () => {};
+  const acceptPayIn = () => {
+    if (errorsCheck()) {
+      return;
+    } else {
+      putDeposit('payin');
+    }
+  };
 
-  const acceptPayOut = () => {};
+  const acceptPayOut = () => {
+    if (errorsCheck()) {
+      return;
+    } else {
+      putDeposit('payout');
+    }
+  };
+
+  const putDeposit = (type) => {
+    try {
+      const ledgerId = ledgersList.find((item) => item.name === selectedLedger).id;
+      const depositResult = dispatch(
+        putBalanceDeposit({
+          id: ledgerId,
+          amountData: {
+            payinAmount: type === 'payout' ? 0 : amount,
+            payoutAmount: type === 'payout' ? amount : 0,
+          },
+        })
+      ).unwrap();
+      setTimeout(() => {
+        showMessage({
+          message: `Deposit successfully added`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'success',
+        });
+      }, 1000);
+    } catch (error) {
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! Putting the Deposit amount error`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
+  };
+
+  const errorsCheck = () => {
+    if (isNaN(amount)) {
+      setErrors({ amount: 'invalid_data' });
+      return true;
+    } else if (!amount) {
+      setErrors({ amount: 'required_field' });
+      return true;
+    } else return false;
+  };
+
+  // const chechErrors = () => {
+  //   const validationParams = ['amount', 'password', 'username'];
+  //   const validationAnswer = checkValidation(inputValue, validationParams);
+
+  //   if (Object.keys(validationAnswer).length > 0) {
+  //     setErrors(validationAnswer);
+  //     return;
+  //   }
+  // }
 
   // const getAllMerchants = async () => {
   //   try {
@@ -362,7 +436,8 @@ const BalanceScreen = (props) => {
               ...styles.textInput,
               width: width - 40,
               borderWidth: 1,
-              borderColor: errors.amount && errors.amount === 'required' ? 'red' : '#F4F4F4',
+              borderRadius: 2,
+              borderColor: errors.amount ? '#FC7270' : '#F4F4F4',
             }}
             value={amount}
             onChangeText={(text) => {
@@ -374,19 +449,19 @@ const BalanceScreen = (props) => {
             }}
           />
 
-          {errors.amount && errors.amount === 'required' && (
+          {errors.amount && (
             <SimpleText
               style={{
                 position: 'absolute',
                 top: 68,
                 left: 0,
-                color: 'red',
+                color: '#FC7270',
                 marginTop: 5,
                 fontSize: 12,
                 letterSpacing: 1,
               }}
             >
-              <FormattedMessage id={'errors.required_field'} />
+              <FormattedMessage id={`errors.${errors.amount}`} />
             </SimpleText>
           )}
         </View>
@@ -445,7 +520,7 @@ const BalanceScreen = (props) => {
                   marginTop: Platform.OS === 'ios' ? 14 : -14,
                   paddingLeft: 11,
                   paddingRight: 2,
-                  // width: 167,
+                  width: width - 40,
                   backgroundColor: '#F4F4F4',
                   borderWidth: 0,
                 }}
