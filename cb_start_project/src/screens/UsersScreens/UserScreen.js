@@ -691,6 +691,7 @@ const UserScreen = (props) => {
                       index={index}
                       id={item?.id}
                       confirmEditPayment={confirmEditPayment}
+                      currentUser={currentUser}
                     />
 
                     {/* <View style={{ alignItems: 'center', marginTop: 40 }}>

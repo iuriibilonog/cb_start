@@ -50,8 +50,10 @@ export const Routing = () => {
           <AuthStack.Screen
             options={{ headerShown: false }}
             name="LogOutScreen"
-            component={LogOutScreen}
-          />
+            // component={LogOutScreen}
+          >
+            {(props) => <LogOutScreen {...props} setIsShowLogOut={setIsShowLogOut} />}
+          </AuthStack.Screen>
         </AuthStack.Navigator>
       ) : !isAuth ? (
         <AuthStack.Navigator>
@@ -169,8 +171,10 @@ export const Routing = () => {
               },
             }}
             name="UsersScreen"
-            component={UsersRoutes}
-          />
+            // component={UsersRoutes}
+          >
+            {(props) => <UsersRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
+          </MainStack.Screen>
           <MainStack.Screen
             options={{
               headerShown: false,

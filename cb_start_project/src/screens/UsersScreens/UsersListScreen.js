@@ -48,13 +48,23 @@ const UsersListScreen = (props) => {
   const scrollRef = useRef();
 
   useEffect(() => {
-    getCurrentPageData();
+    if (!props.searchUser) {
+      getUsersWithoutSearch();
+    } else {
+      getCurrentPageData();
+    }
     // if (props.searchUser) {
     //   dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
     // } else {
     //   dispatch(getUsersByPage(currentPage));
     // }
   }, [currentPage]);
+
+  const getUsersWithoutSearch = async () => {
+    setIsLoading(true);
+    await dispatch(getUsersByPage(currentPage));
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -71,6 +81,7 @@ const UsersListScreen = (props) => {
   }, []);
 
   const getCurrentPageData = async () => {
+    console.log('isLoading99999');
     setIsLoading(true);
     if (props.searchUser) {
       await dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
@@ -81,15 +92,15 @@ const UsersListScreen = (props) => {
   };
 
   useEffect(() => {
-    // if (props.searchUser) {
-
-    //   dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
-    // } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-    //   dispatch(getUsersByPage(1));
-    // } else if (!props.searchUser) {
-    //   dispatch(getUsersByPage(currentPage));
-    // }
-    getUserListData();
+    if (props.route.params?.isNewUserCreated) {
+      const page = Math.ceil((usersData.totalCount + 1) / 20);
+      page === currentPage ? getCurrentPageData() : setCurrentPage(page);
+    } else if (props.route.params?.removeUser) {
+      const page = Math.ceil((usersData.totalCount - 1) / 20);
+      page === currentPage ? getCurrentPageData() : setCurrentPage(page);
+    } else {
+      getUserListData();
+    }
   }, [props]);
 
   const getUserListData = async () => {
@@ -97,17 +108,7 @@ const UsersListScreen = (props) => {
     if (props.searchUser) {
       await dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
     } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-      if (props.route.params?.isNewUserCreated) {
-        const page = Math.ceil((usersData.totalCount + 1) / 20);
-        await dispatch(getUsersByPage(page));
-
-        scrollRef.current?.scrollToOffset({
-          offset: Dimensions.get('window').height,
-          animated: true,
-        });
-      } else {
-        await dispatch(getUsersByPage(1));
-      }
+      await dispatch(getUsersByPage(1));
     } else if (!props.searchUser) {
       await dispatch(getUsersByPage(currentPage));
     }
@@ -126,6 +127,13 @@ const UsersListScreen = (props) => {
 
   useEffect(() => {
     if (data?.length > 0 && props.route.params?.isNewUserCreated) {
+      delete props.route.params?.isNewUserCreated;
+      scrollRef.current?.scrollToOffset({
+        offset: 1000,
+        animated: true,
+      });
+    } else if (data?.length > 0 && props.route.params?.removeUser) {
+      delete props.route.params?.removeUser;
       scrollRef.current?.scrollToOffset({
         offset: 1000,
         animated: true,
@@ -349,6 +357,7 @@ const UsersListScreen = (props) => {
             </SimpleText>
           </View>
         )}
+
         {totalPages > 1 && (
           <Pagination
             totalPages={totalPages}

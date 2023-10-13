@@ -31,8 +31,6 @@ const LogOutScreen = ({ setIsShowLogOut, navigation, setIsAuth }) => {
   const refresh = useSelector(getRefresh);
 
   const handleLogoutSubmit = () => {
-    console.log('email', user.email);
-    console.log('refresh', refresh);
     try {
       dispatch(userLogout({ email: user.email, refreshToken: refresh }));
       // setIsAuth(false);

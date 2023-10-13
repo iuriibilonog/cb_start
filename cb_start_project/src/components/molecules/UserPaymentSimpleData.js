@@ -27,7 +27,7 @@ const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
 const editInactive = require('src/images/edit_inactive.png');
 
-const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEditPayment }) => {
+const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPayment }) => {
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
@@ -271,6 +271,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           id,
                           dataName: 'netPrice',
                           keyBoard: 'numeric',
+                          currentUser,
                         })
                       }
                     >
@@ -306,6 +307,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'fixedNetPrice',
+                          currentUser,
                         })
                       }
                     >
@@ -342,6 +344,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'minAmount',
+                          currentUser,
                         })
                       }
                     >
@@ -377,6 +380,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'maxAmount',
+                          currentUser,
                         })
                       }
                     >
@@ -412,6 +416,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'minCommission',
+                          currentUser,
                         })
                       }
                     >
@@ -447,6 +452,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'limit',
+                          currentUser,
                         })
                       }
                     >
@@ -482,6 +488,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'rateCommission',
+                          currentUser,
                         })
                       }
                     >
@@ -528,6 +535,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                               index,
                               id,
                               dataName: 'restrictedCountries',
+                              currentUser,
                             })
                       }
                     >
@@ -581,6 +589,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                               index,
                               id,
                               dataName: 'restrictedCountries',
+                              currentUser,
                             })
                           }
                         >
@@ -635,6 +644,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                               index,
                               id,
                               dataName: 'restrictedBrands',
+                              currentUser,
                             })
                       }
                     >
@@ -683,6 +693,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                               index,
                               id,
                               dataName: 'restrictedBrands',
+                              currentUser,
                             })
                           }
                         >
@@ -760,6 +771,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'NetPriceMasterCard',
+                          currentUser,
                         })
                       }
                     >
@@ -799,6 +811,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'fixedNetPriceMasterCard',
+                          currentUser,
                         })
                       }
                     >
@@ -836,6 +849,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'minCommissionMasterCard',
+                          currentUser,
                         })
                       }
                     >
@@ -911,6 +925,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'NetPriceVisa',
+                          currentUser,
                         })
                       }
                     >
@@ -948,6 +963,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'fixedNetPriceVisa',
+                          currentUser,
                         })
                       }
                     >
@@ -986,6 +1002,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                           index,
                           id,
                           dataName: 'minCommissionVisa',
+                          currentUser,
                         })
                       }
                     >
@@ -1103,6 +1120,7 @@ const UserPaymentSimpleData = ({ item, index, id, getNewPaymentValue, confirmEdi
                     index,
                     id,
                     dataName: 'chance',
+                    currentUser,
                   })
                 }
               >
