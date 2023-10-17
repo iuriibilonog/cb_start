@@ -14,9 +14,10 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 
 import { getEditedPaymentsSettings } from 'src/redux/content/selectors';
-import { setEditedPaymentsSettings } from 'src/redux/content/operations';
+import { setEditedPaymentsSettings, putNewPaymentsChain } from 'src/redux/content/operations';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch, useSelector } from 'react-redux';
 import { putEditLedger } from 'src/redux/content/operations';
@@ -40,7 +41,54 @@ const EditPaymentsSettingsScreen = (props) => {
     getNewPaymentValue(id, dataName, value);
   };
 
+  const handleChangeCurrentChains = async (value) => {
+    console.log('value', value);
+
+    const data = value.split(', ');
+    const chainsArr = data.map((item) => parseInt(item));
+
+    try {
+      const putResult = await dispatch(
+        putNewPaymentsChain({
+          key: props.route.params.chainId,
+          chainData: { methods: chainsArr, useBalancer: props.route.params.isUseBalancer },
+        })
+      ).unwrap();
+
+      props.navigation.navigate('UserScreen', {
+        id: props.route.params?.currentUser?.id,
+        isRefresh: true,
+      });
+
+      setTimeout(() => {
+        showMessage({
+          message: `Current chains was edit successfully!`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'success',
+        });
+      }, 500);
+    } catch (error) {
+      setTimeout(() => {
+        showMessage({
+          message: `Attention! Current chains was not edit!`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
+  };
+
   const getNewPaymentValue = async (id, dataName, value) => {
+    if (dataName === 'currentChains') {
+      handleChangeCurrentChains(value);
+
+      return;
+    }
     const data = paymentSettings.map((item) => {
       if (item.id === id) {
         switch (dataName) {

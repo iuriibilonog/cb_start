@@ -11,6 +11,7 @@ import {
   setEditedPaymentsSettings,
   confirmUserPaymentData,
   getAllUsers,
+  putNewPaymentsChain,
 } from 'src/redux/content/operations';
 import {
   getApiKeys,
@@ -69,7 +70,7 @@ const UserScreen = (props) => {
   const [ledgersByApiData, setLedgersByApiData] = useState([]);
   const [selectedLedger, setSelectedLedger] = useState('');
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [paymentsData, setPaymentsData] = useState([]);
 
   // const [minConfirmation, setMinConfirmation] = useState(1);
@@ -87,17 +88,15 @@ const UserScreen = (props) => {
   const refBalanceModal = useRef();
   const refLedgersModal = useRef();
 
+  // useEffect(() => {
+  //   console.log('paymentsData', paymentsData.length);
+  // }, [paymentsData]);
+
   useEffect(() => {
-    // console.log('START', ledgersByApiData);
-    // console.log('-Selector-ledgersByApi', ledgersByApi);
+    console.log('9');
     handleCleanUserLedgers();
-    // if(!props.route.params.isRefresh)
-    // setCurrentUser()
   }, []);
 
-  // useEffect(() => {
-  //   console.log('editedPaymentData99', editedPaymentData);
-  // }, [editedPaymentData]);
   const allPaymentData = useSelector(getEditedPaymentsSettings);
 
   const getBrands = (data) => {
@@ -120,7 +119,6 @@ const UserScreen = (props) => {
   const confirmEditPayment = async (id) => {
     setIsLoading(true);
     const currentPaymentData = allPaymentData.filter((item) => item.id === id)[0];
-    // console.log('currentPaymentData', currentPaymentData);
 
     const paymentData = {
       name: currentPaymentData.name,
@@ -173,17 +171,18 @@ const UserScreen = (props) => {
 
       const update = await dispatch(getUserPayments(chainIdOfCurrentLedger)).unwrap();
       // console.log('update', update.paymentMethodSettings[0]);
-      setPaymentsData(
-        Array.isArray(update.paymentMethodSettings)
-          ? update.paymentMethodSettings
-          : [update.paymentMethodSettings]
-      );
-      dispatch(
+      await dispatch(
         setEditedPaymentsSettings(
           Array.isArray(update.paymentMethodSettings)
             ? update.paymentMethodSettings
             : [update.paymentMethodSettings]
         )
+      );
+
+      setPaymentsData(
+        Array.isArray(update.paymentMethodSettings)
+          ? update.paymentMethodSettings
+          : [update.paymentMethodSettings]
       );
 
       setIsLoading(false);
@@ -212,13 +211,13 @@ const UserScreen = (props) => {
   };
 
   const handleCleanUserLedgers = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       const clean = await dispatch(cleanUserLedgers()).unwrap();
       setLedgersByApiData([]);
-      setIsLoading(false);
+      // setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
+      // setIsLoading(false);
       setTimeout(() => {
         showMessage({
           message: `Ooops, something went wrong!`,
@@ -233,22 +232,16 @@ const UserScreen = (props) => {
   };
 
   const handleGetData = async () => {
-    // console.log('currentUser', currentUser);
-    // console.log('ID', props.route.params.id);
-
     if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-      setIsLoading(true);
       try {
         const merchApi = await dispatch(getMerchantsApiKeys(props.route.params.id)).unwrap();
         const ledger = await dispatch(getLedgersData(props.route.params.id)).unwrap();
         if (props.route.params.isRefresh) {
           const byApiKey = await dispatch(getLedgersByApiKeyID(props.route.params.id)).unwrap();
+          // ======================================================================
+          getPaymentsData();
         }
-        // console.log('-(merchApi)- ', merchApi);
-        // console.log('-(ledger)- ', ledger);
-        setIsLoading(false);
       } catch (error) {
-        setIsLoading(false);
         setTimeout(() => {
           showMessage({
             message: `Ooops, something went wrong!`,
@@ -265,22 +258,28 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     // console.log('props-route-params-USER-LIST', props.route.params);
+    // setIsLoading(true);
+    console.log('1');
     handleGetData();
+    setIsLoading(false);
   }, [props.route.params, currentUser]);
 
   useEffect(() => {
     if (apiData) {
+      console.log('2');
       setApiKeysData(apiData);
     }
   }, [apiData]);
 
   useEffect(() => {
     if (ledgersByApi && ledgersByApi.length > 0) {
+      console.log('3');
       const data = ledgersByApi.map((item) => item.name);
       setChainIdOfCurrentLedger(ledgersByApi[0].payMethodChainsId);
       setLedgersByApiData(data);
       setInitialLedger(data[0]);
     } else {
+      console.log('3');
       setLedgersByApiData([]);
       setInitialLedger('');
     }
@@ -288,6 +287,7 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (balanceData) {
+      console.log('4');
       // console.log('balanceData>', balanceData);
       const data = balanceData.map((item) => item.name);
       setBalances(data);
@@ -296,20 +296,18 @@ const UserScreen = (props) => {
   }, [balanceData]);
 
   useEffect(() => {
+    console.log('5');
     refBalanceModal.current?.select(-1);
   }, [initialBalance]);
 
   //************************************************************************* */
 
   const getPaymentsData = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       const payments = await dispatch(getUserPayments(chainIdOfCurrentLedger)).unwrap();
-      setPaymentsData(
-        Array.isArray(payments.paymentMethodSettings)
-          ? payments.paymentMethodSettings
-          : [payments.paymentMethodSettings]
-      );
+      // console.log('payments.paymentMethodSettings', payments.paymentMethodSettings);
+      setIsUseBalancer(payments.useBalancer);
       const edited = await dispatch(
         setEditedPaymentsSettings(
           Array.isArray(payments.paymentMethodSettings)
@@ -317,7 +315,12 @@ const UserScreen = (props) => {
             : [payments.paymentMethodSettings]
         )
       ).unwrap();
-      setIsLoading(false);
+      setPaymentsData(
+        Array.isArray(payments.paymentMethodSettings)
+          ? payments.paymentMethodSettings
+          : [payments.paymentMethodSettings]
+      );
+      // setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       setTimeout(() => {
@@ -336,6 +339,7 @@ const UserScreen = (props) => {
   useEffect(() => {
     // console.log('BOo', initialLedger);
     if (initialLedger && chainIdOfCurrentLedger) {
+      console.log('6');
       // console.log('BOOM');
       getPaymentsData();
     }
@@ -343,6 +347,7 @@ const UserScreen = (props) => {
   }, [initialLedger, chainIdOfCurrentLedger]);
 
   useEffect(() => {
+    console.log('7');
     // console.log('allUsers', allUsers);
     dispatch(getAllUsers()).then((res) => {
       // console.log('<res>', res);
@@ -356,6 +361,7 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (selectedLedger !== '') {
+      console.log('8');
       // console.log('selectedLedger', selectedLedger);
       // console.log('ledgersByApi', ledgersByApi);
       setInitialLedger(ledgersByApi[selectedLedger].name);
@@ -368,13 +374,13 @@ const UserScreen = (props) => {
   const handleExpandRow = async (itemId) => {
     // console.log('Dispatch - id', itemId);
     if (!isAdditDataOpen) {
-      setIsLoading(true);
+      // setIsLoading(true);
       setSelectedIndex(itemId);
       try {
         const data = await dispatch(getLedgersByApiKeyID(itemId)).unwrap();
-        setIsLoading(false);
+        // setIsLoading(false);
       } catch (error) {
-        setIsLoading(false);
+        // setIsLoading(false);
         setTimeout(() => {
           showMessage({
             message: `Ooops, something went wrong!`,
@@ -449,6 +455,43 @@ const UserScreen = (props) => {
       user: currentUser,
       parentScreen: 'UserScreen',
     });
+  };
+
+  const handleSetUseBalancer = async (item) => {
+    // setIsLoading(true);
+    try {
+      const paymentsChainIDs = paymentsData.map((item) => item.id);
+
+      const putResult = await dispatch(
+        putNewPaymentsChain({
+          key: chainIdOfCurrentLedger,
+          chainData: { methods: [...paymentsChainIDs], useBalancer: !isUseBalancer },
+        })
+      ).unwrap();
+      setIsUseBalancer((prev) => !prev);
+      // setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Use Balancer was edit successfully!`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'success',
+        });
+      }, 1000);
+    } catch (error) {
+      // setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Attention! Use Balancer was not edit!`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
   };
 
   const flatListRenderModule = (item, index) => (
@@ -685,27 +728,21 @@ const UserScreen = (props) => {
                 </TouchableOpacity>
               </View>
             </View>
+
             {paymentsData && paymentsData.length > 0 ? (
               <View>
                 {paymentsData.map((item, index) => (
                   <View key={index}>
-                    <UserPaymentSimpleData
+                    {/* <UserPaymentSimpleData
                       item={item}
                       index={index}
                       id={item?.id}
                       confirmEditPayment={confirmEditPayment}
                       currentUser={currentUser}
-                    />
+                    /> */}
 
-                    {/* <View style={{ alignItems: 'center', marginTop: 40 }}>
-                      <TouchableOpacity onPress={() => confirmEditPayment(item.id)}>
-                        <SimpleButton
-                          text={'common.edit'}
-                          style={{ backgroundColor: '#FFE13A', width: 174 }}
-                          textStyle={{ color: '#262626' }}
-                        />
-                      </TouchableOpacity>
-                    </View> */}
+                    {/* {console.log('index', index)}
+                    {console.log('item', item)} */}
                   </View>
                 ))}
               </View>
@@ -742,7 +779,7 @@ const UserScreen = (props) => {
               <SimpleText
                 style={{
                   fontFamily: 'Mont_SB',
-                  maxWidth: width / 1.5,
+                  maxWidth: 112,
                   paddingRight: 40,
                   paddingLeft: 10,
                 }}
@@ -751,7 +788,22 @@ const UserScreen = (props) => {
                   paymentsData.length > 0 &&
                   paymentsData.map((item) => item?.id).join(', ')}
               </SimpleText>
-              <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  navigation.navigate('EditPaymentsSettingsScreen', {
+                    parentScreen: 'UserScreen',
+                    name: 'users.currentChains',
+                    value: paymentsData.map((item) => item?.id).join(', '),
+                    // index,
+                    chainId: chainIdOfCurrentLedger,
+                    isUseBalancer,
+                    id: currentUser.id,
+                    dataName: 'currentChains',
+                    currentUser,
+                  });
+                }}
+              >
                 <IconButton edit />
               </TouchableOpacity>
             </View>
@@ -763,31 +815,13 @@ const UserScreen = (props) => {
                 justifyContent: 'flex-start',
               }}
             >
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={() => setIsUseBalancer((prev) => !prev)}
-              >
+              <TouchableOpacity activeOpacity={0.5} onPress={handleSetUseBalancer}>
                 <SimpleCheckBox checked={isUseBalancer} style={{ marginRight: 13 }} />
               </TouchableOpacity>
               <SimpleText style={{ paddingTop: 4 }}>
                 <FormattedMessage id={'users.use_balancer'} />
               </SimpleText>
             </View>
-
-            {/* <View style={{ marginTop: 40 }}>
-              <SimpleText
-                style={{
-                  fontFamily: 'Mont_SB',
-                  fontSize: 20,
-                  color: '#FF6765',
-                  textAlign: 'center',
-                  letterSpacing: 1,
-                  lineHeight: 25,
-                }}
-              >
-                <FormattedMessage id={'users.validation_error'} />
-              </SimpleText>
-            </View> */}
           </View>
         </>
       )}
@@ -798,200 +832,205 @@ const UserScreen = (props) => {
     // <ScrollView>
     <ScrollView>
       <MainLoader isVisible={isLoading} />
-      <View style={styles.wrapper}>
-        <View style={styles.titleWrapper}>
-          <SimpleText style={styles.titleText}>
-            <FormattedMessage id={'common.users'} />
-          </SimpleText>
-        </View>
-
-        <View style={styles.userBlockWrapper}>
-          <View style={styles.userWrapper}>
-            <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 24, maxWidth: width / 1.5 }}>
-              {currentUser && currentUser.username}
+      {!isLoading && (
+        <View style={styles.wrapper}>
+          <View style={styles.titleWrapper}>
+            <SimpleText style={styles.titleText}>
+              <FormattedMessage id={'common.users'} />
             </SimpleText>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserEdit()}>
-                <IconButton edit />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserDelete()}>
-                <IconButton del />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.userBalance}>
-            <SimpleText style={{ fontFamily: 'Mont_SB', marginBottom: 14 }}>
-              <FormattedMessage id={'common.balance'} />
-            </SimpleText>
-            {balances && initialBalance && (
-              <ModalDropdown
-                options={balances}
-                ref={refBalanceModal}
-                defaultIndex={0}
-                defaultValue={initialBalance}
-                isFullWidth
-                animated={false}
-                onSelect={setSelectedBalance}
-                textStyle={{ fontSize: 16, fontFamily: 'Mont', lineHeight: 16 }}
-                style={{
-                  backgroundColor: '#F4F4F4',
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  justifyContent: 'space-between',
-                }}
-                dropdownStyle={{
-                  marginLeft: -16,
-                  marginTop: Platform.OS === 'ios' ? 14 : -14,
-                  paddingLeft: 11,
-                  paddingRight: 2,
-                  // width: 167,
-                  backgroundColor: '#F4F4F4',
-                  borderWidth: 0,
-                }}
-                dropdownTextStyle={{
-                  fontSize: 16,
-                  lineHeight: 16,
-                  fontWeight: '600',
-                  backgroundColor: '#F4F4F4',
-                  color: 'rgba(38, 38, 38, 0.50)',
-                }}
-                renderRightComponent={() => (
-                  <Image
-                    source={
-                      isDropdownOpen
-                        ? require('src/images/arrow_up.png')
-                        : require('src/images/arrow_down.png')
-                    }
-                    style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                  ></Image>
-                )}
-                renderRowProps={{ activeOpacity: 1 }}
-                renderSeparator={() => <></>}
-                onDropdownWillShow={() => setIsDropdownOpen(true)}
-                onDropdownWillHide={() => setIsDropdownOpen(false)}
-              />
-            )}
-          </View>
-          <View style={styles.userPayInOut}>
-            <View style={styles.payInOutTitles}>
-              <SimpleText style={{ ...styles.payInOutTitlesText, marginBottom: 12 }}>
-                <FormattedMessage id={'users.payin'} />:
-              </SimpleText>
-              <SimpleText style={styles.payInOutTitlesText}>
-                <FormattedMessage id={'users.payout'} />:
-              </SimpleText>
-            </View>
-            <View style={styles.payInOutValues}>
-              <SimpleText style={{ ...styles.payInOutValuesText, marginBottom: 12 }}>
-                {balanceData && balanceData.length > 0 && balanceData[+selectedBalance]
-                  ? balanceData[+selectedBalance].payinAmount.toFixed(2) +
-                    ' ' +
-                    balanceData[+selectedBalance].currency
-                  : ''}
-              </SimpleText>
-              <SimpleText style={styles.payInOutValuesText}>
-                {balanceData && balanceData.length > 0 && balanceData[+selectedBalance]
-                  ? balanceData[+selectedBalance].payoutAmount.toFixed(2) +
-                    ' ' +
-                    balanceData[+selectedBalance].currency
-                  : ''}
-              </SimpleText>
-            </View>
           </View>
 
-          <TouchableOpacity activeOpacity={0.5} onPress={() => setIsPersonalOpen((prev) => !prev)}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <SimpleText
+          <View style={styles.userBlockWrapper}>
+            <View style={styles.userWrapper}>
+              <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 24, maxWidth: width / 1.5 }}>
+                {currentUser && currentUser.username}
+              </SimpleText>
+              <View
                 style={{
-                  fontFamily: 'Mont_SB',
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
-                <FormattedMessage id={'users.personal_info'} />
-              </SimpleText>
-              <View style={{ marginRight: 26 }}>
-                <Image
-                  source={isPersonalOpen ? arrowUp : arrowDown}
-                  style={{ width: 26, height: 26 }}
-                />
+                <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserEdit()}>
+                  <IconButton edit />
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => handleUserDelete()}>
+                  <IconButton del />
+                </TouchableOpacity>
               </View>
             </View>
-          </TouchableOpacity>
+            <View style={styles.userBalance}>
+              <SimpleText style={{ fontFamily: 'Mont_SB', marginBottom: 14 }}>
+                <FormattedMessage id={'common.balance'} />
+              </SimpleText>
+              {balances && initialBalance && (
+                <ModalDropdown
+                  options={balances}
+                  ref={refBalanceModal}
+                  defaultIndex={0}
+                  defaultValue={initialBalance}
+                  isFullWidth
+                  animated={false}
+                  onSelect={setSelectedBalance}
+                  textStyle={{ fontSize: 16, fontFamily: 'Mont', lineHeight: 16 }}
+                  style={{
+                    backgroundColor: '#F4F4F4',
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    justifyContent: 'space-between',
+                  }}
+                  dropdownStyle={{
+                    marginLeft: -16,
+                    marginTop: Platform.OS === 'ios' ? 14 : -14,
+                    paddingLeft: 11,
+                    paddingRight: 2,
+                    // width: 167,
+                    backgroundColor: '#F4F4F4',
+                    borderWidth: 0,
+                  }}
+                  dropdownTextStyle={{
+                    fontSize: 16,
+                    lineHeight: 16,
+                    fontWeight: '600',
+                    backgroundColor: '#F4F4F4',
+                    color: 'rgba(38, 38, 38, 0.50)',
+                  }}
+                  renderRightComponent={() => (
+                    <Image
+                      source={
+                        isDropdownOpen
+                          ? require('src/images/arrow_up.png')
+                          : require('src/images/arrow_down.png')
+                      }
+                      style={{ width: 26, height: 26, marginLeft: 'auto' }}
+                    ></Image>
+                  )}
+                  renderRowProps={{ activeOpacity: 1 }}
+                  renderSeparator={() => <></>}
+                  onDropdownWillShow={() => setIsDropdownOpen(true)}
+                  onDropdownWillHide={() => setIsDropdownOpen(false)}
+                />
+              )}
+            </View>
+            <View style={styles.userPayInOut}>
+              <View style={styles.payInOutTitles}>
+                <SimpleText style={{ ...styles.payInOutTitlesText, marginBottom: 12 }}>
+                  <FormattedMessage id={'users.payin'} />:
+                </SimpleText>
+                <SimpleText style={styles.payInOutTitlesText}>
+                  <FormattedMessage id={'users.payout'} />:
+                </SimpleText>
+              </View>
+              <View style={styles.payInOutValues}>
+                <SimpleText style={{ ...styles.payInOutValuesText, marginBottom: 12 }}>
+                  {balanceData && balanceData.length > 0 && balanceData[+selectedBalance]
+                    ? balanceData[+selectedBalance].payinAmount.toFixed(2) +
+                      ' ' +
+                      balanceData[+selectedBalance].currency
+                    : ''}
+                </SimpleText>
+                <SimpleText style={styles.payInOutValuesText}>
+                  {balanceData && balanceData.length > 0 && balanceData[+selectedBalance]
+                    ? balanceData[+selectedBalance].payoutAmount.toFixed(2) +
+                      ' ' +
+                      balanceData[+selectedBalance].currency
+                    : ''}
+                </SimpleText>
+              </View>
+            </View>
 
-          {isPersonalOpen && currentUser && (
-            <View style={styles.userPersonal}>
-              <View style={styles.personalTitles}>
-                <SimpleText style={{ marginBottom: 12 }}>Name</SimpleText>
-                <SimpleText>Email</SimpleText>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => setIsPersonalOpen((prev) => !prev)}
+            >
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <SimpleText
+                  style={{
+                    fontFamily: 'Mont_SB',
+                  }}
+                >
+                  <FormattedMessage id={'users.personal_info'} />
+                </SimpleText>
+                <View style={{ marginRight: 26 }}>
+                  <Image
+                    source={isPersonalOpen ? arrowUp : arrowDown}
+                    style={{ width: 26, height: 26 }}
+                  />
+                </View>
               </View>
-              <View style={styles.personalValues}>
-                <SimpleText style={{ marginBottom: 12 }}>{currentUser.username}</SimpleText>
-                <SimpleText>{currentUser.email}</SimpleText>
+            </TouchableOpacity>
+
+            {isPersonalOpen && currentUser && (
+              <View style={styles.userPersonal}>
+                <View style={styles.personalTitles}>
+                  <SimpleText style={{ marginBottom: 12 }}>Name</SimpleText>
+                  <SimpleText>Email</SimpleText>
+                </View>
+                <View style={styles.personalValues}>
+                  <SimpleText style={{ marginBottom: 12 }}>{currentUser.username}</SimpleText>
+                  <SimpleText>{currentUser.email}</SimpleText>
+                </View>
               </View>
+            )}
+          </View>
+
+          <View style={styles.titleWrapper}>
+            <SimpleText style={styles.titleText}>
+              <FormattedMessage id={'api.api_keys'} />
+            </SimpleText>
+            <TouchableOpacity activeOpacity={0.5} onPress={handleNewApiKey}>
+              <SimpleButton plus text={'api.new_api_key'} />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              height: 50,
+              paddingLeft: 15,
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: 'rgba(217, 217, 217, 0.70)',
+              backgroundColor: '#F4F4F4',
+            }}
+          >
+            <View style={{ ...styles.tableCell, width: width / 6 }}>
+              <SimpleText style={styles.headerText}>ID</SimpleText>
+            </View>
+            <View style={{ ...styles.tableCell, flex: 1 }}>
+              <SimpleText style={styles.headerText}>
+                <FormattedMessage id={'common.user'} />
+              </SimpleText>
+            </View>
+            <View style={{ ...styles.tableCell, width: 52 }}>
+              <SimpleText style={styles.headerText}>
+                <FormattedMessage id={'common.edit'} />
+              </SimpleText>
+            </View>
+            <View style={{ ...styles.tableCell, width: 52 }}>
+              <SimpleText style={styles.headerText}>
+                <FormattedMessage id={'common.del'} />
+              </SimpleText>
+            </View>
+          </View>
+          {apiKeysData && apiKeysData.length > 0 ? (
+            apiKeysData.map((item, index) => (
+              <View key={item.id}>{flatListRenderModule(item, index)}</View>
+            ))
+          ) : (
+            <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
+              <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
+                <FormattedMessage id={'common.data_not_found'} />
+              </SimpleText>
             </View>
           )}
         </View>
-
-        <View style={styles.titleWrapper}>
-          <SimpleText style={styles.titleText}>
-            <FormattedMessage id={'api.api_keys'} />
-          </SimpleText>
-          <TouchableOpacity activeOpacity={0.5} onPress={handleNewApiKey}>
-            <SimpleButton plus text={'api.new_api_key'} />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            height: 50,
-            paddingLeft: 15,
-            flexDirection: 'row',
-            alignItems: 'center',
-            borderBottomWidth: 1,
-            borderBottomColor: 'rgba(217, 217, 217, 0.70)',
-            backgroundColor: '#F4F4F4',
-          }}
-        >
-          <View style={{ ...styles.tableCell, width: width / 6 }}>
-            <SimpleText style={styles.headerText}>ID</SimpleText>
-          </View>
-          <View style={{ ...styles.tableCell, flex: 1 }}>
-            <SimpleText style={styles.headerText}>
-              <FormattedMessage id={'common.user'} />
-            </SimpleText>
-          </View>
-          <View style={{ ...styles.tableCell, width: 52 }}>
-            <SimpleText style={styles.headerText}>
-              <FormattedMessage id={'common.edit'} />
-            </SimpleText>
-          </View>
-          <View style={{ ...styles.tableCell, width: 52 }}>
-            <SimpleText style={styles.headerText}>
-              <FormattedMessage id={'common.del'} />
-            </SimpleText>
-          </View>
-        </View>
-        {apiKeysData && apiKeysData.length > 0 ? (
-          apiKeysData.map((item, index) => (
-            <View key={item.id}>{flatListRenderModule(item, index)}</View>
-          ))
-        ) : (
-          <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
-            <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
-              <FormattedMessage id={'common.data_not_found'} />
-            </SimpleText>
-          </View>
-        )}
-      </View>
+      )}
     </ScrollView>
   );
 };

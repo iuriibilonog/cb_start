@@ -95,6 +95,8 @@ const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPaymen
     setIsBrandsOpen(false);
   };
 
+  console.log('editedPayments[index]', editedPayments[index]);
+
   return (
     editedPayments.length > 0 && (
       <TouchableWithoutFeedback onPress={() => handleOnBlur()}>
