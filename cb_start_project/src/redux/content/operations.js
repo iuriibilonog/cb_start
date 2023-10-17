@@ -267,7 +267,7 @@ export const getLedgersData = createAsyncThunk(
       const { data } = await api.get(`${BASE_URL}/api/ledgers?filter=${userId}`, {
         withCredentials: true,
       });
-      console.log('getLedgersData-data', data);
+
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -484,7 +484,6 @@ export const putNewPaymentsChain = createAsyncThunk(
   }
 );
 
-// https://dev.cashbulls.io/api/balance-logs?ledgerId=5&page=1&pageSize=10000
 export const getBalanceLogs = createAsyncThunk('content/getBalanceLogs', async (id, thunkAPI) => {
   try {
     // console.log('putNewPaymentsChain -> key>>', key);
@@ -501,7 +500,6 @@ export const getBalanceLogs = createAsyncThunk('content/getBalanceLogs', async (
   }
 });
 
-// https://dev.cashbulls.io/api/ledgers/53/deposit
 export const putBalanceDeposit = createAsyncThunk(
   'content/putBalanceDeposit',
   async ({ id, amountData }, thunkAPI) => {

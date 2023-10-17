@@ -30,7 +30,6 @@ const LogOutScreen = ({ setIsShowLogOut, navigation, setIsAuth }) => {
   const user = useSelector(getUser);
   const refresh = useSelector(getRefresh);
   const token = useSelector(getToken);
-  console.log('token', token);
 
   const handleLogoutSubmit = () => {
     try {

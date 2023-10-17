@@ -116,6 +116,7 @@ const lang = {
   'users.setting_name': 'Setting name',
   'users.addit_setting_mastercard': 'Additional settings for MasterCard',
   'users.addit_setting_visa': 'Additional settings for Visa',
+  'users.currentChains': 'Current chains',
 
   //balance=====
   'balance.history': 'History balance merchant',
