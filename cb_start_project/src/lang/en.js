@@ -130,7 +130,7 @@ const lang = {
   'common.email': 'email',
   'common.e_mail': 'E-Mail',
   'common.user_name': 'User name',
-  'common.password': 'password',
+  'common.password': 'Password',
   'common.description': 'Description',
   'common.details': 'Details',
   'common.bank': 'Bank',
