@@ -13,7 +13,8 @@ import { getAllBanks, getBankConversion, getBankBalance } from 'src/redux/conten
 import React, { useState, useEffect, cloneElement } from 'react';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import api from 'src/services/interceptor';
-import ModalDropdown from 'react-native-modal-dropdown';
+// import ModalDropdown from 'react-native-modal-dropdown';
+import ModalDropdown from 'src/components/molecules/ModalDropdown';
 import SimpleText from '../../components/atoms/SimpleText';
 import MainLoader from 'src/components/molecules/MainLoader';
 import { FormattedMessage } from 'react-intl';
@@ -206,7 +207,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                     isFullWidth
                     animated={false}
                     onSelect={setSelectedBank}
-                    textStyle={{ fontSize: 16, fontFamily: 'Mont' }}
+                    textStyle={{ fontSize: 16, fontFamily: 'Mont', lineHeight: 16 }}
                     style={{
                       backgroundColor: '#F4F4F4',
                       paddingHorizontal: 16,
@@ -219,12 +220,15 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                       paddingLeft: 11,
                       paddingRight: 2,
                       width: 167,
+                      height: banksNames.length > 4 ? 152 : banksNames.length * 40,
                       backgroundColor: '#F4F4F4',
                       borderWidth: 0,
                     }}
                     dropdownTextStyle={{
                       fontSize: 16,
+                      lineHeight: 16,
                       fontWeight: '600',
+                      fontFamily: 'Mont',
                       backgroundColor: '#F4F4F4',
                       color: 'rgba(38, 38, 38, 0.50)',
                     }}

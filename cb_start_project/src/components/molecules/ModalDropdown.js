@@ -13,6 +13,7 @@ import {
   FlatList,
   Platform,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -343,7 +344,6 @@ export default class ModalDropdown extends Component {
     if (renderSearch) return renderSearch;
 
     const { buttonText, searchValue } = this.state;
-
     return (
       <TextInput
         style={[styles.searchInput, searchInputStyle]}
@@ -383,10 +383,21 @@ export default class ModalDropdown extends Component {
     const { selectedIndex } = this.state;
     const { options } = this.state;
 
-    console.log('SELECTED INDEX: ', selectedIndex);
-    console.log('flatListRef>>>: ', flatListRef);
+    // console.log('SELECTED INDEX: ', selectedIndex);
+    // console.log('flatListRef>>>: ', flatListRef);
+    // console.log('options>>>: ', options);
 
     return (
+      // <ScrollView>
+      //   {options &&
+      //     options.map((item, index) => (
+      //       <TouchableOpacity onPress={() => this._renderItem({ item, index })}>
+      //         <View style={{ paddingVertical: 10, paddingHorizontal: 5, borderWidth: 1 }}>
+      //           <Text style={{ lineHeight: 16 }}>{item}</Text>
+      //         </View>
+      //       </TouchableOpacity>
+      //     ))}
+      // </ScrollView>
       <FlatList
         {...dropdownListProps}
         getItemLayout={(data, index) => {
@@ -394,20 +405,25 @@ export default class ModalDropdown extends Component {
             // length: 33 + StyleSheet.hairlineWidth,
             // index,
             // offset: (33 + StyleSheet.hairlineWidth) * index,
-            length: 40,
+            length: 36,
             index,
-            offset: 40 * index,
+            offset: 36 * index,
           };
         }}
         data={options}
         // ref={(component) => (this.flatList = component)}
-        ref={flatListRef}
+        // ref={flatListRef}
         scrollEnabled={scrollEnabled}
         // initialScrollIndex={saveScrollPosition ? selectedIndex : 0}
-        initialScrollIndex={selectedIndex}
+        initialScrollIndex={options.length > 4 ? selectedIndex : 0}
+        // initialScrollIndex={5}
         style={styles.list}
         keyExtractor={(item, i) => `key-${i}`}
         renderItem={this._renderItem}
+        // renderItem={(element) => {
+        //   console.log(element);
+        //   return <Text>aaa</Text>;
+        // }}
         ItemSeparatorComponent={renderSeparator || this._renderSeparator}
         automaticallyAdjustContentInsets={false}
         showsVerticalScrollIndicator={showsVerticalScrollIndicator}

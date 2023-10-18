@@ -36,7 +36,8 @@ import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from 'src/components/molecules/Pagination';
 import { useNavigation } from '@react-navigation/native';
-import ModalDropdown from 'react-native-modal-dropdown';
+// import ModalDropdown from 'react-native-modal-dropdown';
+import ModalDropdown from 'src/components/molecules/ModalDropdown';
 import IconButton from 'src/components/atoms/IconButton';
 import SimpleCheckBox from 'src/components/atoms/SimpleCheckBox';
 import SimpleButton from 'src/components/atoms/SimpleButton';
@@ -51,10 +52,11 @@ const editInactiveIcon = require('src/images/edit_inactive.png');
 
 const UserScreen = (props) => {
   const dispatch = useDispatch();
-  const apiData = useSelector(getApiKeys);
-  const balanceData = useSelector(ledgersData);
-  const ledgersByApi = useSelector(ledgersByApiKeyID);
-  const userPaymentsData = useSelector(userPayments);
+  // const apiData = useSelector(getApiKeys);
+  // const balanceData = useSelector(ledgersData);
+  // const ledgersByApi = useSelector(ledgersByApiKeyID);
+  const allPaymentData = useSelector(getEditedPaymentsSettings);
+  // const userPaymentsData = useSelector(userPayments);
 
   const [allUsers, setAllUsers] = useState();
   const [currentUser, setCurrentUser] = useState();
@@ -67,16 +69,18 @@ const UserScreen = (props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPersonalOpen, setIsPersonalOpen] = useState(false);
   const [isUseBalancer, setIsUseBalancer] = useState(false);
+  const [ledgersByApiDataNames, setLedgersByApiDataNames] = useState([]);
   const [ledgersByApiData, setLedgersByApiData] = useState([]);
   const [selectedLedger, setSelectedLedger] = useState('');
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [paymentsData, setPaymentsData] = useState([]);
 
   // const [minConfirmation, setMinConfirmation] = useState(1);
 
   const [chainIdOfCurrentLedger, setChainIdOfCurrentLedger] = useState([]);
 
+  const [balancesNames, setBalancesNames] = useState([]);
   const [balances, setBalances] = useState([]);
   // const [isUseWhiteList, setIsUseWhiteList] = useState(false);
   // const [isUseAcive, setIsUseAcive] = useState(false);
@@ -93,11 +97,103 @@ const UserScreen = (props) => {
   // }, [paymentsData]);
 
   useEffect(() => {
-    console.log('9');
+    console.log('1-didmount');
     handleCleanUserLedgers();
+    getApiData();
+    getBalanceData();
   }, []);
 
-  const allPaymentData = useSelector(getEditedPaymentsSettings);
+  const getApiData = async () => {
+    console.log('2-getApiData');
+    try {
+      const merchApiData = await dispatch(getMerchantsApiKeys(props.route.params.id)).unwrap();
+      // console.log('merchApiData', merchApiData.items);
+      if (merchApiData?.items?.length > 0) {
+        setApiKeysData(merchApiData.items);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! getMerchantsApiKeys failed`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
+  };
+
+  const getBalanceData = async () => {
+    console.log('3-getBalance');
+    try {
+      // console.log('Balance_id', props.route.params.id);
+      const balanceData = await dispatch(getLedgersData(props.route.params.id)).unwrap();
+      // console.log('Balance_data', balanceData);
+      if (balanceData?.items?.length > 0) {
+        const data = balanceData.items.map((item) => item.name);
+        setBalances(balanceData.items);
+        setBalancesNames(data);
+        setInitialBalance(data[0]);
+        refBalanceModal.current?.select(-1);
+      } else {
+        setBalances([]);
+        setInitialBalance('');
+        refBalanceModal.current?.select(-1);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! getLedgersData(Balance) failed`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
+  };
+
+  const getLedgersByApiData = async (keyId) => {
+    console.log('5-getLedgerByApiData');
+    setIsLoading(true);
+    try {
+      const byApiKey = await dispatch(
+        getLedgersByApiKeyID(keyId ? keyId : props.route.params.id)
+      ).unwrap();
+      if (byApiKey?.items?.length > 0) {
+        const data = byApiKey.items.map((item) => item.name);
+        setChainIdOfCurrentLedger(byApiKey.items[0].payMethodChainsId);
+        setLedgersByApiData(byApiKey.items);
+        setLedgersByApiDataNames(data);
+        setInitialLedger(data[0]);
+
+        getPaymentsData(byApiKey.items[0].payMethodChainsId);
+        refLedgersModal.current?.select(-1);
+      } else {
+        setLedgersByApiData([]);
+        setLedgersByApiDataNames([]);
+        setInitialLedger('');
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! getLedgersByApiKeyID failed`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
+  };
 
   const getBrands = (data) => {
     if (Array.isArray(data) && data.includes('Visa') && data.includes('MasterCard'))
@@ -231,82 +327,27 @@ const UserScreen = (props) => {
     }
   };
 
-  const handleGetData = async () => {
-    if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-      try {
-        const merchApi = await dispatch(getMerchantsApiKeys(props.route.params.id)).unwrap();
-        const ledger = await dispatch(getLedgersData(props.route.params.id)).unwrap();
-        if (props.route.params.isRefresh) {
-          const byApiKey = await dispatch(getLedgersByApiKeyID(props.route.params.id)).unwrap();
-          // ======================================================================
-          getPaymentsData();
-        }
-      } catch (error) {
-        setTimeout(() => {
-          showMessage({
-            message: `Ooops, something went wrong!`,
-            titleStyle: {
-              textAlign: 'center',
-            },
-            type: 'danger',
-          });
-        }, 1000);
-        console.warn('Error:', error);
-      }
-    }
-  };
-
   useEffect(() => {
-    // console.log('props-route-params-USER-LIST', props.route.params);
-    // setIsLoading(true);
-    console.log('1');
-    handleGetData();
-    setIsLoading(false);
+    console.log('4-props, currentUser');
+    if (props.route.params.isRefresh) {
+      console.log('currUser:', currentUser);
+      getLedgersByApiData();
+    }
   }, [props.route.params, currentUser]);
 
   useEffect(() => {
-    if (apiData) {
-      console.log('2');
-      setApiKeysData(apiData);
-    }
-  }, [apiData]);
+    console.log('6-props-params-id');
+    dispatch(getAllUsers()).then((res) => {
+      setAllUsers(res.payload.items);
+      if (props.route.params.id) {
+        setCurrentUser(res.payload.items.find((item) => item.id === +props.route.params.id));
+      }
+    });
+  }, [props.route.params.id]);
 
-  useEffect(() => {
-    if (ledgersByApi && ledgersByApi.length > 0) {
-      console.log('3');
-      const data = ledgersByApi.map((item) => item.name);
-      setChainIdOfCurrentLedger(ledgersByApi[0].payMethodChainsId);
-      setLedgersByApiData(data);
-      setInitialLedger(data[0]);
-    } else {
-      console.log('3');
-      setLedgersByApiData([]);
-      setInitialLedger('');
-    }
-  }, [ledgersByApi]);
-
-  useEffect(() => {
-    if (balanceData) {
-      console.log('4');
-      // console.log('balanceData>', balanceData);
-      const data = balanceData.map((item) => item.name);
-      setBalances(data);
-      setInitialBalance(data[0]);
-    }
-  }, [balanceData]);
-
-  useEffect(() => {
-    console.log('5');
-    refBalanceModal.current?.select(-1);
-  }, [initialBalance]);
-
-  //************************************************************************* */
-
-  const getPaymentsData = async () => {
-    // setIsLoading(true);
+  const getPaymentsData = async (chainIdOfCurrentLedger) => {
     try {
       const payments = await dispatch(getUserPayments(chainIdOfCurrentLedger)).unwrap();
-      // console.log('payments.paymentMethodSettings', payments.paymentMethodSettings);
       setIsUseBalancer(payments.useBalancer);
       const edited = await dispatch(
         setEditedPaymentsSettings(
@@ -337,35 +378,10 @@ const UserScreen = (props) => {
   };
 
   useEffect(() => {
-    // console.log('BOo', initialLedger);
-    if (initialLedger && chainIdOfCurrentLedger) {
-      console.log('6');
-      // console.log('BOOM');
-      getPaymentsData();
-    }
-    refLedgersModal.current?.select(-1);
-  }, [initialLedger, chainIdOfCurrentLedger]);
-
-  useEffect(() => {
-    console.log('7');
-    // console.log('allUsers', allUsers);
-    dispatch(getAllUsers()).then((res) => {
-      // console.log('<res>', res);
-      setAllUsers(res.payload.items);
-      if (props.route.params.id) {
-        // console.log('props.route.params.id_USERSSCREEN', props.route.params.id);
-        setCurrentUser(res.payload.items.find((item) => item.id === +props.route.params.id));
-      }
-    });
-  }, [props.route.params.id]);
-
-  useEffect(() => {
     if (selectedLedger !== '') {
-      console.log('8');
-      // console.log('selectedLedger', selectedLedger);
-      // console.log('ledgersByApi', ledgersByApi);
-      setInitialLedger(ledgersByApi[selectedLedger].name);
-      setChainIdOfCurrentLedger(ledgersByApi[selectedLedger].payMethodChainsId);
+      console.log('7-selectLedger');
+      setInitialLedger(ledgersByApiData[selectedLedger].name);
+      setChainIdOfCurrentLedger(ledgersByApiData[selectedLedger].payMethodChainsId);
     }
   }, [selectedLedger]);
 
@@ -377,7 +393,8 @@ const UserScreen = (props) => {
       // setIsLoading(true);
       setSelectedIndex(itemId);
       try {
-        const data = await dispatch(getLedgersByApiKeyID(itemId)).unwrap();
+        // const data = await dispatch(getLedgersByApiKeyID(itemId)).unwrap();
+        getLedgersByApiData(itemId);
         // setIsLoading(false);
       } catch (error) {
         // setIsLoading(false);
@@ -437,7 +454,7 @@ const UserScreen = (props) => {
     // console.log('selectedLedger', selectedLedger);
     navigation.navigate('EditLedgerScreen', {
       user: currentUser,
-      data: ledgersByApi[selectedLedger ? selectedLedger : 0],
+      data: ledgersByApiData[selectedLedger ? selectedLedger : 0],
       parentScreen: 'UserScreen',
     });
   };
@@ -654,7 +671,7 @@ const UserScreen = (props) => {
               ) : (
                 <ModalDropdown
                   ref={refLedgersModal}
-                  options={ledgersByApiData}
+                  options={ledgersByApiDataNames}
                   defaultIndex={0}
                   defaultValue={initialLedger}
                   isFullWidth
@@ -683,6 +700,8 @@ const UserScreen = (props) => {
                     paddingLeft: 11,
                     paddingRight: 2,
                     // width: 167,
+                    height:
+                      ledgersByApiDataNames.length > 4 ? 152 : ledgersByApiDataNames.length * 40,
                     width: width / 1.7,
                     backgroundColor: '#F4F4F4',
                     borderWidth: 0,
@@ -729,17 +748,19 @@ const UserScreen = (props) => {
               </View>
             </View>
 
-            {paymentsData && paymentsData.length > 0 ? (
+            {currentUser && paymentsData && paymentsData.length > 0 ? (
               <View>
+                {console.log(`===========Length = ${paymentsData.length}===========`)}
                 {paymentsData.map((item, index) => (
                   <View key={index}>
-                    {/* <UserPaymentSimpleData
+                    {console.log('index', index)}
+                    <UserPaymentSimpleData
                       item={item}
                       index={index}
                       id={item?.id}
                       confirmEditPayment={confirmEditPayment}
                       currentUser={currentUser}
-                    /> */}
+                    />
 
                     {/* {console.log('index', index)}
                     {console.log('item', item)} */}
@@ -863,9 +884,9 @@ const UserScreen = (props) => {
               <SimpleText style={{ fontFamily: 'Mont_SB', marginBottom: 14 }}>
                 <FormattedMessage id={'common.balance'} />
               </SimpleText>
-              {balances && initialBalance && (
+              {balancesNames && initialBalance && (
                 <ModalDropdown
-                  options={balances}
+                  options={balancesNames}
                   ref={refBalanceModal}
                   defaultIndex={0}
                   defaultValue={initialBalance}
@@ -885,6 +906,7 @@ const UserScreen = (props) => {
                     paddingLeft: 11,
                     paddingRight: 2,
                     // width: 167,
+                    height: balancesNames.length > 4 ? 152 : balancesNames.length * 40,
                     backgroundColor: '#F4F4F4',
                     borderWidth: 0,
                   }}
@@ -892,6 +914,7 @@ const UserScreen = (props) => {
                     fontSize: 16,
                     lineHeight: 16,
                     fontWeight: '600',
+                    fontFamily: 'Mont',
                     backgroundColor: '#F4F4F4',
                     color: 'rgba(38, 38, 38, 0.50)',
                   }}
@@ -923,17 +946,17 @@ const UserScreen = (props) => {
               </View>
               <View style={styles.payInOutValues}>
                 <SimpleText style={{ ...styles.payInOutValuesText, marginBottom: 12 }}>
-                  {balanceData && balanceData.length > 0 && balanceData[+selectedBalance]
-                    ? balanceData[+selectedBalance].payinAmount.toFixed(2) +
+                  {balances && balances.length > 0 && balances[+selectedBalance]
+                    ? balances[+selectedBalance].payinAmount.toFixed(2) +
                       ' ' +
-                      balanceData[+selectedBalance].currency
+                      balances[+selectedBalance].currency
                     : ''}
                 </SimpleText>
                 <SimpleText style={styles.payInOutValuesText}>
-                  {balanceData && balanceData.length > 0 && balanceData[+selectedBalance]
-                    ? balanceData[+selectedBalance].payoutAmount.toFixed(2) +
+                  {balances && balances.length > 0 && balances[+selectedBalance]
+                    ? balances[+selectedBalance].payoutAmount.toFixed(2) +
                       ' ' +
-                      balanceData[+selectedBalance].currency
+                      balances[+selectedBalance].currency
                     : ''}
                 </SimpleText>
               </View>

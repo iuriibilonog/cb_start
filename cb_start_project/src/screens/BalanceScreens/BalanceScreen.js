@@ -25,7 +25,8 @@ import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import Pagination from 'src/components/molecules/Pagination';
 import { useNavigation } from '@react-navigation/native';
-import ModalDropdown from 'react-native-modal-dropdown';
+// import ModalDropdown from 'react-native-modal-dropdown';
+import ModalDropdown from 'src/components/molecules/ModalDropdown';
 import IconButton from 'src/components/atoms/IconButton';
 import SimpleCheckBox from 'src/components/atoms/SimpleCheckBox';
 import SimpleButton from 'src/components/atoms/SimpleButton';
@@ -71,7 +72,6 @@ const BalanceScreen = (props) => {
   useEffect(() => {
     if (allUsers) {
       const merchants = allUsers.filter((item) => item.roleId === 1);
-      // console.log('allMerchants', allMerchants);
       setMerchantsList(merchants);
       setSelectedMerchant(merchants[0].username);
       getLedgersByMechantId(merchants[0].id);
@@ -83,21 +83,32 @@ const BalanceScreen = (props) => {
       const ledgers = await dispatch(getLedgersData(userId)).unwrap();
       if (ledgers.items && ledgers.items.length > 0) {
         setLedgersList(ledgers.items);
+        // setLedgersList([
+        //   'Merchant',
+        //   'Support',
+        //   'Admin',
+        //   'Merchant2',
+        //   'Support2',
+        //   'Admin2',
+        //   'Merchant3',
+        //   'Support3',
+        //   'Admin3',
+        //   'Merchant4',
+        //   'Support4',
+        //   'Admin4',
+        // ]);
         setSelectedLedger(ledgers.items[0].name);
+        // setSelectedLedger('Merchant');
         setSelectedBalanceName(ledgers.items[0].name);
         setSelectedBalanceObject(ledgers.items[0]);
-        // console.log('setSelectedBalanceObject', ledgers.items[0]);
-        refLedgersModal.current?.select(-1);
-        refBalanceModal.current?.select(-1);
+        refreshModals();
         const logs = await dispatch(getBalanceLogs(ledgers.items[0].id)).unwrap();
-        // console.log('logs', logs);
         setBalanceLogs(logs.items);
       } else {
         setLedgersList([' ']);
         setSelectedLedger(' ');
         setSelectedBalanceName(' ');
-        refLedgersModal.current?.select(-1);
-        refBalanceModal.current?.select(-1);
+        refreshModals();
         setBalanceLogs([]);
       }
     } catch (error) {
@@ -115,6 +126,13 @@ const BalanceScreen = (props) => {
     }
   };
 
+  const refreshModals = () => {
+    setTimeout(() => {
+      refLedgersModal.current?.select(-1);
+      refBalanceModal.current?.select(-1);
+    }, 1);
+  };
+
   const handleMerchantSelect = (text) => {
     setSelectedMerchant(text);
     getLedgersByMechantId(merchantsList.find((item) => item.username === text).id);
@@ -130,10 +148,9 @@ const BalanceScreen = (props) => {
     if (refBalanceModal.current && refBalanceModal.current.select) {
       refBalanceModal.current.select(-1);
     }
-  }, [selectedBalanceName]);
+  }, [selectedLedger]);
 
   const handleBalanceSelect = (text) => {
-    // console.log('Text', text);
     setSelectedBalanceName(text);
     setSelectedBalanceObject(ledgersList.find((item) => item.name === text));
     // getLedgersByMechantId(merchantsList.find((item) => item.username === text).id);
@@ -170,8 +187,6 @@ const BalanceScreen = (props) => {
       const selectedMerchantId = merchantsList.find(
         (item) => item.username === selectedMerchant
       ).id;
-      // console.log('merchantsList', merchantsList);
-      // console.log('selectedMerchantId', selectedMerchantId);
       await getLedgersByMechantId(
         merchantsList.find((item) => item.username === selectedMerchant).id
       );
@@ -290,7 +305,6 @@ const BalanceScreen = (props) => {
               // isFullWidth
               animated={false}
               onSelect={(index, option) => {
-                // console.log(index, '<>', option);
                 handleMerchantSelect(option);
               }}
               textStyle={{
@@ -355,12 +369,12 @@ const BalanceScreen = (props) => {
               <ModalDropdown
                 ref={refLedgersModal}
                 options={ledgersList.map((item) => item.name)}
+                // options={ledgersList}
                 defaultIndex={0}
                 defaultValue={selectedLedger}
                 // isFullWidth
                 animated={false}
                 onSelect={(index, option) => {
-                  // console.log(index, '<>', option);
                   handleLedgerSelect(option);
                 }}
                 textStyle={{
@@ -387,7 +401,8 @@ const BalanceScreen = (props) => {
                   backgroundColor: '#F4F4F4',
                   borderWidth: 0,
                   borderRadius: 2,
-                  height: 220,
+
+                  height: ledgersList.length > 4 ? 152 : ledgersList.length * 40,
                 }}
                 dropdownTextStyle={{
                   fontSize: 16,
@@ -490,9 +505,9 @@ const BalanceScreen = (props) => {
           {ledgersList && selectedBalanceName && (
             <View style={{ pointerEvents: ledgersList[0] === ' ' ? 'none' : 'all' }}>
               <ModalDropdown
-                options={ledgersList.map((item) => item.name)}
                 ref={refBalanceModal}
-                defaultIndex={0}
+                options={ledgersList.map((item) => item.name)}
+                defaultIndex={ledgersList.map((item) => item.name).indexOf(selectedLedger)}
                 defaultValue={selectedBalanceName}
                 isFullWidth
                 animated={false}
@@ -512,6 +527,7 @@ const BalanceScreen = (props) => {
                   paddingLeft: 11,
                   paddingRight: 2,
                   width: width - 40,
+                  height: ledgersList.length > 4 ? 152 : ledgersList.length * 40,
                   backgroundColor: '#F4F4F4',
                   borderWidth: 0,
                 }}
@@ -519,6 +535,7 @@ const BalanceScreen = (props) => {
                   fontSize: 16,
                   lineHeight: 16,
                   fontWeight: '600',
+                  fontFamily: 'Mont',
                   backgroundColor: '#F4F4F4',
                   color: 'rgba(38, 38, 38, 0.50)',
                 }}

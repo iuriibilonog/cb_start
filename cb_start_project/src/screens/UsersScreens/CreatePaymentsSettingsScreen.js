@@ -25,7 +25,8 @@ import {
   putNewPaymentsChain,
 } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
-import ModalDropdown from 'react-native-modal-dropdown';
+// import ModalDropdown from 'react-native-modal-dropdown';
+import ModalDropdown from 'src/components/molecules/ModalDropdown';
 import ConfirmActionComponent from 'src/components/molecules/ConfirmActionComponent';
 import DecrementIncrement from 'src/components/atoms/DecrementIncrement';
 import SimpleButton from '../../components/atoms/SimpleButton';
@@ -263,7 +264,7 @@ const CreatePaymentsSettingsScreen = (props) => {
           backgroundColor: '#F4F4F4',
           borderWidth: 0,
           borderRadius: 2,
-          height: 150,
+          height: restrictedBrands.length > 4 ? 152 : restrictedBrands.length * 40,
         }}
         dropdownTextStyle={{
           fontSize: 16,
@@ -385,7 +386,7 @@ const CreatePaymentsSettingsScreen = (props) => {
                         backgroundColor: '#F4F4F4',
                         borderWidth: 0,
                         borderRadius: 2,
-                        height: 220,
+                        height: banksList.length > 4 ? 152 : banksList.length * 40,
                       }}
                       dropdownTextStyle={{
                         fontSize: 16,

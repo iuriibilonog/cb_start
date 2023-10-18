@@ -15,7 +15,8 @@ import {
   TextInput,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
-import ModalDropdown from 'react-native-modal-dropdown';
+// import ModalDropdown from 'react-native-modal-dropdown';
+import ModalDropdown from 'src/components/molecules/ModalDropdown';
 import { useDispatch } from 'react-redux';
 import { putEditUser, postNewUser } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
@@ -269,19 +270,19 @@ const AddEditUserScreen = (props) => {
                       }}
                       dropdownStyle={{
                         marginLeft: -10,
-                        marginTop: Platform.OS === 'ios' ? 12 : -12,
+                        marginTop: Platform.OS === 'ios' ? 10 : -10,
                         paddingLeft: 5,
                         paddingRight: 2,
                         // width: '100%',
                         width: width - 90,
-                        height: 160,
+                        height: roles.length > 4 ? 152 : roles.length * 40,
                         borderWidth: 1,
                         borderColor: 'rgba(0, 0, 0, 0.20)',
                         borderRadius: 2,
                       }}
                       dropdownTextStyle={{
                         fontSize: 16,
-                        lineHeight: 30,
+                        lineHeight: 16,
                         fontWeight: '600',
                         fontFamily: 'Mont',
                         // backgroundColor: '#F4F4F4',

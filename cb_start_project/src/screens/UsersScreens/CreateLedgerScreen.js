@@ -17,7 +17,8 @@ import {
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import ModalDropdown from 'react-native-modal-dropdown';
+// import ModalDropdown from 'react-native-modal-dropdown';
+import ModalDropdown from 'src/components/molecules/ModalDropdown';
 import { checkValidation } from 'src/utils/errorsValidation';
 
 const arrowLeft = require('src/images/header_left.png');
@@ -149,6 +150,7 @@ const AddLedgerScreen = (props) => {
                         onSelect={setSelectedCurrency}
                         textStyle={{
                           fontSize: 16,
+                          lineHeight: 16,
                           fontFamily: 'Mont',
                           color: [0, 1, 2, 3, 4, 5].includes(selectedCurrency)
                             ? '#262626'
@@ -170,13 +172,14 @@ const AddLedgerScreen = (props) => {
                           paddingLeft: 5,
                           paddingRight: 2,
                           width: width - 90,
-                          height: 200,
+                          height: currency.length > 4 ? 152 : currency.length * 40,
                           borderWidth: 1,
                           borderColor: 'rgba(0, 0, 0, 0.20)',
                           borderRadius: 2,
                         }}
                         dropdownTextStyle={{
                           fontSize: 16,
+                          lineHeight: 16,
                           fontWeight: '600',
                           fontFamily: 'Mont',
                           // backgroundColor: '#F4F4F4',
