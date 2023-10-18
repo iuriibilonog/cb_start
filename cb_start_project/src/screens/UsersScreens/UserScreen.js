@@ -52,11 +52,8 @@ const editInactiveIcon = require('src/images/edit_inactive.png');
 
 const UserScreen = (props) => {
   const dispatch = useDispatch();
-  // const apiData = useSelector(getApiKeys);
-  // const balanceData = useSelector(ledgersData);
-  // const ledgersByApi = useSelector(ledgersByApiKeyID);
+
   const allPaymentData = useSelector(getEditedPaymentsSettings);
-  // const userPaymentsData = useSelector(userPayments);
 
   const [allUsers, setAllUsers] = useState();
   const [currentUser, setCurrentUser] = useState();
@@ -76,14 +73,10 @@ const UserScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentsData, setPaymentsData] = useState([]);
 
-  // const [minConfirmation, setMinConfirmation] = useState(1);
-
   const [chainIdOfCurrentLedger, setChainIdOfCurrentLedger] = useState([]);
 
   const [balancesNames, setBalancesNames] = useState([]);
   const [balances, setBalances] = useState([]);
-  // const [isUseWhiteList, setIsUseWhiteList] = useState(false);
-  // const [isUseAcive, setIsUseAcive] = useState(false);
 
   const { width } = Dimensions.get('window');
 
@@ -91,10 +84,6 @@ const UserScreen = (props) => {
 
   const refBalanceModal = useRef();
   const refLedgersModal = useRef();
-
-  // useEffect(() => {
-  //   console.log('paymentsData', paymentsData.length);
-  // }, [paymentsData]);
 
   useEffect(() => {
     console.log('1-didmount');
@@ -107,7 +96,7 @@ const UserScreen = (props) => {
     console.log('2-getApiData');
     try {
       const merchApiData = await dispatch(getMerchantsApiKeys(props.route.params.id)).unwrap();
-      // console.log('merchApiData', merchApiData.items);
+
       if (merchApiData?.items?.length > 0) {
         setApiKeysData(merchApiData.items);
       }
@@ -129,9 +118,8 @@ const UserScreen = (props) => {
   const getBalanceData = async () => {
     console.log('3-getBalance');
     try {
-      // console.log('Balance_id', props.route.params.id);
       const balanceData = await dispatch(getLedgersData(props.route.params.id)).unwrap();
-      // console.log('Balance_data', balanceData);
+
       if (balanceData?.items?.length > 0) {
         const data = balanceData.items.map((item) => item.name);
         setBalances(balanceData.items);
@@ -165,6 +153,7 @@ const UserScreen = (props) => {
       const byApiKey = await dispatch(
         getLedgersByApiKeyID(keyId ? keyId : props.route.params.id)
       ).unwrap();
+
       if (byApiKey?.items?.length > 0) {
         const data = byApiKey.items.map((item) => item.name);
         setChainIdOfCurrentLedger(byApiKey.items[0].payMethodChainsId);
@@ -331,7 +320,8 @@ const UserScreen = (props) => {
     console.log('4-props, currentUser');
     if (props.route.params.isRefresh) {
       console.log('currUser:', currentUser);
-      getLedgersByApiData();
+      setPaymentsData([]);
+      getLedgersByApiData(selectedIndex || apiKeysData[0].id);
     }
   }, [props.route.params, currentUser]);
 
@@ -349,6 +339,7 @@ const UserScreen = (props) => {
     try {
       const payments = await dispatch(getUserPayments(chainIdOfCurrentLedger)).unwrap();
       setIsUseBalancer(payments.useBalancer);
+      console.log('payments.paymentMethodSettings', payments.paymentMethodSettings.length);
       const edited = await dispatch(
         setEditedPaymentsSettings(
           Array.isArray(payments.paymentMethodSettings)
@@ -800,7 +791,7 @@ const UserScreen = (props) => {
               <SimpleText
                 style={{
                   fontFamily: 'Mont_SB',
-                  maxWidth: 112,
+                  maxWidth: width / 2,
                   paddingRight: 40,
                   paddingLeft: 10,
                 }}
@@ -811,6 +802,7 @@ const UserScreen = (props) => {
               </SimpleText>
               <TouchableOpacity
                 activeOpacity={0.5}
+                style={{ marginTop: -15 }}
                 onPress={() => {
                   navigation.navigate('EditPaymentsSettingsScreen', {
                     parentScreen: 'UserScreen',
@@ -1113,7 +1105,7 @@ const styles = StyleSheet.create({
 
   userWrapper: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
   userBalance: { marginTop: 37 },

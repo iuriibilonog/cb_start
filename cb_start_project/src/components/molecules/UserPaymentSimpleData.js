@@ -95,7 +95,6 @@ const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPaymen
     setIsBrandsOpen(false);
   };
 
-  console.log('editedPayments[index]', editedPayments.length > 0, editedPayments[index]);
   console.log('item', item.id);
 
   return (
