@@ -130,7 +130,7 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
 });
 export const getTransactionData = createAsyncThunk(
   'content/getTransactionData',
-  async ({ transactionData, page = 1 }, thunkAPI) => {
+  async ({ transactionData, page = 1, search }, thunkAPI) => {
     try {
       let setLink;
       let timezone;
@@ -180,8 +180,9 @@ export const getTransactionData = createAsyncThunk(
       }
       // console.log('page,setLink', page, '<><>', setLink);
       const { data } = await api.get(
-        `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&${setLink}`,
-        // `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&startDate=${startDate}&endDate=${endDate}&userId=${userId}&apiKeyId=${apiKeyId}&mode=${mode}&status=${status}&currency=${currency}&timezone=${timezone}&bankName=${bankName}`,
+        search
+          ? `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&search=${search}&${setLink}`
+          : `${BASE_URL}/api/payments?page=${page}&pageSize=100&includeTransactions=true&${setLink}`,
         {
           withCredentials: true,
         }

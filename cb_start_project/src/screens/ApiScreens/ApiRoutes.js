@@ -17,7 +17,6 @@ const ApiRoutes = ({ handlePressIconLogOut }) => {
   const ApiStack = createStackNavigator();
 
   const handleSearchApiText = (data) => {
-    console.log('DATA-> ', data);
     setSearchApi(data);
   };
 
