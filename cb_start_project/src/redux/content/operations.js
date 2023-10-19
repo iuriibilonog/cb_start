@@ -194,17 +194,25 @@ export const getTransactionData = createAsyncThunk(
   }
 );
 
-export const getApiData = createAsyncThunk('content/getApiData', async (page = 1, thunkAPI) => {
-  try {
-    // console.log('getApiData-Operations - page', page);
-    const { data } = await api.get(`${BASE_URL}/api/api-keys?page=${page}&pageSize=100`, {
-      withCredentials: true,
-    });
-    return data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const getApiData = createAsyncThunk(
+  'content/getApiData',
+  async ({ page = 1, searchText }, thunkAPI) => {
+    try {
+      // console.log('getApiData-Operations - page', page);
+      const { data } = await api.get(
+        searchText
+          ? `${BASE_URL}/api/api-keys?page=${page}&pageSize=100&search=${searchText}`
+          : `${BASE_URL}/api/api-keys?page=${page}&pageSize=100`,
+        {
+          withCredentials: true,
+        }
+      );
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
 export const putApiKey = createAsyncThunk('content/putApiKey', async ({ id, name }, thunkAPI) => {
   try {
