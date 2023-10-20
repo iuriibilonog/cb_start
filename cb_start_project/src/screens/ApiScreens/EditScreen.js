@@ -1,43 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  Text,
   StyleSheet,
   View,
   Keyboard,
-  Dimensions,
-  Pressable,
   TouchableWithoutFeedback,
-  ImageBackground,
   Image,
-  ScrollView,
   TouchableOpacity,
-  FlatList,
-  TextInput,
 } from 'react-native';
-import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
 import { putApiKey } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
 import MainLoader from 'src/components/molecules/MainLoader';
+import ConfirmActionComponent from 'src/components/molecules/ConfirmActionComponent';
 
 const arrowLeft = require('src/images/header_left.png');
 
 const EditScreen = (props) => {
-  const [value, setValue] = useState(props.route.params.name);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const { width } = Dimensions.get('window');
 
-  const submit = async () => {
+  const submit = async (data) => {
     try {
       setIsLoading(true);
-      await dispatch(putApiKey({ id: props.route.params.id, name: value }));
+      await dispatch(putApiKey({ id: props.route.params.id, name: data }));
       setIsLoading(false);
       await props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
       setTimeout(() => {
         showMessage({
-          message: `Edit Api key ${value} successfully`,
+          message: `Edit Api key ${data} successfully`,
           titleStyle: {
             textAlign: 'center',
           },
@@ -47,7 +38,7 @@ const EditScreen = (props) => {
     } catch (err) {
       setIsLoading(false);
       showMessage({
-        message: `Something went wrong! Api key ${value} does't edit`,
+        message: `Something went wrong! Api key ${data} does't edit`,
         titleStyle: {
           textAlign: 'center',
         },
@@ -83,21 +74,17 @@ const EditScreen = (props) => {
         >
           <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
-        {/* </View> */}
-
-        <View style={styles.innerWrapper}>
-          <SimpleText style={styles.title}>
-            <FormattedMessage id={'api.edit_api'} />
-          </SimpleText>
-          <TextInput style={styles.input} value={value} onChangeText={(text) => setValue(text)} />
-          <TouchableOpacity activeOpacity={0.5} style={{ width: '100%' }} onPress={submit}>
-            <View style={styles.btn}>
-              <SimpleText style={styles.btnText}>
-                <FormattedMessage id={'common.edit'} />
-              </SimpleText>
-            </View>
-          </TouchableOpacity>
-        </View>
+        <FormattedMessage id={'api.api_key_name'}>
+          {(placeholder) => (
+            <ConfirmActionComponent
+              isEdit
+              title={'api.api_key_name'}
+              initialValue={props.route.params.name}
+              action={submit}
+              placeholder={placeholder[0]}
+            />
+          )}
+        </FormattedMessage>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -122,7 +109,7 @@ const styles = StyleSheet.create({
   btn: {
     width: '100%',
     height: 42,
-    backgroundColor: '#D6B747',
+    backgroundColor: '#FFE13A',
     borderRadius: 2,
     alignItems: 'center',
     justifyContent: 'center',
