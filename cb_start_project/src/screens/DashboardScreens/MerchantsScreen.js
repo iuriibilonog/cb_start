@@ -82,7 +82,6 @@ const MerchantsScreen = ({
         }
         break;
       case 'Transactions':
-        console.log('<<))>>', radioSelect);
         if (Object.keys(radioSelect).length > 0) {
           setTransactionFilter('merchants', { filters: radioSelect, value: radioSelect.value });
         }

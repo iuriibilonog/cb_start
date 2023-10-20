@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   FlatList,
   RefreshControl,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
@@ -32,6 +34,7 @@ const TransactionsScreen = ({
   isMerchApiKeyAvailable,
   createTransactionRequestObject,
   isTransactionsWithFilterLoading,
+  ...props
 }) => {
   const dispatch = useDispatch();
   const transactionInfo = useSelector(getTransactionInfo);
@@ -43,6 +46,7 @@ const TransactionsScreen = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const { width } = Dimensions.get('window');
 
@@ -51,8 +55,54 @@ const TransactionsScreen = ({
   const route = useRoute();
 
   useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (props.searchTxt || props.searchTxt === '') {
+      setCurrentPage(1);
+      getTableData(1);
+    }
+  }, [props.searchTxt]);
+
+  useEffect(() => {
     getTableData();
   }, [currentPage]);
+
+  const getTableData = async (page) => {
+    if (route.name === 'TransactionsScreen') {
+      setIsLoading(true);
+      const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
+
+      if (props.searchTxt) {
+        await dispatch(
+          getTransactionData({
+            transactionData: transactionRequestObject,
+            page: page ? page : currentPage,
+            search: props.searchTxt,
+          })
+        );
+      } else {
+        await dispatch(
+          getTransactionData({
+            transactionData: transactionRequestObject,
+            page: page ? page : currentPage,
+          })
+        );
+      }
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (transactionInfo) {
@@ -60,18 +110,6 @@ const TransactionsScreen = ({
       setData(transactionInfo.items);
     }
   }, [transactionInfo]);
-
-  const getTableData = async () => {
-    if (route.name === 'TransactionsScreen') {
-      setIsLoading(true);
-      const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
-
-      await dispatch(
-        getTransactionData({ transactionData: transactionRequestObject, page: currentPage })
-      );
-      setIsLoading(false);
-    }
-  };
 
   const handleExpandRow = (index) => {
     setIsAdditDataOpen((prev) => !prev);
@@ -87,6 +125,22 @@ const TransactionsScreen = ({
   const validTextShow = (date) => {
     const a = date.split('T');
     return a[0] + ' ' + a[1].slice(0, 5);
+  };
+
+  const handleBlur = async () => {
+    if (!props.searchTxt && isKeyboardVisible) {
+      setIsLoading(true);
+      props.setIsSearchVisible(false);
+      const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
+      await dispatch(
+        getTransactionData({
+          transactionData: transactionRequestObject,
+          page: 1,
+        })
+      );
+      setIsLoading(false);
+      Keyboard.dismiss();
+    }
   };
 
   const flatListRenderModule = (item, index) => (
@@ -412,137 +466,138 @@ const TransactionsScreen = ({
 
   return (
     // <ScrollView>
-
-    <View style={styles.wrapper}>
-      {!isFiltersVisible && (
-        <View style={styles.title}>
-          <SimpleText style={{ fontSize: 34, fontFamily: 'Mont_SB' }}>
-            <FormattedMessage id={'transactions.transactions'} />
-          </SimpleText>
-        </View>
-      )}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: isFiltersVisible
-            ? 'flex-start'
-            : genReportTransactionFilters.length
-            ? 'space-between'
-            : 'center',
-          paddingLeft: isFiltersVisible ? 20 : genReportTransactionFilters.length > 0 ? 30 : 0,
-          paddingTop: isFiltersVisible ? 17 : genReportTransactionFilters.length > 0 ? 17 : 0,
-          paddingBottom: isFiltersVisible ? 17 : genReportTransactionFilters.length > 0 ? 17 : 28,
-        }}
-      >
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => setIsFiltersVisible((prev) => !prev)}
+    <TouchableWithoutFeedback onPress={handleBlur}>
+      <View style={styles.wrapper}>
+        {!isFiltersVisible && (
+          <View style={styles.title}>
+            <SimpleText style={{ fontSize: 34, fontFamily: 'Mont_SB' }}>
+              <FormattedMessage id={'transactions.transactions'} />
+            </SimpleText>
+          </View>
+        )}
+        <View
           style={{
-            position: 'relative',
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: isFiltersVisible
+              ? 'flex-start'
+              : genReportTransactionFilters.length
+              ? 'space-between'
+              : 'center',
+            paddingLeft: isFiltersVisible ? 20 : genReportTransactionFilters.length > 0 ? 30 : 0,
+            paddingTop: isFiltersVisible ? 17 : genReportTransactionFilters.length > 0 ? 17 : 0,
+            paddingBottom: isFiltersVisible ? 17 : genReportTransactionFilters.length > 0 ? 17 : 28,
           }}
         >
-          <SimpleText style={{ fontFamily: 'Mont_SB' }}>
-            <FormattedMessage id={'common.filters'} />
-          </SimpleText>
-          <Image
-            source={isFiltersVisible ? arrowUp : arrowDown}
-            style={{ width: 20, height: 20 }}
-          />
-          {!isFiltersVisible && genReportTransactionFilters.length > 0 && (
-            <View style={styles.filterBadge}>
-              <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 10, color: '#fff' }}>
-                {genReportTransactionFilters.length}
-              </SimpleText>
-            </View>
-          )}
-        </TouchableOpacity>
-        {!isFiltersVisible && genReportTransactionFilters.length > 0 && (
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => {
-              setGenReportTransactionFilters([]);
+            onPress={() => setIsFiltersVisible((prev) => !prev)}
+            style={{
+              position: 'relative',
+              flexDirection: 'row',
+              alignItems: 'center',
             }}
-            style={{ marginRight: 24 }}
           >
-            <SimpleText style={{ color: '#FC595A', letterSpacing: 0.48 }}>
-              <FormattedMessage id={'common.reset'} />
+            <SimpleText style={{ fontFamily: 'Mont_SB' }}>
+              <FormattedMessage id={'common.filters'} />
             </SimpleText>
+            <Image
+              source={isFiltersVisible ? arrowUp : arrowDown}
+              style={{ width: 20, height: 20 }}
+            />
+            {!isFiltersVisible && genReportTransactionFilters.length > 0 && (
+              <View style={styles.filterBadge}>
+                <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 10, color: '#fff' }}>
+                  {genReportTransactionFilters.length}
+                </SimpleText>
+              </View>
+            )}
           </TouchableOpacity>
+          {!isFiltersVisible && genReportTransactionFilters.length > 0 && (
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => {
+                setGenReportTransactionFilters([]);
+              }}
+              style={{ marginRight: 24 }}
+            >
+              <SimpleText style={{ color: '#FC595A', letterSpacing: 0.48 }}>
+                <FormattedMessage id={'common.reset'} />
+              </SimpleText>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {isFiltersVisible && (
+          <TransactionsFilters
+            // isActive=""
+            filtersDots={filtersDots}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        )}
+
+        <View
+          style={{
+            ...styles.tableRow,
+            flexDirection: 'row',
+            borderBottomWidth: 1,
+            borderBottomColor: 'rgba(217, 217, 217, 0.70)',
+            backgroundColor: '#F4F4F4',
+          }}
+        >
+          {/* <View style={{ width: 20 }}></View> */}
+          <View style={{ ...styles.tableHeaderCell, width: width / 4, alignItems: 'center' }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'transactions.int_id'} />
+            </SimpleText>
+          </View>
+          <View style={{ ...styles.tableHeaderCell, width: width / 4, alignItems: 'center' }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'transactions.amount'} />
+            </SimpleText>
+          </View>
+          <View style={{ ...styles.tableHeaderCell, width: 70, alignItems: 'center' }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'transactions.mode'} />
+            </SimpleText>
+          </View>
+          <View style={{ ...styles.tableCellStatus, alignItems: 'center' }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'transactions.status'} />
+            </SimpleText>
+          </View>
+        </View>
+        {isLoading || isTransactionsWithFilterLoading ? (
+          <MainLoader isVisible={true} />
+        ) : data && data.length > 0 ? (
+          <FlatList
+            data={data}
+            refreshControl={
+              <RefreshControl
+                isRefreshing={isLoading}
+                onRefresh={getTableData}
+                colors={['transparent']} // for android
+                tintColor={'transparent'} // for ios
+              />
+            }
+            renderItem={({ item, index }) => flatListRenderModule(item, index)}
+          />
+        ) : (
+          <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
+            <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
+              <FormattedMessage id={'transactions.not_found'} />
+            </SimpleText>
+          </View>
+        )}
+        {totalPages > 1 && (
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         )}
       </View>
-
-      {isFiltersVisible && (
-        <TransactionsFilters
-          // isActive=""
-          filtersDots={filtersDots}
-          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
-        />
-      )}
-
-      <View
-        style={{
-          ...styles.tableRow,
-          flexDirection: 'row',
-          borderBottomWidth: 1,
-          borderBottomColor: 'rgba(217, 217, 217, 0.70)',
-          backgroundColor: '#F4F4F4',
-        }}
-      >
-        {/* <View style={{ width: 20 }}></View> */}
-        <View style={{ ...styles.tableHeaderCell, width: width / 4, alignItems: 'center' }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'transactions.int_id'} />
-          </SimpleText>
-        </View>
-        <View style={{ ...styles.tableHeaderCell, width: width / 4, alignItems: 'center' }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'transactions.amount'} />
-          </SimpleText>
-        </View>
-        <View style={{ ...styles.tableHeaderCell, width: 70, alignItems: 'center' }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'transactions.mode'} />
-          </SimpleText>
-        </View>
-        <View style={{ ...styles.tableCellStatus, alignItems: 'center' }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'transactions.status'} />
-          </SimpleText>
-        </View>
-      </View>
-      {isLoading || isTransactionsWithFilterLoading ? (
-        <MainLoader isVisible={true} />
-      ) : data && data.length > 0 ? (
-        <FlatList
-          data={data}
-          refreshControl={
-            <RefreshControl
-              isRefreshing={isLoading}
-              onRefresh={getTableData}
-              colors={['transparent']} // for android
-              tintColor={'transparent'} // for ios
-            />
-          }
-          renderItem={({ item, index }) => flatListRenderModule(item, index)}
-        />
-      ) : (
-        <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
-          <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
-            <FormattedMessage id={'transactions.not_found'} />
-          </SimpleText>
-        </View>
-      )}
-      {totalPages > 1 && (
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
-    </View>
+    </TouchableWithoutFeedback>
     // </ScrollView>
   );
 };

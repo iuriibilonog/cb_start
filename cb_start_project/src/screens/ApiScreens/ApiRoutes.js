@@ -4,13 +4,31 @@ import ApiScreen from './ApiScreen';
 import EditScreen from './EditScreen';
 import DeleteScreen from './DeleteScreen';
 import UserScreen from '../UsersScreens/UserScreen';
+import { Image, Pressable, TouchableOpacity, View, TextInput } from 'react-native';
+import debounce from 'lodash.debounce';
 
-import { Image, Pressable } from 'react-native';
 const headerLeft = require('src/images/header_left.png');
-const ApiStack = createStackNavigator();
+const profileIcon = require('src/images/profile_icon.png');
+const searchIcon = require('src/images/search_dark.png');
 
 const ApiRoutes = ({ handlePressIconLogOut }) => {
-  const profileIcon = require('src/images/profile_icon.png');
+  const [searchApi, setSearchApi] = useState();
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const ApiStack = createStackNavigator();
+
+  const handleSearchApiText = (data) => {
+    setSearchApi(data);
+  };
+
+  const handleHideSearchInput = () => {
+    setIsSearchVisible(false);
+  };
+
+  const handleFilter = debounce(handleSearchApiText, 1000);
+
+  const handleSearchApi = () => {
+    setIsSearchVisible((prev) => !prev);
+  };
   return (
     <ApiStack.Navigator initialRouteName={ApiScreen}>
       <ApiStack.Screen
@@ -18,19 +36,53 @@ const ApiRoutes = ({ handlePressIconLogOut }) => {
           headerTitle: 'API',
           headerTitleAlign: 'left',
           headerRight: ({ size }) => (
-            <Pressable onPress={handlePressIconLogOut}>
-              <Image
-                source={profileIcon}
-                style={{ width: 25, height: 25, marginRight: 20 }}
-                // onPress={() => navigation.navigate("registration")}
-              />
-            </Pressable>
+            <View style={{ flexDirection: 'row', position: 'relative', height: 26 }}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={handleSearchApi}
+                style={{
+                  borderBottomWidth: isSearchVisible ? 1 : 0,
+                  borderColor: 'rgba(217, 217, 217, 0.70)',
+                }}
+              >
+                <Image
+                  source={searchIcon}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    marginRight: isSearchVisible ? 0 : 20,
+                    opacity: isSearchVisible ? 0.3 : 1,
+                  }}
+                />
+              </TouchableOpacity>
+              {isSearchVisible && (
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: 'rgba(217, 217, 217, 0.70)',
+                    height: 26,
+                    width: 150,
+                    marginRight: 12,
+                    paddingTop: 3,
+                    paddingHorizontal: 5,
+                  }}
+                >
+                  <TextInput onChangeText={handleFilter} style={{}} autoFocus={true} />
+                </View>
+              )}
+
+              <Pressable onPress={handlePressIconLogOut}>
+                <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
+              </Pressable>
+            </View>
           ),
         }}
         name="ApiScreen"
         // component={TransactionsScreen}
       >
-        {(props) => <ApiScreen {...props} />}
+        {(props) => (
+          <ApiScreen {...props} searchApi={searchApi} setIsSearchVisible={handleHideSearchInput} />
+        )}
       </ApiStack.Screen>
       <ApiStack.Screen
         options={{

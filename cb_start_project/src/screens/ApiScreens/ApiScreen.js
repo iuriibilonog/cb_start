@@ -11,6 +11,8 @@ import {
   FlatList,
   Pressable,
   RefreshControl,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
@@ -35,33 +37,56 @@ const ApiScreen = (props) => {
   const [totalPages, setTotalPages] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const { width } = Dimensions.get('window');
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    getApiKeys();
-  }, [currentPage]);
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   useEffect(() => {
-    if (props.route.params && props.route.params.isRefresh) {
-      getApiKeys();
+    if (
+      (props.route.params && props.route.params.isRefresh) ||
+      props.searchApi ||
+      props.searchApi === ''
+    ) {
+      setCurrentPage(1);
+      getCurrentPageData(1);
     }
-  }, [props.route.params]);
+  }, [props.route.params, props.searchApi]);
 
-  const getApiKeys = async () => {
+  useEffect(() => {
+    getCurrentPageData();
+  }, [currentPage]);
+
+  const getCurrentPageData = async (page) => {
     setIsLoading(true);
-    await dispatch(getApiData(currentPage));
-    setIsLoading(false);
+    if (props.searchApi) {
+      await dispatch(getApiData({ page: page ? page : currentPage, searchText: props.searchApi }));
+    } else {
+      await dispatch(getApiData({ page: page ? page : currentPage }));
+    }
   };
 
   useEffect(() => {
     if (apiData) {
-      console.log('totalCount', apiData.totalCount);
       const pages = Math.ceil(apiData.totalCount / 100);
       setTotalPages(pages);
       setData(apiData.items);
+      setIsLoading(false);
     }
   }, [apiData]);
 
@@ -79,8 +104,17 @@ const ApiScreen = (props) => {
   };
 
   const handleNavigate = (apikey) => {
-    console.log('props', apikey);
     navigation.navigate('UserScreen', { id: apikey.userId });
+  };
+
+  const handleBlur = async () => {
+    if (!props.searchApi && isKeyboardVisible) {
+      setIsLoading(true);
+      props.setIsSearchVisible(false);
+      await dispatch(getApiData({ page: 1 }));
+      setIsLoading(false);
+      Keyboard.dismiss();
+    }
   };
 
   const flatListRenderModule = (item, index) => (
@@ -217,73 +251,74 @@ const ApiScreen = (props) => {
 
   return (
     // <ScrollView>
-
-    <View style={styles.wrapper}>
-      <View style={styles.titleWrapper}>
-        <SimpleText style={styles.titleText}>
-          <FormattedMessage id={'api.api_keys'} />
-        </SimpleText>
+    <TouchableWithoutFeedback onPress={handleBlur}>
+      <View style={styles.wrapper}>
+        <View style={styles.titleWrapper}>
+          <SimpleText style={styles.titleText}>
+            <FormattedMessage id={'api.api_keys'} />
+          </SimpleText>
+        </View>
+        <View
+          style={{
+            height: 50,
+            paddingLeft: 15,
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderBottomWidth: 1,
+            borderBottomColor: 'rgba(217, 217, 217, 0.70)',
+            backgroundColor: '#F4F4F4',
+          }}
+        >
+          <View style={{ ...styles.tableCell, width: width / 6 }}>
+            <SimpleText style={styles.headerText}>ID</SimpleText>
+          </View>
+          <View style={{ ...styles.tableCell, flex: 1 }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'common.user'} />
+            </SimpleText>
+          </View>
+          <View style={{ ...styles.tableCell, width: 52 }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'common.edit'} />
+            </SimpleText>
+          </View>
+          <View style={{ ...styles.tableCell, width: 52 }}>
+            <SimpleText style={styles.headerText}>
+              <FormattedMessage id={'common.del'} />
+            </SimpleText>
+          </View>
+        </View>
+        {isLoading ? (
+          <MainLoader isVisible={isLoading} />
+        ) : data && data.length > 0 ? (
+          <FlatList
+            data={data}
+            refreshControl={
+              <RefreshControl
+                isRefreshing={isLoading}
+                onRefresh={getCurrentPageData}
+                colors={['transparent']} // for android
+                tintColor={'transparent'} // for ios
+              />
+            }
+            renderItem={({ item, index }) => flatListRenderModule(item, index)}
+          />
+        ) : (
+          <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
+            <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
+              <FormattedMessage id={'common.data_not_found'} />
+            </SimpleText>
+          </View>
+        )}
+        {totalPages > 1 && (
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </View>
-      <View
-        style={{
-          height: 50,
-          paddingLeft: 15,
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderBottomWidth: 1,
-          borderBottomColor: 'rgba(217, 217, 217, 0.70)',
-          backgroundColor: '#F4F4F4',
-        }}
-      >
-        <View style={{ ...styles.tableCell, width: width / 6 }}>
-          <SimpleText style={styles.headerText}>ID</SimpleText>
-        </View>
-        <View style={{ ...styles.tableCell, flex: 1 }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'common.user'} />
-          </SimpleText>
-        </View>
-        <View style={{ ...styles.tableCell, width: 52 }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'common.edit'} />
-          </SimpleText>
-        </View>
-        <View style={{ ...styles.tableCell, width: 52 }}>
-          <SimpleText style={styles.headerText}>
-            <FormattedMessage id={'common.del'} />
-          </SimpleText>
-        </View>
-      </View>
-      {isLoading ? (
-        <MainLoader isVisible={isLoading} />
-      ) : data && data.length > 0 ? (
-        <FlatList
-          data={data}
-          refreshControl={
-            <RefreshControl
-              isRefreshing={isLoading}
-              onRefresh={getApiKeys}
-              colors={['transparent']} // for android
-              tintColor={'transparent'} // for ios
-            />
-          }
-          renderItem={({ item, index }) => flatListRenderModule(item, index)}
-        />
-      ) : (
-        <View style={{ marginTop: 70, justifyContent: 'center', alignItems: 'center' }}>
-          <SimpleText style={{ fontSize: 20, fontFamily: 'Mont_SB' }}>
-            <FormattedMessage id={'common.data_not_found'} />
-          </SimpleText>
-        </View>
-      )}
-      {totalPages > 1 && (
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
-    </View>
+    </TouchableWithoutFeedback>
     // </ScrollView>
   );
 };

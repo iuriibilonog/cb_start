@@ -12,9 +12,12 @@ import ModeScreen from '../TransactionsScreens/ModeScreen';
 import CurrencyScreen from '../TransactionsScreens/CurrencyScreen';
 import TimeZoneScreen from '../DashboardScreens/TimeZoneScreen';
 import MerchantsApiKeyScreen from '../DashboardScreens/MerchantsApiKeyScreen';
+import debounce from 'lodash.debounce';
+import { Image, Pressable, TouchableOpacity, View, TextInput } from 'react-native';
 
-import { Image, Pressable } from 'react-native';
 const headerLeft = require('src/images/header_left.png');
+const searchIcon = require('src/images/search_dark.png');
+
 const TransactionsStack = createStackNavigator();
 const dateNow = new Date().toISOString().slice(0, 10);
 const initialFilters = [];
@@ -25,7 +28,23 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
   const [isMerchApiKeyAvailable, setIsMerchApiKeyAvailable] = useState(false);
   const [isTransactionsWithFilterLoading, setIsTransactionsWithFilterLoading] = useState(false);
 
+  const [search, setSearch] = useState();
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const dispatch = useDispatch();
+
+  const handleSearchText = (data) => {
+    setSearch(data);
+  };
+
+  const handleHideSearchInput = () => {
+    setIsSearchVisible(false);
+  };
+
+  const handleFilter = debounce(handleSearchText, 1000);
+
+  const handleSearchTransactions = () => {
+    setIsSearchVisible((prev) => !prev);
+  };
 
   useEffect(() => {
     // console.log('genReportPaymentsFilters', genReportPaymentsFilters);
@@ -102,13 +121,45 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
           headerTitle: 'Transactions',
           headerTitleAlign: 'left',
           headerRight: ({ size }) => (
-            <Pressable onPress={handlePressIconLogOut}>
-              <Image
-                source={profileIcon}
-                style={{ width: 25, height: 25, marginRight: 20 }}
-                // onPress={() => navigation.navigate("registration")}
-              />
-            </Pressable>
+            <View style={{ flexDirection: 'row', position: 'relative', height: 26 }}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={handleSearchTransactions}
+                style={{
+                  borderBottomWidth: isSearchVisible ? 1 : 0,
+                  borderColor: 'rgba(217, 217, 217, 0.70)',
+                }}
+              >
+                <Image
+                  source={searchIcon}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    marginRight: isSearchVisible ? 0 : 20,
+                    opacity: isSearchVisible ? 0.3 : 1,
+                  }}
+                />
+              </TouchableOpacity>
+              {isSearchVisible && (
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: 'rgba(217, 217, 217, 0.70)',
+                    height: 26,
+                    width: 150,
+                    marginRight: 12,
+                    paddingTop: 3,
+                    paddingHorizontal: 5,
+                  }}
+                >
+                  <TextInput onChangeText={handleFilter} style={{}} autoFocus={true} />
+                </View>
+              )}
+
+              <Pressable onPress={handlePressIconLogOut}>
+                <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
+              </Pressable>
+            </View>
           ),
         }}
         name="TransactionsScreen"
@@ -117,6 +168,8 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
         {(props) => (
           <TransactionsScreen
             {...props}
+            searchTxt={search}
+            setIsSearchVisible={handleHideSearchInput}
             isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}
             filtersDots={filtersDots}
