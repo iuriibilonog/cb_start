@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUsersByPage, getSearchUsers } from 'src/redux/content/operations';
+import { getUsersByPage, getSearchUsers, getLedgersData } from 'src/redux/content/operations';
 import { usersByPage, searchUsers } from 'src/redux/content/selectors';
+import isEqual from 'lodash/isEqual';
 import {
   StyleSheet,
   View,
@@ -33,6 +34,7 @@ const UsersListScreen = (props) => {
   const usersData = useSelector(usersByPage);
   const searchUsersData = useSelector(searchUsers);
 
+  const [incomingUsersData, setIncomingUsersData] = useState();
   const [data, setData] = useState(null);
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
@@ -53,17 +55,12 @@ const UsersListScreen = (props) => {
     } else {
       getCurrentPageData();
     }
-    // if (props.searchUser) {
-    //   dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
-    // } else {
-    //   dispatch(getUsersByPage(currentPage));
-    // }
   }, [currentPage]);
 
   const getUsersWithoutSearch = async () => {
     setIsLoading(true);
     await dispatch(getUsersByPage(currentPage));
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   useEffect(() => {
@@ -81,14 +78,13 @@ const UsersListScreen = (props) => {
   }, []);
 
   const getCurrentPageData = async () => {
-    console.log('isLoading99999');
     setIsLoading(true);
     if (props.searchUser) {
       await dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
     } else {
       await dispatch(getUsersByPage(currentPage));
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   useEffect(() => {
@@ -112,16 +108,21 @@ const UsersListScreen = (props) => {
     } else if (!props.searchUser) {
       await dispatch(getUsersByPage(currentPage));
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   useEffect(() => {
-    if (usersData) {
+    if (usersData && usersData.items.length > 0) {
       setIsLoading(true);
       const pages = Math.ceil(usersData.totalCount / 20);
       setTotalPages(pages);
-      setData(usersData.items);
-      setIsLoading(false);
+
+      if (!incomingUsersData || !isEqual(incomingUsersData, usersData.items)) {
+        addAllUsersLedgers(usersData.items);
+        setIncomingUsersData(usersData.items);
+      } else {
+        setIsLoading(false);
+      }
     }
   }, [usersData]);
 
@@ -141,10 +142,33 @@ const UsersListScreen = (props) => {
     }
   }, [data]);
 
+  const addAllUsersLedgers = async (usersList) => {
+    // console.log('STARTT');
+    let correctedUsersList = [...usersList];
+    let sucessCount = 0;
+    for (let i = 0; i < correctedUsersList.length; i++) {
+      const res = await dispatch(getLedgersData(correctedUsersList[i].id));
+      const userLedgers = res.payload.items.map((item) => item.currency);
+      // console.log('UsersLedgers: ', userLedgers.join(', '));
+      correctedUsersList[i] = { ...correctedUsersList[i], ledgers: userLedgers.join(', ') };
+      sucessCount = sucessCount + 1;
+      if (sucessCount > usersList.length - 1) {
+        setData(correctedUsersList);
+        setIsLoading(false);
+      }
+    }
+  };
+
   useEffect(() => {
     if (searchUsersData) {
       const pages = Math.ceil(searchUsersData.totalCount / 20);
       setTotalPages(pages);
+      if (!incomingUsersData || !isEqual(incomingUsersData, searchUsersData.items)) {
+        addAllUsersLedgers(searchUsersData.items);
+        setIncomingUsersData(searchUsersData.items);
+      } else {
+        setIsLoading(false);
+      }
       setData(searchUsersData.items);
     }
   }, [searchUsersData]);
@@ -173,7 +197,7 @@ const UsersListScreen = (props) => {
       setIsLoading(true);
       props.setIsSearchVisible(false);
       await dispatch(getUsersByPage(1));
-      setIsLoading(false);
+      // setIsLoading(false);
       Keyboard.dismiss();
     }
   };
@@ -290,7 +314,7 @@ const UsersListScreen = (props) => {
               <SimpleText>{showDate(item.createdAt)}</SimpleText>
             </View>
             <View style={{ ...styles.additDataCellValues, borderBottomWidth: 0 }}>
-              <SimpleText></SimpleText>
+              <SimpleText>{item.ledgers}</SimpleText>
             </View>
           </View>
         </View>
