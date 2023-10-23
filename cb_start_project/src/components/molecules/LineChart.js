@@ -54,10 +54,6 @@ const SimpleLineChart = () => {
     return dataObj;
   });
 
-  //   setApprovedData(lineData3);
-
-  //   console.log('lineData3', lineData3);
-
   const lineData = [
     {
       value: 10,

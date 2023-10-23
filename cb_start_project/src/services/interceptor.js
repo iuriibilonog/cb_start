@@ -111,8 +111,6 @@ export const AxiosInterceptor = ({ children }) => {
         throw error;
       }
 
-      console.log('firstErr');
-
       throw error?.response?.data || error;
     }
   );

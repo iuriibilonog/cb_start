@@ -17,7 +17,7 @@ import Datepicker from 'src/components/atoms/Datepicker';
 import SimpleText from 'src/components/atoms/SimpleText';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import { FormattedMessage } from 'react-intl';
-import { MaskedTextInput } from 'react-native-mask-text';
+import ModalDropdown from 'src/components/molecules/ModalDropdown';
 
 const calendarIcon = require('src/images/calendar_icon.png');
 

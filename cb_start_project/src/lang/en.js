@@ -32,6 +32,8 @@ const lang = {
   'dashboard.filters_columns': 'Filters columns',
   'dashboard.reset': 'Reset',
   'dashboard.no_transactions': 'No transactions for this date',
+  'dashboard.conversion.last_days': 'Conversion last days',
+  'dashboard.max_days': 'Max 5 days',
 
   //===transactions===
   'transactions.transactions': 'Transactions',
@@ -131,6 +133,7 @@ const lang = {
 
   'actions.to_login': 'To Login',
   'actions.to_main': 'To Main',
+  'errors.date_interval': '*Max 5 days allowed',
 
   //common=====
   'common.date': 'Date',
@@ -164,6 +167,7 @@ const lang = {
   'common.active': 'Active',
   'common.chance': 'Chance',
   'common.type': 'Type',
+  'common.upload': 'Upload',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

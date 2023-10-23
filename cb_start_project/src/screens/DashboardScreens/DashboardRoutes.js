@@ -32,9 +32,6 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     endDate: initialDate,
   });
 
-  // useEffect(() => {
-  //   console.log('genReportPaymentsFilters', genReportPaymentsFilters);
-  // }, [genReportPaymentsFilters, genReportTransactionFilters]);
   const confirmReport = async () => {
     let str = '';
 
@@ -69,7 +66,6 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         case 'filterColumns':
           const filters = item.filters.map((filter) => (filter = `exportFields=${filter.code}`));
           str = str + '&' + `${filters.join('&')}`;
-          // console.log('str', str);
           break;
 
         default:

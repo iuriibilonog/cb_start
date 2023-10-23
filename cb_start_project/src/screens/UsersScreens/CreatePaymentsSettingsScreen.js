@@ -54,24 +54,14 @@ const CreatePaymentsSettingsScreen = (props) => {
   const currentChainId = props.route.params.chainId;
   const currentChainIDs = props.route.params.chainIDs;
 
-  // useEffect(() => {
-  //   console.log('PROPS-chainIdOfCurrentLedger', currentChainId);
-  // }, []);
-
   useEffect(() => {
     setSelectedBank(banksList[0].name);
     preparePaymentsMethodsList(banksList[0].id);
   }, [banksList]);
 
-  // useEffect(() => {
-  //   console.log('<<inputsData>>', inputsData);
-  // }, [inputsData]);
-
   const preparePaymentsMethodsList = async (bankId) => {
     try {
-      // {userId: 97, name: "aaatest"}
       const methodsListByBank = await dispatch(getPaymentsMethods(bankId)).unwrap();
-      // console.log('methodsListByBank', methodsListByBank.payload.items);
       setMethodsList(methodsListByBank.items);
       setSelectedMethod(methodsListByBank.items[0].name);
       refMethods.current?.select(-1);
@@ -181,7 +171,6 @@ const CreatePaymentsSettingsScreen = (props) => {
       });
       return;
     }
-    // console.log('SUBMIT:', inputsData);
     let gatheredData = { ...inputsData };
     gatheredData.restrictedBrands =
       selectedRestrictedBrand === 'empty' ? [] : [selectedRestrictedBrand];
@@ -192,14 +181,10 @@ const CreatePaymentsSettingsScreen = (props) => {
     const paymentMethodId = methodsList.find((item) => item.name === selectedMethod).id;
     gatheredData.paymentMethodId = paymentMethodId;
     gatheredData = prepareCommissionsMasterCard(gatheredData);
-    // console.log('<1>', gatheredData);
     gatheredData = prepareCommissionsVisa(gatheredData);
-
-    // console.log('RESULT - - -SUBMIT:', gatheredData);
 
     try {
       const postResult = await dispatch(postNewPaymentsSettings(gatheredData)).unwrap();
-      // console.log('SUBMIT - postResult', postResult.payload);
       if (postResult && postResult.id) {
         const putResult = await dispatch(
           putNewPaymentsChain({
@@ -237,7 +222,6 @@ const CreatePaymentsSettingsScreen = (props) => {
         // isFullWidth
         animated={false}
         onSelect={(index, option) => {
-          // console.log(index, '<>', option);
           handleBrandSelect(option);
         }}
         textStyle={{
@@ -359,7 +343,6 @@ const CreatePaymentsSettingsScreen = (props) => {
                       // isFullWidth
                       animated={false}
                       onSelect={(index, option) => {
-                        // console.log(index, '<>', option);
                         handleBankSelect(option);
                       }}
                       textStyle={{
@@ -428,7 +411,6 @@ const CreatePaymentsSettingsScreen = (props) => {
                       // isFullWidth
                       animated={false}
                       onSelect={(index, option) => {
-                        // console.log(index, '<>', option);
                         setSelectedMethod(option);
                       }}
                       textStyle={{

@@ -33,7 +33,6 @@ const BanksScreen = ({
   const data = useSelector(getBanks);
 
   useEffect(() => {
-    console.log('BANKS', data);
     if (!data.length) return;
     const modifyBanks = data.map((item) => ({
       name: item.name,
@@ -41,7 +40,6 @@ const BanksScreen = ({
       id: item.id,
     }));
     setBanks((prev) => [...prev, ...modifyBanks]);
-    // console.log('modifyBanks', modifyBanks);
   }, [data]);
 
   useEffect(() => {

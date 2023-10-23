@@ -86,14 +86,12 @@ const UserScreen = (props) => {
   const refLedgersModal = useRef();
 
   useEffect(() => {
-    console.log('1-didmount');
     handleCleanUserLedgers();
     getApiData();
     getBalanceData();
   }, []);
 
   const getApiData = async () => {
-    console.log('2-getApiData');
     try {
       const merchApiData = await dispatch(getMerchantsApiKeys(props.route.params.id)).unwrap();
 
@@ -116,7 +114,6 @@ const UserScreen = (props) => {
   };
 
   const getBalanceData = async () => {
-    console.log('3-getBalance');
     try {
       const balanceData = await dispatch(getLedgersData(props.route.params.id)).unwrap();
 
@@ -147,7 +144,6 @@ const UserScreen = (props) => {
   };
 
   const getLedgersByApiData = async (keyId) => {
-    console.log('5-getLedgerByApiData');
     setIsLoading(true);
     try {
       const byApiKey = await dispatch(
@@ -253,9 +249,7 @@ const UserScreen = (props) => {
 
     try {
       const confirm = await dispatch(confirmUserPaymentData({ paymentData, id })).unwrap();
-
       const update = await dispatch(getUserPayments(chainIdOfCurrentLedger)).unwrap();
-      // console.log('update', update.paymentMethodSettings[0]);
       await dispatch(
         setEditedPaymentsSettings(
           Array.isArray(update.paymentMethodSettings)
@@ -317,16 +311,13 @@ const UserScreen = (props) => {
   };
 
   useEffect(() => {
-    console.log('4-props, currentUser');
     if (props.route.params.isRefresh) {
-      console.log('currUser:', currentUser);
       setPaymentsData([]);
       getLedgersByApiData(selectedIndex || apiKeysData[0].id);
     }
   }, [props.route.params, currentUser]);
 
   useEffect(() => {
-    console.log('6-props-params-id');
     dispatch(getAllUsers()).then((res) => {
       setAllUsers(res.payload.items);
       if (props.route.params.id) {
@@ -339,7 +330,6 @@ const UserScreen = (props) => {
     try {
       const payments = await dispatch(getUserPayments(chainIdOfCurrentLedger)).unwrap();
       setIsUseBalancer(payments.useBalancer);
-      console.log('payments.paymentMethodSettings', payments.paymentMethodSettings.length);
       const edited = await dispatch(
         setEditedPaymentsSettings(
           Array.isArray(payments.paymentMethodSettings)
@@ -370,7 +360,6 @@ const UserScreen = (props) => {
 
   useEffect(() => {
     if (selectedLedger !== '') {
-      console.log('7-selectLedger');
       setInitialLedger(ledgersByApiData[selectedLedger].name);
       setChainIdOfCurrentLedger(ledgersByApiData[selectedLedger].payMethodChainsId);
     }
@@ -379,7 +368,6 @@ const UserScreen = (props) => {
   //************************************************************************* */
 
   const handleExpandRow = async (itemId) => {
-    // console.log('Dispatch - id', itemId);
     if (!isAdditDataOpen) {
       // setIsLoading(true);
       setSelectedIndex(itemId);
@@ -400,14 +388,10 @@ const UserScreen = (props) => {
         }, 1000);
         console.warn('Error:', error);
       }
-      // console.log('Dispatch');
-
-      // console.log('Dispatch');
     } else {
       setSelectedIndex('');
       setLedgersByApiData([]);
     }
-    // console.log('open');
     setIsAdditDataOpen((prev) => !prev);
   };
 
@@ -441,8 +425,6 @@ const UserScreen = (props) => {
   };
 
   const handleLedgerEdit = () => {
-    // console.log('ledgersByApi', ledgersByApi[selectedLedger ? selectedLedger : 0]);
-    // console.log('selectedLedger', selectedLedger);
     navigation.navigate('EditLedgerScreen', {
       user: currentUser,
       data: ledgersByApiData[selectedLedger ? selectedLedger : 0],
@@ -668,7 +650,6 @@ const UserScreen = (props) => {
                   isFullWidth
                   animated={false}
                   onSelect={(index, option) => {
-                    // console.log(index, '<>', option);
                     setSelectedLedger(index);
                   }}
                   textStyle={{
@@ -741,10 +722,8 @@ const UserScreen = (props) => {
 
             {currentUser && paymentsData && paymentsData.length > 0 ? (
               <View>
-                {console.log(`===========Length = ${paymentsData.length}===========`)}
                 {paymentsData.map((item, index) => (
                   <View key={index}>
-                    {console.log('index', index)}
                     <UserPaymentSimpleData
                       item={item}
                       index={index}
@@ -752,9 +731,6 @@ const UserScreen = (props) => {
                       confirmEditPayment={confirmEditPayment}
                       currentUser={currentUser}
                     />
-
-                    {/* {console.log('index', index)}
-                    {console.log('item', item)} */}
                   </View>
                 ))}
               </View>

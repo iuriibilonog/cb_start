@@ -54,14 +54,13 @@ const Dropdown = (props) => {
               position: 'absolute',
             }}
           >
-            <ScrollView nestedScrollEnabled={true} onScroll={() => console.log('first')}>
+            <ScrollView nestedScrollEnabled={true}>
               {data &&
                 data.map((item, index) => (
                   <Pressable
                     key={index}
                     onPress={() => handleSelect(index, item)}
                     onBlur={() => {
-                      console.log('AAA');
                       setIsOpen(false);
                     }}
                   >

@@ -41,15 +41,7 @@ const GeneralReportsScreen = ({
         } else {
           setIsMerchantApiKeyAvaible(true);
         }
-        // const filtersValues = genReportPaymentsFilters.map(item=>)
-        // console.log('=Payments==>', genReportPaymentsFilters);
         setFilters(genReportPaymentsFilters);
-        // setFilters(
-        //   genReportPaymentsFilters.map((item) => {
-        //     console.log('>', item);
-        //     return Object.values(item)[0];
-        //   })
-        // );
         break;
       case 'Transactions':
         merchantObj = genReportTransactionFilters.find((item) => item.name === 'merchants');
@@ -58,7 +50,6 @@ const GeneralReportsScreen = ({
         } else {
           setIsMerchantApiKeyAvaible(true);
         }
-        // console.log('=Transactions==>', genReportTransactionFilters);
         setFilters(genReportTransactionFilters);
         break;
 
@@ -97,13 +88,9 @@ const GeneralReportsScreen = ({
   };
 
   const handleDeleteSelectedFilter = (filterForDeletetion) => {
-    // console.log('filterForDeletetion', filterForDeletetion);
-    // const correctedFiltersList = filters.filter((item) => item.name !== filterForDeletetion.name);
-    // console.log('correctedFiltersList', correctedFiltersList);
     if (filterForDeletetion === 'all') {
       handleDeleteAllFilters(radioSelect.value);
     } else handleDeleteFilter(radioSelect.value, filterForDeletetion);
-    // setFilters(correctedFiltersList);
   };
 
   return (
@@ -180,7 +167,6 @@ const GeneralReportsScreen = ({
             </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>
-          {/* {console.log('isMerchantApiKeyAvaible', isMerchantApiKeyAvaible)} */}
           {!isMerchantApiKeyAvaible ? (
             <View
               style={{

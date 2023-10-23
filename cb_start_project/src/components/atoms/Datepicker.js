@@ -7,13 +7,12 @@ import { MaskedTextInput } from 'react-native-mask-text';
 const calendarIcon = require('src/images/calendar_icon.png');
 
 const Datepicker = (props) => {
-  const [value, setValue] = useState(props.value || new Date().toISOString().slice(0, 10));
+  const [value, setValue] = useState();
   const [isFormatError, setIsFormatError] = useState(false);
-  const { isDisabled, isFocused } = props;
+  // const { isDisabled, isFocused } = props;
 
   useEffect(() => {
-    setValue(props.value);
-    // console.log('props-->>', props.value);
+    setValue(props.value ? props.value : new Date().toISOString().slice(0, 10));
   }, [props.value]);
 
   const handleValue = (value) => {
@@ -22,7 +21,6 @@ const Datepicker = (props) => {
   };
 
   const handleLostFocus = () => {
-    // console.log('LOST FOCUS');
     if (value.length !== 10) {
       setIsFormatError(true);
     } else if (moment(value, 'YYYY/MM/DD').isValid()) {

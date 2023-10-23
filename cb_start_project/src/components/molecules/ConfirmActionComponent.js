@@ -51,8 +51,6 @@ const EditScreen = (props) => {
     const validationParams = [dataName];
     const validationAnswer = checkValidation(value, validationParams);
 
-    console.log('validationAnswer', validationAnswer);
-
     if (Object.keys(validationAnswer).length > 0) {
       setErrors(validationAnswer);
       return;
