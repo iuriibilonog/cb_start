@@ -32,6 +32,8 @@ const lang = {
   'dashboard.filters_columns': 'Filters columns',
   'dashboard.reset': 'Reset',
   'dashboard.no_transactions': 'No transactions for this date',
+  'dashboard.conversion.last_days': 'Conversion last days',
+  'dashboard.max_days': 'Max 5 days',
 
   //===transactions===
   'transactions.transactions': 'Transactions',
@@ -125,6 +127,7 @@ const lang = {
   'errors.required_field': 'required field',
   'errors.invalid_data': 'invalid data',
   'errors.email_not_valid': 'email must be an email',
+  'errors.date_interval': '*Max 5 days allowed',
 
   //common=====
   'common.date': 'Date',
@@ -158,6 +161,7 @@ const lang = {
   'common.active': 'Active',
   'common.chance': 'Chance',
   'common.type': 'Type',
+  'common.upload': 'Upload',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

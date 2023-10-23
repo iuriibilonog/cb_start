@@ -94,8 +94,6 @@ export const AxiosInterceptor = ({ children }) => {
       //     context.showErrorInterceptor(error);
       //   }
 
-      console.log('firstErr');
-
       throw error?.response?.data || error;
     }
   );

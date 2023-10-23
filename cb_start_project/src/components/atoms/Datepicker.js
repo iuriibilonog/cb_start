@@ -7,12 +7,12 @@ import { MaskedTextInput } from 'react-native-mask-text';
 const calendarIcon = require('src/images/calendar_icon.png');
 
 const Datepicker = (props) => {
-  const [value, setValue] = useState(props.value || new Date().toISOString().slice(0, 10));
+  const [value, setValue] = useState();
   const [isFormatError, setIsFormatError] = useState(false);
-  const { isDisabled, isFocused } = props;
+  // const { isDisabled, isFocused } = props;
 
   useEffect(() => {
-    setValue(props.value);
+    setValue(props.value ? props.value : new Date().toISOString().slice(0, 10));
     // console.log('props-->>', props.value);
   }, [props.value]);
 
