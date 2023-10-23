@@ -23,11 +23,13 @@ import {
   setEditedPaymentsSettings,
   skipEditedPaymentsSettings,
   confirmUserPaymentData,
-  getPaymentsMethods
+  getPaymentsMethods,
+  setLoaderFalseWithError,
 } from './operations';
 
 const initialState = {
   content: {
+    isMainLoaderOn: true,
     banks: [],
     allUsers: [],
     balance: [],
@@ -225,6 +227,9 @@ const userSlice = createSlice({
           message: action.payload,
         };
       });
+    builder.addCase(setLoaderFalseWithError.fulfilled, (state, action) => {
+      state.content.isMainLoaderOn = action.payload;
+    });
   },
 });
 

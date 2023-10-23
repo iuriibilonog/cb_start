@@ -1,10 +1,14 @@
 import { Overlay } from '@rneui/themed';
 import { Image, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
+import { isMainLoaderOnSelector } from 'src/redux/content/selectors';
 
 const MainLoader = ({ isVisible }) => {
+  const isLoaderOn = useSelector(isMainLoaderOnSelector);
+
   return (
     <Overlay
-      isVisible={isVisible}
+      isVisible={isVisible && isLoaderOn}
       backdropStyle={{
         backgroundColor: 'rgba(255,255,255,0.75)',
       }}

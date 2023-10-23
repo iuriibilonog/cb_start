@@ -8,6 +8,8 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { useDispatch } from 'react-redux';
 import { getAllBanks, getBankConversion, getBankBalance } from 'src/redux/content/operations';
 import React, { useState, useEffect, cloneElement } from 'react';
@@ -158,6 +160,18 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
     }
   };
 
+  const testReq = async () => {
+    // api.get('https://httpstat.us/500');
+    await AsyncStorage.setItem(
+      'token',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbGVJZCI6MywiZW1haWwiOiJkZXNpZ25lckFkbWluQGRlc2lnbmVyLmNvbSIsImlhdCI6MTY5NzE5NzQ0NiwiZXhwIjoxNjk3MjAxMDQ2fQ.bWCU8oVvk97Qi-cSYyeHNTaRd3AZlwvbQg2pzhcnot4'
+    );
+    await AsyncStorage.setItem(
+      'refresh',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbGVJZCI6MywiZW1haWwiOiJkZXNpZ25lckFkbWluQGRlc2lnbmVyLmNvbSIsImlhdCI6MTY5NzE5NzQ0NiwiZXhwIjoxNjk3MjAxMDQ2fQ.bWCU8oVvk97Qi-cSYyeHNTaRd3AZlwvbQg2pzhcnot4'
+    );
+  };
+
   return (
     <ScrollView style={styles.mainWrapper}>
       <MainLoader isVisible={isLoading} />
@@ -185,6 +199,9 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
               <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={testReq}>
+            <Text>999</Text>
+          </TouchableOpacity>
           <View style={styles.bankContainer}>
             <SimpleText style={styles.smallTitle}>
               <FormattedMessage id={'dashboard.banks'} />

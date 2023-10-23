@@ -523,3 +523,10 @@ export const putBalanceDeposit = createAsyncThunk(
     }
   }
 );
+
+export const setLoaderFalseWithError = createAsyncThunk(
+  'content/setLoaderFalseWithError',
+  async (data, thunkAPI) => {
+    return data;
+  }
+);

@@ -17,6 +17,8 @@ import BanksScreen from './BanksScreen';
 import { Image, Pressable, Alert, Platform } from 'react-native';
 import { getReport } from 'src/redux/content/operations';
 import { useDispatch } from 'react-redux';
+import { showMessage } from 'react-native-flash-message';
+import ErrorsScreen from 'src/screens/ErrorsScreen/ErrorsScreen';
 
 const DashboardStack = createStackNavigator();
 
@@ -75,13 +77,9 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       }
     });
 
-    const report = await dispatch(getReport(str));
+    try {
+      const report = await dispatch(getReport(str)).unwrap();
 
-    if (report.error) {
-      Alert.alert(`${report.payload.error}`, ' ', [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ]);
-    } else {
       const blob = new Blob([report.payload], {
         type: 'application/json',
       });
@@ -120,7 +118,24 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         }
       };
       fr.readAsDataURL(blob);
-      // console.log('fr.readAsDataURL', fr.onload());
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        showMessage({
+          message: 'No transactions in the selected period!',
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      } else {
+        showMessage({
+          message: `${error}`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }
     }
   };
 
@@ -407,6 +422,13 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           />
         )}
       </DashboardStack.Screen>
+      <DashboardStack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="ErrorsScreen"
+        component={ErrorsScreen}
+      />
     </DashboardStack.Navigator>
   );
 };

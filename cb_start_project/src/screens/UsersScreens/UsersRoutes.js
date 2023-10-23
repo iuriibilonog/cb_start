@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import UserScreen from './UserScreen';
 import UsersListScreen from './UsersListScreen';
 import { createStackNavigator } from '@react-navigation/stack';

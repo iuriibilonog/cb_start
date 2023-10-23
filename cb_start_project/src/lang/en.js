@@ -125,6 +125,12 @@ const lang = {
   'errors.required_field': 'required field',
   'errors.invalid_data': 'invalid data',
   'errors.email_not_valid': 'email must be an email',
+  'errors.401': 'Session time has expired, log in again please!',
+
+  //actions=====
+
+  'actions.to_login': 'To Login',
+  'actions.to_main': 'To Main',
 
   //common=====
   'common.date': 'Date',

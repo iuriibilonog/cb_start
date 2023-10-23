@@ -37,6 +37,7 @@ export const Routing = () => {
   }, [isAuth]);
 
   const AuthStack = createStackNavigator();
+  const ErrorStack = createStackNavigator();
   const MainStack = createBottomTabNavigator();
 
   const handlePressIconLogOut = () => {
@@ -102,7 +103,6 @@ export const Routing = () => {
               },
             }}
             name="DashboardRoutes"
-            // component={DashboardRoutes}
           >
             {(props) => (
               <DashboardRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />
@@ -129,6 +129,7 @@ export const Routing = () => {
               <TransactionsRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />
             )}
           </MainStack.Screen>
+
           <MainStack.Screen
             options={{
               headerShown: false,
@@ -150,15 +151,7 @@ export const Routing = () => {
           <MainStack.Screen
             options={{
               headerShown: false,
-              // headerTitle: 'Users',
-              // headerTitleAlign: 'left',
-              // headerRight: ({ size }) => (
-              //   <Image
-              //     source={profileIcon}
-              //     style={{ width: 25, height: 25, marginRight: 20 }}
-              //     // onPress={() => navigation.navigate("registration")}
-              //   />
-              // ),
+
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
                   ? (image = require('src/images/users_active.png'))
@@ -178,15 +171,7 @@ export const Routing = () => {
           <MainStack.Screen
             options={{
               headerShown: false,
-              // headerTitle: 'Balance',
-              // headerTitleAlign: 'left',
-              // headerRight: ({ size }) => (
-              //   <Image
-              //     source={profileIcon}
-              //     style={{ width: 25, height: 25, marginRight: 20 }}
-              //     // onPress={() => navigation.navigate("registration")}
-              //   />
-              // ),
+
               tabBarIcon: ({ tintColor, image, focused }) => {
                 focused
                   ? (image = require('src/images/balance_active.png'))

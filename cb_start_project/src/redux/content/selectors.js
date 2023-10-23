@@ -10,7 +10,7 @@ export const ledgersByApiKeyID = (state) => state.content.content.ledgersByApiKe
 export const userPayments = (state) => state.content.content.userPayments;
 export const getEditedPaymentsSettings = (state) => state.content.content.editedPaymentsSettings;
 export const paymentsMethods = (state) => state.content.content.paymentsMethods;
-
+export const isMainLoaderOnSelector = (state) => state.content.content.isMainLoaderOn;
 
 // export const getModes = (state) => state.content.content.modes;
 // export const getCurrencies = (state) => state.content.content.currencies;
