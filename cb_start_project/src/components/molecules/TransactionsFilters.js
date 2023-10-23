@@ -13,14 +13,9 @@ import { useNavigation } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 
 const TransactionsFilters = (props) => {
-  // const [selection, setSelection] = useState(props.isActive || ''); //'date'
   const navigation = useNavigation();
   let selection;
-  // console.log('PROPS>', props);
   selection = props.isActive;
-  useEffect(() => {
-    // console.log('FILTERS');
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -28,11 +23,6 @@ const TransactionsFilters = (props) => {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => {
-            // setSelection('date');
-            // navigation.reset({
-            //   index: 1,
-            //   routes: [{ name: 'TransactionsScreen' }],
-            // });
             navigation.dispatch(
               CommonActions.reset({
                 index: 0,

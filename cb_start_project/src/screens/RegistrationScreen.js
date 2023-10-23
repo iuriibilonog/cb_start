@@ -26,7 +26,6 @@ const eyeOn = require('src/images/eye_on.png');
 
 const RegistrationScreen = ({ navigation }) => {
   const handleSubmit = (data) => {
-    console.log('submit data>>', inputValue);
     // navigation.navigate('RegistrationScreen');
   };
 
@@ -39,12 +38,10 @@ const RegistrationScreen = ({ navigation }) => {
   };
 
   const handleInput = (data) => {
-    // console.log(data);
     setInputValue((prev) => ({ ...prev, ...data }));
   };
 
   useEffect(() => {
-    console.log('InputValues: ', inputValue);
   }, [inputValue]);
 
   return (

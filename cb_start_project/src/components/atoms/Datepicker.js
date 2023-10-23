@@ -13,7 +13,6 @@ const Datepicker = (props) => {
 
   useEffect(() => {
     setValue(props.value ? props.value : new Date().toISOString().slice(0, 10));
-    // console.log('props-->>', props.value);
   }, [props.value]);
 
   const handleValue = (value) => {
@@ -22,7 +21,6 @@ const Datepicker = (props) => {
   };
 
   const handleLostFocus = () => {
-    // console.log('LOST FOCUS');
     if (value.length !== 10) {
       setIsFormatError(true);
     } else if (moment(value, 'YYYY/MM/DD').isValid()) {

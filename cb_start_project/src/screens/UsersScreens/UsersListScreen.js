@@ -143,13 +143,11 @@ const UsersListScreen = (props) => {
   }, [data]);
 
   const addAllUsersLedgers = async (usersList) => {
-    // console.log('STARTT');
     let correctedUsersList = [...usersList];
     let sucessCount = 0;
     for (let i = 0; i < correctedUsersList.length; i++) {
       const res = await dispatch(getLedgersData(correctedUsersList[i].id));
       const userLedgers = res.payload.items.map((item) => item.currency);
-      // console.log('UsersLedgers: ', userLedgers.join(', '));
       correctedUsersList[i] = { ...correctedUsersList[i], ledgers: userLedgers.join(', ') };
       sucessCount = sucessCount + 1;
       if (sucessCount > usersList.length - 1) {
@@ -179,7 +177,6 @@ const UsersListScreen = (props) => {
   };
 
   const handleNavigate = (user) => {
-    console.log('props>userID', user);
     navigation.navigate('UserScreen', { id: user.id });
   };
 
@@ -192,7 +189,6 @@ const UsersListScreen = (props) => {
   };
 
   const handleBlur = async () => {
-    // console.log('PRESS OUT', props.searchUser, isKeyboardVisible);
     if (!props.searchUser && isKeyboardVisible) {
       setIsLoading(true);
       props.setIsSearchVisible(false);

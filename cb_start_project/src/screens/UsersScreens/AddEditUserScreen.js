@@ -237,8 +237,6 @@ const AddEditUserScreen = (props) => {
             {roles.length > 0 && (
               <FormattedMessage id={'common.role'}>
                 {(msg) => {
-                  // console.log('selectedRole', selectedRole);
-                  // console.log('role', roles[selectedRole]);
                   return (
                     <ModalDropdown
                       options={roles}

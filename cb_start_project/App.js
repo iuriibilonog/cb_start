@@ -43,8 +43,6 @@ export default function App() {
     prepare();
   }, []);
 
-  // console.log('language', navigator.language);
-  // const locale = navigator.language;
   const locale = 'en';
   let lang = UA;
   if (locale === 'en') {

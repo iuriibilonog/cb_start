@@ -161,7 +161,6 @@ const CreateSecurePassScreen = ({ navigation }) => {
   };
 
   const getCodeStyles = (item) => {
-    console.log('item', item);
     switch (item.id) {
       case '5':
         if (item.value !== '') {
@@ -186,7 +185,6 @@ const CreateSecurePassScreen = ({ navigation }) => {
       <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
         <View>
           <SimpleText style={styles.title}>
-            {console.log('createdPass', createdPass)}
             <FormattedMessage
               id={createdPass ? 'secure_confirm.title_enter' : 'secure_create.title_enter'}
             />

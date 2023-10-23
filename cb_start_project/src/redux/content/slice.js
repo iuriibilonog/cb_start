@@ -73,7 +73,6 @@ const userSlice = createSlice({
     //   state.content.banks = action.payload;
     // }),
     //   builder.addCase(getBankBalance.rejected, (state, action) => {
-    //     console.log('first', first)
     //     state.error = {
     //       message: action.payload,
     //     };

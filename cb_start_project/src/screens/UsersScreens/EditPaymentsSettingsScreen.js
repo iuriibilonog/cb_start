@@ -28,10 +28,6 @@ import ConfirmActionComponentRadioList from 'src/components/molecules/ConfirmAct
 const arrowLeft = require('src/images/header_left.png');
 
 const EditPaymentsSettingsScreen = (props) => {
-  // useEffect(() => {
-  //   console.log('props', props.route.params);
-  // }, []);
-
   const dispatch = useDispatch();
   const { width } = Dimensions.get('window');
   const { dataName, id, keyBoard, currentUser } = props.route.params;
@@ -42,8 +38,6 @@ const EditPaymentsSettingsScreen = (props) => {
   };
 
   const handleChangeCurrentChains = async (value) => {
-    console.log('value', value);
-
     const data = value.split(', ');
     const chainsArr = data.map((item) => parseInt(item));
 

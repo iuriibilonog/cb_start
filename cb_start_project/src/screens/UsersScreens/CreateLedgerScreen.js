@@ -53,7 +53,6 @@ const AddLedgerScreen = (props) => {
       return;
     }
     try {
-      console.log('NewLedger: ', value, currency[selectedCurrency]);
       // await dispatch(putApiKey({ id: props.route.params.id, name: value }));
       // props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
     } catch (err) {

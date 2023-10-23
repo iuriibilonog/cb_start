@@ -95,8 +95,6 @@ const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPaymen
     setIsBrandsOpen(false);
   };
 
-  console.log('item', item.id);
-
   return (
     editedPayments.length > 0 && (
       <TouchableWithoutFeedback onPress={() => handleOnBlur()}>
@@ -226,7 +224,6 @@ const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPaymen
                     <SimpleText>{item.id}</SimpleText>
                   </View>
                   <View style={{ ...styles.additDataCellValues, backgroundColor: '#FAFAFA' }}>
-                    {/* {console.log('banks', banks)} */}
                     {banks && item && item.paymentMethod && (
                       <SimpleText>
                         {banks.find((bank) => bank.id === item.paymentMethod.bankId)?.name}
@@ -613,13 +610,10 @@ const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPaymen
                         flex: 1,
                       }}
                     >
-                      {/* {console.log('first', editedPayments[index]['restrictedBrands'])}
-                      {console.log('first', item.restrictedBrands)} */}
                       {editedPayments[index]['restrictedBrands'] &&
                       editedPayments[index]['restrictedBrands'] !== item.restrictedBrands
                         ? getRestrictedBrands(editedPayments[index]['restrictedBrands'])
                         : getRestrictedBrands(item.restrictedBrands)}
-                      {/* {getRestrictedBrands(item.restrictedBrands)} */}
                     </Text>
                     {editedPayments[index]['restrictedBrands'] !== item.restrictedBrands && (
                       <View

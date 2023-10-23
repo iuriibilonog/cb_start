@@ -48,7 +48,6 @@ const EditScreen = (props) => {
   ];
 
   const submit = () => {
-    console.log('radioSelect', radioSelect);
     if (action && radioSelect) {
       action(radioSelect.value);
     }

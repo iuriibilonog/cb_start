@@ -47,19 +47,16 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
   };
 
   useEffect(() => {
-    // console.log('genReportPaymentsFilters', genReportPaymentsFilters);
     const filtersWithData = genReportTransactionFilters.filter(
       (item) => item.name && item.name !== ''
     );
     if (filtersWithData) {
-      // console.log('<><><><>', filtersWithData);
       setFiltersDots(filtersWithData.map((item) => item.name));
       setIsMerchApiKeyAvailable(
         filtersWithData.find((item) => item.name === 'merchants') !== undefined
       );
     }
     if (genReportTransactionFilters.length === 0) {
-      console.log('Reset filters');
       confirmTransactionFilters();
     }
   }, [genReportTransactionFilters]);
