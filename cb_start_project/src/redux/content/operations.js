@@ -477,10 +477,10 @@ export const setLoaderFalseWithError = createAsyncThunk(
 
 export const conversionLastDaysData = createAsyncThunk(
   'content/conversionLastDaysData',
-  async ({ id, amountData }, thunkAPI) => {
+  async ({ chartData, type }, thunkAPI) => {
     try {
-      const { data } = await api.put(
-        `${BASE_URL}/api/payments/currencyGraph?currency=EUR&status=processing&startDate=2023-10-11&endDate=2023-10-24&timezone=Etc/UTC`,
+      const { data } = await api.get(
+        `${BASE_URL}/api/payments/currencyGraph?currency=EUR&status=${type}&startDate=${chartData.startDate}&endDate=${chartData.endDate}&timezone=${chartData.timezone}`,
         {
           withCredentials: true,
         }
