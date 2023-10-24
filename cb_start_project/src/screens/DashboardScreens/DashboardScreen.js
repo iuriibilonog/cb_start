@@ -12,9 +12,15 @@ import {
   Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import SimpleLineChart from 'src/components/molecules/LineChart';
 import { useDispatch } from 'react-redux';
-import { getAllBanks, getBankConversion, getBankBalance } from 'src/redux/content/operations';
+import { showMessage } from 'react-native-flash-message';
+import {
+  getAllBanks,
+  getBankConversion,
+  getBankBalance,
+  conversionLastDaysData,
+} from 'src/redux/content/operations';
 import React, { useState, useEffect, useRef } from 'react';
 import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import api from 'src/services/interceptor';
@@ -30,6 +36,7 @@ import StyledCalendar from 'src/components/molecules/StyledCalendar';
 const calendarIcon = require('src/images/calendar_icon.png');
 const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
+
 const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
   const initialDateString = new Date().toISOString().slice(0, 10);
   const initialDateMsec = new Date(`${initialDateString}T00:00:00.000Z`).getTime();
@@ -57,6 +64,9 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [isConversionVisible, setIsConversionVisible] = useState(false);
+  const [approvedDataChart, setApprovedDataChart] = useState([]);
+  const [declinedDataChart, setDeclinedDataChart] = useState([]);
+  const [processingDataChart, setProcessingDataChart] = useState([]);
 
   const approvedValue = currentBankConversion?.approvedCount || 0;
   const declinedValue = currentBankConversion?.declinedCount || 0;
@@ -205,6 +215,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       if (noOverDates) {
         checkDatesError(inputsData.startDate, inputsData.endDate);
       } else {
+        handleUpload();
         setErrors({});
       }
     } else {
@@ -285,13 +296,62 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbGVJZCI6MywiZW1haWwiOiJkZXNpZ25lckFkbWluQGRlc2lnbmVyLmNvbSIsImlhdCI6MTY5NzE5NzQ0NiwiZXhwIjoxNjk3MjAxMDQ2fQ.bWCU8oVvk97Qi-cSYyeHNTaRd3AZlwvbQg2pzhcnot4'
     );
   };
-  const handleUpload = () => {
-    console.log('Upload:', inputsData);
+  const handleUpload = async () => {
     const result = {
       ...inputsData,
+      startDate: inputsData.startDate.dateString,
+      endDate: inputsData.endDate.dateString,
       timezone: timezones.find((item) => item.value === inputsData.timezone).code,
     };
-    console.log('result:', result);
+
+    try {
+      const approved = await dispatch(
+        conversionLastDaysData({ chartData: result, type: 'approved' })
+      ).unwrap();
+      console.log('approved', approved);
+      setApprovedDataChart(approved);
+    } catch (error) {
+      showMessage({
+        message: `Somthing went wrong! Approved conversion of last days didn't upload!`,
+        titleStyle: {
+          textAlign: 'center',
+        },
+        type: 'danger',
+      });
+      console.warn('Error:', error);
+    }
+    try {
+      const declined = await dispatch(
+        conversionLastDaysData({ chartData: result, type: 'declined' })
+      ).unwrap();
+      console.log('declined', declined);
+      setDeclinedDataChart(declined);
+    } catch (error) {
+      showMessage({
+        message: `Somthing went wrong! Declined conversion of last days didn't upload!`,
+        titleStyle: {
+          textAlign: 'center',
+        },
+        type: 'danger',
+      });
+      console.warn('Error:', error);
+    }
+    try {
+      const processing = await dispatch(
+        conversionLastDaysData({ chartData: result, type: 'processing' })
+      ).unwrap();
+      console.log('processing', processing);
+      setProcessingDataChart(processing);
+    } catch (error) {
+      showMessage({
+        message: `Somthing went wrong! Processing conversion of last days didn't upload!`,
+        titleStyle: {
+          textAlign: 'center',
+        },
+        type: 'danger',
+      });
+      console.warn('Error:', error);
+    }
   };
 
   const handleCalendarData = (data) => {
@@ -527,7 +587,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
               >
                 <Image
                   source={isConversionVisible ? arrowUp : arrowDown}
-                  style={{ width: 26, height: 26, marginBottom:6 }}
+                  style={{ width: 26, height: 26, marginBottom: 6 }}
                 />
               </TouchableOpacity>
             </View>
@@ -874,6 +934,11 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                 </TouchableOpacity>
               </View>
             )}
+            <SimpleLineChart
+              approvedDataChart={approvedDataChart}
+              declinedDataChart={declinedDataChart}
+              processingDataChart={processingDataChart}
+            />
           </View>
         </View>
       </TouchableWithoutFeedback>
