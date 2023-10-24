@@ -527,7 +527,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
               >
                 <Image
                   source={isConversionVisible ? arrowUp : arrowDown}
-                  style={{ width: 26, height: 26, marginBottom:6 }}
+                  style={{ width: 26, height: 26, marginBottom: 6 }}
                 />
               </TouchableOpacity>
             </View>
@@ -874,6 +874,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                 </TouchableOpacity>
               </View>
             )}
+            <SimpleLineChart />
           </View>
         </View>
       </TouchableWithoutFeedback>
