@@ -511,7 +511,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
             <SimpleText style={styles.title}>
               <FormattedMessage id={'dashboard.conversion.last_days'} />
             </SimpleText>
-            <SimpleLineChart />
             <View style={styles.conversionInputsWrapper}>
               <View style={styles.itemWrapper}>
                 <View style={styles.itemTitle}>
