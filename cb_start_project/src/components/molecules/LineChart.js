@@ -226,6 +226,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
                             paddingRight: 5,
                             paddingTop: 5,
                             paddingBottom: 15,
+                            marginLeft: aprovedData.indexOf(items[0]) === 4 ? -70 : 0,
                           }}
                         >
                           {aprovedData.length && items[0].value !== 0 && (
