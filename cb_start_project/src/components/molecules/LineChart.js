@@ -23,15 +23,14 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
   const [maxChartValue, setMaxChartValue] = useState(100);
 
   const test = [
-    { date: '2023-10-01', currency: 'EUR', sum: 0 },
-    { date: '2023-10-11', currency: 'EUR', sum: 1000 },
-    { date: '2023-10-12', currency: 'EUR', sum: 0 },
-    { date: '2023-10-13', currency: 'EUR', sum: 10 },
-    { date: '2023-10-14', currency: 'EUR', sum: 1 },
+    { date: '2023-10-20', currency: 'EUR', sum: 5 },
+    { date: '2023-10-21', currency: 'EUR', sum: 100 },
+    { date: '2023-10-22', currency: 'EUR', sum: 0 },
+    { date: '2023-10-23', currency: 'EUR', sum: 10 },
+    { date: '2023-10-24', currency: 'EUR', sum: 1 },
   ];
 
   const getMaxValue = (arr) => {
-    console.log('arr', arr);
     let res = 0;
     arr.forEach((item) => {
       if (item.sum > res) res = item.sum;
@@ -57,7 +56,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
       const options = { month: 'short', day: 'numeric' };
       const dataObj = {
         value: item.sum,
-        // label: new Intl.DateTimeFormat('en-US', options).format(n),
+        label: new Intl.DateTimeFormat('en-US', options).format(n),
         labelComponent: () => (
           <Text
             style={{
@@ -72,7 +71,8 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
           return (
             <View
               style={{
-                backgroundColor: '#0BA39A',
+                backgroundColor:
+                  type === 'approved' ? '#06BBB1' : type === 'declined' ? '#FF5A5A' : '#F2CE4D',
                 paddingHorizontal: 5,
                 paddingVertical: 2,
                 borderRadius: 4,
@@ -173,14 +173,16 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
               : 50
           }
           // initialSpacing={aprovedData.length > 1 ? 0 : (Dimensions.get('window').width - 130) / 2}
-          initialSpacing={0}
+          initialSpacing={20}
           maxValue={maxChartValue}
           color1="#06BBB1"
           color2="#FF5A5A"
           color3="#F2CE4D"
+          // focusEnabled={true}
           pointerConfig={{
-            delayBeforeUnFocus: 5000,
-            pointerStripUptoDataPoint: true,
+            showPointerStrip: true,
+            // delayBeforeUnFocus: 500,
+            // pointerStripUptoDataPoint: true,
             pointerStripColor: 'transparent',
 
             pointerColor: 'transparent',
@@ -188,106 +190,122 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
             pointerLabelComponent: (items) => {
               return (
                 <View>
-                  <View
-                    style={{
-                      backgroundColor: '#f4f4f4',
-                      width: 80,
-                      paddingVertical: 5,
-                      borderTopLeftRadius: 4,
-                      borderTopRightRadius: 4,
-                      marginLeft: aprovedData.indexOf(items[0]) === 4 ? -50 : 0,
-                      marginTop: items[0].value === 0 ? -20 : 0,
-                    }}
-                  >
-                    <Text style={{ color: 'black', textAlign: 'center' }}>{items[0].label}</Text>
-                  </View>
+                  {(items[0].value !== 0 || items[1].value !== 0 || items[2].value !== 0) && (
+                    <>
+                      <View
+                        style={{
+                          backgroundColor: '#f4f4f4',
+                          width: 90,
+                          paddingVertical: 5,
+                          borderTopLeftRadius: 4,
+                          borderTopRightRadius: 4,
+                          marginLeft: aprovedData.indexOf(items[0]) === 4 ? -70 : 0,
+                        }}
+                      >
+                        <Text style={{ color: 'black', textAlign: 'center' }}>
+                          {items[0].label}
+                        </Text>
+                      </View>
 
-                  <View
-                    style={{
-                      width: 80,
-                      backgroundColor: '#282C3E',
-                      borderBottomLeftRadius: 4,
-                      borderBottomRightRadius: 4,
-                      justifyContent: 'center',
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                      paddingTop: 5,
-                      paddingBottom: 15,
-                      marginLeft: aprovedData.indexOf(items[0]) === 4 ? -50 : 0,
-                    }}
-                  >
-                    {aprovedData.length && (
-                      <>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <View
-                            style={{
-                              borderRadius: 10,
-                              width: 10,
-                              height: 10,
-                              backgroundColor: '#0BA39A',
-                              marginRight: 5,
-                            }}
-                          ></View>
-                          <Text style={{ color: 'lightgray', fontSize: 12 }}>{'approved:'}</Text>
-                        </View>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[0].value}</Text>
-                      </>
-                    )}
-                    {declinedData.length && (
-                      <>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginTop: 8,
-                          }}
-                        >
-                          <View
-                            style={{
-                              borderRadius: 10,
-                              width: 10,
-                              height: 10,
-                              backgroundColor: '#FF5A5A',
-                              marginRight: 5,
-                            }}
-                          ></View>
-                          <Text style={{ color: 'lightgray', fontSize: 12 }}>{'declined:'}</Text>
-                        </View>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[1].value}</Text>
-                      </>
-                    )}
-                    {processingData.length && (
-                      <>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginTop: 8,
-                          }}
-                        >
-                          <View
-                            style={{
-                              borderRadius: 10,
-                              width: 10,
-                              height: 10,
-                              backgroundColor: '#F2CE4D',
-                              marginRight: 5,
-                            }}
-                          ></View>
-                          <Text style={{ color: 'lightgray', fontSize: 12 }}>{'declined:'}</Text>
-                        </View>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[1].value}</Text>
-                      </>
-                    )}
-                  </View>
+                      <View
+                        style={{
+                          width: 90,
+                          backgroundColor: '#282C3E',
+                          borderBottomLeftRadius: 4,
+                          borderBottomRightRadius: 4,
+                          justifyContent: 'center',
+                          paddingLeft: 5,
+                          paddingRight: 5,
+                          paddingTop: 5,
+                          paddingBottom: 15,
+                        }}
+                      >
+                        {aprovedData.length && items[0].value !== 0 && (
+                          <>
+                            <View
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <View
+                                style={{
+                                  borderRadius: 10,
+                                  width: 10,
+                                  height: 10,
+                                  backgroundColor: '#0BA39A',
+                                  marginRight: 5,
+                                }}
+                              ></View>
+                              <Text style={{ color: 'lightgray', fontSize: 12 }}>
+                                {'approved:'}
+                              </Text>
+                            </View>
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                              {items[0].value}
+                            </Text>
+                          </>
+                        )}
+                        {declinedData.length && items[1].value !== 0 && (
+                          <>
+                            <View
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 8,
+                              }}
+                            >
+                              <View
+                                style={{
+                                  borderRadius: 10,
+                                  width: 10,
+                                  height: 10,
+                                  backgroundColor: '#FF5A5A',
+                                  marginRight: 5,
+                                }}
+                              ></View>
+                              <Text style={{ color: 'lightgray', fontSize: 12 }}>
+                                {'declined:'}
+                              </Text>
+                            </View>
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                              {items[1].value}
+                            </Text>
+                          </>
+                        )}
+                        {processingData.length && items[2].value !== 0 && (
+                          <>
+                            <View
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 8,
+                              }}
+                            >
+                              <View
+                                style={{
+                                  borderRadius: 10,
+                                  width: 10,
+                                  height: 10,
+                                  backgroundColor: '#F2CE4D',
+                                  marginRight: 5,
+                                }}
+                              ></View>
+                              <Text style={{ color: 'lightgray', fontSize: 12 }}>
+                                {'processing:'}
+                              </Text>
+                            </View>
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                              {items[2].value}
+                            </Text>
+                          </>
+                        )}
+                      </View>
+                    </>
+                  )}
                 </View>
               );
             },
