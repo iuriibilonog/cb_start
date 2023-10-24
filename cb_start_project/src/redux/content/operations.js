@@ -23,6 +23,7 @@ export const getAllUsers = createAsyncThunk('content/getAllUsers', async (_, thu
 export const getUsersByPage = createAsyncThunk(
   'content/getUsersByPage',
   async (page = 1, thunkAPI) => {
+    console.log('>> getUsersByPage << page', page);
     try {
       const { data } = await api.get(`${BASE_URL}/api/users?page=${page}&pageSize=20`, {
         withCredentials: true,
@@ -122,7 +123,6 @@ export const getTransactionData = createAsyncThunk(
       let setLink;
       let timezone;
       if (transactionData.timezone) {
-
         timezone =
           transactionData.timezone.indexOf('+0') > 0
             ? 'Europe/London'
@@ -243,6 +243,7 @@ export const deleteUser = createAsyncThunk('content/deleteUser', async (id, thun
 export const getLedgersData = createAsyncThunk(
   'content/getLedgersData',
   async (userId, thunkAPI) => {
+    console.log('>> getLedgersData << userId', userId);
     try {
       const { data } = await api.get(`${BASE_URL}/api/ledgers?filter=${userId}`, {
         withCredentials: true,
@@ -301,6 +302,7 @@ export const getLedgersByApiKeyID = createAsyncThunk(
 export const getSearchUsers = createAsyncThunk(
   'content/getSearchUsers',
   async (searchData, thunkAPI) => {
+    console.log('>> getSearchUsers << searchData', searchData);
     try {
       const { page = 1, searchText } = searchData;
       const { data } = await api.get(
