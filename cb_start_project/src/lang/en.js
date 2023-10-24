@@ -168,6 +168,14 @@ const lang = {
   'common.chance': 'Chance',
   'common.type': 'Type',
   'common.upload': 'Upload',
+
+  //chart=====
+  'chart.approved_total': 'Approved total:',
+  'chart.declined_total': 'Declined total:',
+  'chart.processing_total': 'Processing total:',
+  'chart.approved': 'approved',
+  'chart.declined': 'declined',
+  'chart.processing': 'processing',
 };
 
 // <FormattedMessage id={'dashboard.report_options'} />

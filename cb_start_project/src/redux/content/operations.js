@@ -122,7 +122,6 @@ export const getTransactionData = createAsyncThunk(
       let setLink;
       let timezone;
       if (transactionData.timezone) {
-
         timezone =
           transactionData.timezone.indexOf('+0') > 0
             ? 'Europe/London'
@@ -473,5 +472,22 @@ export const setLoaderFalseWithError = createAsyncThunk(
   'content/setLoaderFalseWithError',
   async (data, thunkAPI) => {
     return data;
+  }
+);
+
+export const conversionLastDaysData = createAsyncThunk(
+  'content/conversionLastDaysData',
+  async ({ id, amountData }, thunkAPI) => {
+    try {
+      const { data } = await api.put(
+        `${BASE_URL}/api/payments/currencyGraph?currency=EUR&status=processing&startDate=2023-10-11&endDate=2023-10-24&timezone=Etc/UTC`,
+        {
+          withCredentials: true,
+        }
+      );
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
 );

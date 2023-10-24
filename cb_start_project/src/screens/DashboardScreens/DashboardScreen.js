@@ -12,7 +12,7 @@ import {
   Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import SimpleLineChart from 'src/components/molecules/LineChart';
 import { useDispatch } from 'react-redux';
 import { getAllBanks, getBankConversion, getBankBalance } from 'src/redux/content/operations';
 import React, { useState, useEffect, useRef } from 'react';
@@ -511,6 +511,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
             <SimpleText style={styles.title}>
               <FormattedMessage id={'dashboard.conversion.last_days'} />
             </SimpleText>
+            <SimpleLineChart />
             <View style={styles.conversionInputsWrapper}>
               <View style={styles.itemWrapper}>
                 <View style={styles.itemTitle}>

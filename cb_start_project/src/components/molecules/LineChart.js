@@ -9,13 +9,21 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { FormattedMessage } from 'react-intl';
 
 import { LineChart } from 'react-native-gifted-charts';
+import SimpleText from '../atoms/SimpleText';
+import { conversionLastDaysData } from 'src/redux/content/operations';
+import { useDispatch } from 'react-redux';
 
 const SimpleLineChart = () => {
   const [aprovedData, setApprovedData] = useState([]);
   const [declinedData, setDeclinedData] = useState([]);
+  const [processingData, setProcessingData] = useState([]);
+
+  const dispatch = useDispatch();
 
   const test = [
     { date: '2023-10-01', currency: 'EUR', sum: 0 },
@@ -25,34 +33,54 @@ const SimpleLineChart = () => {
     { date: '2023-10-14', currency: 'EUR', sum: 1 },
   ];
 
-  const lineData3 = test.map((item) => {
-    const n = new Date(item.date);
-    const options = { month: 'short', day: 'numeric' };
-    const dataObj = {
-      value: item.sum,
-      label: new Intl.DateTimeFormat('en-US', options).format(n),
-      dataPointLabelComponent: () => {
-        return (
-          <View
-            style={{
-              backgroundColor: '#0BA39A',
-              paddingHorizontal: 5,
-              paddingVertical: 2,
-              borderRadius: 4,
-              marginLeft: 20,
-            }}
-          >
-            <Text style={{ color: 'white' }}>{item.sum}</Text>
-          </View>
-        );
-      },
-    };
+  useEffect(() => {
+    createApprovedDataForChart(test, 'approved');
+    createApprovedDataForChart(test, 'declined');
+    createApprovedDataForChart(test, 'processing');
+  }, []);
 
-    // item.value = item.sum;
-    // item.label = new Intl.DateTimeFormat('en-US', options).format(n);
+  const createApprovedDataForChart = (data, type) => {
+    const lineData = test.map((item) => {
+      const n = new Date(item.date);
+      const options = { month: 'short', day: 'numeric' };
+      const dataObj = {
+        value: item.sum,
+        label: new Intl.DateTimeFormat('en-US', options).format(n),
+        dataPointLabelComponent: () => {
+          return (
+            <View
+              style={{
+                backgroundColor: '#0BA39A',
+                paddingHorizontal: 5,
+                paddingVertical: 2,
+                borderRadius: 4,
+                marginLeft: 20,
+              }}
+            >
+              <Text style={{ color: 'white' }}>{item.sum}</Text>
+            </View>
+          );
+        },
+      };
 
-    return dataObj;
-  });
+      return dataObj;
+    });
+
+    switch (type) {
+      case 'approved':
+        setApprovedData(lineData);
+        break;
+      case 'declined':
+        setDeclinedData(lineData);
+        break;
+      case 'processing':
+        setProcessingData(lineData);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   const lineData = [
     {
@@ -261,8 +289,56 @@ const SimpleLineChart = () => {
   ];
   return (
     <View style={{ marginVertical: 40 }}>
+      <View style={styles.schartBar}>
+        <View style={{ ...styles.barTitleWrapper, marginBottom: 12 }}>
+          <View style={{ ...styles.marker, backgroundColor: '#06BBB1' }}></View>
+          <SimpleText>
+            <FormattedMessage id={'chart.approved_total'} />
+          </SimpleText>
+          <SimpleText>9999999</SimpleText>
+        </View>
+        <View style={{ ...styles.barTitleWrapper, marginBottom: 12 }}>
+          <View style={{ ...styles.marker, backgroundColor: '#FF5A5A' }}></View>
+          <SimpleText>
+            <FormattedMessage id={'chart.declined_total'} />
+          </SimpleText>
+        </View>
+        <View style={{ ...styles.barTitleWrapper }}>
+          <View style={{ ...styles.marker, backgroundColor: '#F2CE4D' }}></View>
+          <SimpleText>
+            <FormattedMessage id={'chart.processing_total'} />
+          </SimpleText>
+        </View>
+      </View>
+      <View style={styles.chartBtnsWrapper}>
+        <TouchableOpacity>
+          <View style={styles.barTitleWrapper}>
+            <View style={{ ...styles.marker, backgroundColor: '#06BBB1' }}></View>
+            <SimpleText>
+              <FormattedMessage id={'chart.approved'} />
+            </SimpleText>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.barTitleWrapper}>
+            <View style={{ ...styles.marker, backgroundColor: '#FF5A5A' }}></View>
+            <SimpleText>
+              <FormattedMessage id={'chart.declined'} />
+            </SimpleText>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.barTitleWrapper}>
+            <View style={{ ...styles.marker, backgroundColor: '#F2CE4D' }}></View>
+            <SimpleText>
+              <FormattedMessage id={'chart.processing'} />
+            </SimpleText>
+          </View>
+        </TouchableOpacity>
+      </View>
       <LineChart
-        data={lineData3}
+        // data={lineData3}
+        data={aprovedData}
         // data2={declinedData}
         curved
         isAnimated={true}
@@ -289,7 +365,7 @@ const SimpleLineChart = () => {
                     paddingVertical: 5,
                     borderTopLeftRadius: 4,
                     borderTopRightRadius: 4,
-                    marginLeft: lineData3.indexOf(items[0]) === 4 ? -50 : 0,
+                    marginLeft: aprovedData.indexOf(items[0]) === 4 ? -50 : 0,
                     marginTop: items[0].value === 0 ? -20 : 0,
                   }}
                 >
@@ -307,7 +383,7 @@ const SimpleLineChart = () => {
                     paddingRight: 5,
                     paddingTop: 5,
                     paddingBottom: 15,
-                    marginLeft: lineData3.indexOf(items[0]) === 4 ? -50 : 0,
+                    marginLeft: aprovedData.indexOf(items[0]) === 4 ? -50 : 0,
                   }}
                 >
                   {aprovedData.length && (
@@ -333,7 +409,7 @@ const SimpleLineChart = () => {
                       <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[0].value}</Text>
                     </>
                   )}
-                  {declinedData.length && (
+                  {/* {declinedData.length && (
                     <>
                       <View
                         style={{
@@ -356,7 +432,7 @@ const SimpleLineChart = () => {
                       </View>
                       <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[1].value}</Text>
                     </>
-                  )}
+                  )} */}
                 </View>
               </View>
             );
@@ -366,5 +442,22 @@ const SimpleLineChart = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  barTitleWrapper: { display: 'flex', flexDirection: 'row', alignItems: 'baseline' },
+  marker: {
+    width: 12,
+    height: 12,
+    borderRadius: 12,
+    marginRight: 7,
+  },
+  chartBtnsWrapper: {
+    marginTop: 50,
+    marginBottom: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+});
 
 export default SimpleLineChart;
