@@ -408,7 +408,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                             ? require('src/images/arrow_up.png')
                             : require('src/images/arrow_down.png')
                         }
-                        style={{ width: 26, height: 36, marginLeft: 'auto' }}
+                        style={{ width: 26, height: 26, marginLeft: 'auto' }}
                       ></Image>
                     )}
                     renderRowProps={{ activeOpacity: 1 }}
