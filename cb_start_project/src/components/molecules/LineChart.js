@@ -31,7 +31,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
   ];
 
   const getMaxValue = (arr) => {
-    console.log('arr', arr);
+    // console.log('arr', arr);
     let res = 0;
     arr.forEach((item) => {
       if (item.sum > res) res = item.sum;
@@ -61,8 +61,13 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
         labelComponent: () => (
           <Text
             style={{
-              marginLeft: 35,
-              width: 50,
+              fontSize: 12,
+              fontFamily: 'Mont',
+              lineHeight: 15,
+              // marginLeft: 0,
+              // width: 50,
+              textAlign: aprovedData.length !== 1 ? 'center' : 'left',
+              // borderWidth: 1,
             }}
           >
             {new Intl.DateTimeFormat('en-US', options).format(n)}
@@ -156,144 +161,155 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
           </View>
         </TouchableOpacity>
       </View>
-      <View>
-        <LineChart
-          data={aprovedData}
-          data2={declinedData}
-          data3={processingData}
-          curved
-          isAnimated={true}
-          height={250}
-          showVerticalLines
-          width={Dimensions.get('window').width - 90}
-          // yAxisLabelTexts={['A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E']}
-          spacing={
-            aprovedData.length > 1
-              ? (Dimensions.get('window').width - 130) / (aprovedData.length - 1)
-              : 50
-          }
-          // initialSpacing={aprovedData.length > 1 ? 0 : (Dimensions.get('window').width - 130) / 2}
-          initialSpacing={0}
-          maxValue={maxChartValue}
-          color1="#06BBB1"
-          color2="#FF5A5A"
-          color3="#F2CE4D"
-          pointerConfig={{
-            delayBeforeUnFocus: 5000,
-            pointerStripUptoDataPoint: true,
-            pointerStripColor: 'transparent',
+      {aprovedData.length > 0 && declinedData.length >= 0 && processingData.length >= 0 && (
+        <View>
+          <LineChart
+            data={aprovedData}
+            data2={declinedData}
+            data3={processingData}
+            curved
+            // rotateLabel
+            isAnimated={true}
+            height={250}
+            showVerticalLines
+            width={aprovedData.length !== 1 ? false : Dimensions.get('window').width - 100}
+            // yAxisLabelTexts={['A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E']}
+            spacing={
+              aprovedData.length !== 1
+                ? (Dimensions.get('window').width - 130) / (aprovedData.length - 1)
+                : 170
+            }
+            initialSpacing={
+              aprovedData.length !== 1 ? 25 : (Dimensions.get('window').width - 80) / 2
+            }
+            // initialSpacing={0}
+            maxValue={maxChartValue}
+            color1="#06BBB1"
+            color2="#FF5A5A"
+            color3="#F2CE4D"
+            pointerConfig={{
+              delayBeforeUnFocus: 5000,
+              pointerStripUptoDataPoint: true,
+              pointerStripColor: 'transparent',
 
-            pointerColor: 'transparent',
+              pointerColor: 'transparent',
 
-            pointerLabelComponent: (items) => {
-              return (
-                <View>
-                  <View
-                    style={{
-                      backgroundColor: '#f4f4f4',
-                      width: 80,
-                      paddingVertical: 5,
-                      borderTopLeftRadius: 4,
-                      borderTopRightRadius: 4,
-                      marginLeft: aprovedData.indexOf(items[0]) === 4 ? -50 : 0,
-                      marginTop: items[0].value === 0 ? -20 : 0,
-                    }}
-                  >
-                    <Text style={{ color: 'black', textAlign: 'center' }}>{items[0].label}</Text>
+              pointerLabelComponent: (items) => {
+                return (
+                  <View>
+                    <View
+                      style={{
+                        backgroundColor: '#f4f4f4',
+                        width: 80,
+                        paddingVertical: 5,
+                        borderTopLeftRadius: 4,
+                        borderTopRightRadius: 4,
+                        marginLeft: aprovedData.indexOf(items[0]) === 4 ? -50 : 0,
+                        marginTop: items[0].value === 0 ? -20 : 0,
+                      }}
+                    >
+                      <Text style={{ color: 'black', textAlign: 'center' }}>{items[0].label}</Text>
+                    </View>
+
+                    <View
+                      style={{
+                        width: 80,
+                        backgroundColor: '#282C3E',
+                        borderBottomLeftRadius: 4,
+                        borderBottomRightRadius: 4,
+                        justifyContent: 'center',
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                        paddingTop: 5,
+                        paddingBottom: 15,
+                        marginLeft: aprovedData.indexOf(items[0]) === 4 ? -50 : 0,
+                      }}
+                    >
+                      {aprovedData.length && (
+                        <>
+                          <View
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <View
+                              style={{
+                                borderRadius: 10,
+                                width: 10,
+                                height: 10,
+                                backgroundColor: '#0BA39A',
+                                marginRight: 5,
+                              }}
+                            ></View>
+                            <Text style={{ color: 'lightgray', fontSize: 12 }}>{'approved:'}</Text>
+                          </View>
+                          <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                            {items[0].value}
+                          </Text>
+                        </>
+                      )}
+                      {declinedData.length && (
+                        <>
+                          <View
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              marginTop: 8,
+                            }}
+                          >
+                            <View
+                              style={{
+                                borderRadius: 10,
+                                width: 10,
+                                height: 10,
+                                backgroundColor: '#FF5A5A',
+                                marginRight: 5,
+                              }}
+                            ></View>
+                            <Text style={{ color: 'lightgray', fontSize: 12 }}>{'declined:'}</Text>
+                          </View>
+                          <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                            {items[1].value}
+                          </Text>
+                        </>
+                      )}
+                      {processingData.length && (
+                        <>
+                          <View
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              marginTop: 8,
+                            }}
+                          >
+                            <View
+                              style={{
+                                borderRadius: 10,
+                                width: 10,
+                                height: 10,
+                                backgroundColor: '#F2CE4D',
+                                marginRight: 5,
+                              }}
+                            ></View>
+                            <Text style={{ color: 'lightgray', fontSize: 12 }}>{'declined:'}</Text>
+                          </View>
+                          <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                            {items[1].value}
+                          </Text>
+                        </>
+                      )}
+                    </View>
                   </View>
-
-                  <View
-                    style={{
-                      width: 80,
-                      backgroundColor: '#282C3E',
-                      borderBottomLeftRadius: 4,
-                      borderBottomRightRadius: 4,
-                      justifyContent: 'center',
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                      paddingTop: 5,
-                      paddingBottom: 15,
-                      marginLeft: aprovedData.indexOf(items[0]) === 4 ? -50 : 0,
-                    }}
-                  >
-                    {aprovedData.length && (
-                      <>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <View
-                            style={{
-                              borderRadius: 10,
-                              width: 10,
-                              height: 10,
-                              backgroundColor: '#0BA39A',
-                              marginRight: 5,
-                            }}
-                          ></View>
-                          <Text style={{ color: 'lightgray', fontSize: 12 }}>{'approved:'}</Text>
-                        </View>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[0].value}</Text>
-                      </>
-                    )}
-                    {declinedData.length && (
-                      <>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginTop: 8,
-                          }}
-                        >
-                          <View
-                            style={{
-                              borderRadius: 10,
-                              width: 10,
-                              height: 10,
-                              backgroundColor: '#FF5A5A',
-                              marginRight: 5,
-                            }}
-                          ></View>
-                          <Text style={{ color: 'lightgray', fontSize: 12 }}>{'declined:'}</Text>
-                        </View>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[1].value}</Text>
-                      </>
-                    )}
-                    {processingData.length && (
-                      <>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginTop: 8,
-                          }}
-                        >
-                          <View
-                            style={{
-                              borderRadius: 10,
-                              width: 10,
-                              height: 10,
-                              backgroundColor: '#F2CE4D',
-                              marginRight: 5,
-                            }}
-                          ></View>
-                          <Text style={{ color: 'lightgray', fontSize: 12 }}>{'declined:'}</Text>
-                        </View>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[1].value}</Text>
-                      </>
-                    )}
-                  </View>
-                </View>
-              );
-            },
-          }}
-        />
-      </View>
+                );
+              },
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };
