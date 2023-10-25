@@ -104,23 +104,14 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
     },
     { value: '(UTC+6) Astana, Omsk', code: 'Asia/Omsk' },
   ];
-  // 5 6 не норм !
+
   const currencies = [
-    { value: 'All' },
     { value: 'EUR' },
     { value: 'USD' },
     { value: 'RUB' },
     { value: 'KZT' },
     { value: 'INR' },
     { value: 'BRL' },
-  ];
-
-  const statuses = [
-    { value: 'All' },
-    { value: 'declined' },
-    { value: 'approved' },
-    { value: 'processing' },
-    { value: 'new' },
   ];
 
   let approvedPercent, declinedPercent;
@@ -179,7 +170,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       endDate: { dateString: initialDateString, timestamp: initialDateMsec },
       timezone: timezones[0].value,
       currency: currencies[0].value,
-      status: statuses[0].value,
     }));
   }, []);
 
@@ -297,6 +287,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
     );
   };
   const handleUpload = async () => {
+    setIsLoading(true);
     const result = {
       ...inputsData,
       startDate: inputsData.startDate.dateString,
@@ -311,6 +302,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       console.log('approved', approved);
       setApprovedDataChart(approved);
     } catch (error) {
+      setIsLoading(false);
       showMessage({
         message: `Somthing went wrong! Approved conversion of last days didn't upload!`,
         titleStyle: {
@@ -327,6 +319,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       console.log('declined', declined);
       setDeclinedDataChart(declined);
     } catch (error) {
+      setIsLoading(false);
       showMessage({
         message: `Somthing went wrong! Declined conversion of last days didn't upload!`,
         titleStyle: {
@@ -342,7 +335,9 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       ).unwrap();
       console.log('processing', processing);
       setProcessingDataChart(processing);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       showMessage({
         message: `Somthing went wrong! Processing conversion of last days didn't upload!`,
         titleStyle: {
@@ -826,7 +821,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                           backgroundColor: '#F4F4F4',
                           borderWidth: 0,
                           borderRadius: 2,
-                          height: currencies.length > 6 ? 220 : currencies.length * 40,
+                          height: currencies.length > 5 ? 175 : currencies.length * 35,
                         }}
                         dropdownTextStyle={{
                           fontSize: 16,
@@ -850,79 +845,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                         renderSeparator={() => <></>}
                         onDropdownWillShow={() => setIsCurrencyDropdownOpen(true)}
                         onDropdownWillHide={() => setIsCurrencyDropdownOpen(false)}
-                      />
-                    )}
-                  </View>
-                  <View style={styles.itemWrapper}>
-                    <View style={styles.itemTitle}>
-                      <SimpleText style={styles.itemTextTitle}>
-                        <FormattedMessage id={'dashboard.status'} />
-                      </SimpleText>
-                    </View>
-                    {statuses && inputsData.status && (
-                      <ModalDropdown
-                        ref={refStatus}
-                        options={statuses.map((item) => item.value)}
-                        defaultIndex={0}
-                        defaultValue={inputsData.status}
-                        // isFullWidth
-                        animated={false}
-                        onSelect={(index, option) => {
-                          // console.log(index, '<>', option);
-                          if (errors.currency) {
-                            setErrors({});
-                          }
-                          setInputsData((prev) => ({ ...prev, status: option }));
-                        }}
-                        textStyle={{
-                          fontSize: 16,
-                          fontFamily: 'Mont',
-                          fontWeight: '600',
-                          lineHeight: 16,
-                          paddingRight: 25,
-                        }}
-                        style={{
-                          backgroundColor: '#F4F4F4',
-                          paddingHorizontal: 16,
-                          paddingVertical: 12,
-                          borderRadius: 2,
-                          justifyContent: 'space-between',
-
-                          width: width - 40,
-                        }}
-                        dropdownStyle={{
-                          marginLeft: -16,
-                          marginTop: Platform.OS === 'ios' ? 14 : -14,
-                          paddingLeft: 11,
-                          paddingRight: 2,
-                          width: width - 40,
-                          backgroundColor: '#F4F4F4',
-                          borderWidth: 0,
-                          borderRadius: 2,
-                          height: statuses.length > 6 ? 220 : statuses.length * 35,
-                        }}
-                        dropdownTextStyle={{
-                          fontSize: 16,
-                          lineHeight: 16,
-                          fontWeight: '600',
-                          fontFamily: 'Mont',
-                          backgroundColor: '#F4F4F4',
-                          color: 'rgba(38, 38, 38, 0.50)',
-                        }}
-                        renderRightComponent={() => (
-                          <Image
-                            source={
-                              isStatusDropdownOpen
-                                ? require('src/images/arrow_up.png')
-                                : require('src/images/arrow_down.png')
-                            }
-                            style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                          ></Image>
-                        )}
-                        renderRowProps={{ activeOpacity: 1 }}
-                        renderSeparator={() => <></>}
-                        onDropdownWillShow={() => setIsStatusDropdownOpen(true)}
-                        onDropdownWillHide={() => setIsStatusDropdownOpen(false)}
                       />
                     )}
                   </View>
@@ -1009,7 +931,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   conversionWrapper: { marginTop: 90, marginBottom: 70 },
-  conversionInputsWrapper: { marginTop: 30 },
+  conversionInputsWrapper: { marginTop: 30, marginBottom: 4 },
   itemWrapper: { marginBottom: 26 },
   itemTitle: { marginBottom: 12 },
   itemTextTitle: { fontSize: 14 },
