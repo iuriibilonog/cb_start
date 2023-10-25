@@ -52,6 +52,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
 
   const [banks, setBanks] = useState([]);
   const [initialBank, setInitialBank] = useState('');
+  const [chartUploadCurrency, setChartUploadCurrence] = useState('EUR');
 
   const [banksNames, setBanksNames] = useState([]);
   const [bankBalance, setBankBalance] = useState([]);
@@ -288,6 +289,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
   };
   const handleUpload = async () => {
     setIsLoading(true);
+    setChartUploadCurrence(inputsData.currency);
     const result = {
       ...inputsData,
       startDate: inputsData.startDate.dateString,
@@ -857,12 +859,12 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                 </TouchableOpacity>
               </View>
             )}
-            {console.log('inputsData', inputsData)}
+
             <SimpleLineChart
               approvedDataChart={approvedDataChart}
               declinedDataChart={declinedDataChart}
               processingDataChart={processingDataChart}
-              currency={inputsData?.currency}
+              currency={chartUploadCurrency}
             />
           </View>
         </View>

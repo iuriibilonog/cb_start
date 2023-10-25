@@ -483,7 +483,7 @@ export const conversionLastDaysData = createAsyncThunk(
   async ({ chartData, type }, thunkAPI) => {
     try {
       const { data } = await api.get(
-        `${BASE_URL}/api/payments/currencyGraph?currency=EUR&status=${type}&startDate=${chartData.startDate}&endDate=${chartData.endDate}&timezone=${chartData.timezone}`,
+        `${BASE_URL}/api/payments/currencyGraph?currency=${chartData.currency}&status=${type}&startDate=${chartData.startDate}&endDate=${chartData.endDate}&timezone=${chartData.timezone}`,
         {
           withCredentials: true,
         }

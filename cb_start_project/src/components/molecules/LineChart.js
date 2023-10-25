@@ -17,7 +17,12 @@ import { FormattedMessage } from 'react-intl';
 import { LineChart } from 'react-native-gifted-charts';
 import SimpleText from '../atoms/SimpleText';
 
-const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataChart }) => {
+const SimpleLineChart = ({
+  approvedDataChart,
+  declinedDataChart,
+  processingDataChart,
+  currency,
+}) => {
   const [aprovedData, setApprovedData] = useState([]);
   const [declinedData, setDeclinedData] = useState([]);
   const [processingData, setProcessingData] = useState([]);
@@ -203,7 +208,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
   };
 
   return (
-    <View style={{ marginVertical: 40 }}>
+    <View style={{ marginTop: 40 }}>
       <View style={styles.schartBar}>
         <View style={{ ...styles.barTitleWrapper, marginBottom: 12 }}>
           <View style={{ ...styles.marker, backgroundColor: '#06BBB1' }}></View>
@@ -211,7 +216,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
             <FormattedMessage id={'chart.approved_total'} />
           </SimpleText>
           <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
-            {conversionApproved}
+            {`${conversionApproved} ${currency}`}
           </SimpleText>
           {conversionApproved !== 0 && (
             <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
@@ -227,7 +232,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
             <FormattedMessage id={'chart.declined_total'} />
           </SimpleText>
           <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
-            {conversionDeclined}
+            {`${conversionDeclined} ${currency}`}
           </SimpleText>
           {conversionDeclined !== 0 && (
             <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
@@ -243,7 +248,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
             <FormattedMessage id={'chart.processing_total'} />
           </SimpleText>
           <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
-            {conversionProcessing}
+            {`${conversionProcessing} ${currency}`}
           </SimpleText>
         </View>
       </View>
