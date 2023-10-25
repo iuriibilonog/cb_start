@@ -33,7 +33,7 @@ const CreateApiKeyScreen = (props) => {
       await dispatch(postApiKey({ userId: props.route.params.user.id, name: data }));
       props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
     } catch (err) {
-      console.log('Create New APi Key ERROR', err);
+      console.warn('Create New APi Key ERROR', err);
     }
   };
 

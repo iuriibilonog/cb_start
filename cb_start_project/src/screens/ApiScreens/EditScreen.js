@@ -44,7 +44,7 @@ const EditScreen = (props) => {
         },
         type: 'success',
       });
-      console.log('err', err);
+      console.warn('Error:', err);
     }
   };
 

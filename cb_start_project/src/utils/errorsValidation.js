@@ -25,7 +25,6 @@ export const checkValidation = (data, validationParams) => {
         break;
     }
   });
-  console.log('errors', errors);
 
   return errors;
 };

@@ -31,7 +31,7 @@ const EditUserScreen = (props) => {
       await dispatch(deleteUser(props.route.params.user.id));
       props.navigation.navigate('UsersListScreen', { isRefresh: true, removeUser: true });
     } catch (err) {
-      console.log('err', err);
+      console.warn('Error:', err);
     }
   };
 

@@ -37,7 +37,6 @@ export const Routing = () => {
   }, [isAuth]);
 
   const AuthStack = createStackNavigator();
-  const ErrorStack = createStackNavigator();
   const MainStack = createBottomTabNavigator();
 
   const handlePressIconLogOut = () => {
@@ -57,7 +56,7 @@ export const Routing = () => {
           </AuthStack.Screen>
         </AuthStack.Navigator>
       ) : !isAuth ? (
-        <AuthStack.Navigator>
+        <AuthStack.Navigator initialRouteName={'LoginScreen'}>
           {/* <AuthStack.Screen
             options={{ headerShown: false }}
             name="EnterSecureScreen"

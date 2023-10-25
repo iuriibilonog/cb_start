@@ -58,7 +58,7 @@ const SimpleLineChart = ({
   // ];
 
   const getMaxValue = (arr, type) => {
-    // console.log('arr', arr);
+    
     let res = 0;
     let conversionTotal = 0;
     arr.forEach((item) => {
@@ -122,7 +122,7 @@ const SimpleLineChart = ({
     const lineData = data.map((item) => {
       const n = new Date(item.date);
       const options = { month: 'short', day: 'numeric' };
-      console.log(item.sum);
+
       const dataObj = {
         value: item.sum,
         label: new Intl.DateTimeFormat('en-US', options).format(n),
@@ -165,17 +165,17 @@ const SimpleLineChart = ({
 
     switch (type) {
       case 'approved':
-        // console.log('approved', lineData);
+        
 
         setApprovedData(lineData);
 
         break;
       case 'declined':
-        // console.log('declined', lineData);
+       
         setDeclinedData(lineData);
         break;
       case 'processing':
-        // console.log('processing', lineData);
+        
         setProcessingData(lineData);
         break;
 
@@ -204,7 +204,6 @@ const SimpleLineChart = ({
       default:
         break;
     }
-    console.log('type', type);
   };
 
   return (
@@ -325,9 +324,9 @@ const SimpleLineChart = ({
             color1={isApprovedActive ? '#06BBB1' : 'transparent'}
             color2="#FF5A5A"
             color3="#F2CE4D"
+            // delayBeforeUnFocus={5000}
+
             pointerConfig={{
-              // delayBeforeUnFocus: 5000,
-              // pointerStripUptoDataPoint: true,
               pointerStripColor: 'transparent',
 
               pointerColor: 'transparent',

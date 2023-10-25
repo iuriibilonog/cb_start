@@ -127,7 +127,9 @@ const lang = {
   'errors.required_field': 'required field',
   'errors.invalid_data': 'invalid data',
   'errors.email_not_valid': 'email must be an email',
-  'errors.401': 'Session time has expired, log in again please!',
+  'errors.401': 'Session time has expired, log in again please.',
+  'errors.500':
+    'Service is unavailable. The server is temporarily unable to process your request, please try again later.',
 
   //actions=====
 

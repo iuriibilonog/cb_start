@@ -50,18 +50,18 @@ const UsersListScreen = (props) => {
   const scrollRef = useRef();
 
   useEffect(() => {
-    console.log('1-currentPage');
+    //console.log('1-currentPage');
     if (!props.searchUser) {
-      console.log('11-currentPage');
+      //console.log('11-currentPage');
       getUsersWithoutSearch();
     } else {
-      console.log('12-currentPage');
+      //console.log('12-currentPage');
       getCurrentPageData();
     }
   }, [currentPage]);
 
   const getUsersWithoutSearch = async () => {
-    console.log('2-getUsersWithoutSearch');
+    //console.log('2-getUsersWithoutSearch');
     setIsLoading(true);
     await dispatch(getUsersByPage(currentPage));
     // setIsLoading(false);
@@ -82,47 +82,47 @@ const UsersListScreen = (props) => {
   }, []);
 
   const getCurrentPageData = async () => {
-    console.log('3-getCurrentPageData');
+    //console.log('3-getCurrentPageData');
     setIsLoading(true);
     if (props.searchUser) {
-      console.log('31-getCurrentPageData');
+      //console.log('31-getCurrentPageData');
       await dispatch(getSearchUsers({ page: currentPage, searchText: props.searchUser }));
     } else {
-      console.log('32-getCurrentPageData');
+      //console.log('32-getCurrentPageData');
       await dispatch(getUsersByPage(currentPage));
     }
     // setIsLoading(false);
   };
 
   useEffect(() => {
-    console.log('4-props');
+    //console.log('4-props');
     if (props.route.params?.isNewUserCreated) {
-      console.log('41-props');
+      //console.log('41-props');
       const page = Math.ceil((usersData.totalCount + 1) / 20);
       page === currentPage ? getCurrentPageData() : setCurrentPage(page);
     } else if (props.route.params?.removeUser) {
-      console.log('42-props');
+      //console.log('42-props');
       const page = Math.ceil((usersData.totalCount - 1) / 20);
       page === currentPage ? getCurrentPageData() : setCurrentPage(page);
     } else {
-      console.log('43-props');
+      //console.log('43-props');
       getUserListData(1);
     }
   }, [props]);
 
   const getUserListData = async (page) => {
-    console.log('5-getUserListData');
+    //console.log('5-getUserListData');
     setIsLoading(true);
     if (props.searchUser) {
-      console.log('51-getUserListData');
+      //console.log('51-getUserListData');
       await dispatch(
         getSearchUsers({ page: page ? page : currentPage, searchText: props.searchUser })
       );
     } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
-      console.log('52-getUserListData');
+      //console.log('52-getUserListData');
       await dispatch(getUsersByPage(1));
     } else if (!props.searchUser) {
-      console.log('53-getUserListData');
+      //console.log('53-getUserListData');
       setIsLoading(false);
       // await dispatch(getUsersByPage(currentPage));
     }
@@ -130,35 +130,35 @@ const UsersListScreen = (props) => {
   };
 
   useEffect(() => {
-    console.log('6-usersData');
+    //console.log('6-usersData');
     if (usersData && usersData.items.length > 0) {
-      console.log('61-usersData');
+      //console.log('61-usersData');
       setIsLoading(true);
       const pages = Math.ceil(usersData.totalCount / 20);
       setTotalPages(pages);
 
       if (!incomingUsersData || !isEqual(incomingUsersData, usersData.items)) {
-        console.log('62-usersData');
+        //console.log('62-usersData');
         addAllUsersLedgers(usersData.items);
         setIncomingUsersData(usersData.items);
       } else {
-        console.log('63-usersData');
+        //console.log('63-usersData');
         // setIsLoading(false);
       }
     }
   }, [usersData]);
 
   useEffect(() => {
-    console.log('7-data');
+    //console.log('7-data');
     if (data?.length > 0 && props.route.params?.isNewUserCreated) {
-      console.log('71-data');
+      //console.log('71-data');
       delete props.route.params?.isNewUserCreated;
       scrollRef.current?.scrollToOffset({
         offset: 1000,
         animated: true,
       });
     } else if (data?.length > 0 && props.route.params?.removeUser) {
-      console.log('72-data');
+      //console.log('72-data');
       delete props.route.params?.removeUser;
       scrollRef.current?.scrollToOffset({
         offset: 1000,
@@ -168,7 +168,7 @@ const UsersListScreen = (props) => {
   }, [data]);
 
   const addAllUsersLedgers = async (usersList) => {
-    console.log('8-addAllUsersLedgers');
+    //console.log('8-addAllUsersLedgers');
     let correctedUsersList = [...usersList];
     let sucessCount = 0;
     for (let i = 0; i < correctedUsersList.length; i++) {
@@ -177,7 +177,7 @@ const UsersListScreen = (props) => {
       correctedUsersList[i] = { ...correctedUsersList[i], ledgers: userLedgers.join(', ') };
       sucessCount = sucessCount + 1;
       if (sucessCount > usersList.length - 1) {
-        console.log('81-addAllUsersLedgers-dataprepared!');
+        //console.log('81-addAllUsersLedgers-dataprepared!');
         setData(correctedUsersList);
         setIsLoading(false);
       }
@@ -185,20 +185,20 @@ const UsersListScreen = (props) => {
   };
 
   useEffect(() => {
-    console.log('9-searchUsersData');
+    //console.log('9-searchUsersData');
     if (searchUsersData) {
-      console.log('91-searchUsersData');
+      //console.log('91-searchUsersData');
       const pages = Math.ceil(searchUsersData.totalCount / 20);
       setTotalPages(pages);
       if (!incomingUsersData || !isEqual(incomingUsersData, searchUsersData.items)) {
-        console.log('92-searchUsersData');
+        //console.log('92-searchUsersData');
         addAllUsersLedgers(searchUsersData.items);
         setIncomingUsersData(searchUsersData.items);
       } else {
-        console.log('93-searchUsersData');
+        //console.log('93-searchUsersData');
         setIsLoading(false);
       }
-      console.log('94-searchUsersData');
+      //console.log('94-searchUsersData');
       setData(searchUsersData.items);
     }
   }, [searchUsersData]);
@@ -221,9 +221,9 @@ const UsersListScreen = (props) => {
   };
 
   const handleBlur = async () => {
-    console.log('10-handleBlur');
+    //console.log('10-handleBlur');
     if (!props.searchUser && isKeyboardVisible) {
-      console.log('101-handleBlur');
+      //console.log('101-handleBlur');
       setIsLoading(true);
       props.setIsSearchVisible(false);
       await dispatch(getUsersByPage(1));

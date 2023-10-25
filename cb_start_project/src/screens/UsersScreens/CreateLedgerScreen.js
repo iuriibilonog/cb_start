@@ -56,7 +56,7 @@ const AddLedgerScreen = (props) => {
       // await dispatch(putApiKey({ id: props.route.params.id, name: value }));
       // props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
     } catch (err) {
-      console.log('err', err);
+      console.warn('Error:', err);
     }
   };
 

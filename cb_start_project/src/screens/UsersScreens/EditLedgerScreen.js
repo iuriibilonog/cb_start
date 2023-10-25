@@ -34,7 +34,7 @@ const EditLedgerScreen = (props) => {
         id: props.route.params.data.apiKeyId,
       });
     } catch (err) {
-      console.log('err', err);
+      console.warn('Error:', err);
     }
   };
 

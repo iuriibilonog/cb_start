@@ -172,6 +172,12 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       timezone: timezones[0].value,
       currency: currencies[0].value,
     }));
+    handleUpload({
+      startDate: { dateString: initialDateString, timestamp: initialDateMsec },
+      endDate: { dateString: initialDateString, timestamp: initialDateMsec },
+      timezone: timezones[0].value,
+      currency: currencies[0].value,
+    });
   }, []);
 
   const checkDatesError = (startDate, endDate) => {
@@ -206,7 +212,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       if (noOverDates) {
         checkDatesError(inputsData.startDate, inputsData.endDate);
       } else {
-        handleUpload();
         setErrors({});
       }
     } else {
@@ -276,32 +281,33 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
     }
   };
 
-  const testReq = async () => {
-    // api.get('https://httpstat.us/500');
-    await AsyncStorage.setItem(
-      'token',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbGVJZCI6MywiZW1haWwiOiJkZXNpZ25lckFkbWluQGRlc2lnbmVyLmNvbSIsImlhdCI6MTY5NzE5NzQ0NiwiZXhwIjoxNjk3MjAxMDQ2fQ.bWCU8oVvk97Qi-cSYyeHNTaRd3AZlwvbQg2pzhcnot4'
-    );
-    await AsyncStorage.setItem(
-      'refresh',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbGVJZCI6MywiZW1haWwiOiJkZXNpZ25lckFkbWluQGRlc2lnbmVyLmNvbSIsImlhdCI6MTY5NzE5NzQ0NiwiZXhwIjoxNjk3MjAxMDQ2fQ.bWCU8oVvk97Qi-cSYyeHNTaRd3AZlwvbQg2pzhcnot4'
-    );
-  };
-  const handleUpload = async () => {
+  const handleUpload = async (data) => {
     setIsLoading(true);
-    setChartUploadCurrence(inputsData.currency);
-    const result = {
-      ...inputsData,
-      startDate: inputsData.startDate.dateString,
-      endDate: inputsData.endDate.dateString,
-      timezone: timezones.find((item) => item.value === inputsData.timezone).code,
-    };
+    setChartUploadCurrence(data ? 'EUR' : inputsData.currency);
+    let result = {};
+    if (data) {
+      result = {
+        ...data,
+        startDate: data.startDate.dateString,
+        endDate: data.endDate.dateString,
+        timezone: timezones.find((item) => item.value === data.timezone).code,
+      };
+    } else {
+      result = {
+        ...inputsData,
+        startDate: inputsData.startDate.dateString,
+        endDate: inputsData.endDate.dateString,
+        timezone: timezones.find((item) => item.value === inputsData.timezone).code,
+      };
+    }
+
+    console.log('result', result);
 
     try {
       const approved = await dispatch(
         conversionLastDaysData({ chartData: result, type: 'approved' })
       ).unwrap();
-      console.log('approved', approved);
+
       setApprovedDataChart(approved);
     } catch (error) {
       setIsLoading(false);
@@ -318,7 +324,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       const declined = await dispatch(
         conversionLastDaysData({ chartData: result, type: 'declined' })
       ).unwrap();
-      console.log('declined', declined);
+
       setDeclinedDataChart(declined);
     } catch (error) {
       setIsLoading(false);
@@ -335,7 +341,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       const processing = await dispatch(
         conversionLastDaysData({ chartData: result, type: 'processing' })
       ).unwrap();
-      console.log('processing', processing);
+
       setProcessingDataChart(processing);
       setIsLoading(false);
     } catch (error) {
@@ -409,9 +415,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
               <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={testReq}>
-            <Text>999</Text>
-          </TouchableOpacity>
           <View style={styles.bankContainer}>
             <SimpleText style={styles.smallTitle}>
               <FormattedMessage id={'dashboard.banks'} />
@@ -719,7 +722,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                         // isFullWidth
                         animated={false}
                         onSelect={(index, option) => {
-                          // console.log(index, '<>', option);
                           if (errors.timezone) {
                             setErrors({});
                           }
@@ -792,7 +794,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                         // isFullWidth
                         animated={false}
                         onSelect={(index, option) => {
-                          // console.log(index, '<>', option);
                           if (errors.currency) {
                             setErrors({});
                           }
@@ -851,7 +852,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                     )}
                   </View>
                 </View>
-                <TouchableOpacity activeOpacity={0.5} onPress={handleUpload}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => handleUpload()}>
                   <SimpleButton
                     text={'common.upload'}
                     style={{ width: width - 90, marginHorizontal: 25 }}

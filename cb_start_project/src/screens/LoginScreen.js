@@ -19,11 +19,11 @@ import {
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin, removeAuthError } from 'src/redux/user/operations';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { checkValidation } from 'src/utils/errorsValidation';
 
 import { FormattedMessage } from 'react-intl';
 import SimpleText from '../components/atoms/SimpleText';
-import { getUserErrors } from 'src/redux/user/selectors';
+
 import { showMessage } from 'react-native-flash-message';
 
 const logoBack = require('src/images/logo_back.png');
@@ -36,14 +36,14 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
   const [inputValue, setInputValue] = useState('');
   const [isPassShown, setIsPassShown] = useState(false);
   const [animation, setAnimation] = useState(new Animated.Value(0));
+  const [errors, setErrors] = useState({});
 
   const dispatch = useDispatch();
 
-  const authErr = useSelector(getUserErrors);
-
   useEffect(() => {
-    if (authErr) {
-      const msg = JSON.parse(authErr.message);
+    if (errors.message) {
+      console.log('errors', errors);
+      const msg = JSON.parse(errors.message);
       startAnimation();
 
       showMessage({
@@ -55,11 +55,7 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
         duration: '3000',
       });
     }
-  }, [authErr]);
-
-  useEffect(() => {
-    if (authErr) dispatch(removeAuthError());
-  }, [inputValue]);
+  }, [errors]);
 
   const startAnimation = () => {
     animation.setValue(0);
@@ -85,12 +81,21 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
   };
 
   const handleSubmit = async () => {
+    const validationParams = ['email', 'password'];
+    const validationAnswer = checkValidation(inputValue, validationParams);
+
+    if (Object.keys(validationAnswer).length > 0) {
+      setErrors(validationAnswer);
+      return;
+    }
+
     try {
       const data = await dispatch(
-        userLogin({ email: 'designerAdmin@designer.com', password: '12345' })
-      );
+        userLogin({ email: inputValue?.email, password: inputValue?.password })
+      ).unwrap();
     } catch (error) {
-      console.warn((err) => 'Error:', error);
+      setErrors({ message: error?.response?.data?.message });
+      // console.warn('Error99:', error.response.data);
     }
 
     Keyboard.dismiss();
@@ -101,6 +106,7 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
   };
 
   const handleInput = (data) => {
+    setErrors({});
     setInputValue((prev) => ({ ...prev, ...data }));
   };
 
@@ -125,24 +131,29 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
                 {(msg) => (
                   <TextInput
                     style={
-                      authErr
+                      errors.email || errors.message
                         ? { ...styles.inputWithError, marginBottom: 30 }
                         : { ...styles.input, marginBottom: 30 }
                     }
                     placeholder={msg[0]}
                     placeholderTextColor={'grey'}
-                    value={inputValue?.name}
+                    value={inputValue?.email}
                     onChangeText={(text) => handleInput({ email: text })}
                   />
                 )}
               </FormattedMessage>
+              {errors['email'] && (
+                <SimpleText style={styles.error}>
+                  <FormattedMessage id={`errors.${errors['email']}`} />
+                </SimpleText>
+              )}
               <View style={styles.passInputWrapper}>
                 <FormattedMessage id={'common.password'}>
                   {(msg) => {
                     return (
                       <TextInput
                         style={
-                          authErr
+                          errors.password || errors.message
                             ? { ...styles.inputWithError, marginBottom: 60 }
                             : { ...styles.input, marginBottom: 60 }
                         }
@@ -155,6 +166,11 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
                     );
                   }}
                 </FormattedMessage>
+                {errors['password'] && (
+                  <SimpleText style={styles.error}>
+                    <FormattedMessage id={`errors.${errors['password']}`} />
+                  </SimpleText>
+                )}
               </View>
               <Pressable
                 onPress={handlePassShowBtn}
@@ -256,6 +272,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   submitTxt: { fontSize: 20, fontWeight: '600', letterSpacing: 1 },
+  error: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    color: '#FF5A5A',
+    marginTop: 5,
+    fontSize: 12,
+    letterSpacing: 1,
+  },
 });
 
 export default RegistrationScreen;

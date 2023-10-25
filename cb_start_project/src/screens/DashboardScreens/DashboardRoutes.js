@@ -81,7 +81,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       });
 
       const fr = new FileReader();
-      // console.log('fr', fr);
+      
 
       fr.onload = async () => {
         if (Platform.OS === 'ios') {
@@ -421,6 +421,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       <DashboardStack.Screen
         options={{
           headerShown: false,
+          tabBarStyle: { display: 'none' },
         }}
         name="ErrorsScreen"
         component={ErrorsScreen}

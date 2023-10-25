@@ -55,7 +55,7 @@ const DeleteScreen = (props) => {
           type: 'danger',
         });
       }, 1000);
-      console.log('err', err);
+      console.warn('Error:', err);
     }
   };
 
