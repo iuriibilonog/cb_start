@@ -935,10 +935,12 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                 </TouchableOpacity>
               </View>
             )}
+            {console.log('inputsData', inputsData)}
             <SimpleLineChart
               approvedDataChart={approvedDataChart}
               declinedDataChart={declinedDataChart}
               processingDataChart={processingDataChart}
+              currency={inputsData?.currency}
             />
           </View>
         </View>

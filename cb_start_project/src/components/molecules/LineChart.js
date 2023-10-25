@@ -30,13 +30,27 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
   const [isProccesingActive, setIsProccesingActive] = useState(true);
   const [yAxisLabelTexts, setYAxisLabelTexts] = useState({});
 
-  const test = [
-    { date: '2023-10-20', currency: 'EUR', sum: 800 },
-    { date: '2023-10-21', currency: 'EUR', sum: 6 },
-    { date: '2023-10-22', currency: 'EUR', sum: 4 },
-    { date: '2023-10-23', currency: 'EUR', sum: 3 },
-    { date: '2023-10-24', currency: 'EUR', sum: 1 },
-  ];
+  // const test = [
+  //   { date: '2023-10-20', currency: 'EUR', sum: 90000000 },
+  //   { date: '2023-10-21', currency: 'EUR', sum: 6 },
+  //   { date: '2023-10-22', currency: 'EUR', sum: 4 },
+  //   { date: '2023-10-23', currency: 'EUR', sum: 1000 },
+  //   { date: '2023-10-24', currency: 'EUR', sum: 1 },
+  // ];
+  // const test2 = [
+  //   { date: '2023-10-20', currency: 'EUR', sum: 800 },
+  //   { date: '2023-10-21', currency: 'EUR', sum: 6 },
+  //   { date: '2023-10-22', currency: 'EUR', sum: 40 },
+  //   { date: '2023-10-23', currency: 'EUR', sum: 3 },
+  //   { date: '2023-10-24', currency: 'EUR', sum: 100 },
+  // ];
+  // const test3 = [
+  //   { date: '2023-10-20', currency: 'EUR', sum: 800 },
+  //   { date: '2023-10-21', currency: 'EUR', sum: 6 },
+  //   { date: '2023-10-22', currency: 'EUR', sum: 4 },
+  //   { date: '2023-10-23', currency: 'EUR', sum: 30 },
+  //   { date: '2023-10-24', currency: 'EUR', sum: 1 },
+  // ];
 
   const getMaxValue = (arr, type) => {
     // console.log('arr', arr);
@@ -67,9 +81,9 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
     const approvedMax = getMaxValue(approvedDataChart, 'approved');
     const declinedMax = getMaxValue(declinedDataChart, 'declined');
     const processingMax = getMaxValue(processingDataChart, 'processing');
-    // const approvedMax = getMaxValue(/* approvedDataChart */ test);
-    // const declinedMax = getMaxValue([] /* declinedDataChart */);
-    // const processingMax = getMaxValue([] /* processingDataChart */);
+    // const approvedMax = getMaxValue(test, 'approved');
+    // const declinedMax = getMaxValue(test2, 'declined');
+    // const processingMax = getMaxValue(test3, 'processing');
     const maxValue = Math.max(approvedMax, declinedMax, processingMax);
     setMaxChartValue(maxValue);
 
@@ -91,9 +105,12 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
       setYAxisLabelTexts(labelsRow);
     }
 
-    createApprovedDataForChart(test /* approvedDataChart */, 'approved');
-    // createApprovedDataForChart(declinedDataChart, 'declined');
-    // createApprovedDataForChart(processingDataChart, 'processing');
+    createApprovedDataForChart(approvedDataChart, 'approved');
+    createApprovedDataForChart(declinedDataChart, 'declined');
+    createApprovedDataForChart(processingDataChart, 'processing');
+    // createApprovedDataForChart(test, 'approved');
+    // createApprovedDataForChart(test2, 'declined');
+    // createApprovedDataForChart(test3, 'processing');
   }, [approvedDataChart, declinedDataChart, processingDataChart]);
 
   const createApprovedDataForChart = (data, type) => {
@@ -125,6 +142,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
               style={{
                 backgroundColor:
                   type === 'approved' ? '#06BBB1' : type === 'declined' ? '#FF5A5A' : '#F2CE4D',
+                opacity: type === 'approved' && !isApprovedActive ? 0 : 1,
                 paddingHorizontal: 5,
                 paddingVertical: 2,
                 borderRadius: 4,
@@ -145,6 +163,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
         // console.log('approved', lineData);
 
         setApprovedData(lineData);
+
         break;
       case 'declined':
         // console.log('declined', lineData);
@@ -159,6 +178,11 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
         break;
     }
   };
+
+  useEffect(() => {
+    createApprovedDataForChart(approvedDataChart, 'approved');
+    // createApprovedDataForChart(test, 'approved');
+  }, [isApprovedActive]);
 
   const handleChangeChartLines = (type) => {
     switch (type) {
@@ -267,10 +291,11 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
       {aprovedData.length > 0 && declinedData.length >= 0 && processingData.length >= 0 && (
         <View>
           <LineChart
-            data={isApprovedActive ? aprovedData : []}
+            data={aprovedData}
             data2={isDeclinedActive ? declinedData : []}
             data3={isProccesingActive ? processingData : []}
             curved
+            hideDataPoints1={!isApprovedActive}
             // yAxisLabelSuffix={maxChartValue > 999 ? 'k' : ''}
             // rotateLabel
             showFractionalValues={maxChartValue > 999 && maxChartValue < 9999 ? true : false}
@@ -279,6 +304,9 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
             showVerticalLines
             width={aprovedData.length !== 1 ? false : Dimensions.get('window').width - 100}
             yAxisLabelTexts={yAxisLabelTexts}
+            // yAxisLabelWidth={100}
+            // yAxisLabelContainerStyle={{ paddingLeft: 5 }}
+            yAxisTextStyle={{ marginLeft: -20 }}
             spacing={
               aprovedData.length !== 1
                 ? (Dimensions.get('window').width - 130) / (aprovedData.length - 1)
@@ -289,7 +317,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
             }
             // initialSpacing={0}
             maxValue={maxChartValue}
-            color1="#06BBB1"
+            color1={isApprovedActive ? '#06BBB1' : 'transparent'}
             color2="#FF5A5A"
             color3="#F2CE4D"
             pointerConfig={{
