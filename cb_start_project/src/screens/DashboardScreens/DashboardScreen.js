@@ -185,7 +185,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
 
   const checkDatesError = (startDate, endDate) => {
     const diffInDays = (endDate.timestamp - startDate.timestamp) / 86400000;
-    if (Math.abs(diffInDays) > 5) {
+    if (Math.abs(diffInDays) > 4) {
       setErrors((prev) => ({ ...prev, endDate: 'date_interval' }));
     } else {
       setErrors({});
@@ -369,6 +369,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       default:
         break;
     }
+    setIsCalendarVisible(false);
   };
 
   const handleDatePickerData = (data, currentPicker) => {
