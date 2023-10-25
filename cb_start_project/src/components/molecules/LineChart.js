@@ -21,12 +21,13 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
   const [declinedData, setDeclinedData] = useState([]);
   const [processingData, setProcessingData] = useState([]);
   const [maxChartValue, setMaxChartValue] = useState(100);
+  const [yAxisLabelTexts, setYAxisLabelTexts] = useState({});
 
   const test = [
-    { date: '2023-10-20', currency: 'EUR', sum: 5 },
-    { date: '2023-10-21', currency: 'EUR', sum: 100 },
-    { date: '2023-10-22', currency: 'EUR', sum: 0 },
-    { date: '2023-10-23', currency: 'EUR', sum: 10 },
+    { date: '2023-10-20', currency: 'EUR', sum: 800 },
+    { date: '2023-10-21', currency: 'EUR', sum: 6 },
+    { date: '2023-10-22', currency: 'EUR', sum: 4 },
+    { date: '2023-10-23', currency: 'EUR', sum: 3 },
     { date: '2023-10-24', currency: 'EUR', sum: 1 },
   ];
 
@@ -40,21 +41,40 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
   };
 
   useEffect(() => {
-    const approvedMax = getMaxValue(approvedDataChart);
-    const declinedMax = getMaxValue(declinedDataChart);
-    const processingMax = getMaxValue(processingDataChart);
+    const approvedMax = getMaxValue(/* approvedDataChart */ test);
+    const declinedMax = getMaxValue([] /* declinedDataChart */);
+    const processingMax = getMaxValue([] /* processingDataChart */);
     const maxValue = Math.max(approvedMax, declinedMax, processingMax);
     setMaxChartValue(maxValue);
 
-    createApprovedDataForChart(approvedDataChart, 'approved');
-    createApprovedDataForChart(declinedDataChart, 'declined');
-    createApprovedDataForChart(processingDataChart, 'processing');
+    if (maxValue > 999) {
+      const labelsRow = ['0k'];
+      const step = maxValue / 10000;
+      for (let i = 1; i <= 10; i++) {
+        labelsRow.push(
+          '' + maxValue > 9999 ? (step * i).toFixed(0) + 'k' : (step * i).toFixed(1) + 'k'
+        );
+      }
+      setYAxisLabelTexts(labelsRow);
+    } else {
+      const labelsRow = ['0'];
+      const step = maxValue / 10;
+      for (let i = 1; i <= 10; i++) {
+        labelsRow.push('' + (step * i).toFixed(0));
+      }
+      setYAxisLabelTexts(labelsRow);
+    }
+
+    createApprovedDataForChart(test /* approvedDataChart */, 'approved');
+    // createApprovedDataForChart(declinedDataChart, 'declined');
+    // createApprovedDataForChart(processingDataChart, 'processing');
   }, [approvedDataChart, declinedDataChart, processingDataChart]);
 
   const createApprovedDataForChart = (data, type) => {
     const lineData = data.map((item) => {
       const n = new Date(item.date);
       const options = { month: 'short', day: 'numeric' };
+      console.log(item.sum);
       const dataObj = {
         value: item.sum,
         label: new Intl.DateTimeFormat('en-US', options).format(n),
@@ -169,12 +189,14 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
             data2={declinedData}
             data3={processingData}
             curved
+            // yAxisLabelSuffix={maxChartValue > 999 ? 'k' : ''}
             // rotateLabel
+            showFractionalValues={maxChartValue > 999 && maxChartValue < 9999 ? true : false}
             isAnimated={true}
             height={250}
             showVerticalLines
             width={aprovedData.length !== 1 ? false : Dimensions.get('window').width - 100}
-            // yAxisLabelTexts={['A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E']}
+            yAxisLabelTexts={yAxisLabelTexts}
             spacing={
               aprovedData.length !== 1
                 ? (Dimensions.get('window').width - 130) / (aprovedData.length - 1)
