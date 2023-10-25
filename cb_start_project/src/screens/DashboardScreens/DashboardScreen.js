@@ -287,6 +287,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
     );
   };
   const handleUpload = async () => {
+    setIsLoading(true);
     const result = {
       ...inputsData,
       startDate: inputsData.startDate.dateString,
@@ -301,6 +302,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       console.log('approved', approved);
       setApprovedDataChart(approved);
     } catch (error) {
+      setIsLoading(false);
       showMessage({
         message: `Somthing went wrong! Approved conversion of last days didn't upload!`,
         titleStyle: {
@@ -317,6 +319,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       console.log('declined', declined);
       setDeclinedDataChart(declined);
     } catch (error) {
+      setIsLoading(false);
       showMessage({
         message: `Somthing went wrong! Declined conversion of last days didn't upload!`,
         titleStyle: {
@@ -332,7 +335,9 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       ).unwrap();
       console.log('processing', processing);
       setProcessingDataChart(processing);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       showMessage({
         message: `Somthing went wrong! Processing conversion of last days didn't upload!`,
         titleStyle: {
@@ -924,7 +929,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   conversionWrapper: { marginTop: 90, marginBottom: 70 },
-  conversionInputsWrapper: { marginTop: 30, marginBottom:4 },
+  conversionInputsWrapper: { marginTop: 30, marginBottom: 4 },
   itemWrapper: { marginBottom: 26 },
   itemTitle: { marginBottom: 12 },
   itemTextTitle: { fontSize: 14 },
