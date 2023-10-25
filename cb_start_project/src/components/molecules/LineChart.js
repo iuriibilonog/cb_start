@@ -8,6 +8,7 @@ import {
   ScrollView,
   Platform,
   Dimensions,
+  Pressable,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 
@@ -21,28 +22,50 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
   const [declinedData, setDeclinedData] = useState([]);
   const [processingData, setProcessingData] = useState([]);
   const [maxChartValue, setMaxChartValue] = useState(100);
+  const [conversionApproved, setConversionApproved] = useState(0);
+  const [conversionDeclined, setConversionDeclined] = useState(0);
+  const [conversionProcessing, setConversionProcessing] = useState(0);
+  const [isApprovedActive, setIsApprovedActive] = useState(true);
+  const [isDeclinedActive, setIsDeclinedActive] = useState(true);
+  const [isProccesingActive, setIsProccesingActive] = useState(true);
 
-  const test = [
-    { date: '2023-10-20', currency: 'EUR', sum: 5 },
-    { date: '2023-10-21', currency: 'EUR', sum: 100 },
+  const test1 = [
+    { date: '2023-10-20', currency: 'EUR', sum: '' },
+    { date: '2023-10-21', currency: 'EUR', sum: '' },
     { date: '2023-10-22', currency: 'EUR', sum: 0 },
     { date: '2023-10-23', currency: 'EUR', sum: 10 },
     { date: '2023-10-24', currency: 'EUR', sum: 1 },
   ];
 
-  const getMaxValue = (arr) => {
+  const getMaxValue = (arr, type) => {
     // console.log('arr', arr);
     let res = 0;
+    let conversionTotal = 0;
     arr.forEach((item) => {
       if (item.sum > res) res = item.sum;
+      conversionTotal = conversionTotal + item.sum;
     });
+    switch (type) {
+      case 'approved':
+        setConversionApproved(conversionTotal);
+        break;
+      case 'declined':
+        setConversionDeclined(conversionTotal);
+        break;
+      case 'processing':
+        setConversionProcessing(conversionTotal);
+        break;
+
+      default:
+        break;
+    }
     return res;
   };
 
   useEffect(() => {
-    const approvedMax = getMaxValue(approvedDataChart);
-    const declinedMax = getMaxValue(declinedDataChart);
-    const processingMax = getMaxValue(processingDataChart);
+    const approvedMax = getMaxValue(approvedDataChart, 'approved');
+    const declinedMax = getMaxValue(declinedDataChart, 'declined');
+    const processingMax = getMaxValue(processingDataChart, 'processing');
     const maxValue = Math.max(approvedMax, declinedMax, processingMax);
     setMaxChartValue(maxValue);
 
@@ -97,6 +120,7 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
     switch (type) {
       case 'approved':
         // console.log('approved', lineData);
+
         setApprovedData(lineData);
         break;
       case 'declined':
@@ -113,6 +137,24 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
     }
   };
 
+  const handleChangeChartLines = (type) => {
+    switch (type) {
+      case 'approved':
+        setIsApprovedActive(!isApprovedActive);
+        break;
+      case 'declined':
+        setIsDeclinedActive(!isDeclinedActive);
+        break;
+      case 'processing':
+        setIsProccesingActive(!isProccesingActive);
+        break;
+
+      default:
+        break;
+    }
+    console.log('type', type);
+  };
+
   return (
     <View style={{ marginVertical: 40 }}>
       <View style={styles.schartBar}>
@@ -121,42 +163,79 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
           <SimpleText>
             <FormattedMessage id={'chart.approved_total'} />
           </SimpleText>
-          <SimpleText>9999999</SimpleText>
+          <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
+            {conversionApproved}
+          </SimpleText>
+          {conversionApproved !== 0 && (
+            <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
+              {`(${((conversionApproved * 100) / (conversionApproved + conversionDeclined)).toFixed(
+                2
+              )}%)`}
+            </SimpleText>
+          )}
         </View>
         <View style={{ ...styles.barTitleWrapper, marginBottom: 12 }}>
           <View style={{ ...styles.marker, backgroundColor: '#FF5A5A' }}></View>
           <SimpleText>
             <FormattedMessage id={'chart.declined_total'} />
           </SimpleText>
+          <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
+            {conversionDeclined}
+          </SimpleText>
+          {conversionDeclined !== 0 && (
+            <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
+              {`(${((conversionDeclined * 100) / (conversionApproved + conversionDeclined)).toFixed(
+                2
+              )}%)`}
+            </SimpleText>
+          )}
         </View>
         <View style={{ ...styles.barTitleWrapper }}>
           <View style={{ ...styles.marker, backgroundColor: '#F2CE4D' }}></View>
           <SimpleText>
             <FormattedMessage id={'chart.processing_total'} />
           </SimpleText>
+          <SimpleText style={{ marginLeft: 5, fontFamily: 'Mont_B' }}>
+            {conversionProcessing}
+          </SimpleText>
         </View>
       </View>
       <View style={styles.chartBtnsWrapper}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleChangeChartLines('approved')}>
           <View style={styles.barTitleWrapper}>
-            <View style={{ ...styles.marker, backgroundColor: '#06BBB1' }}></View>
-            <SimpleText>
+            <View
+              style={{
+                ...styles.marker,
+                backgroundColor: isApprovedActive ? '#06BBB1' : 'rgba(6, 187, 177, 0.2)',
+              }}
+            ></View>
+            <SimpleText style={{ opacity: isApprovedActive ? 1 : 0.2 }}>
               <FormattedMessage id={'chart.approved'} />
             </SimpleText>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleChangeChartLines('declined')}>
           <View style={styles.barTitleWrapper}>
-            <View style={{ ...styles.marker, backgroundColor: '#FF5A5A' }}></View>
-            <SimpleText>
+            <View
+              style={{
+                ...styles.marker,
+                backgroundColor: isDeclinedActive ? '#FF5A5A' : 'rgba(255, 90, 90, 0.2)',
+              }}
+            ></View>
+            <SimpleText style={{ opacity: isDeclinedActive ? 1 : 0.2 }}>
               <FormattedMessage id={'chart.declined'} />
             </SimpleText>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleChangeChartLines('processing')}>
           <View style={styles.barTitleWrapper}>
-            <View style={{ ...styles.marker, backgroundColor: '#F2CE4D' }}></View>
-            <SimpleText>
+            <View
+              style={{
+                ...styles.marker,
+                backgroundColor: isProccesingActive ? '#F2CE4D' : 'rgba(242, 206, 77, 0.2)',
+              }}
+            ></View>
+            <SimpleText style={{ opacity: isProccesingActive ? 1 : 0.2 }}>
               <FormattedMessage id={'chart.processing'} />
             </SimpleText>
           </View>
@@ -165,9 +244,9 @@ const SimpleLineChart = ({ approvedDataChart, declinedDataChart, processingDataC
       {aprovedData.length > 0 && declinedData.length >= 0 && processingData.length >= 0 && (
         <View>
           <LineChart
-            data={aprovedData}
-            data2={declinedData}
-            data3={processingData}
+            data={isApprovedActive ? aprovedData : []}
+            data2={isDeclinedActive ? declinedData : []}
+            data3={isProccesingActive ? processingData : []}
             curved
             // rotateLabel
             isAnimated={true}
@@ -337,9 +416,10 @@ const styles = StyleSheet.create({
   chartBtnsWrapper: {
     marginTop: 50,
     marginBottom: 20,
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    zIndex: 1,
   },
 });
 
