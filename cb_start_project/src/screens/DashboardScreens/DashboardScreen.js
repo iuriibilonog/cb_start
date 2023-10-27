@@ -38,8 +38,15 @@ const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
 
 const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
-  const initialDateString = new Date().toISOString().slice(0, 10);
-  const initialDateMsec = new Date(`${initialDateString}T00:00:00.000Z`).getTime();
+  const initialStartDateString = new Date(new Date().getTime() - 86400000 * 4).toISOString();
+  const initialStartDateMsec = new Date(initialStartDateString).getTime();
+  const initialEndDateString = new Date().toISOString();
+  const initialEndDateMsec = new Date(initialEndDateString).getTime();
+
+  // const initialStartDateString = new Date().toISOString().slice(0, 10);
+  // const initialStartDateMsec = new Date(`${initialStartDateString}T00:00:00.000Z`).getTime();
+  // const initialEndDateString = new Date().toISOString().slice(0, 10);
+  // const initialEndDateMsec = new Date(`${initialEndDateString}T00:00:00.000Z`).getTime();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState();
   const [selectedBank, setSelectedBank] = useState('0');
@@ -167,14 +174,14 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
     getBanks();
     setInputsData((prev) => ({
       ...prev,
-      startDate: { dateString: initialDateString, timestamp: initialDateMsec },
-      endDate: { dateString: initialDateString, timestamp: initialDateMsec },
+      startDate: { dateString: initialStartDateString, timestamp: initialStartDateMsec },
+      endDate: { dateString: initialEndDateString, timestamp: initialEndDateMsec },
       timezone: timezones[0].value,
       currency: currencies[0].value,
     }));
     handleUpload({
-      startDate: { dateString: initialDateString, timestamp: initialDateMsec },
-      endDate: { dateString: initialDateString, timestamp: initialDateMsec },
+      startDate: { dateString: initialStartDateString, timestamp: initialStartDateMsec },
+      endDate: { dateString: initialEndDateString, timestamp: initialEndDateMsec },
       timezone: timezones[0].value,
       currency: currencies[0].value,
     });
@@ -182,7 +189,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
 
   const checkDatesError = (startDate, endDate) => {
     const diffInDays = (endDate.timestamp - startDate.timestamp) / 86400000;
-    if (Math.abs(diffInDays) > 4) {
+    if (Math.abs(diffInDays) > 5) {
       setErrors((prev) => ({ ...prev, endDate: 'date_interval' }));
     } else {
       setErrors({});
@@ -239,8 +246,8 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
 
   const checkConversionOfPeriod = async () => {
     if (
-      balancePeriod.startDate !== initialDateString ||
-      balancePeriod.endDate !== initialDateString
+      balancePeriod.startDate !== initialStartDateString ||
+      balancePeriod.endDate !== initialEndDateString
     ) {
       setIsLoading(true);
       const bankName = banksNames[selectedBank] || initialBank;
