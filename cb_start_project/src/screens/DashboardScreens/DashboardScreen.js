@@ -70,7 +70,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
   const [isTimezoneDropdownOpen, setIsTimezoneDropdownOpen] = useState(false);
   const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
-  const [isGroupingTypeDropdownOpen, setIsGroupingTypeDropdownOpen] = useState(false);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [isConversionVisible, setIsConversionVisible] = useState(false);
   const [approvedDataChart, setApprovedDataChart] = useState([]);
@@ -83,7 +82,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
   const refTimezone = useRef();
   const refCurrency = useRef();
   const refStatus = useRef();
-  // refGroupingTypes
 
   const timezones = [
     { value: 'UTC0', code: 'Etc/UTC' },
@@ -123,8 +121,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
     { value: 'INR' },
     { value: 'BRL' },
   ];
-
-  const groupingTypes = [{ value: 'ApiKey' }, { value: 'Bank' }, { value: 'All' }];
 
   let approvedPercent, declinedPercent;
   if (approvedValue === 0 && declinedValue === 0) {
@@ -182,14 +178,12 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       endDate: { dateString: initialEndDateString, timestamp: initialEndDateMsec },
       timezone: timezones[0].value,
       currency: currencies[0].value,
-      groupingType: groupingTypes[0].value,
     }));
     handleUpload({
       startDate: { dateString: initialStartDateString, timestamp: initialStartDateMsec },
       endDate: { dateString: initialEndDateString, timestamp: initialEndDateMsec },
       timezone: timezones[0].value,
       currency: currencies[0].value,
-      groupingType: groupingTypes[0].value,
     });
   }, []);
 
@@ -864,78 +858,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                       />
                     )}
                   </View>
-                </View>
-                <View style={styles.itemWrapper}>
-                  <View style={styles.itemTitle}>
-                    <SimpleText style={styles.itemTextTitle}>
-                      <FormattedMessage id={'dashboard.grouping_type'} />
-                    </SimpleText>
-                  </View>
-                  {groupingTypes && inputsData.groupingType && (
-                    <ModalDropdown
-                      // ref={refGroupingTypes}
-                      options={groupingTypes.map((item) => item.value)}
-                      defaultIndex={0}
-                      defaultValue={inputsData.groupingType}
-                      // isFullWidth
-                      animated={false}
-                      onSelect={(index, option) => {
-                        if (errors.groupingType) {
-                          setErrors({});
-                        }
-                        setInputsData((prev) => ({ ...prev, groupingType: option }));
-                      }}
-                      textStyle={{
-                        fontSize: 16,
-                        fontFamily: 'Mont',
-                        fontWeight: '600',
-                        lineHeight: 16,
-                        paddingRight: 25,
-                      }}
-                      style={{
-                        backgroundColor: '#F4F4F4',
-                        paddingHorizontal: 16,
-                        paddingVertical: 12,
-                        borderRadius: 2,
-                        justifyContent: 'space-between',
-
-                        width: width - 40,
-                      }}
-                      dropdownStyle={{
-                        marginLeft: -16,
-                        marginTop: 14,
-                        paddingLeft: 11,
-                        paddingRight: 2,
-                        width: width - 40,
-                        backgroundColor: '#F4F4F4',
-                        borderWidth: 0,
-                        borderRadius: 2,
-                        height: groupingTypes.length > 5 ? 175 : groupingTypes.length * 35,
-                      }}
-                      dropdownTextStyle={{
-                        fontSize: 16,
-                        lineHeight: 16,
-                        fontWeight: '600',
-                        fontFamily: 'Mont',
-                        backgroundColor: '#F4F4F4',
-                        color: 'rgba(38, 38, 38, 0.50)',
-                      }}
-                      renderRightComponent={() => (
-                        <Image
-                          source={
-                            isGroupingTypeDropdownOpen
-                              ? require('src/images/arrow_up.png')
-                              : require('src/images/arrow_down.png')
-                          }
-                          style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                        ></Image>
-                      )}
-                      renderRowProps={{ activeOpacity: 1 }}
-                      renderSeparator={() => <></>}
-                      onDropdownWillShow={() => setIsGroupingTypeDropdownOpen(true)}
-                      onDropdownWillHide={() => setIsGroupingTypeDropdownOpen(false)}
-                    />
-                  )}
                 </View>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => handleUpload()}>
                   <SimpleButton
