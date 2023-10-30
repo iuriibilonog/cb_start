@@ -171,13 +171,13 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
                     <FormattedMessage id={`errors.${errors['password']}`} />
                   </SimpleText>
                 )}
+                <Pressable
+                  onPress={handlePassShowBtn}
+                  style={{ position: 'absolute', right: 20, top: 13 }}
+                >
+                  <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
+                </Pressable>
               </View>
-              <Pressable
-                onPress={handlePassShowBtn}
-                style={{ position: 'absolute', right: 20, top: 13 }}
-              >
-                <Image source={isPassShown ? eyeOff : eyeOn} style={{ width: 25, height: 25 }} />
-              </Pressable>
             </Animated.View>
             {/* <Pressable
             onPress={() => setIsRememberMe((prev) => !prev)}
