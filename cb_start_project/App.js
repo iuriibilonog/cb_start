@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
