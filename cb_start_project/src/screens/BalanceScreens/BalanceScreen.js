@@ -324,7 +324,7 @@ const BalanceScreen = (props) => {
               }}
               dropdownStyle={{
                 marginLeft: -16,
-                marginTop: Platform.OS === 'ios' ? 14 : -14,
+                marginTop: 14,
                 paddingLeft: 11,
                 paddingRight: 2,
                 width: width - 40,
@@ -394,7 +394,7 @@ const BalanceScreen = (props) => {
                 }}
                 dropdownStyle={{
                   marginLeft: -16,
-                  marginTop: Platform.OS === 'ios' ? 14 : -14,
+                  marginTop: 14,
                   paddingLeft: 11,
                   paddingRight: 2,
                   width: width - 40,
@@ -523,7 +523,7 @@ const BalanceScreen = (props) => {
                 }}
                 dropdownStyle={{
                   marginLeft: -16,
-                  marginTop: Platform.OS === 'ios' ? 14 : -14,
+                  marginTop: 14,
                   paddingLeft: 11,
                   paddingRight: 2,
                   width: width - 40,

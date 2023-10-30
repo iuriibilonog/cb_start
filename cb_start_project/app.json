@@ -20,14 +20,14 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#242834"
       },
-      "package": "com.iuriibilonog.cb_start_project"
+      "package": "com.artowod.cb_start_project"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "0500722d-4e96-4ccf-96f1-14e4bcaf1114"
+        "projectId": "415d0acf-64b6-43f5-a9af-2e4685a677f4"
       }
     }
   }

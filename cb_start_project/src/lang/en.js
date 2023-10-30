@@ -34,6 +34,7 @@ const lang = {
   'dashboard.no_transactions': 'No transactions for this date',
   'dashboard.conversion.last_days': 'Conversion last days',
   'dashboard.max_days': 'Max 5 days',
+  'dashboard.grouping_type': 'Grouping type',
 
   //===transactions===
   'transactions.transactions': 'Transactions',
