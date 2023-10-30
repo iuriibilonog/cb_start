@@ -110,9 +110,10 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
         responseType: 'blob',
       }
     );
-
+    console.log('DATA', data);
     return data;
   } catch (error) {
+    console.log('ERRORRR', error);
     return thunkAPI.rejectWithValue(error);
   }
 });
@@ -376,7 +377,6 @@ export const confirmUserPaymentData = createAsyncThunk(
 
       return data;
     } catch (error) {
-      
       return thunkAPI.rejectWithValue(error);
     }
   }

@@ -136,7 +136,13 @@ const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPaymen
                 : {}
             }
           >
-            <View style={!isUseAcive ? { opacity: 0.4, pointerEvents: 'none' } : {}}>
+            {/* <View style={!isUseAcive ? { opacity: 0.4, pointerEvents: 'none' } : {}}> */}
+            <View
+              style={{
+                opacity: !isUseAcive ? 0.4 : 1,
+                pointerEvents: !isUseAcive ? 'none' : 'auto',
+              }}
+            >
               <View
                 style={{
                   ...styles.tableRow,
@@ -1099,7 +1105,7 @@ const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPaymen
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 opacity: isUseAcive ? 1 : 0.4,
-                pointerEvents: isUseAcive ? 'all' : 'none',
+                pointerEvents: isUseAcive ? 'auto' : 'none',
               }}
             >
               <SimpleText style={{ paddingTop: 4, width: width / 2.5 }}>
