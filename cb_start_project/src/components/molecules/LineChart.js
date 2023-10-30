@@ -18,15 +18,16 @@ import { LineChart } from 'react-native-gifted-charts';
 import SimpleText from '../atoms/SimpleText';
 
 const SimpleLineChart = ({
-  approvedDataChart,
-  declinedDataChart,
-  processingDataChart,
+  approvedDataChart = [],
+  declinedDataChart = [],
+  processingDataChart = [],
   currency,
 }) => {
   const [aprovedData, setApprovedData] = useState([]);
   const [declinedData, setDeclinedData] = useState([]);
   const [processingData, setProcessingData] = useState([]);
   const [maxChartValue, setMaxChartValue] = useState(100);
+  // const [minChartValue, setMinChartValue] = useState(100);
   const [conversionApproved, setConversionApproved] = useState(0);
   const [conversionDeclined, setConversionDeclined] = useState(0);
   const [conversionProcessing, setConversionProcessing] = useState(0);
@@ -34,35 +35,37 @@ const SimpleLineChart = ({
   const [isDeclinedActive, setIsDeclinedActive] = useState(true);
   const [isProccesingActive, setIsProccesingActive] = useState(true);
   const [yAxisLabelTexts, setYAxisLabelTexts] = useState({});
+  const [yAxisOffset, setYAxisOffset] = useState(0);
 
   // const test = [
-  //   { date: '2023-10-20', currency: 'EUR', sum: 90000000 },
-  //   { date: '2023-10-21', currency: 'EUR', sum: 6 },
-  //   { date: '2023-10-22', currency: 'EUR', sum: 4 },
-  //   { date: '2023-10-23', currency: 'EUR', sum: 1000 },
-  //   { date: '2023-10-24', currency: 'EUR', sum: 1 },
+  //   { date: '2023-10-23', currency: 'EUR', sum: 20 },
+  //   { date: '2023-10-24', currency: 'EUR', sum: 23 },
+  //   { date: '2023-10-25', currency: 'EUR', sum: 19 },
+  //   { date: '2023-10-26', currency: 'EUR', sum: 20 },
+  //   { date: '2023-10-27', currency: 'EUR', sum: 21 },
   // ];
   // const test2 = [
-  //   { date: '2023-10-20', currency: 'EUR', sum: 800 },
-  //   { date: '2023-10-21', currency: 'EUR', sum: 6 },
-  //   { date: '2023-10-22', currency: 'EUR', sum: 40 },
-  //   { date: '2023-10-23', currency: 'EUR', sum: 3 },
-  //   { date: '2023-10-24', currency: 'EUR', sum: 100 },
+  //   { date: '2023-10-23', currency: 'EUR', sum: 1 },
+  //   { date: '2023-10-24', currency: 'EUR', sum: 22 },
+  //   { date: '2023-10-25', currency: 'EUR', sum: 20 },
+  //   { date: '2023-10-26', currency: 'EUR', sum: 3 },
+  //   { date: '2023-10-27', currency: 'EUR', sum: 22 },
   // ];
   // const test3 = [
-  //   { date: '2023-10-20', currency: 'EUR', sum: 800 },
-  //   { date: '2023-10-21', currency: 'EUR', sum: 6 },
-  //   { date: '2023-10-22', currency: 'EUR', sum: 4 },
-  //   { date: '2023-10-23', currency: 'EUR', sum: 30 },
-  //   { date: '2023-10-24', currency: 'EUR', sum: 1 },
+  //   { date: '2023-10-23', currency: 'EUR', sum: 20 },
+  //   { date: '2023-10-24', currency: 'EUR', sum: 21 },
+  //   { date: '2023-10-25', currency: 'EUR', sum: 20 },
+  //   { date: '2023-10-26', currency: 'EUR', sum: 23 },
+  //   { date: '2023-10-27', currency: 'EUR', sum: 25 },
   // ];
 
-  const getMaxValue = (arr, type) => {
-    
-    let res = 0;
+  const getMaxMinValue = (arr, type) => {
+    let max = arr[0]?.sum || 0;
+    let min = arr[0]?.sum || 0;
     let conversionTotal = 0;
     arr.forEach((item) => {
-      if (item.sum > res) res = item.sum;
+      if (item.sum > max) max = item.sum;
+      if (item.sum < min) min = item.sum;
       conversionTotal = conversionTotal + item.sum;
     });
     switch (type) {
@@ -79,33 +82,49 @@ const SimpleLineChart = ({
       default:
         break;
     }
-    return res;
+
+    return { max, min };
   };
 
   useEffect(() => {
-    const approvedMax = getMaxValue(approvedDataChart, 'approved');
-    const declinedMax = getMaxValue(declinedDataChart, 'declined');
-    const processingMax = getMaxValue(processingDataChart, 'processing');
-    // const approvedMax = getMaxValue(test, 'approved');
-    // const declinedMax = getMaxValue(test2, 'declined');
-    // const processingMax = getMaxValue(test3, 'processing');
-    const maxValue = Math.max(approvedMax, declinedMax, processingMax);
+    const approvedMaxMin = getMaxMinValue(approvedDataChart, 'approved');
+    const declinedMaxMin = getMaxMinValue(declinedDataChart, 'declined');
+    const processingMaxMin = getMaxMinValue(processingDataChart, 'processing');
+    // const approvedMaxMin = getMaxMinValue(test, 'approved');
+    // const declinedMaxMin = getMaxMinValue(test2, 'declined');
+    // const processingMaxMin = getMaxMinValue(test3, 'processing');
+    const maxValue = Math.max(approvedMaxMin.max, declinedMaxMin.max, processingMaxMin.max);
+    const minValue = Math.min(approvedMaxMin.min, declinedMaxMin.min, processingMaxMin.min);
     setMaxChartValue(maxValue);
+    // setMinChartValue(minValue);
+
+    // console.log('maxValue', maxValue);
+    // console.log('minValue', minValue);
+    let step = maxValue / 10;
+
+    let targetStep = Math.floor(minValue / step);
+    const yOffset = minValue - step;
+    setYAxisOffset(yOffset <= 0 ? 0 : yOffset);
+    // console.log('targetStep', targetStep);
+    // console.log('yAxisOffset', yOffset);
 
     if (maxValue > 999) {
-      const labelsRow = ['0k'];
-      const step = maxValue / 10000;
+      let labelsRow = [yOffset <= 0 ? '0k' : (yOffset / 1000).toFixed(1) + 'k'];
+      const stepIfOffset = (maxValue - yOffset) / 8;
       for (let i = 1; i <= 10; i++) {
-        labelsRow.push(
-          '' + maxValue > 9999 ? (step * i).toFixed(0) + 'k' : (step * i).toFixed(1) + 'k'
-        );
+        '' +
+          labelsRow.push(
+            maxValue > 9999
+              ? ((yOffset + stepIfOffset * i) / 1000).toFixed(0) + 'k'
+              : ((yOffset + stepIfOffset * i) / 1000).toFixed(2) + 'k'
+          );
       }
       setYAxisLabelTexts(labelsRow);
     } else {
-      const labelsRow = ['0'];
-      const step = maxValue / 10;
+      let labelsRow = [yOffset <= 0 ? '0' : yOffset.toFixed(1)];
+      const stepIfOffset = (maxValue - yOffset) / 8;
       for (let i = 1; i <= 10; i++) {
-        labelsRow.push('' + (step * i).toFixed(0));
+        labelsRow.push((yOffset + stepIfOffset * i).toFixed(0));
       }
       setYAxisLabelTexts(labelsRow);
     }
@@ -132,10 +151,7 @@ const SimpleLineChart = ({
               fontSize: 12,
               fontFamily: 'Mont',
               lineHeight: 15,
-              // marginLeft: 0,
-              // width: 50,
               textAlign: aprovedData.length !== 1 ? 'center' : 'left',
-              // borderWidth: 1,
             }}
           >
             {new Intl.DateTimeFormat('en-US', options).format(n)}
@@ -165,17 +181,13 @@ const SimpleLineChart = ({
 
     switch (type) {
       case 'approved':
-        
-
         setApprovedData(lineData);
 
         break;
       case 'declined':
-       
         setDeclinedData(lineData);
         break;
       case 'processing':
-        
         setProcessingData(lineData);
         break;
 
@@ -320,7 +332,11 @@ const SimpleLineChart = ({
               aprovedData.length !== 1 ? 25 : (Dimensions.get('window').width - 80) / 2
             }
             // initialSpacing={0}
-            maxValue={maxChartValue}
+            // maxValue={maxChartValue + maxChartValue / 8}
+            // yAxisOffset={minChartValue - minChartValue / 8}
+
+            maxValue={maxChartValue - yAxisOffset + maxChartValue / 10}
+            yAxisOffset={yAxisOffset}
             color1={isApprovedActive ? '#06BBB1' : 'transparent'}
             color2="#FF5A5A"
             color3="#F2CE4D"
@@ -388,7 +404,7 @@ const SimpleLineChart = ({
                                 </Text>
                               </View>
                               <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                                {items[0].value}
+                                {items[0].value + yAxisOffset}
                               </Text>
                             </>
                           )}
@@ -416,7 +432,7 @@ const SimpleLineChart = ({
                                 </Text>
                               </View>
                               <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                                {items[1].value}
+                                {items[1].value + yAxisOffset}
                               </Text>
                             </>
                           )}
@@ -444,7 +460,7 @@ const SimpleLineChart = ({
                                 </Text>
                               </View>
                               <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                                {items[2].value}
+                                {items[2].value + yAxisOffset}
                               </Text>
                             </>
                           )}
