@@ -76,6 +76,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       });
     } else {
       genReportTransactionFilters.map((item) => {
+        console.log('item', item);
         switch (item.name) {
           case 'date':
             str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
