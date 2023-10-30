@@ -27,6 +27,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [genReportPaymentsFilters, setGenReportPaymentsFilters] = useState([]);
   const [genReportTransactionFilters, setGenReportTransactionFilters] = useState([]);
+  const [reportType, setReportType] = useState('Payments');
   const dispatch = useDispatch();
   const [balancePeriod, setBalancePeriod] = useState({
     startDate: initialDate,
@@ -39,48 +40,80 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     setIsLoading(true);
     let str = '';
 
-    genReportPaymentsFilters.map((item) => {
-      switch (item.name) {
-        case 'date':
-          str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
-          break;
-        case 'timezone':
-          str = str + '&' + `timezone=${item.filters.code}`;
-          break;
-        case 'merchants':
-          if (item.value !== 'All merchants') {
-            str = str + '&' + `userId=${item.filters.id}`;
-          }
-          break;
-        case 'merchantApiKey':
-          if (item.value !== 'All api keys') {
-            str = str + '&' + `apiKeyId=${item.filters.id}`;
-          }
-          break;
-        case 'status':
-          if (item.value !== 'All') {
-            str = str + '&' + `status=${item.value}`;
-          }
-          break;
-        case 'banks':
-          if (item.value !== 'All') {
-            str = str + '&' + `bankName=${item.value}`;
-          }
-          break;
-        case 'filterColumns':
-          const filters = item.filters.map((filter) => (filter = `exportFields=${filter.code}`));
-          str = str + '&' + `${filters.join('&')}`;
-          break;
+    if (reportType === 'Payments') {
+      genReportPaymentsFilters.map((item) => {
+        switch (item.name) {
+          case 'date':
+            str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
+            break;
+          case 'timezone':
+            str = str + '&' + `timezone=${item.filters.code}`;
+            break;
+          case 'merchants':
+            if (item.value !== 'All merchants') {
+              str = str + '&' + `userId=${item.filters.id}`;
+            }
+            break;
+          case 'merchantApiKey':
+            if (item.value !== 'All api keys') {
+              str = str + '&' + `apiKeyId=${item.filters.id}`;
+            }
+            break;
+          case 'status':
+            if (item.value !== 'All') {
+              str = str + '&' + `status=${item.value}`;
+            }
+            break;
 
-        default:
-          break;
-      }
-    });
+          case 'filterColumns':
+            const filters = item.filters.map((filter) => (filter = `exportFields=${filter.code}`));
+            str = str + '&' + `${filters.join('&')}`;
+            break;
+
+          default:
+            break;
+        }
+      });
+    } else {
+      genReportTransactionFilters.map((item) => {
+        switch (item.name) {
+          case 'date':
+            str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
+            break;
+          case 'timezone':
+            str = str + '&' + `timezone=${item.filters.code}`;
+            break;
+          case 'merchants':
+            if (item.value !== 'All merchants') {
+              str = str + '&' + `userId=${item.filters.id}`;
+            }
+            break;
+          case 'merchantApiKey':
+            if (item.value !== 'All api keys') {
+              str = str + '&' + `apiKeyId=${item.filters.id}`;
+            }
+            break;
+          case 'status':
+            if (item.value !== 'All') {
+              str = str + '&' + `status=${item.value}`;
+            }
+            break;
+          case 'banks':
+            if (item.value !== 'All') {
+              str = str + '&' + `bankName=${item.value}`;
+            }
+            break;
+
+          default:
+            break;
+        }
+      });
+    }
 
     try {
-      const report = await dispatch(getReport(str)).unwrap();
-      console.log('Report', report);
-      const blob = new Blob([report.payload], {
+      const report = await dispatch(getReport({ str, reportType })).unwrap();
+
+      const blob = new Blob([report], {
         type: 'application/json',
       });
 
@@ -135,7 +168,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       } else {
         setTimeout(() => {
           showMessage({
-            message: `${error}`,
+            message: error,
             titleStyle: {
               textAlign: 'center',
             },
@@ -267,6 +300,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             genReportTransactionFilters={genReportTransactionFilters}
             handleDeleteFilter={handleDeleteFilter}
             handleDeleteAllFilters={handleDeleteAllFilters}
+            setReportType={setReportType}
           />
         )}
       </DashboardStack.Screen>

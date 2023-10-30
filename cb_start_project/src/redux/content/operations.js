@@ -97,24 +97,41 @@ export const getBankConversion = createAsyncThunk(
   }
 );
 export const getReport = createAsyncThunk('content/getReport', async (reportData, thunkAPI) => {
-  if (!reportData.includes('startDate')) {
-    reportData = `startDate=${initialDate}` + '&' + `endDate=${initialDate}` + reportData;
+  const { str, reportType } = reportData;
+  if (!str.includes('startDate')) {
+    str = `startDate=${initialDate}` + '&' + `endDate=${initialDate}` + str;
   }
 
-  try {
-    const { data } = await api.get(
-      `${BASE_URL}/api/payments/export?${reportData}&exportFields=createdAt&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode`,
-      {
-        withCredentials: true,
+  if (reportType === 'Payments') {
+    try {
+      const { data } = await api.get(
+        `${BASE_URL}/api/payments/export?${str}&exportFields=createdAt&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode`,
+        {
+          withCredentials: true,
 
-        responseType: 'blob',
-      }
-    );
-    console.log('DATA', data);
-    return data;
-  } catch (error) {
-    console.log('ERRORRR', error);
-    return thunkAPI.rejectWithValue(error);
+          responseType: 'blob',
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  } else {
+    try {
+      const { data } = await api.get(
+        `${BASE_URL}/api/transactions/export?${str}&groupingType=All`,
+        {
+          withCredentials: true,
+
+          responseType: 'blob',
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
 });
 export const getTransactionData = createAsyncThunk(

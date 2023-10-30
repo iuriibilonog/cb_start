@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { persistCombineReducers } from 'redux-persist';
 import { configureStore } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userSlice from './user/slice';
@@ -18,24 +19,20 @@ import {
 const userPersistConfig = {
   key: 'user',
   storage: AsyncStorage,
-  whitelist: ['token'],
+  whitelist: ['user'],
 };
 
-const rootReducer = combineReducers({
+const rootReducer = persistCombineReducers(userPersistConfig, {
   content: ContentSlice,
-  user: persistReducer(userPersistConfig, userSlice),
+  user: userSlice,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      // serializableCheck: {
-      //   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      // },
       serializableCheck: false,
     }),
-  // devTools: process.env.NODE_ENV === 'development',
 });
 
 export const persistor = persistStore(store);

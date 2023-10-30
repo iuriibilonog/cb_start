@@ -22,6 +22,7 @@ const GeneralReportsScreen = ({
   genReportTransactionFilters,
   handleDeleteFilter,
   handleDeleteAllFilters,
+  setReportType,
 }) => {
   const [selectedId, setSelectedId] = useState(3);
   const [radioSelect, setRadioSelect] = useState({ value: 'Payments' });
@@ -30,6 +31,10 @@ const GeneralReportsScreen = ({
   const [isClickedOutside, setIsClickedOutside] = useState(false);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    setReportType(radioSelect.value);
+  }, [radioSelect]);
 
   useEffect(() => {
     switch (radioSelect.value) {
