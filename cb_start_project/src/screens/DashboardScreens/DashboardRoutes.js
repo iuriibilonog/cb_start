@@ -10,6 +10,7 @@ import GeneralReportsScreen from './GeneralReportsScreen';
 import CalendarScreen from './CalendarScreen';
 import TimeZoneScreen from './TimeZoneScreen';
 import MerchantsScreen from './MerchantsScreen';
+import GroupingTypesScreen from './GroupingTypesScreen';
 import MerchantsApiKeyScreen from './MerchantsApiKeyScreen';
 import StatusScreen from './StatusScreen';
 import FilterColumnsScreen from './FilterColumnsScreen';
@@ -467,6 +468,32 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           />
         )}
       </DashboardStack.Screen>
+      <DashboardStack.Screen
+        options={{
+          headerBackTitleVisible: false,
+          headerTitle: 'Grouping types',
+          headerTitleAlign: 'left',
+          headerBackImage: () => (
+            <Image
+              source={headerLeft}
+              style={{ width: 24, height: 24, marginLeft: 20, marginRight: 10 }}
+              // onPress={() => navigation.navigate("registration")}
+            />
+          ),
+        }}
+        name="GroupingTypesScreen"
+        // component={BanksScreen}
+      >
+        {(props) => (
+          <GroupingTypesScreen
+            {...props}
+            transactionFilter={genReportTransactionFilters}
+            setTransactionFilter={setTransactionFilter}
+            confirmReport={confirmReport}
+          />
+        )}
+      </DashboardStack.Screen>
+
       <DashboardStack.Screen
         options={{
           headerShown: false,

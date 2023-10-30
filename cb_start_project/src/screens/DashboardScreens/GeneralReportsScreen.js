@@ -87,7 +87,9 @@ const GeneralReportsScreen = ({
         } else {
           navigation.navigate('BanksScreen', { type: radioSelect });
         }
-
+        break;
+      case 7:
+        navigation.navigate('GroupingTypesScreen', { type: radioSelect });
         break;
     }
   };
@@ -229,23 +231,42 @@ const GeneralReportsScreen = ({
           </TouchableOpacity>
 
           {radioSelect?.value === 'Transactions' ? (
-            <TouchableOpacity
-              style={{
-                ...styles.reportContainerItem,
-                backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
-              }}
-              onPress={() => handleReportSelect(6)}
-            >
-              <SimpleText
+            <>
+              <TouchableOpacity
                 style={{
-                  ...styles.itemText,
-                  fontFamily: selectedId === 6 ? 'Mont_SB' : 'Mont',
+                  ...styles.reportContainerItem,
+                  backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
                 }}
+                onPress={() => handleReportSelect(6)}
               >
-                <FormattedMessage id={'dashboard.banks'} />
-              </SimpleText>
-              <Image source={arrowRight} style={styles.arrowRight} />
-            </TouchableOpacity>
+                <SimpleText
+                  style={{
+                    ...styles.itemText,
+                    fontFamily: selectedId === 6 ? 'Mont_SB' : 'Mont',
+                  }}
+                >
+                  <FormattedMessage id={'dashboard.banks'} />
+                </SimpleText>
+                <Image source={arrowRight} style={styles.arrowRight} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  ...styles.reportContainerItem,
+                  backgroundColor: selectedId === 7 ? '#F4F4F4' : '#fff',
+                }}
+                onPress={() => handleReportSelect(7)}
+              >
+                <SimpleText
+                  style={{
+                    ...styles.itemText,
+                    fontFamily: selectedId === 7 ? 'Mont_SB' : 'Mont',
+                  }}
+                >
+                  <FormattedMessage id={'dashboard.grouping_type'} />
+                </SimpleText>
+                <Image source={arrowRight} style={styles.arrowRight} />
+              </TouchableOpacity>
+            </>
           ) : (
             <TouchableOpacity
               style={{
