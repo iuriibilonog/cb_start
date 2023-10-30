@@ -466,7 +466,7 @@ const CreatePaymentsSettingsScreen = (props) => {
                 </View>
                 <View
                   style={{
-                    pointerEvents: isMethodsDropdownOpen || isBanksDropdownOpen ? 'none' : 'all',
+                    pointerEvents: isMethodsDropdownOpen || isBanksDropdownOpen ? 'none' : 'auto',
                     opacity: isMethodsDropdownOpen || isBanksDropdownOpen ? 0.5 : 1,
                   }}
                 >

@@ -365,7 +365,7 @@ const BalanceScreen = (props) => {
             </SimpleText>
           </View>
           {ledgersList && selectedLedger && (
-            <View style={{ pointerEvents: ledgersList[0] === ' ' ? 'none' : 'all' }}>
+            <View style={{ pointerEvents: ledgersList[0] === ' ' ? 'none' : 'auto' }}>
               <ModalDropdown
                 ref={refLedgersModal}
                 options={ledgersList.map((item) => item.name)}
@@ -503,7 +503,7 @@ const BalanceScreen = (props) => {
             <FormattedMessage id={'common.balance'} />
           </SimpleText>
           {ledgersList && selectedBalanceName && (
-            <View style={{ pointerEvents: ledgersList[0] === ' ' ? 'none' : 'all' }}>
+            <View style={{ pointerEvents: ledgersList[0] === ' ' ? 'none' : 'auto' }}>
               <ModalDropdown
                 ref={refBalanceModal}
                 options={ledgersList.map((item) => item.name)}

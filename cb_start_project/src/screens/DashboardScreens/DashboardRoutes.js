@@ -19,6 +19,7 @@ import { getReport } from 'src/redux/content/operations';
 import { useDispatch } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
 import ErrorsScreen from 'src/screens/ErrorsScreen/ErrorsScreen';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const DashboardStack = createStackNavigator();
 
@@ -31,8 +32,11 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     startDate: initialDate,
     endDate: initialDate,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const confirmReport = async () => {
+    console.log('COnfirmSTART!');
+    setIsLoading(true);
     let str = '';
 
     genReportPaymentsFilters.map((item) => {
@@ -75,13 +79,12 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
 
     try {
       const report = await dispatch(getReport(str)).unwrap();
-
+      console.log('Report', report);
       const blob = new Blob([report.payload], {
         type: 'application/json',
       });
 
       const fr = new FileReader();
-      
 
       fr.onload = async () => {
         if (Platform.OS === 'ios') {
@@ -114,23 +117,31 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         }
       };
       fr.readAsDataURL(blob);
+      setIsLoading(false);
     } catch (error) {
+      console.log('errror', error);
+      console.log('errror-resp', error?.response);
+      setIsLoading(false);
       if (error?.response?.status === 404) {
-        showMessage({
-          message: 'No transactions in the selected period!',
-          titleStyle: {
-            textAlign: 'center',
-          },
-          type: 'danger',
-        });
+        setTimeout(() => {
+          showMessage({
+            message: 'No transactions in the selected period!',
+            titleStyle: {
+              textAlign: 'center',
+            },
+            type: 'danger',
+          });
+        }, 1000);
       } else {
-        showMessage({
-          message: `${error}`,
-          titleStyle: {
-            textAlign: 'center',
-          },
-          type: 'danger',
-        });
+        setTimeout(() => {
+          showMessage({
+            message: `${error}`,
+            titleStyle: {
+              textAlign: 'center',
+            },
+            type: 'danger',
+          });
+        }, 1000);
       }
     }
   };
@@ -173,6 +184,9 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
 
   const profileIcon = require('src/images/profile_icon.png');
   const headerLeft = require('src/images/header_left.png');
+  // if (isLoading) {
+  //   return <MainLoader isVisible={isLoading} />;
+  // }
   return (
     <DashboardStack.Navigator initialRouteName={DashboardScreen}>
       <DashboardStack.Screen
