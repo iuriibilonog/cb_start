@@ -167,7 +167,7 @@ const AddLedgerScreen = (props) => {
                         }}
                         dropdownStyle={{
                           marginLeft: -10,
-                          marginTop: Platform.OS === 'ios' ? 12 : -12,
+                          marginTop: 12,
                           paddingLeft: 5,
                           paddingRight: 2,
                           width: width - 90,

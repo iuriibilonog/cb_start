@@ -245,7 +245,7 @@ const GeneralReportsScreen = ({
             <TouchableOpacity
               style={{
                 ...styles.reportContainerItem,
-                marginTop: 80,
+                // marginTop: 80,
                 backgroundColor: selectedId === 6 ? '#F4F4F4' : '#fff',
               }}
               onPress={() => handleReportSelect(6)}

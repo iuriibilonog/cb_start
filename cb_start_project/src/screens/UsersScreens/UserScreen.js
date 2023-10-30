@@ -668,7 +668,7 @@ const UserScreen = (props) => {
                   }}
                   dropdownStyle={{
                     marginLeft: -16,
-                    marginTop: Platform.OS === 'ios' ? 14 : -14,
+                    marginTop: 14,
                     paddingLeft: 11,
                     paddingRight: 2,
                     // width: 167,
@@ -870,7 +870,7 @@ const UserScreen = (props) => {
                   }}
                   dropdownStyle={{
                     marginLeft: -16,
-                    marginTop: Platform.OS === 'ios' ? 14 : -14,
+                    marginTop: 14,
                     paddingLeft: 11,
                     paddingRight: 2,
                     // width: 167,
