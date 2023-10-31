@@ -49,7 +49,6 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
         message: msg['message'],
         titleStyle: {
           textAlign: 'center',
-          paddingVertical: 20,
         },
         type: 'danger',
       });
