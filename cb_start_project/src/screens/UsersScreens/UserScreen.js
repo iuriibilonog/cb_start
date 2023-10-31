@@ -311,7 +311,7 @@ const UserScreen = (props) => {
   };
 
   useEffect(() => {
-    if (props.route.params.isRefresh) {
+    if (props.route.params?.isRefresh) {
       setPaymentsData([]);
       getLedgersByApiData(selectedIndex || apiKeysData[0].id);
     }
@@ -324,7 +324,7 @@ const UserScreen = (props) => {
         setCurrentUser(res.payload.items.find((item) => item.id === +props.route.params.id));
       }
     });
-  }, [props.route.params.id]);
+  }, [props.route.params?.id]);
 
   const getPaymentsData = async (chainIdOfCurrentLedger) => {
     try {
@@ -433,7 +433,11 @@ const UserScreen = (props) => {
   };
 
   const handleLedgerCreate = () => {
-    navigation.navigate('CreateLedgerScreen', { user: currentUser, parentScreen: 'UserScreen' });
+    navigation.navigate('CreateLedgerScreen', {
+      user: currentUser,
+      selectedApiKeyId: selectedIndex,
+      parentScreen: 'UserScreen',
+    });
   };
 
   const handleNavigate = () => {

@@ -494,3 +494,33 @@ export const conversionLastDaysData = createAsyncThunk(
     }
   }
 );
+
+export const postPaymethodChain = createAsyncThunk(
+  'content/postPaymethodChain',
+  async (chainData, thunkAPI) => {
+    try {
+      const { data } = await api.post(`${BASE_URL}/api/paymethod-chains`, chainData, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const postNewLedger = createAsyncThunk(
+  'content/postNewLedger',
+  async (chainData, thunkAPI) => {
+    try {
+      const { data } = await api.post(`${BASE_URL}/api/ledgers`, chainData, {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);

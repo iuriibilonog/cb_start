@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { showMessage } from 'react-native-flash-message';
 import {
   Text,
   StyleSheet,
@@ -14,6 +15,9 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
+
+import { postPaymethodChain, postNewLedger } from 'src/redux/content/operations';
+
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -53,10 +57,32 @@ const AddLedgerScreen = (props) => {
       return;
     }
     try {
-      // await dispatch(putApiKey({ id: props.route.params.id, name: value }));
-      // props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
-    } catch (err) {
-      console.warn('Error:', err);
+      const paymentChainResponse = await dispatch(postPaymethodChain({ name: value })).unwrap();
+      await dispatch(
+        postNewLedger({
+          currency: currency[selectedCurrency],
+          amount: 0,
+          payinAmount: 0,
+          payoutAmount: 0,
+          netPrice: 0,
+          lockedAmount: 0,
+          name: value,
+          apiKeyId: props.route.params.selectedApiKeyId,
+          payMethodChainsId: paymentChainResponse.id,
+        })
+      );
+      props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
+    } catch (error) {
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! Create New Ledger failed`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
     }
   };
 
