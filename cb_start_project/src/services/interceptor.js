@@ -95,6 +95,7 @@ export const AxiosInterceptor = ({ children }) => {
           }
         }
       }
+
       if (error?.response?.status === 504) {
         return showMessage({
           message: 'Gateway Time-out. Try again later',

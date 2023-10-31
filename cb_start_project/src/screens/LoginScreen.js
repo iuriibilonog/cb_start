@@ -42,7 +42,6 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
 
   useEffect(() => {
     if (errors.message) {
-      console.log('errors', errors);
       const msg = JSON.parse(errors.message);
       startAnimation();
 
@@ -50,9 +49,9 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
         message: msg['message'],
         titleStyle: {
           textAlign: 'center',
+          paddingVertical: 20,
         },
         type: 'danger',
-        duration: '3000',
       });
     }
   }, [errors]);
@@ -86,6 +85,7 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
 
     if (Object.keys(validationAnswer).length > 0) {
       setErrors(validationAnswer);
+      startAnimation();
       return;
     }
 

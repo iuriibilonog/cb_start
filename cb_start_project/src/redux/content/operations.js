@@ -98,9 +98,6 @@ export const getBankConversion = createAsyncThunk(
 );
 export const getReport = createAsyncThunk('content/getReport', async (reportData, thunkAPI) => {
   const { str, reportType } = reportData;
-  if (!str.includes('startDate')) {
-    str = `startDate=${initialDate}` + '&' + `endDate=${initialDate}` + str;
-  }
 
   if (reportType === 'Payments') {
     try {
@@ -119,14 +116,11 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
     }
   } else {
     try {
-      const { data } = await api.get(
-        `${BASE_URL}/api/transactions/export?${str}&groupingType=All`,
-        {
-          withCredentials: true,
+      const { data } = await api.get(`${BASE_URL}/api/transactions/export?${str}`, {
+        withCredentials: true,
 
-          responseType: 'blob',
-        }
-      );
+        responseType: 'blob',
+      });
 
       return data;
     } catch (error) {

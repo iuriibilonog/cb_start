@@ -37,7 +37,6 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const confirmReport = async () => {
-    console.log('COnfirmSTART!');
     setIsLoading(true);
     let str = '';
 
@@ -77,7 +76,6 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       });
     } else {
       genReportTransactionFilters.map((item) => {
-        console.log('item', item);
         switch (item.name) {
           case 'date':
             str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
@@ -105,11 +103,22 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
               str = str + '&' + `bankName=${item.value}`;
             }
             break;
+          case 'groupingType':
+            str = str + '&' + `groupingType=${item.value}`;
+
+            break;
 
           default:
             break;
         }
       });
+    }
+
+    if (!str.includes('startDate')) {
+      str = `startDate=${initialDate}` + '&' + `endDate=${initialDate}` + str;
+    }
+    if (reportType === 'Transactions' && !str.includes('groupingType')) {
+      str = str + '&' + 'groupingType=All';
     }
 
     try {
@@ -123,7 +132,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
 
       fr.onload = async () => {
         if (Platform.OS === 'ios') {
-          const fileUri = `${FileSystem.documentDirectory}/report.xlsx`;
+          const name = report?.data?.name || 'report.xlsx';
+          const fileUri = `${FileSystem.documentDirectory}/${name}`;
 
           await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
             encoding: FileSystem.EncodingType.Base64,
@@ -135,9 +145,10 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
 
           if (permissions.granted) {
             let directoryUri = permissions.directoryUri;
+            const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
             await StorageAccessFramework.createFileAsync(
               directoryUri,
-              'report1',
+              `${name}`,
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
               .then(async (fileUri) => {
@@ -170,7 +181,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       } else {
         setTimeout(() => {
           showMessage({
-            message: error,
+            message: `${error}`,
             titleStyle: {
               textAlign: 'center',
             },
