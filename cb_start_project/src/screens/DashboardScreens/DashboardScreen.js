@@ -308,8 +308,6 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
       };
     }
 
-    console.log('result', result);
-
     try {
       const approved = await dispatch(
         conversionLastDaysData({ chartData: result, type: 'approved' })
