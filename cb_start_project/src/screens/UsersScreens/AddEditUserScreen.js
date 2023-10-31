@@ -268,7 +268,7 @@ const AddEditUserScreen = (props) => {
                       }}
                       dropdownStyle={{
                         marginLeft: -10,
-                        marginTop: Platform.OS === 'ios' ? 10 : -10,
+                        marginTop: 10,
                         paddingLeft: 5,
                         paddingRight: 2,
                         // width: '100%',

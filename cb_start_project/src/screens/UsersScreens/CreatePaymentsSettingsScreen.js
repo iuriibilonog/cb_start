@@ -192,7 +192,7 @@ const CreatePaymentsSettingsScreen = (props) => {
             chainData: { methods: [...currentChainIDs, postResult.id] },
           })
         ).unwrap();
-        props.navigation.navigate(props.route.params.parentScreen);
+        props.navigation.navigate(props.route.params.parentScreen, { isRefresh: true });
       }
     } catch (error) {
       setTimeout(() => {
@@ -279,7 +279,7 @@ const CreatePaymentsSettingsScreen = (props) => {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        Keyboard.dismiss();
+        // Keyboard.dismiss();
       }}
     >
       <>
