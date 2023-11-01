@@ -101,7 +101,7 @@ const EditScreen = (props) => {
               style={{
                 ...styles.input,
 
-                borderColor: errors[dataName] ? 'red' : 'rgba(0, 0, 0, 0.20)',
+                borderColor: errors[dataName] ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
               }}
               value={value}
               placeholder={placeholder}
@@ -135,9 +135,9 @@ const EditScreen = (props) => {
                 borderBottomColor: isEmptyValue
                   ? '#FC7270'
                   : errors[dataName]
-                  ? 'red'
+                  ? '#FC7270'
                   : 'rgba(0, 0, 0, 0.20)',
-                // borderColor: errors[dataName] ? 'red' : 'rgba(0, 0, 0, 0.20)',
+                // borderColor: errors[dataName] ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
               }}
               placeholder={placeholder}
               value={value}
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 38,
     left: 0,
-    color: 'red',
+    color: '#FC7270',
     marginTop: 5,
     fontSize: 12,
     letterSpacing: 1,

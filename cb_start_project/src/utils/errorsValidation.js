@@ -16,6 +16,14 @@ export const checkValidation = (data, validationParams) => {
 
         break;
 
+      case 'selectedCurrency':
+        if (typeof data === 'string' || typeof data === 'number') {
+          if (!data && data !== 0) errors[item] = 'required_field';
+        } else {
+          if (!data[item] && data[item] !== 0) errors[item] = 'required_field';
+        }
+        break;
+
       default:
         if (typeof data === 'string') {
           if (!data) errors[item] = 'required_field';

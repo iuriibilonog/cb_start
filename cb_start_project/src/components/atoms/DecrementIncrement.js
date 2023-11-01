@@ -21,6 +21,13 @@ const DecrementIncrement = (props) => {
   }, [value]);
 
   const handleSetValue = (text) => {
+    if (!text) {
+      setValue(0);
+      return;
+    } else if (text.length > 1 && text.slice(0, 1) === '0') {
+      text = text.slice(1);
+    }
+
     if (/^\d+$/.test(text)) {
       setValue(text);
     }
