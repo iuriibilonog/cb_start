@@ -2,6 +2,13 @@ import { Text, View, Image, StyleSheet, TextInput, Pressable, ScrollView } from 
 import React, { useState, useEffect } from 'react';
 
 const SimpleText = (props) => {
+  if (props.numberOfLines) {
+    return (
+      <Text style={{ ...styles.initialStyles, ...props.style }} numberOfLines={props.numberOfLines}>
+        {props.children}
+      </Text>
+    );
+  }
   return <Text style={{ ...styles.initialStyles, ...props.style }}>{props.children}</Text>;
 };
 

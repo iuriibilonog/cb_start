@@ -152,6 +152,7 @@ const UserScreen = (props) => {
 
       if (byApiKey?.items?.length > 0) {
         const data = byApiKey.items.map((item) => item.name);
+
         setChainIdOfCurrentLedger(byApiKey.items[0].payMethodChainsId);
         setLedgersByApiData(byApiKey.items);
         setLedgersByApiDataNames(data);
@@ -163,6 +164,8 @@ const UserScreen = (props) => {
         setLedgersByApiData([]);
         setLedgersByApiDataNames([]);
         setInitialLedger('');
+        setPaymentsData([]);
+        setIsUseBalancer(false);
       }
       setIsLoading(false);
     } catch (error) {
@@ -369,6 +372,7 @@ const UserScreen = (props) => {
     if (!isAdditDataOpen) {
       // setIsLoading(true);
       setSelectedIndex(itemId);
+
       try {
         // const data = await dispatch(getLedgersByApiKeyID(itemId)).unwrap();
         getLedgersByApiData(itemId);
@@ -706,7 +710,7 @@ const UserScreen = (props) => {
                 />
               )}
             </View>
-            <View style={{ ...styles.userWrapper, marginBottom: 16 }}>
+            <View style={{ ...styles.userWrapper, marginBottom: 16, alignItems: 'center' }}>
               <SimpleText style={{ fontSize: 24, maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.payments_settings'} />
               </SimpleText>
@@ -716,9 +720,15 @@ const UserScreen = (props) => {
                   alignItems: 'center',
                 }}
               >
-                <TouchableOpacity activeOpacity={0.5} onPress={() => handlePaymentsCreate()}>
-                  <IconButton add />
-                </TouchableOpacity>
+                {ledgersByApiDataNames.length > 0 ? (
+                  <TouchableOpacity activeOpacity={0.5} onPress={() => handlePaymentsCreate()}>
+                    <IconButton add />
+                  </TouchableOpacity>
+                ) : (
+                  <View>
+                    <IconButton add style={{ backgroundColor: 'rgba(176, 176, 176, 0.4)' }} />
+                  </View>
+                )}
               </View>
             </View>
 
@@ -762,7 +772,14 @@ const UserScreen = (props) => {
                 marginTop: 45,
               }}
             />
-            <View style={{ ...styles.userWrapper, marginBottom: 16, marginTop: 45 }}>
+            <View
+              style={{
+                ...styles.userWrapper,
+                marginBottom: 16,
+                marginTop: 45,
+                // alignItems: 'center',
+              }}
+            >
               <SimpleText style={{ fontFamily: 'Mont_SB', maxWidth: width / 1.5 }}>
                 <FormattedMessage id={'users.current_chains'} />
               </SimpleText>
@@ -778,25 +795,31 @@ const UserScreen = (props) => {
                   paymentsData.length > 0 &&
                   paymentsData.map((item) => item?.id).join(', ')}
               </SimpleText>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={{ marginTop: -15 }}
-                onPress={() => {
-                  navigation.navigate('EditPaymentsSettingsScreen', {
-                    parentScreen: 'UserScreen',
-                    name: 'users.currentChains',
-                    value: paymentsData.map((item) => item?.id).join(', '),
-                    // index,
-                    chainId: chainIdOfCurrentLedger,
-                    isUseBalancer,
-                    id: currentUser.id,
-                    dataName: 'currentChains',
-                    currentUser,
-                  });
-                }}
-              >
-                <IconButton edit />
-              </TouchableOpacity>
+              {paymentsData && paymentsData.length > 0 ? (
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={{ marginTop: -15 }}
+                  onPress={() => {
+                    navigation.navigate('EditPaymentsSettingsScreen', {
+                      parentScreen: 'UserScreen',
+                      name: 'users.currentChains',
+                      value: paymentsData.map((item) => item?.id).join(', '),
+                      // index,
+                      chainId: chainIdOfCurrentLedger,
+                      isUseBalancer,
+                      id: currentUser.id,
+                      dataName: 'currentChains',
+                      currentUser,
+                    });
+                  }}
+                >
+                  <IconButton edit />
+                </TouchableOpacity>
+              ) : (
+                <View style={{ marginTop: -15 }}>
+                  <IconButton edit style={{ backgroundColor: 'rgba(176, 176, 176, 0.4)' }} />
+                </View>
+              )}
             </View>
             <View
               style={{
@@ -806,9 +829,19 @@ const UserScreen = (props) => {
                 justifyContent: 'flex-start',
               }}
             >
-              <TouchableOpacity activeOpacity={0.5} onPress={handleSetUseBalancer}>
-                <SimpleCheckBox checked={isUseBalancer} style={{ marginRight: 13 }} />
-              </TouchableOpacity>
+              {paymentsData && paymentsData.length > 0 ? (
+                <TouchableOpacity activeOpacity={0.5} onPress={handleSetUseBalancer}>
+                  <SimpleCheckBox checked={isUseBalancer} style={{ marginRight: 13 }} />
+                </TouchableOpacity>
+              ) : (
+                <View>
+                  <SimpleCheckBox
+                    checked={isUseBalancer}
+                    disable={true}
+                    style={{ marginRight: 13 }}
+                  />
+                </View>
+              )}
               <SimpleText style={{ paddingTop: 4 }}>
                 <FormattedMessage id={'users.use_balancer'} />
               </SimpleText>
@@ -832,7 +865,7 @@ const UserScreen = (props) => {
           </View>
 
           <View style={styles.userBlockWrapper}>
-            <View style={styles.userWrapper}>
+            <View style={{ ...styles.userWrapper, alignItems: 'center' }}>
               <SimpleText style={{ fontFamily: 'Mont_SB', fontSize: 24, maxWidth: width / 1.5 }}>
                 {currentUser && currentUser.username}
               </SimpleText>
@@ -875,7 +908,7 @@ const UserScreen = (props) => {
                     marginTop: 14,
                     paddingLeft: 11,
                     paddingRight: 2,
-                    // width: 167,
+                    width: width - 40,
                     height: balancesNames.length > 4 ? 152 : balancesNames.length * 40,
                     backgroundColor: '#F4F4F4',
                     borderWidth: 0,
@@ -907,10 +940,13 @@ const UserScreen = (props) => {
             </View>
             <View style={styles.userPayInOut}>
               <View style={styles.payInOutTitles}>
-                <SimpleText style={{ ...styles.payInOutTitlesText, marginBottom: 12 }}>
+                <SimpleText
+                  style={{ ...styles.payInOutTitlesText, marginBottom: 12 }}
+                  numberOfLines={1}
+                >
                   <FormattedMessage id={'users.payin'} />:
                 </SimpleText>
-                <SimpleText style={styles.payInOutTitlesText}>
+                <SimpleText style={styles.payInOutTitlesText} numberOfLines={1}>
                   <FormattedMessage id={'users.payout'} />:
                 </SimpleText>
               </View>
