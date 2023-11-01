@@ -185,8 +185,10 @@ export const Routing = () => {
               },
             }}
             name="BalanceRoutesScreen"
-            component={BalanceRoutes}
-          />
+            // component={BalanceRoutes}
+          >
+            {(props) => <BalanceRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
+          </MainStack.Screen>
         </MainStack.Navigator>
       )}
     </>

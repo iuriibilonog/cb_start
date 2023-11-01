@@ -16,7 +16,7 @@ import debounce from 'lodash.debounce';
 const profileIcon = require('src/images/profile_icon.png');
 const searchIcon = require('src/images/search_dark.png');
 
-const BalanceRoutes = () => {
+const BalanceRoutes = ({ handlePressIconLogOut }) => {
   const [searchUser, setSearchUser] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
@@ -42,45 +42,14 @@ const BalanceRoutes = () => {
       <BalanceStack.Screen
         options={{
           // headerShown: false,
-          headerTitle: 'User',
+          headerTitle: 'Balance',
           headerTitleAlign: 'left',
           headerRight: ({ size }) => (
-            <View style={{ flexDirection: 'row', position: 'relative', height: 26 }}>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={handleSearchUser}
-                style={{
-                  borderBottomWidth: isSearchVisible ? 1 : 0,
-                  borderColor: 'rgba(217, 217, 217, 0.70)',
-                }}
-              >
-                <Image
-                  source={searchIcon}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginRight: isSearchVisible ? 0 : 20,
-                    opacity: isSearchVisible ? 0.3 : 1,
-                  }}
-                />
-              </TouchableOpacity>
-              {isSearchVisible && (
-                <View
-                  style={{
-                    borderBottomWidth: 1,
-                    borderColor: 'rgba(217, 217, 217, 0.70)',
-                    height: 26,
-                    width: 150,
-                    marginRight: 12,
-                    paddingTop: 3,
-                    paddingHorizontal: 5,
-                  }}
-                >
-                  <TextInput onChangeText={handleFilter} style={{}} autoFocus={true} />
-                </View>
-              )}
-              <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
-            </View>
+            <Pressable onPress={handlePressIconLogOut}>
+              <View style={{ flexDirection: 'row', position: 'relative', height: 26 }}>
+                <Image source={profileIcon} style={{ width: 25, height: 25, marginRight: 20 }} />
+              </View>
+            </Pressable>
           ),
         }}
         name="BalanceMainScreen"

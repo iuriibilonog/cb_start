@@ -95,14 +95,14 @@ const userSlice = createSlice({
           message: action.payload,
         };
       });
-    builder.addCase(getUsersByPage.fulfilled, (state, action) => {
-      state.content.usersByPage = action.payload;
-    }),
-      builder.addCase(getUsersByPage.rejected, (state, action) => {
-        state.error = {
-          message: action.payload,
-        };
-      });
+    // builder.addCase(getUsersByPage.fulfilled, (state, action) => {
+    //   state.content.usersByPage = action.payload;
+    // }),
+    //   builder.addCase(getUsersByPage.rejected, (state, action) => {
+    //     state.error = {
+    //       message: action.payload,
+    //     };
+    //   });
     builder.addCase(getMerchantsApiKeys.fulfilled, (state, action) => {
       state.content.merchantApiKeys = action.payload.items;
     }),
@@ -159,14 +159,14 @@ const userSlice = createSlice({
         };
       });
 
-    builder.addCase(getSearchUsers.fulfilled, (state, action) => {
-      state.content.searchUsers = action.payload;
-    }),
-      builder.addCase(getSearchUsers.rejected, (state, action) => {
-        state.error = {
-          message: action.payload,
-        };
-      });
+    // builder.addCase(getSearchUsers.fulfilled, (state, action) => {
+    //   state.content.searchUsers = action.payload;
+    // }),
+    //   builder.addCase(getSearchUsers.rejected, (state, action) => {
+    //     state.error = {
+    //       message: action.payload,
+    //     };
+    //   });
 
     builder.addCase(deleteUser.fulfilled, (state, action) => {}),
       builder.addCase(deleteUser.rejected, (state, action) => {

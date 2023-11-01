@@ -22,12 +22,19 @@ import SimpleButton from 'src/components/atoms/SimpleButton';
 import { useNavigation } from '@react-navigation/native';
 import MainLoader from 'src/components/molecules/MainLoader';
 
+const deleteIcon = require('src/images/delete.png');
+const deleteInactiveIcon = require('src/images/delete_inactive.png');
 const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
+const editIcon = require('src/images/edit.png');
+const editInactiveIcon = require('src/images/edit_inactive.png');
 
 const UsersListScreen = (props) => {
   const dispatch = useDispatch();
+  // const usersData = useSelector(usersByPage);
+  // const searchUsersData = useSelector(searchUsers);
 
+  const [incomingUsersData, setIncomingUsersData] = useState();
   const [data, setData] = useState(null);
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
@@ -35,13 +42,33 @@ const UsersListScreen = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
+  const [usersData, setUsersData] = useState([]);
+  const [searchUsersData, setSearchUsersData] = useState([]);
 
   const { width } = Dimensions.get('window');
 
   const navigation = useNavigation();
 
   const scrollRef = useRef();
+
+  useEffect(() => {
+    //console.log('1-currentPage');
+    if (!props.searchUser) {
+      //console.log('11-currentPage');
+      getUsersWithoutSearch();
+    } else {
+      //console.log('12-currentPage');
+      getCurrentPageData();
+    }
+  }, [currentPage]);
+
+  const getUsersWithoutSearch = async () => {
+    //console.log('2-getUsersWithoutSearch');
+    setIsLoading(true);
+    const users = await dispatch(getUsersByPage(currentPage)).unwrap();
+    setUsersData(users);
+    // setIsLoading(false);
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -57,24 +84,80 @@ const UsersListScreen = (props) => {
     };
   }, []);
 
-  useEffect(() => {
+  const getCurrentPageData = async () => {
+    //console.log('3-getCurrentPageData');
+    setIsLoading(true);
     if (props.searchUser) {
-      getUserWithSearch();
+      //console.log('31-getCurrentPageData');
+      const searchUsers = await dispatch(
+        getSearchUsers({ page: currentPage, searchText: props.searchUser })
+      ).unwrap();
+      setSearchUsersData(searchUsers);
     } else {
-      getUserWithoutSearch();
+      console.log('32-getCurrentPageData');
+      const users = await dispatch(getUsersByPage(currentPage)).unwrap();
+      setUsersData(users);
     }
-  }, [currentPage, props.searchUser]);
+    // setIsLoading(false);
+  };
 
   useEffect(() => {
+    //console.log('4-props');
     if (props.route.params?.isNewUserCreated) {
-      const page = Math.ceil((totalCount + 1) / 20);
-      page === currentPage ? getUserWithoutSearch() : setCurrentPage(page);
+      //console.log('41-props');
+      const page = Math.ceil((usersData.totalCount + 1) / 20);
+      page === currentPage ? getCurrentPageData() : setCurrentPage(page);
     } else if (props.route.params?.removeUser) {
-      const page = Math.ceil((totalCount - 1) / 20);
-      page === currentPage ? getUserWithoutSearch() : setCurrentPage(page);
-      setCurrentPage(page);
+      //console.log('42-props');
+      const page = Math.ceil((usersData.totalCount - 1) / 20);
+      page === currentPage ? getCurrentPageData() : setCurrentPage(page);
+    } else {
+      console.log('43-props');
+      getUserListData(1);
     }
   }, [props]);
+
+  const getUserListData = async (page) => {
+    //console.log('5-getUserListData');
+    setIsLoading(true);
+    if (props.searchUser) {
+      //console.log('51-getUserListData');
+      const searchUsers = await dispatch(
+        getSearchUsers({ page: page ? page : currentPage, searchText: props.searchUser })
+      ).unwrap();
+      console.log('searchUsers', searchUsers);
+      setSearchUsersData(searchUsers);
+    } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
+      //console.log('52-getUserListData');
+      const users = await dispatch(getUsersByPage(1)).unwrap();
+      console.log('users', users);
+      setUsersData(users);
+    } else if (!props.searchUser) {
+      //console.log('53-getUserListData');
+      setIsLoading(false);
+      // await dispatch(getUsersByPage(currentPage));
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    // console.log('6-usersData');
+    if (usersData && usersData.items?.length > 0) {
+      console.log('61-usersData');
+      setIsLoading(true);
+      const pages = Math.ceil(usersData.totalCount / 20);
+      setTotalPages(pages);
+
+      if (!incomingUsersData || !isEqual(incomingUsersData, usersData.items)) {
+        //console.log('62-usersData');
+        addAllUsersLedgers(usersData.items);
+        setIncomingUsersData(usersData.items);
+      } else {
+        //console.log('63-usersData');
+        // setIsLoading(false);
+      }
+    }
+  }, [usersData]);
 
   useEffect(() => {
     // console.log('7-data');
@@ -95,49 +178,45 @@ const UsersListScreen = (props) => {
     }
   }, [data]);
 
-  const getUserWithoutSearch = async () => {
-    setIsLoading(true);
-    const users = await dispatch(getUsersByPage(currentPage)).unwrap();
-    setData(users.items);
-
-    const pages = Math.ceil(users.totalCount / 20);
-    setTotalCount(users.totalCount);
-    setTotalPages(pages);
-    setIsLoading(false);
-  };
-  const getUserWithSearch = async () => {
-    setIsLoading(true);
-    const searchUsers = await dispatch(
-      getSearchUsers({ page: currentPage, searchText: props.searchUser })
-    ).unwrap();
-    console.log('searchUsers', searchUsers);
-    setData(searchUsers.items);
-
-    const pages = Math.ceil(searchUsers.totalCount / 20);
-    setTotalPages(pages);
-    setIsLoading(false);
-  };
-
-  const getUserLedger = async (id, index) => {
-    if (!data[index].ledgers) {
-      const res = await dispatch(getLedgersData(id)).unwrap();
-      const userLedgers = res.items.map((item) => item.currency);
-      const withLedger = data.map((item) => {
-        if (item.id === id) {
-          item.ledgers = userLedgers.join(', ');
-          return item;
-        }
-        return item;
-      });
-
-      setData(withLedger);
+  const addAllUsersLedgers = async (usersList) => {
+    //console.log('8-addAllUsersLedgers');
+    let correctedUsersList = [...usersList];
+    let sucessCount = 0;
+    for (let i = 0; i < correctedUsersList.length; i++) {
+      const res = await dispatch(getLedgersData(correctedUsersList[i].id));
+      const userLedgers = res.payload.items.map((item) => item.currency);
+      correctedUsersList[i] = { ...correctedUsersList[i], ledgers: userLedgers.join(', ') };
+      sucessCount = sucessCount + 1;
+      if (sucessCount > usersList.length - 1) {
+        //console.log('81-addAllUsersLedgers-dataprepared!');
+        setData(correctedUsersList);
+        setIsLoading(false);
+      }
     }
   };
 
-  const handleExpandRow = (id, index) => {
-    getUserLedger(id, index);
+  useEffect(() => {
+    //console.log('9-searchUsersData');
+    if (searchUsersData.length > 0) {
+      console.log('91-searchUsersData');
+      const pages = Math.ceil(searchUsersData.totalCount / 20);
+      setTotalPages(pages);
+      if (!incomingUsersData || !isEqual(incomingUsersData, searchUsersData.items)) {
+        //console.log('92-searchUsersData');
+        addAllUsersLedgers(searchUsersData.items);
+        setIncomingUsersData(searchUsersData.items);
+      } else {
+        //console.log('93-searchUsersData');
+        setIsLoading(false);
+      }
+      //console.log('94-searchUsersData');
+      setData(searchUsersData.items);
+    }
+  }, [searchUsersData]);
+
+  const handleExpandRow = (index) => {
     setIsAdditDataOpen((prev) => !prev);
-    setSelectedIndex(id);
+    setSelectedIndex(index);
   };
 
   const handleNavigate = (user) => {
@@ -156,13 +235,11 @@ const UsersListScreen = (props) => {
     //console.log('10-handleBlur');
     if (!props.searchUser && isKeyboardVisible) {
       //console.log('101-handleBlur');
-      // setIsLoading(true);
+      setIsLoading(true);
       props.setIsSearchVisible(false);
       const users = await dispatch(getUsersByPage(1)).unwrap();
-      setData(users.items);
+      setUsersData(users);
       // setIsLoading(false);
-      Keyboard.dismiss();
-    } else {
       Keyboard.dismiss();
     }
   };
@@ -186,7 +263,7 @@ const UsersListScreen = (props) => {
             borderBottomWidth: isAdditDataOpen && selectedIndex === item.id ? 0 : 1,
           }}
         >
-          <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id, index)}>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => handleExpandRow(item.id)}>
             <View
               style={{
                 ...styles.tableCell,
@@ -325,7 +402,6 @@ const UsersListScreen = (props) => {
             </SimpleText>
           </View>
         </View>
-
         {data && data.length > 0 ? (
           <FlatList
             data={data}
@@ -333,7 +409,7 @@ const UsersListScreen = (props) => {
             refreshControl={
               <RefreshControl
                 isRefreshing={isLoading}
-                onRefresh={getUserWithoutSearch}
+                onRefresh={getCurrentPageData}
                 colors={['transparent']} // for android
                 tintColor={'transparent'} // for ios
               />
