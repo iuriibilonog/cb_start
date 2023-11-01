@@ -200,7 +200,6 @@ const UserScreen = (props) => {
   const confirmEditPayment = async (id) => {
     setIsLoading(true);
     const currentPaymentData = allPaymentData.filter((item) => item.id === id)[0];
-
     const paymentData = {
       name: currentPaymentData.name,
       netPrice: +currentPaymentData.netPrice,
@@ -257,7 +256,6 @@ const UserScreen = (props) => {
             : [update.paymentMethodSettings]
         )
       );
-
       setPaymentsData(
         Array.isArray(update.paymentMethodSettings)
           ? update.paymentMethodSettings
@@ -324,7 +322,7 @@ const UserScreen = (props) => {
         setCurrentUser(res.payload.items.find((item) => item.id === +props.route.params.id));
       }
     });
-  }, [props.route.params?.id]);
+  }, [props.route.params?.id, props.route.params?.isNewUserCreated]);
 
   const getPaymentsData = async (chainIdOfCurrentLedger) => {
     try {

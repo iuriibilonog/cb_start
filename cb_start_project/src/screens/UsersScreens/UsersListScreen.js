@@ -96,6 +96,7 @@ const UsersListScreen = (props) => {
 
   useEffect(() => {
     //console.log('4-props');
+    // мы этот пропс убираем -  так как возврат с редактирования будет в UserScreen
     if (props.route.params?.isNewUserCreated) {
       //console.log('41-props');
       const page = Math.ceil((usersData.totalCount + 1) / 20);

@@ -614,7 +614,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                       style={{
                         ...styles.datePickerWrapper,
                         borderBottomWidth: 1,
-                        borderBottomColor: errors.endDate === 'date_interval' ? 'red' : '#fff',
+                        borderBottomColor: errors.endDate === 'date_interval' ? '#FC7270' : '#fff',
                       }}
                     >
                       {inputsData.startDate && (
@@ -633,7 +633,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                           position: 'absolute',
                           top: 68,
                           left: 0,
-                          color: 'red',
+                          color: '#FC7270',
                           marginTop: 5,
                           fontSize: 12,
                           letterSpacing: 1,
@@ -664,7 +664,7 @@ const DashboardScreen = ({ navigation, setBalancePeriod, balancePeriod }) => {
                       style={{
                         ...styles.datePickerWrapper,
                         borderBottomWidth: 1,
-                        borderBottomColor: errors.endDate === 'date_interval' ? 'red' : '#fff',
+                        borderBottomColor: errors.endDate === 'date_interval' ? '#FC7270' : '#fff',
                       }}
                     >
                       {inputsData.endDate && (

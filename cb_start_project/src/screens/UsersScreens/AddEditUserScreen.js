@@ -13,10 +13,12 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 import SimpleText from 'src/components/atoms/SimpleText';
 // import ModalDropdown from 'react-native-modal-dropdown';
 import ModalDropdown from 'src/components/molecules/ModalDropdown';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useDispatch } from 'react-redux';
 import { putEditUser, postNewUser } from 'src/redux/content/operations';
 import { FormattedMessage } from 'react-intl';
@@ -81,7 +83,11 @@ const AddEditUserScreen = (props) => {
           : putEditUser({ userId: props.route.params.user.id, updatedData })
       ).unwrap();
 
-      props.navigation.navigate('UsersListScreen', { isRefresh: true, isNewUserCreated: true });
+      props.navigation.navigate('UserScreen', {
+        id: props.route.params.user.id,
+        // isRefresh: true,
+        isNewUserCreated: true,
+      });
     } catch (error) {
       setTimeout(() => {
         showMessage({
@@ -109,206 +115,222 @@ const AddEditUserScreen = (props) => {
     }
     setInputValue((prev) => ({ ...prev, ...data }));
   };
-
+  const headerHeight = useHeaderHeight();
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
+    <ScrollView
+      style={{
+        flex: 1,
+
+        backgroundColor: '#fff',
       }}
     >
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: 20,
-          paddingVertical: 20,
-          justifyContent: 'flex-start',
-          backgroundColor: '#fff',
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
         }}
       >
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() =>
-            props.navigation.navigate(props.route.params.parentScreen, {
-              id: props.route.params.user?.id,
-            })
-          }
+        <View
           style={{
-            marginRight: 'auto',
+            flex: 1,
+            paddingHorizontal: 20,
+            paddingVertical: 20,
+            justifyContent: 'flex-start',
             backgroundColor: '#fff',
           }}
         >
-          <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        {/* </View> */}
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() =>
+              props.navigation.navigate(props.route.params.parentScreen, {
+                id: props.route.params.user?.id,
+              })
+            }
+            style={{
+              marginRight: 'auto',
+              backgroundColor: '#fff',
+            }}
+          >
+            <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
+          </TouchableOpacity>
+          {/* </View> */}
+          <KeyboardAvoidingView
+            keyboardVerticalOffset={headerHeight}
+            // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            behavior="position"
+            style={{ flex: 1 }}
+          >
+            <View style={styles.innerWrapper}>
+              <SimpleText style={styles.title}>
+                <FormattedMessage id={props.new ? 'users.add_new_user' : 'users.edit_user'} />
+              </SimpleText>
 
-        <View style={styles.innerWrapper}>
-          <SimpleText style={styles.title}>
-            <FormattedMessage id={props.new ? 'users.add_new_user' : 'users.edit_user'} />
-          </SimpleText>
-          <View style={{ width: '100%' }}>
-            <FormattedMessage id={'common.e_mail'}>
-              {(msg) => (
-                <View>
-                  <TextInput
-                    style={{
-                      ...styles.input,
-                      marginBottom: 30,
-                      // borderWidth: errors.email && errors.email === 'required' ? 1 : 0,
-                      // borderBottomWidth: 1,
-                      borderColor: errors.email ? 'red' : 'rgba(0, 0, 0, 0.20)',
-                    }}
-                    placeholder={msg[0]}
-                    placeholderTextColor={'grey'}
-                    value={inputValue?.email}
-                    onChangeText={(text) => handleInput({ email: text })}
-                  />
-                </View>
-              )}
-            </FormattedMessage>
-            {errors.email && (
-              <SimpleText style={styles.error}>
-                <FormattedMessage id={`errors.${errors.email}`} />
-              </SimpleText>
-            )}
-          </View>
-          <View style={{ width: '100%' }}>
-            <FormattedMessage id={'common.user_name'}>
-              {(msg) => (
-                <TextInput
-                  style={{
-                    ...styles.input,
-                    marginBottom: 30,
-                    borderColor: errors.username ? 'red' : 'rgba(0, 0, 0, 0.20)',
-                  }}
-                  placeholder={msg[0]}
-                  placeholderTextColor={'grey'}
-                  value={inputValue?.username}
-                  onChangeText={(text) => handleInput({ username: text })}
-                />
-              )}
-            </FormattedMessage>
-            {errors.username && (
-              <SimpleText style={styles.error}>
-                <FormattedMessage id={`errors.${errors.username}`} />
-              </SimpleText>
-            )}
-          </View>
-          <View style={styles.passInputWrapper}>
-            <FormattedMessage id={'common.password'}>
-              {(msg) => {
-                return (
-                  <TextInput
-                    style={{
-                      ...styles.input,
-                      marginBottom: 30,
-                      borderColor: errors.password ? 'red' : 'rgba(0, 0, 0, 0.20)',
-                    }}
-                    placeholder={msg[0]}
-                    placeholderTextColor={'grey'}
-                    value={inputValue?.password}
-                    onChangeText={(text) => handleInput({ password: text })}
-                    secureTextEntry={!isPassShown}
-                  />
-                );
-              }}
-            </FormattedMessage>
-            <Pressable
-              onPress={handlePassShowBtn}
-              style={{ position: 'absolute', right: 10, top: 6 }}
-            >
-              <Image
-                source={
-                  isPassShown && inputValue.password
-                    ? eyeOnCross
-                    : inputValue.password
-                    ? eyeOn
-                    : eyeOff
-                }
-                style={{ width: 25, height: 25 }}
-              />
-            </Pressable>
-            {errors.password && (
-              <SimpleText style={styles.error}>
-                <FormattedMessage id={`errors.${errors.password}`} />
-              </SimpleText>
-            )}
-          </View>
-          <View style={{ height: 42, marginBottom: 55, width: '100%' }}>
-            {roles.length > 0 && (
-              <FormattedMessage id={'common.role'}>
-                {(msg) => {
-                  return (
-                    <ModalDropdown
-                      options={roles}
-                      defaultIndex={1}
-                      defaultValue={
-                        [0, 1, 2].includes(selectedRole) ? roles[selectedRole] : roles[0]
-                      }
-                      isFullWidth
-                      animated={false}
-                      onSelect={setSelectedRole}
-                      textStyle={{
-                        fontSize: 16,
-                        fontFamily: 'Mont',
-                        color: '#262626',
-
-                        // color: [0, 1, 2].includes(selectedRole)
-                        //   ? '#262626'
-                        //   : 'rgba(38, 38, 38, 0.6)',
-                      }}
+              <View style={{ width: '100%' }}>
+                <FormattedMessage id={'common.e_mail'}>
+                  {(msg) => (
+                    <View>
+                      <TextInput
+                        style={{
+                          ...styles.input,
+                          marginBottom: 30,
+                          // borderWidth: errors.email && errors.email === 'required' ? 1 : 0,
+                          // borderBottomWidth: 1,
+                          borderBottomColor: errors.email ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
+                        }}
+                        placeholder={msg[0]}
+                        placeholderTextColor={'grey'}
+                        value={inputValue?.email}
+                        onChangeText={(text) => handleInput({ email: text })}
+                      />
+                    </View>
+                  )}
+                </FormattedMessage>
+                {errors.email && (
+                  <SimpleText style={styles.error}>
+                    <FormattedMessage id={`errors.${errors.email}`} />
+                  </SimpleText>
+                )}
+              </View>
+              <View style={{ width: '100%' }}>
+                <FormattedMessage id={'common.user_name'}>
+                  {(msg) => (
+                    <TextInput
                       style={{
-                        // backgroundColor: '#F4F4F4',
-                        paddingHorizontal: 10,
-                        paddingBottom: 5,
-                        justifyContent: 'space-between',
-                        borderColor: 'rgba(0, 0, 0, 0.20)',
-                        borderBottomWidth: 1,
-
-                        width: '100%',
+                        ...styles.input,
+                        marginBottom: 30,
+                        borderBottomColor: errors.username ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
                       }}
-                      dropdownStyle={{
-                        marginLeft: -10,
-                        marginTop: 10,
-                        paddingLeft: 5,
-                        paddingRight: 2,
-                        // width: '100%',
-                        width: width - 90,
-                        height: roles.length > 4 ? 152 : roles.length * 40,
-                        borderWidth: 1,
-                        borderColor: 'rgba(0, 0, 0, 0.20)',
-                        borderRadius: 2,
-                      }}
-                      dropdownTextStyle={{
-                        fontSize: 16,
-                        lineHeight: 16,
-                        fontWeight: '600',
-                        fontFamily: 'Mont',
-                        // backgroundColor: '#F4F4F4',
-                        color: 'rgba(38, 38, 38, 0.50)',
-                      }}
-                      renderRightComponent={() => (
-                        <Image
-                          source={
-                            isDropdownOpen
-                              ? require('src/images/arrow_up.png')
-                              : [0, 1, 2].includes(selectedRole)
-                              ? require('src/images/arrow_down.png')
-                              : require('src/images/arrow_down_inactive.png')
-                          }
-                          style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                        />
-                      )}
-                      renderRowProps={{ activeOpacity: 1 }}
-                      renderSeparator={() => <></>}
-                      onDropdownWillShow={() => setIsDropdownOpen(true)}
-                      onDropdownWillHide={() => setIsDropdownOpen(false)}
+                      placeholder={msg[0]}
+                      placeholderTextColor={'grey'}
+                      value={inputValue?.username}
+                      onChangeText={(text) => handleInput({ username: text })}
                     />
-                  );
-                }}
-              </FormattedMessage>
-            )}
-          </View>
-          <TouchableOpacity activeOpacity={0.5} style={{ width: '100%' }} onPress={submit}>
+                  )}
+                </FormattedMessage>
+                {errors.username && (
+                  <SimpleText style={styles.error}>
+                    <FormattedMessage id={`errors.${errors.username}`} />
+                  </SimpleText>
+                )}
+              </View>
+              <View style={styles.passInputWrapper}>
+                <FormattedMessage id={'common.password'}>
+                  {(msg) => {
+                    return (
+                      <TextInput
+                        style={{
+                          ...styles.input,
+                          marginBottom: 30,
+                          borderBottomColor: errors.password ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
+                        }}
+                        placeholder={msg[0]}
+                        placeholderTextColor={'grey'}
+                        value={inputValue?.password}
+                        onChangeText={(text) => handleInput({ password: text })}
+                        secureTextEntry={!isPassShown}
+                      />
+                    );
+                  }}
+                </FormattedMessage>
+                <Pressable
+                  onPress={handlePassShowBtn}
+                  style={{ position: 'absolute', right: 10, top: 6 }}
+                >
+                  <Image
+                    source={
+                      isPassShown && inputValue.password
+                        ? eyeOnCross
+                        : inputValue.password
+                        ? eyeOn
+                        : eyeOff
+                    }
+                    style={{ width: 25, height: 25 }}
+                  />
+                </Pressable>
+                {errors.password && (
+                  <SimpleText style={styles.error}>
+                    <FormattedMessage id={`errors.${errors.password}`} />
+                  </SimpleText>
+                )}
+              </View>
+
+              <View style={{ height: 42, marginBottom: 55, width: '100%' }}>
+                {roles.length > 0 && (
+                  <FormattedMessage id={'common.role'}>
+                    {(msg) => {
+                      return (
+                        <ModalDropdown
+                          options={roles}
+                          defaultIndex={1}
+                          defaultValue={
+                            [0, 1, 2].includes(selectedRole) ? roles[selectedRole] : roles[0]
+                          }
+                          isFullWidth
+                          animated={false}
+                          onSelect={setSelectedRole}
+                          textStyle={{
+                            fontSize: 16,
+                            fontFamily: 'Mont',
+                            color: '#262626',
+
+                            // color: [0, 1, 2].includes(selectedRole)
+                            //   ? '#262626'
+                            //   : 'rgba(38, 38, 38, 0.6)',
+                          }}
+                          style={{
+                            // backgroundColor: '#F4F4F4',
+                            paddingHorizontal: 10,
+                            paddingBottom: 5,
+                            justifyContent: 'space-between',
+                            borderColor: 'rgba(0, 0, 0, 0.20)',
+                            borderBottomWidth: 1,
+
+                            width: '100%',
+                          }}
+                          dropdownStyle={{
+                            marginLeft: -10,
+                            marginTop: 10,
+                            paddingLeft: 5,
+                            paddingRight: 2,
+                            // width: '100%',
+                            width: width - 90,
+                            height: roles.length > 4 ? 152 : roles.length * 40,
+                            borderWidth: 1,
+                            borderColor: 'rgba(0, 0, 0, 0.20)',
+                            borderRadius: 2,
+                          }}
+                          dropdownTextStyle={{
+                            fontSize: 16,
+                            lineHeight: 16,
+                            fontWeight: '600',
+                            fontFamily: 'Mont',
+                            // backgroundColor: '#F4F4F4',
+                            color: 'rgba(38, 38, 38, 0.50)',
+                          }}
+                          renderRightComponent={() => (
+                            <Image
+                              source={
+                                isDropdownOpen
+                                  ? require('src/images/arrow_up.png')
+                                  : [0, 1, 2].includes(selectedRole)
+                                  ? require('src/images/arrow_down.png')
+                                  : require('src/images/arrow_down_inactive.png')
+                              }
+                              style={{ width: 26, height: 26, marginLeft: 'auto' }}
+                            />
+                          )}
+                          renderRowProps={{ activeOpacity: 1 }}
+                          renderSeparator={() => <></>}
+                          onDropdownWillShow={() => setIsDropdownOpen(true)}
+                          onDropdownWillHide={() => setIsDropdownOpen(false)}
+                        />
+                      );
+                    }}
+                  </FormattedMessage>
+                )}
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+          <TouchableOpacity activeOpacity={0.5} style={{ paddingHorizontal: 25 }} onPress={submit}>
             <View style={{ ...styles.btn, backgroundColor: props.new ? '#0BA39A' : '#FFE13A' }}>
               <SimpleText style={{ ...styles.btnText, color: props.new ? '#fff' : '#262626' }}>
                 <FormattedMessage id={props.new ? 'common.create' : 'common.edit'} />
@@ -316,8 +338,8 @@ const AddEditUserScreen = (props) => {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </ScrollView>
   );
 };
 
@@ -336,11 +358,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Mont',
     fontSize: 16,
     color: '#262626',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.20)',
-    borderLeftColor: '#fff',
-    borderRightColor: '#fff',
-    borderTopColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, 0.20)',
+    // borderLeftColor: '#fff',
+    // borderRightColor: '#fff',
+    // borderTopColor: '#fff',
   },
   passInputWrapper: { width: '100%', position: 'relative' },
   btn: {
@@ -360,7 +382,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 38,
     left: 0,
-    color: 'red',
+    color: '#FC7270',
     marginTop: 5,
     fontSize: 12,
     letterSpacing: 1,

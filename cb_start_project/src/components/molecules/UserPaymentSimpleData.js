@@ -18,7 +18,10 @@ import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import { useNavigation } from '@react-navigation/native';
 import { getEditedPaymentsSettings } from 'src/redux/content/selectors';
-import { skipEditedPaymentsSettings } from 'src/redux/content/operations';
+import {
+  skipEditedPaymentsSettings,
+  setEditedPaymentsSettings,
+} from 'src/redux/content/operations';
 import SimpleCheckBox from 'src/components/atoms/SimpleCheckBox';
 import SimpleButton from 'src/components/atoms/SimpleButton';
 
@@ -51,6 +54,20 @@ const UserPaymentSimpleData = ({ item, index, id, currentUser, confirmEditPaymen
       dispatch(skipEditedPaymentsSettings());
     };
   }, []);
+
+  useEffect(() => {
+    const data = editedPayments.map((item) => {
+      if (item.id === id) {
+        return { ...item, active: isUseAcive };
+      }
+      return item;
+    });
+    dispatchIsUseActive(data);
+  }, [isUseAcive]);
+
+  const dispatchIsUseActive = async (data) => {
+    await dispatch(setEditedPaymentsSettings(data));
+  };
 
   const getRestrictedCountries = (countries) => {
     // countries = [

@@ -506,7 +506,7 @@ const CreatePaymentsSettingsScreen = (props) => {
                             width: width - 40,
                             borderWidth: 1,
                             borderColor:
-                              errors.name && errors.name === 'required' ? 'red' : '#F4F4F4',
+                              errors.name && errors.name === 'required' ? '#FC7270' : '#F4F4F4',
                           }}
                           value={inputsData.settingsName}
                           onChangeText={(text) => {
@@ -525,7 +525,7 @@ const CreatePaymentsSettingsScreen = (props) => {
                           position: 'absolute',
                           top: 68,
                           left: 0,
-                          color: 'red',
+                          color: '#FC7270',
                           marginTop: 5,
                           fontSize: 12,
                           letterSpacing: 1,

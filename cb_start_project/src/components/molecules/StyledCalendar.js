@@ -127,7 +127,7 @@ const StyledCalendar = ({ initialDay, setSelectedDay }) => {
             },
             'stylesheet.day.basic': {
               // selected: {
-              //   backgroundColor: 'red',
+              //   backgroundColor: '#FC7270',
               //   borderRadius: 20,
               // },
               // today: {
@@ -141,7 +141,7 @@ const StyledCalendar = ({ initialDay, setSelectedDay }) => {
                 alignItems: 'center',
               },
               // selectedText: {
-              //   color: 'red',
+              //   color: '#FC7270',
               // },
             },
             weekVerticalMargin: 0,
@@ -149,7 +149,7 @@ const StyledCalendar = ({ initialDay, setSelectedDay }) => {
             calendarBackground: '#ffffff',
             textSectionTitleColor: '#b6c1cd',
             textSectionTitleDisabledColor: '#d9e1e8',
-            selectedDayBackgroundColor: 'red',
+            selectedDayBackgroundColor: '#FC7270',
             selectedDayTextColor: 'green',
             todayTextColor: '#00adf5',
             dayTextColor: '#2d4150',

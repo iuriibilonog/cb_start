@@ -31,7 +31,7 @@ const AddLedgerScreen = (props) => {
   const [value, setValue] = useState(props.route.params.name);
   const [isEmptyValue, setIsEmptyValue] = useState(false);
   const [currency, setCurrency] = useState(['EUR', 'USD', 'RUB', 'KZT', 'INR', 'BRL']);
-  const [selectedCurrency, setSelectedCurrency] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState();
   const [errors, setErrors] = useState({});
 
@@ -44,6 +44,7 @@ const AddLedgerScreen = (props) => {
   const { width } = Dimensions.get('window');
 
   const handleSubmitLedger = async (data) => {
+    console.log('>>', value, selectedCurrency);
     const validationParams = ['value', 'selectedCurrency'];
     const validationAnswer = checkValidation({ value, selectedCurrency }, validationParams);
 
@@ -129,7 +130,7 @@ const AddLedgerScreen = (props) => {
             <SimpleText style={styles.title}>
               <FormattedMessage id={'users.add_new_ledger'} />
             </SimpleText>
-            <View style={{ width: '100%' }}>
+            <View style={{ width: '100%', position: 'relative', marginBottom: 40 }}>
               <FormattedMessage id={'users.ledger_name'}>
                 {(placeholder) => (
                   <TextInput
@@ -157,14 +158,14 @@ const AddLedgerScreen = (props) => {
                 </SimpleText>
               )}
             </View>
-            <View style={{ width: '100%' }}>
+            <View style={{ width: '100%', position: 'relative', marginBottom: 40 }}>
               {currency.length > 0 && (
                 <FormattedMessage id={'common.currency'}>
                   {(msg) => {
                     return (
                       <ModalDropdown
                         options={currency}
-                        defaultIndex={1}
+                        defaultIndex={0}
                         defaultValue={
                           [0, 1, 2, 3, 4, 5].includes(selectedCurrency)
                             ? currency[selectedCurrency]
@@ -279,7 +280,6 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 10,
     paddingVertical: 8,
-    marginBottom: 40,
     fontFamily: 'Mont',
     fontSize: 16,
     color: '#262626',
@@ -302,9 +302,9 @@ const styles = StyleSheet.create({
   },
   error: {
     position: 'absolute',
-    top: 38,
+    bottom: -15,
     left: 0,
-    color: 'red',
+    color: '#FC7270',
     marginTop: 5,
     fontSize: 12,
     letterSpacing: 1,

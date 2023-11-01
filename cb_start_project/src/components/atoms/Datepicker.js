@@ -42,7 +42,7 @@ const Datepicker = (props) => {
       onBlur={handleLostFocus}
       value={value}
       keyboardType="numeric"
-      style={{ ...styles.valueText, color: isFormatError ? 'red' : '#262626' }}
+      style={{ ...styles.valueText, color: isFormatError ? '#FC7270' : '#262626' }}
     />
 
     // </View>
