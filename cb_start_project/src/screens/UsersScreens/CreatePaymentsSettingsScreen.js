@@ -14,8 +14,10 @@ import {
   FlatList,
   TextInput,
   ScrollViewBase,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { getBanks, paymentsMethods } from 'src/redux/content/selectors';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { showMessage } from 'react-native-flash-message';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch, useSelector } from 'react-redux';
@@ -276,16 +278,17 @@ const CreatePaymentsSettingsScreen = (props) => {
     );
   };
 
+  const headerHeight = useHeaderHeight();
+
   return (
     <TouchableWithoutFeedback
-      onPress={() => {
-        // Keyboard.dismiss();
-      }}
+    // onPress={() => {
+    //   Keyboard.dismiss();
+    // }}
     >
       <>
         <View
           style={{
-            // flex: 1,
             paddingHorizontal: 20,
             paddingVertical: 20,
             justifyContent: 'flex-start',
@@ -307,383 +310,391 @@ const CreatePaymentsSettingsScreen = (props) => {
             <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>
         </View>
-        <ScrollView ref={scrollRef}>
-          <View
-            style={{
-              flex: 1,
-              paddingHorizontal: 20,
-              paddingBottom: 60,
-              justifyContent: 'flex-start',
-              backgroundColor: '#fff',
-            }}
-          >
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={headerHeight}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          // behavior="position"
+          style={{ flex: 1 }}
+        >
+          <ScrollView ref={scrollRef}>
             <View
               style={{
                 flex: 1,
+                paddingHorizontal: 20,
+                paddingBottom: 60,
                 justifyContent: 'flex-start',
                 backgroundColor: '#fff',
               }}
             >
-              <View style={styles.innerWrapper}>
-                <SimpleText style={styles.title}>
-                  <FormattedMessage id={'users.add_new_payments_settings'} />
-                </SimpleText>
-                <View style={styles.itemWrapper}>
-                  <View style={styles.itemTitle}>
-                    <SimpleText style={styles.itemTextTitle}>
-                      <FormattedMessage id={'dashboard.banks'} />
-                    </SimpleText>
-                  </View>
-                  {banksList && selectedBank && (
-                    <ModalDropdown
-                      // ref={refLedgersModal}
-                      options={banksList.map((item) => item.name)}
-                      defaultIndex={0}
-                      defaultValue={selectedBank}
-                      // isFullWidth
-                      animated={false}
-                      onSelect={(index, option) => {
-                        handleBankSelect(option);
-                      }}
-                      textStyle={{
-                        fontSize: 16,
-                        fontFamily: 'Mont',
-                        fontWeight: '600',
-                        lineHeight: 16,
-                      }}
-                      style={{
-                        backgroundColor: '#F4F4F4',
-                        paddingHorizontal: 16,
-                        paddingVertical: 12,
-                        borderRadius: 2,
-                        justifyContent: 'space-between',
-                        // height:40,
-                        width: width - 40,
-                      }}
-                      dropdownStyle={{
-                        marginLeft: -16,
-                        marginTop: 14,
-                        paddingLeft: 11,
-                        paddingRight: 2,
-                        width: width - 40,
-                        backgroundColor: '#F4F4F4',
-                        borderWidth: 0,
-                        borderRadius: 2,
-                        height: banksList.length > 4 ? 152 : banksList.length * 40,
-                      }}
-                      dropdownTextStyle={{
-                        fontSize: 16,
-                        lineHeight: 16,
-                        fontWeight: '600',
-                        fontFamily: 'Mont',
-                        backgroundColor: '#F4F4F4',
-                        color: 'rgba(38, 38, 38, 0.50)',
-                      }}
-                      renderRightComponent={() => (
-                        <Image
-                          source={
-                            isBanksDropdownOpen
-                              ? require('src/images/arrow_up.png')
-                              : require('src/images/arrow_down.png')
-                          }
-                          style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                        ></Image>
-                      )}
-                      renderRowProps={{ activeOpacity: 1 }}
-                      renderSeparator={() => <></>}
-                      onDropdownWillShow={() => setIsBanksDropdownOpen(true)}
-                      onDropdownWillHide={() => setIsBanksDropdownOpen(false)}
-                    />
-                  )}
-                </View>
-                <View style={styles.itemWrapper}>
-                  <View style={styles.itemTitle}>
-                    <SimpleText style={styles.itemTextTitle}>
-                      <FormattedMessage id={'users.payment_method'} />
-                    </SimpleText>
-                  </View>
-                  {methodsList && selectedMethod && (
-                    <ModalDropdown
-                      ref={refMethods}
-                      options={methodsList.map((item) => item.name)}
-                      defaultIndex={0}
-                      defaultValue={selectedMethod}
-                      // isFullWidth
-                      animated={false}
-                      onSelect={(index, option) => {
-                        setSelectedMethod(option);
-                      }}
-                      textStyle={{
-                        fontSize: 16,
-                        fontFamily: 'Mont',
-                        fontWeight: '600',
-                        lineHeight: 16,
-                      }}
-                      style={{
-                        backgroundColor: '#F4F4F4',
-                        paddingHorizontal: 16,
-                        paddingVertical: 12,
-                        borderRadius: 2,
-                        justifyContent: 'space-between',
-
-                        width: width - 40,
-                      }}
-                      dropdownStyle={{
-                        marginLeft: -16,
-                        marginTop: 14,
-                        paddingLeft: 11,
-                        paddingRight: 2,
-                        width: width - 40,
-                        backgroundColor: '#F4F4F4',
-                        borderWidth: 0,
-                        borderRadius: 2,
-                        height: methodsList.length > 6 ? 220 : methodsList.length * 40,
-                      }}
-                      dropdownTextStyle={{
-                        fontSize: 16,
-                        lineHeight: 16,
-                        fontWeight: '600',
-                        fontFamily: 'Mont',
-                        backgroundColor: '#F4F4F4',
-                        color: 'rgba(38, 38, 38, 0.50)',
-                      }}
-                      renderRightComponent={() => (
-                        <Image
-                          source={
-                            isMethodsDropdownOpen
-                              ? require('src/images/arrow_up.png')
-                              : require('src/images/arrow_down.png')
-                          }
-                          style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                        ></Image>
-                      )}
-                      renderRowProps={{ activeOpacity: 1 }}
-                      renderSeparator={() => <></>}
-                      onDropdownWillShow={() => setIsMethodsDropdownOpen(true)}
-                      onDropdownWillHide={() => setIsMethodsDropdownOpen(false)}
-                    />
-                  )}
-                </View>
-                <View
-                  style={{
-                    pointerEvents: isMethodsDropdownOpen || isBanksDropdownOpen ? 'none' : 'auto',
-                    opacity: isMethodsDropdownOpen || isBanksDropdownOpen ? 0.5 : 1,
-                  }}
-                >
-                  <View style={{ ...styles.itemWrapper, flexDirection: 'row' }}>
-                    <View style={{ width: 65 }}>
-                      <SimpleText style={{ ...styles.boldText, marginBottom: 12 }}>
-                        <FormattedMessage id={'transactions.mode'} />:
-                      </SimpleText>
-                      <SimpleText style={styles.boldText}>
-                        <FormattedMessage id={'common.type'} />:
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'flex-start',
+                  backgroundColor: '#fff',
+                }}
+              >
+                <View style={styles.innerWrapper}>
+                  <SimpleText style={styles.title}>
+                    <FormattedMessage id={'users.add_new_payments_settings'} />
+                  </SimpleText>
+                  <View style={styles.itemWrapper}>
+                    <View style={styles.itemTitle}>
+                      <SimpleText style={styles.itemTextTitle}>
+                        <FormattedMessage id={'dashboard.banks'} />
                       </SimpleText>
                     </View>
-                    <View>
-                      <SimpleText style={{ ...styles.boldText, marginBottom: 12 }}>
-                        {methodsList &&
-                          selectedMethod &&
-                          methodsList.find((i) => i.name === selectedMethod)?.mode}
-                      </SimpleText>
-                      <SimpleText style={styles.boldText}>
-                        {methodsList &&
-                          selectedMethod &&
-                          methodsList.find((i) => i.name === selectedMethod)?.type}
-                      </SimpleText>
-                    </View>
+                    {banksList && selectedBank && (
+                      <ModalDropdown
+                        // ref={refLedgersModal}
+                        options={banksList.map((item) => item.name)}
+                        defaultIndex={0}
+                        defaultValue={selectedBank}
+                        // isFullWidth
+                        animated={false}
+                        onSelect={(index, option) => {
+                          handleBankSelect(option);
+                        }}
+                        textStyle={{
+                          fontSize: 16,
+                          fontFamily: 'Mont',
+                          fontWeight: '600',
+                          lineHeight: 16,
+                        }}
+                        style={{
+                          backgroundColor: '#F4F4F4',
+                          paddingHorizontal: 16,
+                          paddingVertical: 12,
+                          borderRadius: 2,
+                          justifyContent: 'space-between',
+                          // height:40,
+                          width: width - 40,
+                        }}
+                        dropdownStyle={{
+                          marginLeft: -16,
+                          marginTop: 14,
+                          paddingLeft: 11,
+                          paddingRight: 2,
+                          width: width - 40,
+                          backgroundColor: '#F4F4F4',
+                          borderWidth: 0,
+                          borderRadius: 2,
+                          height: banksList.length > 4 ? 152 : banksList.length * 40,
+                        }}
+                        dropdownTextStyle={{
+                          fontSize: 16,
+                          lineHeight: 16,
+                          fontWeight: '600',
+                          fontFamily: 'Mont',
+                          backgroundColor: '#F4F4F4',
+                          color: 'rgba(38, 38, 38, 0.50)',
+                        }}
+                        renderRightComponent={() => (
+                          <Image
+                            source={
+                              isBanksDropdownOpen
+                                ? require('src/images/arrow_up.png')
+                                : require('src/images/arrow_down.png')
+                            }
+                            style={{ width: 26, height: 26, marginLeft: 'auto' }}
+                          ></Image>
+                        )}
+                        renderRowProps={{ activeOpacity: 1 }}
+                        renderSeparator={() => <></>}
+                        onDropdownWillShow={() => setIsBanksDropdownOpen(true)}
+                        onDropdownWillHide={() => setIsBanksDropdownOpen(false)}
+                      />
+                    )}
                   </View>
                   <View style={styles.itemWrapper}>
                     <View style={styles.itemTitle}>
                       <SimpleText style={styles.itemTextTitle}>
-                        <FormattedMessage id={'users.setting_name'} />
+                        <FormattedMessage id={'users.payment_method'} />
                       </SimpleText>
                     </View>
-                    <FormattedMessage id={'users.setting_name'}>
-                      {(placeholder) => (
-                        <TextInput
-                          style={{
-                            ...styles.textInput,
-                            width: width - 40,
-                            borderWidth: 1,
-                            borderColor:
-                              errors.name && errors.name === 'required' ? '#FC7270' : '#F4F4F4',
-                          }}
-                          value={inputsData.settingsName}
-                          onChangeText={(text) => {
-                            if (errors.name) {
-                              setErrors({});
-                            }
-                            setInputsData((prev) => ({ ...prev, name: text }));
-                          }}
-                          placeholder={placeholder[0]}
-                        />
-                      )}
-                    </FormattedMessage>
-                    {errors.name && errors.name === 'required' && (
-                      <SimpleText
-                        style={{
-                          position: 'absolute',
-                          top: 68,
-                          left: 0,
-                          color: '#FC7270',
-                          marginTop: 5,
-                          fontSize: 12,
-                          letterSpacing: 1,
+                    {methodsList && selectedMethod && (
+                      <ModalDropdown
+                        ref={refMethods}
+                        options={methodsList.map((item) => item.name)}
+                        defaultIndex={0}
+                        defaultValue={selectedMethod}
+                        // isFullWidth
+                        animated={false}
+                        onSelect={(index, option) => {
+                          setSelectedMethod(option);
                         }}
-                      >
-                        <FormattedMessage id={'errors.required_field'} />
-                      </SimpleText>
+                        textStyle={{
+                          fontSize: 16,
+                          fontFamily: 'Mont',
+                          fontWeight: '600',
+                          lineHeight: 16,
+                        }}
+                        style={{
+                          backgroundColor: '#F4F4F4',
+                          paddingHorizontal: 16,
+                          paddingVertical: 12,
+                          borderRadius: 2,
+                          justifyContent: 'space-between',
+
+                          width: width - 40,
+                        }}
+                        dropdownStyle={{
+                          marginLeft: -16,
+                          marginTop: 14,
+                          paddingLeft: 11,
+                          paddingRight: 2,
+                          width: width - 40,
+                          backgroundColor: '#F4F4F4',
+                          borderWidth: 0,
+                          borderRadius: 2,
+                          height: methodsList.length > 6 ? 220 : methodsList.length * 40,
+                        }}
+                        dropdownTextStyle={{
+                          fontSize: 16,
+                          lineHeight: 16,
+                          fontWeight: '600',
+                          fontFamily: 'Mont',
+                          backgroundColor: '#F4F4F4',
+                          color: 'rgba(38, 38, 38, 0.50)',
+                        }}
+                        renderRightComponent={() => (
+                          <Image
+                            source={
+                              isMethodsDropdownOpen
+                                ? require('src/images/arrow_up.png')
+                                : require('src/images/arrow_down.png')
+                            }
+                            style={{ width: 26, height: 26, marginLeft: 'auto' }}
+                          ></Image>
+                        )}
+                        renderRowProps={{ activeOpacity: 1 }}
+                        renderSeparator={() => <></>}
+                        onDropdownWillShow={() => setIsMethodsDropdownOpen(true)}
+                        onDropdownWillHide={() => setIsMethodsDropdownOpen(false)}
+                      />
                     )}
                   </View>
-                  <View style={styles.digitBlockWrapper}>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.net_price'}
-                        name={'netPrice'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.fixed_net_price'}
-                        name={'fixedNetPrice'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.min_commission'}
-                        name={'minCommission'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.limit'}
-                        name={'limit'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.min_amount'}
-                        name={'minAmount'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.max_amount'}
-                        name={'maxAmount'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.rate_commission'}
-                        name={'rateCommission'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-
-                    <View style={styles.digitItemWrapper}>
-                      <View style={styles.itemTitle}>
-                        <SimpleText style={styles.itemTextTitle}>
-                          <FormattedMessage id={'users.restricted_brands'} /> :
+                  <View
+                    style={{
+                      pointerEvents: isMethodsDropdownOpen || isBanksDropdownOpen ? 'none' : 'auto',
+                      opacity: isMethodsDropdownOpen || isBanksDropdownOpen ? 0.5 : 1,
+                    }}
+                  >
+                    <View style={{ ...styles.itemWrapper, flexDirection: 'row' }}>
+                      <View style={{ width: 65 }}>
+                        <SimpleText style={{ ...styles.boldText, marginBottom: 12 }}>
+                          <FormattedMessage id={'transactions.mode'} />:
+                        </SimpleText>
+                        <SimpleText style={styles.boldText}>
+                          <FormattedMessage id={'common.type'} />:
                         </SimpleText>
                       </View>
-                      {selectedRestrictedBrand && showRestrictedBrands()}
-                      {/* <DecrementIncrement
-                        title={'users.restricted_brands'}
-                        name={'restrictedBrands'}
-                        setDigitsValues={handleSetInputsValues}
-                      /> */}
-                    </View>
-
-                    <View style={{ marginBottom: 60 }}>
-                      <View style={styles.itemTitle}>
-                        <SimpleText style={styles.itemTextTitle}>
-                          <FormattedMessage id={'users.restricted_countries'} />
+                      <View>
+                        <SimpleText style={{ ...styles.boldText, marginBottom: 12 }}>
+                          {methodsList &&
+                            selectedMethod &&
+                            methodsList.find((i) => i.name === selectedMethod)?.mode}
+                        </SimpleText>
+                        <SimpleText style={styles.boldText}>
+                          {methodsList &&
+                            selectedMethod &&
+                            methodsList.find((i) => i.name === selectedMethod)?.type}
                         </SimpleText>
                       </View>
-                      <FormattedMessage id={'users.restricted_countries'}>
+                    </View>
+
+                    <View style={styles.itemWrapper}>
+                      <View style={styles.itemTitle}>
+                        <SimpleText style={styles.itemTextTitle}>
+                          <FormattedMessage id={'users.setting_name'} />
+                        </SimpleText>
+                      </View>
+                      <FormattedMessage id={'users.setting_name'}>
                         {(placeholder) => (
                           <TextInput
-                            style={{ ...styles.textInput, width: width - 40 }}
-                            value={inputsData.restrictedCountries}
+                            style={{
+                              ...styles.textInput,
+                              width: width - 40,
+                              borderWidth: 1,
+                              borderColor:
+                                errors.name && errors.name === 'required' ? '#FC7270' : '#F4F4F4',
+                            }}
+                            value={inputsData.settingsName}
                             onChangeText={(text) => {
-                              setInputsData((prev) => ({ ...prev, restrictedCountries: text }));
+                              if (errors.name) {
+                                setErrors({});
+                              }
+                              setInputsData((prev) => ({ ...prev, name: text }));
                             }}
                             placeholder={placeholder[0]}
                           />
                         )}
                       </FormattedMessage>
+                      {errors.name && errors.name === 'required' && (
+                        <SimpleText
+                          style={{
+                            position: 'absolute',
+                            top: 68,
+                            left: 0,
+                            color: '#FC7270',
+                            marginTop: 5,
+                            fontSize: 12,
+                            letterSpacing: 1,
+                          }}
+                        >
+                          <FormattedMessage id={'errors.required_field'} />
+                        </SimpleText>
+                      )}
                     </View>
-                  </View>
-                  <View style={{ marginBottom: 60 }}>
-                    <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
-                      <FormattedMessage id={'users.addit_setting_mastercard'} />
-                    </SimpleText>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.net_price'}
-                        name={'mastercard_netPrice'}
+                    <View style={styles.digitBlockWrapper}>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.net_price'}
+                          name={'netPrice'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.fixed_net_price'}
+                          name={'fixedNetPrice'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.min_commission'}
+                          name={'minCommission'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.limit'}
+                          name={'limit'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.min_amount'}
+                          name={'minAmount'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.max_amount'}
+                          name={'maxAmount'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.rate_commission'}
+                          name={'rateCommission'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+
+                      <View style={styles.digitItemWrapper}>
+                        <View style={styles.itemTitle}>
+                          <SimpleText style={styles.itemTextTitle}>
+                            <FormattedMessage id={'users.restricted_brands'} /> :
+                          </SimpleText>
+                        </View>
+                        {selectedRestrictedBrand && showRestrictedBrands()}
+                        {/* <DecrementIncrement
+                        title={'users.restricted_brands'}
+                        name={'restrictedBrands'}
                         setDigitsValues={handleSetInputsValues}
-                      />
+                      /> */}
+                      </View>
+
+                      <View style={{ marginBottom: 60 }}>
+                        <View style={styles.itemTitle}>
+                          <SimpleText style={styles.itemTextTitle}>
+                            <FormattedMessage id={'users.restricted_countries'} />
+                          </SimpleText>
+                        </View>
+                        <FormattedMessage id={'users.restricted_countries'}>
+                          {(placeholder) => (
+                            <TextInput
+                              style={{ ...styles.textInput, width: width - 40 }}
+                              value={inputsData.restrictedCountries}
+                              onChangeText={(text) => {
+                                setInputsData((prev) => ({ ...prev, restrictedCountries: text }));
+                              }}
+                              placeholder={placeholder[0]}
+                            />
+                          )}
+                        </FormattedMessage>
+                      </View>
                     </View>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.fixed_net_price'}
-                        name={'mastercard_fixedNetPrice'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
+                    <View style={{ marginBottom: 60 }}>
+                      <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
+                        <FormattedMessage id={'users.addit_setting_mastercard'} />
+                      </SimpleText>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.net_price'}
+                          name={'mastercard_netPrice'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.fixed_net_price'}
+                          name={'mastercard_fixedNetPrice'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
+                        <DecrementIncrement
+                          title={'users.min_commission'}
+                          name={'mastercard_minCommission'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
                     </View>
-                    <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
-                      <DecrementIncrement
-                        title={'users.min_commission'}
-                        name={'mastercard_minCommission'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                  </View>
-                  <View style={{ marginBottom: 50 }}>
-                    <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
-                      <FormattedMessage id={'users.addit_setting_visa'} />
-                    </SimpleText>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.net_price'}
-                        name={'visa_netPrice'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                    <View style={styles.digitItemWrapper}>
-                      <DecrementIncrement
-                        title={'users.fixed_net_price'}
-                        name={'visa_fixedNetPrice'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
-                    </View>
-                    <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
-                      <DecrementIncrement
-                        title={'users.min_commission'}
-                        name={'visa_minCommission'}
-                        setDigitsValues={handleSetInputsValues}
-                      />
+
+                    <View style={{ marginBottom: 50 }}>
+                      <SimpleText style={{ fontSize: 24, marginBottom: 40, lineHeight: 30 }}>
+                        <FormattedMessage id={'users.addit_setting_visa'} />
+                      </SimpleText>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.net_price'}
+                          name={'visa_netPrice'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={styles.digitItemWrapper}>
+                        <DecrementIncrement
+                          title={'users.fixed_net_price'}
+                          name={'visa_fixedNetPrice'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
+                      <View style={{ ...styles.digitItemWrapper, marginBottom: 0 }}>
+                        <DecrementIncrement
+                          title={'users.min_commission'}
+                          name={'visa_minCommission'}
+                          setDigitsValues={handleSetInputsValues}
+                        />
+                      </View>
                     </View>
                   </View>
                 </View>
-                {/*  */}
               </View>
+              <TouchableOpacity activeOpacity={0.5} onPress={handleSubmit}>
+                <SimpleButton
+                  text={'common.create'}
+                  style={{ width: width - 90, marginHorizontal: 25 }}
+                />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity activeOpacity={0.5} onPress={handleSubmit}>
-              <SimpleButton
-                text={'common.create'}
-                style={{ width: width - 90, marginHorizontal: 25 }}
-              />
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </>
     </TouchableWithoutFeedback>
   );
