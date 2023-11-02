@@ -1130,8 +1130,8 @@ const styles = StyleSheet.create({
     marginTop: 45,
     marginBottom: 40,
   },
-  payInOutTitles: { width: 96, marginRight: 21 },
-  payInOutValues: {},
+  payInOutTitles: { width: 100, marginRight: 10 },
+  payInOutValues: { flex: 1 },
   payInOutTitlesText: { fontSize: 24 },
   payInOutValuesText: { fontSize: 24, fontFamily: 'Mont_SB' },
   userPersonal: {
