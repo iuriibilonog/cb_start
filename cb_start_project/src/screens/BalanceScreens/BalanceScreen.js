@@ -74,11 +74,11 @@ const BalanceScreen = (props) => {
       const merchants = allUsers.filter((item) => item.roleId === 1);
       setMerchantsList(merchants);
       setSelectedMerchant(merchants[0].username);
-      getLedgersByMechantId(merchants[0].id);
+      getLedgersByMerchantId(merchants[0].id, true);
     }
   }, [allUsers]);
 
-  const getLedgersByMechantId = async (userId) => {
+  const getLedgersByMerchantId = async (userId, isInitial = false) => {
     try {
       const ledgers = await dispatch(getLedgersData(userId)).unwrap();
       if (ledgers.items && ledgers.items.length > 0) {
@@ -97,13 +97,22 @@ const BalanceScreen = (props) => {
         //   'Support4',
         //   'Admin4',
         // ]);
-        setSelectedLedger(ledgers.items[0].name);
-        // setSelectedLedger('Merchant');
-        setSelectedBalanceName(ledgers.items[0].name);
-        setSelectedBalanceObject(ledgers.items[0]);
+        if (isInitial) {
+          setSelectedLedger(ledgers.items[0].name);
+          setSelectedBalanceName(ledgers.items[0].name);
+          setSelectedBalanceObject(ledgers.items[0]);
+          const logs = await dispatch(getBalanceLogs(ledgers.items[0].id)).unwrap();
+          setBalanceLogs(logs.items);
+        } else {
+          const currentLedger = ledgers.items.find((i) => i.name === selectedLedger);
+          setSelectedBalanceName(currentLedger.name);
+          setSelectedBalanceObject(currentLedger);
+          const logs = await dispatch(getBalanceLogs(currentLedger.id)).unwrap();
+          setBalanceLogs(logs.items);
+        }
         refreshModals();
-        const logs = await dispatch(getBalanceLogs(ledgers.items[0].id)).unwrap();
-        setBalanceLogs(logs.items);
+        // const logs = await dispatch(getBalanceLogs(ledgers.items[0].id)).unwrap();
+        // setBalanceLogs(logs.items);
       } else {
         setLedgersList([' ']);
         setSelectedLedger(' ');
@@ -135,14 +144,23 @@ const BalanceScreen = (props) => {
 
   const handleMerchantSelect = (text) => {
     setSelectedMerchant(text);
-    getLedgersByMechantId(merchantsList.find((item) => item.username === text).id);
+    getLedgersByMerchantId(merchantsList.find((item) => item.username === text).id, true);
   };
 
   const handleLedgerSelect = (text) => {
     setSelectedLedger(text);
     setSelectedBalanceName(text);
     setSelectedBalanceObject(ledgersList.find((item) => item.name === text));
+    const selectedLedgerId = ledgersList.find((item) => item.name === text).id;
+    getLogs(selectedLedgerId);
+    // getLedgersByMerchantId(selectedMerchantId);
   };
+
+  useEffect(() => {
+    if (refLedgersModal.current && refLedgersModal.current.select) {
+      refLedgersModal.current.select(-1);
+    }
+  }, [selectedMerchant]);
 
   useEffect(() => {
     if (refBalanceModal.current && refBalanceModal.current.select) {
@@ -153,7 +171,27 @@ const BalanceScreen = (props) => {
   const handleBalanceSelect = (text) => {
     setSelectedBalanceName(text);
     setSelectedBalanceObject(ledgersList.find((item) => item.name === text));
-    // getLedgersByMechantId(merchantsList.find((item) => item.username === text).id);
+    const selectedLedgerId = ledgersList.find((item) => item.name === text).id;
+    getLogs(selectedLedgerId);
+  };
+
+  const getLogs = async (id) => {
+    try {
+      const logs = await dispatch(getBalanceLogs(id)).unwrap();
+      setBalanceLogs(logs.items);
+    } catch (error) {
+      setIsLoading(false);
+      setTimeout(() => {
+        showMessage({
+          message: `Something went wrong! Get Logs error`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }, 1000);
+      console.warn('Error:', error);
+    }
   };
 
   const acceptPayIn = () => {
@@ -173,7 +211,8 @@ const BalanceScreen = (props) => {
   };
 
   const putDeposit = async (type) => {
-    setIsLoading(true);
+    setAmount('');
+    // setIsLoading(true);
     try {
       const ledgerId = ledgersList.find((item) => item.name === selectedLedger).id;
       const depositResult = await dispatch(
@@ -185,10 +224,7 @@ const BalanceScreen = (props) => {
           },
         })
       ).unwrap();
-      const selectedMerchantId = merchantsList.find(
-        (item) => item.username === selectedMerchant
-      ).id;
-      await getLedgersByMechantId(
+      await getLedgersByMerchantId(
         merchantsList.find((item) => item.username === selectedMerchant).id
       );
       setIsLoading(false);
