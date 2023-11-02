@@ -312,8 +312,7 @@ const CreatePaymentsSettingsScreen = (props) => {
         </View>
         <KeyboardAvoidingView
           keyboardVerticalOffset={headerHeight}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          // behavior="position"
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{ flex: 1 }}
         >
           <ScrollView ref={scrollRef}>

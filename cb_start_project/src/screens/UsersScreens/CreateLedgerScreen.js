@@ -14,10 +14,11 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import { postPaymethodChain, postNewLedger } from 'src/redux/content/operations';
-
+import { useHeaderHeight } from '@react-navigation/elements';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { useDispatch } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -87,185 +88,200 @@ const AddLedgerScreen = (props) => {
     }
   };
 
+  const headerHeight = useHeaderHeight();
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
       }}
     >
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: 20,
-          paddingVertical: 20,
-          justifyContent: 'flex-start',
-          backgroundColor: '#fff',
-        }}
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        style={{ flex: 1 }}
       >
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() =>
-            props.navigation.navigate(props.route.params.parentScreen, {
-              id: props.route.params?.user?.id,
-            })
-          }
+        <ScrollView
           style={{
-            marginRight: 'auto',
             backgroundColor: '#fff',
           }}
         >
-          <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        {/* </View> */}
-        <View
-          style={{
-            flex: 1,
-            paddingHorizontal: 25,
-            paddingVertical: 20,
-            justifyContent: 'flex-start',
-            backgroundColor: '#fff',
-          }}
-        >
-          <View style={styles.innerWrapper}>
-            <SimpleText style={styles.title}>
-              <FormattedMessage id={'users.add_new_ledger'} />
-            </SimpleText>
-            <View style={{ width: '100%', position: 'relative', marginBottom: 40 }}>
-              <FormattedMessage id={'users.ledger_name'}>
-                {(placeholder) => (
-                  <TextInput
-                    style={{
-                      ...styles.input,
-                      borderBottomColor: isEmptyValue ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
-                    }}
-                    placeholder={placeholder[0]}
-                    value={value}
-                    onChangeText={(text) => {
-                      if (errors['value']) {
-                        setErrors((prev) => {
-                          delete prev['value'];
-                          return prev;
-                        });
-                      }
-                      setValue(text);
-                    }}
-                  />
-                )}
-              </FormattedMessage>
-              {errors['value'] && (
-                <SimpleText style={styles.error}>
-                  <FormattedMessage id={`errors.${errors['value']}`} />
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: 20,
+              paddingVertical: 20,
+              justifyContent: 'flex-start',
+              backgroundColor: '#fff',
+            }}
+          >
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() =>
+                props.navigation.navigate(props.route.params.parentScreen, {
+                  id: props.route.params?.user?.id,
+                })
+              }
+              style={{
+                marginRight: 'auto',
+                backgroundColor: '#fff',
+              }}
+            >
+              <Image source={arrowLeft} style={{ width: 24, height: 24 }} />
+            </TouchableOpacity>
+            {/* </View> */}
+            <View
+              style={{
+                flex: 1,
+                paddingHorizontal: 25,
+                paddingVertical: 20,
+                justifyContent: 'flex-start',
+                backgroundColor: '#fff',
+              }}
+            >
+              <View style={styles.innerWrapper}>
+                <SimpleText style={styles.title}>
+                  <FormattedMessage id={'users.add_new_ledger'} />
                 </SimpleText>
-              )}
-            </View>
-            <View style={{ width: '100%', position: 'relative', marginBottom: 40 }}>
-              {currency.length > 0 && (
-                <FormattedMessage id={'common.currency'}>
-                  {(msg) => {
-                    return (
-                      <ModalDropdown
-                        options={currency}
-                        defaultIndex={0}
-                        defaultValue={
-                          [0, 1, 2, 3, 4, 5].includes(selectedCurrency)
-                            ? currency[selectedCurrency]
-                            : msg[0]
-                        }
-                        isFullWidth
-                        animated={false}
-                        onSelect={setSelectedCurrency}
-                        textStyle={{
-                          fontSize: 16,
-                          lineHeight: 16,
-                          fontFamily: 'Mont',
-                          color: [0, 1, 2, 3, 4, 5].includes(selectedCurrency)
-                            ? '#262626'
-                            : 'rgba(38, 38, 38, 0.30)',
-                        }}
+                <View style={{ width: '100%', position: 'relative', marginBottom: 40 }}>
+                  <FormattedMessage id={'users.ledger_name'}>
+                    {(placeholder) => (
+                      <TextInput
                         style={{
-                          // backgroundColor: '#F4F4F4',
-                          paddingHorizontal: 10,
-                          paddingBottom: 5,
-                          justifyContent: 'space-between',
-                          borderColor: 'rgba(0, 0, 0, 0.20)',
-                          borderBottomWidth: 1,
-
-                          width: '100%',
+                          ...styles.input,
+                          borderBottomColor: isEmptyValue ? '#FC7270' : 'rgba(0, 0, 0, 0.20)',
                         }}
-                        dropdownStyle={{
-                          marginLeft: -10,
-                          marginTop: 12,
-                          paddingLeft: 5,
-                          paddingRight: 2,
-                          width: width - 90,
-                          height: currency.length > 4 ? 152 : currency.length * 40,
-                          borderWidth: 1,
-                          borderColor: 'rgba(0, 0, 0, 0.20)',
-                          borderRadius: 2,
-                        }}
-                        dropdownTextStyle={{
-                          fontSize: 16,
-                          lineHeight: 16,
-                          fontWeight: '600',
-                          fontFamily: 'Mont',
-                          // backgroundColor: '#F4F4F4',
-                          color: 'rgba(38, 38, 38, 0.50)',
-                        }}
-                        renderRightComponent={() => (
-                          <Image
-                            source={
-                              isDropdownOpen
-                                ? require('src/images/arrow_up.png')
-                                : [0, 1, 2, 3, 4, 5].includes(selectedCurrency)
-                                ? require('src/images/arrow_down.png')
-                                : require('src/images/arrow_down_inactive.png')
-                            }
-                            style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                          />
-                        )}
-                        renderRowProps={{ activeOpacity: 1 }}
-                        renderSeparator={() => <></>}
-                        onDropdownWillShow={() => {
-                          if (errors['selectedCurrency']) {
+                        placeholder={placeholder[0]}
+                        value={value}
+                        onChangeText={(text) => {
+                          if (errors['value']) {
                             setErrors((prev) => {
-                              delete prev['selectedCurrency'];
+                              delete prev['value'];
                               return prev;
                             });
                           }
-
-                          setIsDropdownOpen(true);
+                          setValue(text);
                         }}
-                        onDropdownWillHide={() => setIsDropdownOpen(false)}
                       />
-                    );
-                  }}
-                </FormattedMessage>
-              )}
-              {errors['selectedCurrency'] && (
-                <SimpleText style={styles.error}>
-                  <FormattedMessage id={`errors.${errors['selectedCurrency']}`} />
-                </SimpleText>
-              )}
-            </View>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              style={{ width: '100%' }}
-              onPress={handleSubmitLedger}
-            >
-              <View
-                style={{
-                  ...styles.btn,
-                  backgroundColor: '#0BA39A',
-                }}
-              >
-                <SimpleText style={{ ...styles.btnText, color: '#fff' }}>
-                  <FormattedMessage id={'common.create'} />
-                </SimpleText>
+                    )}
+                  </FormattedMessage>
+                  {errors['value'] && (
+                    <SimpleText style={styles.error}>
+                      <FormattedMessage id={`errors.${errors['value']}`} />
+                    </SimpleText>
+                  )}
+                </View>
+                <View style={{ width: '100%', position: 'relative', marginBottom: 40 }}>
+                  {currency.length > 0 && (
+                    <FormattedMessage id={'common.currency'}>
+                      {(msg) => {
+                        return (
+                          <ModalDropdown
+                            options={currency}
+                            defaultIndex={0}
+                            defaultValue={
+                              [0, 1, 2, 3, 4, 5].includes(selectedCurrency)
+                                ? currency[selectedCurrency]
+                                : msg[0]
+                            }
+                            isFullWidth
+                            animated={false}
+                            onSelect={setSelectedCurrency}
+                            textStyle={{
+                              fontSize: 16,
+                              lineHeight: 16,
+                              fontFamily: 'Mont',
+                              color: [0, 1, 2, 3, 4, 5].includes(selectedCurrency)
+                                ? '#262626'
+                                : 'rgba(38, 38, 38, 0.30)',
+                            }}
+                            style={{
+                              // backgroundColor: '#F4F4F4',
+                              paddingHorizontal: 10,
+                              paddingBottom: 5,
+                              justifyContent: 'space-between',
+                              borderColor: 'rgba(0, 0, 0, 0.20)',
+                              borderBottomWidth: 1,
+
+                              width: '100%',
+                            }}
+                            dropdownStyle={{
+                              marginLeft: -10,
+                              marginTop: 12,
+                              paddingLeft: 5,
+                              paddingRight: 2,
+                              width: width - 90,
+                              height: currency.length > 4 ? 152 : currency.length * 40,
+                              borderWidth: 1,
+                              borderColor: 'rgba(0, 0, 0, 0.20)',
+                              borderRadius: 2,
+                            }}
+                            dropdownTextStyle={{
+                              fontSize: 16,
+                              lineHeight: 16,
+                              fontWeight: '600',
+                              fontFamily: 'Mont',
+                              // backgroundColor: '#F4F4F4',
+                              color: 'rgba(38, 38, 38, 0.50)',
+                            }}
+                            renderRightComponent={() => (
+                              <Image
+                                source={
+                                  isDropdownOpen
+                                    ? require('src/images/arrow_up.png')
+                                    : [0, 1, 2, 3, 4, 5].includes(selectedCurrency)
+                                    ? require('src/images/arrow_down.png')
+                                    : require('src/images/arrow_down_inactive.png')
+                                }
+                                style={{ width: 26, height: 26, marginLeft: 'auto' }}
+                              />
+                            )}
+                            renderRowProps={{ activeOpacity: 1 }}
+                            renderSeparator={() => <></>}
+                            onDropdownWillShow={() => {
+                              if (errors['selectedCurrency']) {
+                                setErrors((prev) => {
+                                  delete prev['selectedCurrency'];
+                                  return prev;
+                                });
+                              }
+
+                              setIsDropdownOpen(true);
+                            }}
+                            onDropdownWillHide={() => setIsDropdownOpen(false)}
+                          />
+                        );
+                      }}
+                    </FormattedMessage>
+                  )}
+                  {errors['selectedCurrency'] && (
+                    <SimpleText style={styles.error}>
+                      <FormattedMessage id={`errors.${errors['selectedCurrency']}`} />
+                    </SimpleText>
+                  )}
+                </View>
+
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={{ width: '100%' }}
+                  onPress={handleSubmitLedger}
+                >
+                  <View
+                    style={{
+                      ...styles.btn,
+                      backgroundColor: '#0BA39A',
+                    }}
+                  >
+                    <SimpleText style={{ ...styles.btnText, color: '#fff' }}>
+                      <FormattedMessage id={'common.create'} />
+                    </SimpleText>
+                  </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
