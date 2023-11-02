@@ -155,8 +155,7 @@ const AddEditUserScreen = (props) => {
           {/* </View> */}
           <KeyboardAvoidingView
             keyboardVerticalOffset={headerHeight}
-            // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            behavior="position"
+            behavior={Platform.OS === 'ios' ? 'padding' : null}
             style={{ flex: 1 }}
           >
             <View style={styles.innerWrapper}>

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 const SimpleText = (props) => {
   if (props.numberOfLines) {
     return (
-      <Text style={{ ...styles.initialStyles, ...props.style }} numberOfLines={props.numberOfLines}>
+      <Text style={{ ...styles.initialStyles, ...props.style }} numberOfLines={props.numberOfLines} ellipsizeMode="clip">
         {props.children}
       </Text>
     );
