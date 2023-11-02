@@ -79,7 +79,6 @@ const UsersListScreen = (props) => {
   useEffect(() => {
     // console.log('7-data');
     if (data?.length > 0 && props.route.params?.isNewUserCreated) {
-      console.log('71-data');
       delete props.route.params?.isNewUserCreated;
       scrollRef.current?.scrollToOffset({
         offset: 1000,
@@ -110,7 +109,7 @@ const UsersListScreen = (props) => {
     const searchUsers = await dispatch(
       getSearchUsers({ page: currentPage, searchText: props.searchUser })
     ).unwrap();
-    console.log('searchUsers', searchUsers);
+
     setData(searchUsers.items);
 
     const pages = Math.ceil(searchUsers.totalCount / 20);

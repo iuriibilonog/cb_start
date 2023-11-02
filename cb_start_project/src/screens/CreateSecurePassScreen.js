@@ -71,8 +71,6 @@ const CreateSecurePassScreen = ({ navigation }) => {
         setIsPassWrong(true);
         setCreatedPass('');
         setConfirmedPass('');
-      } else {
-        console.log('auth');
       }
     }
   }, [confirmedPass]);

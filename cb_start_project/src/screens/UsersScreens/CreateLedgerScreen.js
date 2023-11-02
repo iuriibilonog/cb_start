@@ -45,7 +45,6 @@ const AddLedgerScreen = (props) => {
   const { width } = Dimensions.get('window');
 
   const handleSubmitLedger = async (data) => {
-    console.log('>>', value, selectedCurrency);
     const validationParams = ['value', 'selectedCurrency'];
     const validationAnswer = checkValidation({ value, selectedCurrency }, validationParams);
 
