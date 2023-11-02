@@ -105,6 +105,15 @@ export const AxiosInterceptor = ({ children }) => {
           type: 'danger',
         });
       }
+      if (error?.response?.status === 409) {
+        return showMessage({
+          message: `${error?.response?.data?.message}`,
+          titleStyle: {
+            textAlign: 'center',
+          },
+          type: 'danger',
+        });
+      }
       if (error?.response?.status === 500) {
         return navigationHelper.navigate('ErrorsScreen', { status: error?.response?.status });
       }
