@@ -173,6 +173,7 @@ const BalanceScreen = (props) => {
   };
 
   const putDeposit = async (type) => {
+    setIsLoading(true);
     try {
       const ledgerId = ledgersList.find((item) => item.name === selectedLedger).id;
       const depositResult = await dispatch(
@@ -190,6 +191,7 @@ const BalanceScreen = (props) => {
       await getLedgersByMechantId(
         merchantsList.find((item) => item.username === selectedMerchant).id
       );
+      setIsLoading(false);
       setTimeout(() => {
         showMessage({
           message: `Deposit successfully added`,
