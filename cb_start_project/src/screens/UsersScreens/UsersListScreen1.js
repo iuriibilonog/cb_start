@@ -327,6 +327,7 @@ const UsersListScreen = (props) => {
       </TouchableOpacity>
       {isAdditDataOpen && selectedIndex === item.id && (
         <View
+          onStartShouldSetResponder={() => true}
           style={{
             paddingLeft: 15,
             flexDirection: 'row',

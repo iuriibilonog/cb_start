@@ -229,6 +229,7 @@ const TransactionsScreen = ({
       </TouchableOpacity>
       {isAdditDataOpen && selectedIndex === item.id && (
         <View
+          onStartShouldSetResponder={() => true}
           style={{
             ...styles.tableRow,
             flexDirection: 'row',
@@ -337,7 +338,11 @@ const TransactionsScreen = ({
         isDetailsOpen &&
         isAdditDataOpen &&
         item.id === selectedIndex && (
-          <TouchableOpacity activeOpacity={0.5} onPress={() => setIsDetailsOpen((prev) => !prev)}>
+          <TouchableOpacity
+            onStartShouldSetResponder={() => true}
+            activeOpacity={0.5}
+            onPress={() => setIsDetailsOpen((prev) => !prev)}
+          >
             <View style={styles.additDataHeader}>
               <Image source={close} style={{ width: 32, height: 32 }} />
             </View>
@@ -349,6 +354,7 @@ const TransactionsScreen = ({
         item.transactions.map((transaction, index) => (
           <View
             key={index}
+            onStartShouldSetResponder={() => true}
             style={{
               ...styles.tableRow,
               flexDirection: 'row',

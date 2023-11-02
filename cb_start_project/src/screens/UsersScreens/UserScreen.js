@@ -585,7 +585,7 @@ const UserScreen = (props) => {
       </TouchableOpacity>
 
       {isAdditDataOpen && selectedIndex === item.id && ledgersByApiData && (
-        <>
+        <View onStartShouldSetResponder={() => true}>
           <View
             style={{
               paddingVertical: 10,
@@ -847,7 +847,7 @@ const UserScreen = (props) => {
               </SimpleText>
             </View>
           </View>
-        </>
+        </View>
       )}
     </>
   );
