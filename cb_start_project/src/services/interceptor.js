@@ -107,7 +107,7 @@ export const AxiosInterceptor = ({ children }) => {
       }
       if (error?.response?.status === 409) {
         return showMessage({
-          message: `${error?.response?.data?.message}`,
+          message: `${error?.response?.data?.error}` || 'Conflict',
           titleStyle: {
             textAlign: 'center',
           },

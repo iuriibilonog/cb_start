@@ -165,8 +165,6 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       fr.readAsDataURL(blob);
       setIsLoading(false);
     } catch (error) {
-      console.log('errror', error);
-      console.log('errror-resp', error?.response);
       setIsLoading(false);
       if (error?.response?.status === 404) {
         setTimeout(() => {

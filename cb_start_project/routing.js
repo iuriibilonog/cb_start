@@ -43,8 +43,6 @@ export const Routing = () => {
     setIsShowLogOut(true);
   };
 
-  console.log('isAuth', isAuth);
-
   return (
     <>
       {isShowLogOut ? (
