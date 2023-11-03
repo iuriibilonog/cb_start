@@ -24,9 +24,9 @@ const ApiRoutes = ({ handlePressIconLogOut }) => {
     setIsSearchVisible(false);
   };
 
-  const handleFilter = debounce(handleSearchApiText, 1000);
+  const handleFilter = debounce(handleSearchApiText, 500);
 
-  const handleSearchApi = () => {
+  const handleSearchApi = () => {console.log('press')
     setIsSearchVisible((prev) => !prev);
   };
   return (

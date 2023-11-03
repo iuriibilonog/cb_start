@@ -58,6 +58,10 @@ const UsersListScreen = (props) => {
   }, []);
 
   useEffect(() => {
+    if (props.searchUser === '' && !isKeyboardVisible) {
+      props.setIsSearchVisible(false);
+      Keyboard.dismiss();
+    }
     if (props.searchUser) {
       getUserWithSearch();
     } else {
@@ -152,18 +156,13 @@ const UsersListScreen = (props) => {
   };
 
   const handleBlur = async () => {
-    //console.log('10-handleBlur');
     if (!props.searchUser && isKeyboardVisible) {
-      //console.log('101-handleBlur');
-      // setIsLoading(true);
       props.setIsSearchVisible(false);
       const users = await dispatch(getUsersByPage(1)).unwrap();
       setData(users.items);
       // setIsLoading(false);
-      Keyboard.dismiss();
-    } else {
-      Keyboard.dismiss();
     }
+    Keyboard.dismiss();
   };
 
   const flatListRenderModule = (item, index) => (

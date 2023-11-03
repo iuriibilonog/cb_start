@@ -40,7 +40,7 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
     setIsSearchVisible(false);
   };
 
-  const handleFilter = debounce(handleSearchText, 1000);
+  const handleFilter = debounce(handleSearchText, 500);
 
   const handleSearchTransactions = () => {
     setIsSearchVisible((prev) => !prev);

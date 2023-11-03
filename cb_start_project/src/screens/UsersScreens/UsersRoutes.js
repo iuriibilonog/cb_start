@@ -44,7 +44,7 @@ const UsersRoutes = ({ handlePressIconLogOut }) => {
     setIsSearchVisible(false);
   };
 
-  const handleFilter = debounce(handleSearchUserText, 1000);
+  const handleFilter = debounce(handleSearchUserText, 500);
 
   const handleSearchUser = () => {
     setIsSearchVisible((prev) => !prev);

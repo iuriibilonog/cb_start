@@ -69,6 +69,10 @@ const TransactionsScreen = ({
   }, []);
 
   useEffect(() => {
+    if (props.searchTxt === '' && !isKeyboardVisible) {
+      props.setIsSearchVisible(false);
+      Keyboard.dismiss();
+    }
     if (props.searchTxt || props.searchTxt === '') {
       setCurrentPage(1);
       getTableData(1);
@@ -139,8 +143,8 @@ const TransactionsScreen = ({
         })
       );
       setIsLoading(false);
-      Keyboard.dismiss();
     }
+    Keyboard.dismiss();
   };
 
   const flatListRenderModule = (item, index) => (

@@ -58,6 +58,10 @@ const ApiScreen = (props) => {
   }, []);
 
   useEffect(() => {
+    if (props.searchApi === '' && !isKeyboardVisible) {
+      props.setIsSearchVisible(false);
+      Keyboard.dismiss();
+    }
     if (
       (props.route.params && props.route.params.isRefresh) ||
       props.searchApi ||
@@ -113,8 +117,8 @@ const ApiScreen = (props) => {
       props.setIsSearchVisible(false);
       await dispatch(getApiData({ page: 1 }));
       setIsLoading(false);
-      Keyboard.dismiss();
     }
+    Keyboard.dismiss();
   };
 
   const flatListRenderModule = (item, index) => (
