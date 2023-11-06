@@ -78,6 +78,13 @@ const lang = {
   'api.api_key_name': 'API Key name',
   'api.new_api_key': 'new API Key',
   'api.edit_api': 'Edit API Key name',
+  'api.api_product': 'Product',
+  'api.api_info': 'API Info',
+  'api.api_status': 'Status',
+  'api.api_id': 'Id',
+  'api.api_site_url': 'Website URL',
+  'api.api_dallback_url': 'Callback URL',
+  'api.api_secret': 'API Secret',
 
   //users=====
   'users.reg_date': 'Reg. Date',
