@@ -17,7 +17,7 @@ const DecrementIncrement = (props) => {
   }, []);
 
   useEffect(() => {
-    setDigitsValues({ [name]: value });
+    setDigitsValues({ [name]: +value });
   }, [value]);
 
   const handleSetValue = (text) => {
