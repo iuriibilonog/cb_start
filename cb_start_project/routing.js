@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, StyleSheet, View } from 'react-native';
 
 import LoginScreen from 'src/screens/LoginScreen';
+// import LogOutScreen from 'src/screens/LogOutScreen';
 
 import DashboardScreen from 'src/screens/DashboardScreens/DashboardScreen';
 import EnterSecureScreen from 'src/screens/EnterSecureScreen';
@@ -22,15 +23,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllUsers } from 'src/redux/content/operations';
 
 const profileIcon = require('src/images/profile_icon.png');
-export const Routing = () => {
-  const [isShowLogOut, setIsShowLogOut] = useState(false);
+const Routing = ({ handlePressIconLogOut }) => {
+  // const [isShowLogOut, setIsShowLogOut] = useState(false);
   const isAuth = useSelector(isLoggedIn);
   const allUsers = useSelector(getUsers);
   // const isAuth = true;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isAuth && isShowLogOut) setIsShowLogOut(false);
+    // if (!isAuth && isShowLogOut) setIsShowLogOut(false);
     if (isAuth && !allUsers.length) {
       dispatch(getAllUsers());
     }
@@ -39,157 +40,121 @@ export const Routing = () => {
   const AuthStack = createStackNavigator();
   const MainStack = createBottomTabNavigator();
 
-  const handlePressIconLogOut = () => {
-    setIsShowLogOut(true);
-  };
+  // const handlePressIconLogOut = () => {
+  //   setIsShowLogOut(true);
+  // };
 
   return (
-    <>
-      {isShowLogOut ? (
-        <AuthStack.Navigator>
-          <AuthStack.Screen
-            options={{ headerShown: false }}
-            name="LogOutScreen"
-            // component={LogOutScreen}
-          >
-            {(props) => <LogOutScreen {...props} setIsShowLogOut={setIsShowLogOut} />}
-          </AuthStack.Screen>
-        </AuthStack.Navigator>
-      ) : !isAuth ? (
-        <AuthStack.Navigator initialRouteName={'LoginScreen'}>
-          {/* <AuthStack.Screen
-            options={{ headerShown: false }}
-            name="EnterSecureScreen"
-            component={EnterSecureScreen}
-          /> */}
-          <AuthStack.Screen
-            options={{ headerShown: false }}
-            name="LoginScreen"
-            component={LoginScreen}
-          />
-        </AuthStack.Navigator>
-      ) : (
-        <MainStack.Navigator
-          screenOptions={({ route }) => ({
-            tabBarShowLabel: false,
-            tabBarStyle: {
-              paddingHorizontal: 22,
-              paddingTop: 23,
-              paddingBottom: 23,
-              backgroundColor: '#242834',
-              height: 75,
-            },
-          })}
-        >
-          {/* <AuthStack.Screen
-            options={{ headerShown: false }}
-            name="CreateSecurePassScreen"
-            component={CreateSecurePassScreen}
-          /> */}
-          <MainStack.Screen
-            options={{
-              headerShown: false,
+    <MainStack.Navigator
+      screenOptions={({ route }) => ({
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          paddingHorizontal: 22,
+          paddingTop: 23,
+          paddingBottom: 23,
+          backgroundColor: '#242834',
+          height: 75,
+        },
+      })}
+    >
+      <MainStack.Screen
+        options={{
+          headerShown: false,
 
-              tabBarIcon: ({ tintColor, image, focused }) => {
-                focused
-                  ? (image = require('src/images/dash_active.png'))
-                  : (image = require('src/images/dash.png'));
-                return (
-                  <View>
-                    <Image source={image} />
-                  </View>
-                );
-              },
-            }}
-            name="DashboardRoutes"
-          >
-            {(props) => (
-              <DashboardRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />
-            )}
-          </MainStack.Screen>
+          tabBarIcon: ({ tintColor, image, focused }) => {
+            focused
+              ? (image = require('src/images/dash_active.png'))
+              : (image = require('src/images/dash.png'));
+            return (
+              <View>
+                <Image source={image} />
+              </View>
+            );
+          },
+        }}
+        name="DashboardRoutes"
+      >
+        {(props) => <DashboardRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
+      </MainStack.Screen>
 
-          <MainStack.Screen
-            options={{
-              headerShown: false,
-              tabBarIcon: ({ tintColor, image, focused }) => {
-                focused
-                  ? (image = require('src/images/card_active.png'))
-                  : (image = require('src/images/card.png'));
-                return (
-                  <View>
-                    <Image source={image} />
-                  </View>
-                );
-              },
-            }}
-            name="TransactionsRoutes"
-          >
-            {(props) => (
-              <TransactionsRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />
-            )}
-          </MainStack.Screen>
+      <MainStack.Screen
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ tintColor, image, focused }) => {
+            focused
+              ? (image = require('src/images/card_active.png'))
+              : (image = require('src/images/card.png'));
+            return (
+              <View>
+                <Image source={image} />
+              </View>
+            );
+          },
+        }}
+        name="TransactionsRoutes"
+      >
+        {(props) => <TransactionsRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
+      </MainStack.Screen>
 
-          <MainStack.Screen
-            options={{
-              headerShown: false,
-              tabBarIcon: ({ tintColor, image, focused }) => {
-                focused
-                  ? (image = require('src/images/api_active.png'))
-                  : (image = require('src/images/api.png'));
-                return (
-                  <View>
-                    <Image source={image} />
-                  </View>
-                );
-              },
-            }}
-            name="ApiRoutes"
-          >
-            {(props) => <ApiRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
-          </MainStack.Screen>
-          <MainStack.Screen
-            options={{
-              headerShown: false,
+      <MainStack.Screen
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ tintColor, image, focused }) => {
+            focused
+              ? (image = require('src/images/api_active.png'))
+              : (image = require('src/images/api.png'));
+            return (
+              <View>
+                <Image source={image} />
+              </View>
+            );
+          },
+        }}
+        name="ApiRoutes"
+      >
+        {(props) => <ApiRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
+      </MainStack.Screen>
+      <MainStack.Screen
+        options={{
+          headerShown: false,
 
-              tabBarIcon: ({ tintColor, image, focused }) => {
-                focused
-                  ? (image = require('src/images/users_active.png'))
-                  : (image = require('src/images/users.png'));
-                return (
-                  <View>
-                    <Image source={image} />
-                  </View>
-                );
-              },
-            }}
-            name="UsersScreen"
-            // component={UsersRoutes}
-          >
-            {(props) => <UsersRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
-          </MainStack.Screen>
-          <MainStack.Screen
-            options={{
-              headerShown: false,
+          tabBarIcon: ({ tintColor, image, focused }) => {
+            focused
+              ? (image = require('src/images/users_active.png'))
+              : (image = require('src/images/users.png'));
+            return (
+              <View>
+                <Image source={image} />
+              </View>
+            );
+          },
+        }}
+        name="UsersScreen"
+        // component={UsersRoutes}
+      >
+        {(props) => <UsersRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
+      </MainStack.Screen>
+      <MainStack.Screen
+        options={{
+          headerShown: false,
 
-              tabBarIcon: ({ tintColor, image, focused }) => {
-                focused
-                  ? (image = require('src/images/balance_active.png'))
-                  : (image = require('src/images/balance.png'));
-                return (
-                  <View>
-                    <Image source={image} />
-                  </View>
-                );
-              },
-            }}
-            name="BalanceRoutesScreen"
-            // component={BalanceRoutes}
-          >
-            {(props) => <BalanceRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
-          </MainStack.Screen>
-        </MainStack.Navigator>
-      )}
-    </>
+          tabBarIcon: ({ tintColor, image, focused }) => {
+            focused
+              ? (image = require('src/images/balance_active.png'))
+              : (image = require('src/images/balance.png'));
+            return (
+              <View>
+                <Image source={image} />
+              </View>
+            );
+          },
+        }}
+        name="BalanceRoutesScreen"
+        // component={BalanceRoutes}
+      >
+        {(props) => <BalanceRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />}
+      </MainStack.Screen>
+    </MainStack.Navigator>
   );
 };
 
@@ -212,3 +177,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.7,
   },
 });
+
+export default Routing;

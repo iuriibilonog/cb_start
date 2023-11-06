@@ -5,6 +5,7 @@ const initialState = {
   userinfo: {
     name: null,
     email: null,
+    roleId: null,
     isLoggedIn: false,
   },
   token: null,
@@ -21,17 +22,17 @@ const userSlice = createSlice({
       state.token = action.payload.accessToken;
       state.refresh = action.payload.refreshToken;
       state.userinfo.isLoggedIn = true;
+      state.roleId = action.payload.user.roleId;
       state.error = null;
     }),
-     
-    builder.addCase(userLogout.fulfilled, (state, action) => initialState),
+      builder.addCase(userLogout.fulfilled, (state, action) => initialState),
       builder.addCase(userLogout.rejected, (state, action) => {
         state.error = {
           status: action.payload.requestStatus,
           message: action.payload,
         };
       });
-   
+
     builder.addCase(changeLoggedInSelector.fulfilled, (state, action) => {
       state.userinfo.isLoggedIn = false;
     });
