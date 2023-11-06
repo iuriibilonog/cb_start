@@ -35,6 +35,7 @@ const lang = {
   'dashboard.conversion.last_days': 'Conversion last days',
   'dashboard.max_days': 'Max 5 days',
   'dashboard.grouping_type': 'Grouping type',
+  'dashboard.client.balance_history': 'Balance history',
 
   //===transactions===
   'transactions.transactions': 'Transactions',

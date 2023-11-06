@@ -14,7 +14,7 @@ import FlashMessage from 'react-native-flash-message';
 import { IntlProvider } from 'react-intl';
 import UA from 'src/lang/ua.json';
 import EN from 'src/lang/en.js';
-import CheckRoleMiddleware from './checkRoleMidleware';
+import CheckRoleMiddleware from './checkRoleMiddleware';
 import { Routing } from './routing';
 
 SplashScreen.preventAutoHideAsync();
