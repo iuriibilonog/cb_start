@@ -92,7 +92,6 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
   ];
 
   useEffect(() => {
-    console.log('UserInfo', userInfo);
     getLedgersByUserId(userInfo.id);
 
     setInputsData((prev) => ({
@@ -112,7 +111,6 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
         setSelectedBalanceName(ledgers.items[0].name);
         setSelectedBalanceObject(ledgers.items[0]);
         getLogs(ledgers.items[0].id);
-        console.log('ledgers', ledgers.items);
       } else {
         setLedgersList([' ']);
         setSelectedBalanceName('');

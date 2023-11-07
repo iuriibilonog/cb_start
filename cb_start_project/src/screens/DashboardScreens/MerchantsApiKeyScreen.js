@@ -1,24 +1,19 @@
 import React, { useState, useEffect, use } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
   Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
-import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import { getMerchantsApiKeys } from 'src/redux/content/operations';
 import MainLoader from 'src/components/molecules/MainLoader';
-
-const arrowRight = require('src/images/right.png');
 
 const MerchantsApiKeyScreen = ({
   route,
@@ -32,14 +27,31 @@ const MerchantsApiKeyScreen = ({
   confirmReport,
   clientId,
 }) => {
-  const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
+  const defaultPaymentFilter =
+    genReportPaymentsFilters &&
+    genReportPaymentsFilters.find((item) => item.name === 'merchantApiKey')
+      ? genReportPaymentsFilters.find((item) => item.name === 'merchantApiKey')
+      : { value: 'All api keys' };
+  const defaultTransactionFilter =
+    genReportTransactionFilters &&
+    genReportTransactionFilters.find((item) => item.name === 'merchantApiKey')
+      ? genReportTransactionFilters.find((item) => item.name === 'merchantApiKey')
+      : { value: 'All api keys' };
+
+  const [radioSelect, setRadioSelect] = useState(
+    reportType === 'Payments'
+      ? defaultPaymentFilter
+      : clientId
+      ? defaultPaymentFilter
+      : defaultTransactionFilter
+  );
+
+  // const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
   const reportType = route.params.type.value;
   const dispatch = useDispatch();
   const [data, setData] = useState([{ value: 'All api keys' }]);
   const [merchId, setMerchId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     switch (reportType) {
@@ -49,7 +61,6 @@ const MerchantsApiKeyScreen = ({
           getMerchApiKeys(clientId);
         } else {
           let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchants');
-          console.log('1>', genReportPaymentsFilters);
           if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
             setMerchId(merchantObj.filters.id);
             getMerchApiKeys(merchantObj.filters.id);
@@ -100,7 +111,7 @@ const MerchantsApiKeyScreen = ({
     if (id?.toString() === merchId?.toString()) return;
 
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const data = await dispatch(getMerchantsApiKeys(id));
       const keys = data.payload.items.map((item) => ({
         ...item,
@@ -108,9 +119,9 @@ const MerchantsApiKeyScreen = ({
       }));
 
       setData((prev) => [...prev, ...keys]);
-      setIsLoading(false);
+      // setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
+      // setIsLoading(false);
       console.warn('Error:', error);
     }
   };
@@ -141,12 +152,16 @@ const MerchantsApiKeyScreen = ({
           <RadioList
             data={data}
             onSelect={setRadioSelect}
-            defaultValue={{ value: 'All api keys' }}
+            defaultValue={radioSelect}
             styling={{ size: 18, spaceBetween: 34 }}
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={() => handleConfirmReport()} style={{ width: 140 }}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => handleConfirmReport()}
+          style={{ width: 140 }}
+        >
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

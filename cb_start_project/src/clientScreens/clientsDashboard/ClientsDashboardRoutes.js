@@ -10,11 +10,11 @@ import TimeZoneScreen from 'src/screens/DashboardScreens/TimeZoneScreen';
 import MerchantsApiKeyScreen from 'src/screens/DashboardScreens/MerchantsApiKeyScreen';
 import StatusScreen from 'src/screens/DashboardScreens/StatusScreen';
 import { Image, Pressable, Platform } from 'react-native';
-import { getReport } from 'src/redux/content/operations';
+import { getReport, setLoaderFalseWithError } from 'src/redux/content/operations';
 import { getUser } from 'src/redux/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
-import { setLoaderFalseWithError } from 'src/redux/content/operations';
+
 import ErrorsScreen from 'src/screens/ErrorsScreen/ErrorsScreen';
 
 const DashboardStack = createStackNavigator();
@@ -345,7 +345,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
-          headerTitle: 'Merchant"s api key',
+          headerTitle: 'Merchant`s api key',
           headerTitleAlign: 'left',
           headerBackImage: () => (
             <Image
@@ -363,11 +363,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             {...props}
             clientId={userInfo.id}
             setPaymentsFilter={setPaymentsFilter}
-            setTransactionFilter={setTransactionFilter}
             genReportPaymentsFilters={genReportPaymentsFilters}
-            genReportTransactionFilters={genReportTransactionFilters}
             confirmReport={confirmReport}
-            isClientAccess
           />
         )}
       </DashboardStack.Screen>
