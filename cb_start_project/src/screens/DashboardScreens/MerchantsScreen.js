@@ -16,6 +16,7 @@ import { FormattedMessage } from 'react-intl';
 import SimpleText from '../../components/atoms/SimpleText';
 import { getUsers } from 'src/redux/content/selectors';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const arrowRight = require('src/images/right.png');
 
@@ -50,6 +51,7 @@ const MerchantsScreen = ({
     { id: 43, value: 'XXXX' },
     { id: 52, value: 'MB' },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
   const allUsers = useSelector(getUsers);
 
   useEffect(() => {
@@ -92,8 +94,14 @@ const MerchantsScreen = ({
     }
   }, [radioSelect]);
 
+  const handleConfirmReport = () => {
+    setIsLoading(true);
+    confirmReport();
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible && (
         <TransactionsFilters
           isActive={'merchants'}
@@ -111,7 +119,7 @@ const MerchantsScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={handleConfirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

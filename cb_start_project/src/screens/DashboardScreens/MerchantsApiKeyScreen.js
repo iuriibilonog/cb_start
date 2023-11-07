@@ -115,6 +115,11 @@ const MerchantsApiKeyScreen = ({
     }
   };
 
+  const handleConfirmReport = () => {
+    setIsLoading(true);
+    confirmReport();
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
       <MainLoader isVisible={isLoading} />
@@ -141,7 +146,7 @@ const MerchantsApiKeyScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={() => handleConfirmReport()} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

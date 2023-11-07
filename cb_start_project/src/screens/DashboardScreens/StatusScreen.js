@@ -14,6 +14,7 @@ import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const arrowRight = require('src/images/right.png');
 
@@ -49,7 +50,7 @@ const StatusScreen = ({
     { value: 'processing' },
     { value: 'new' },
   ];
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -74,8 +75,14 @@ const StatusScreen = ({
     }
   }, [radioSelect]);
 
+  const handleConfirmReport = () => {
+    setIsLoading(true);
+    confirmReport();
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible && (
         <TransactionsFilters
           isActive={'status'}

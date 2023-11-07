@@ -16,6 +16,7 @@ import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const BanksScreen = ({
   setTransactionFilter,
@@ -29,6 +30,7 @@ const BanksScreen = ({
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'All' };
   const [radioSelect, setRadioSelect] = useState(defaultTransactionFilter);
   const [banks, setBanks] = useState([{ value: 'All' }]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const data = useSelector(getBanks);
 
@@ -50,8 +52,14 @@ const BanksScreen = ({
     }
   }, [radioSelect]);
 
+  const handleConfirmReport = () => {
+    setIsLoading(true);
+    confirmReport();
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible && (
         <TransactionsFilters
           isActive={'banks'}
@@ -69,7 +77,7 @@ const BanksScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={handleConfirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

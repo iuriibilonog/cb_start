@@ -5,6 +5,7 @@ import RadioList from 'src/components/molecules/RadioList';
 import { FormattedMessage } from 'react-intl';
 import SimpleText from '../../components/atoms/SimpleText';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const arrowRight = require('src/images/right.png');
 
@@ -33,6 +34,8 @@ const TimeZoneScreen = ({
   const [radioSelect, setRadioSelect] = useState(
     reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
   );
+
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     switch (reportType) {
@@ -80,8 +83,14 @@ const TimeZoneScreen = ({
 
   const navigation = useNavigation();
 
+  const handleConfirmReport = () => {
+    setIsLoading(true);
+    confirmReport();
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible && (
         <TransactionsFilters
           isActive={'timezone'}
@@ -99,7 +108,11 @@ const TimeZoneScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={handleConfirmReport}
+          style={{ width: 140 }}
+        >
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

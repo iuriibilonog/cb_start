@@ -14,6 +14,7 @@ import { getReport } from 'src/redux/content/operations';
 import { getUser } from 'src/redux/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
+import { setLoaderFalseWithError } from 'src/redux/content/operations';
 import ErrorsScreen from 'src/screens/ErrorsScreen/ErrorsScreen';
 
 const DashboardStack = createStackNavigator();
@@ -32,7 +33,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const userInfo = useSelector(getUser);
 
   const confirmReport = async () => {
-    setIsLoading(true);
+    await dispatch(setLoaderFalseWithError(true));
+    // setIsLoading(true);
     let str = '';
 
     if (reportType === 'Payments') {
@@ -158,9 +160,11 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         }
       };
       fr.readAsDataURL(blob);
-      setIsLoading(false);
+      await dispatch(setLoaderFalseWithError(false));
+      // setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
+      await dispatch(setLoaderFalseWithError(false));
+      // setIsLoading(false);
       if (error?.response?.status === 404) {
         setTimeout(() => {
           showMessage({
