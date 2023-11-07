@@ -27,7 +27,7 @@ const calendarIcon = require('src/images/calendar_icon.png');
 const arrowDown = require('src/images/arrow_down.png');
 const arrowUp = require('src/images/arrow_up.png');
 
-const ClientsDashboardScreen = (props) => {
+const ClientsDashboardScreen = ({ navigation, ...props }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [ledgersList, setLedgersList] = useState([]);
   const [selectedBalanceName, setSelectedBalanceName] = useState();
@@ -348,278 +348,21 @@ const ClientsDashboardScreen = (props) => {
           <SimpleText style={{ ...styles.title }}>
             <FormattedMessage id={'dashboard.generate_report'} />
           </SimpleText>
-
-          <View style={styles.conversionWrapper}>
-            <View style={styles.conversionInputsWrapper}>
-              <View style={styles.itemWrapper}>
-                <View style={styles.itemTitle}>
-                  <SimpleText style={styles.itemTextTitle}>
-                    <FormattedMessage id={'dashboard.start_date'} />
-                  </SimpleText>
-                </View>
-                <Pressable
-                  onPress={() => {
-                    setIsCalendarVisible((prev) => !prev);
-                    setFocusedDay('start');
-                  }}
-                  style={{
-                    ...styles.datePickerWrapper,
-                    borderBottomWidth: 1,
-                    borderBottomColor: errors.endDate === 'date_interval' ? '#FC7270' : '#fff',
-                  }}
-                >
-                  {inputsData.startDate && (
-                    <Datepicker
-                      // isFocused={focusedDay === 'start'}
-                      value={inputsData.startDate.dateString}
-                      setValue={(text) => handleDatePickerData(text, 'start')}
-                    />
-                  )}
-
-                  <Image source={calendarIcon} style={styles.calendarIcon} />
-                </Pressable>
-                {errors.startDate && errors.startDate === 'required' && (
-                  <SimpleText
-                    style={{
-                      position: 'absolute',
-                      top: 68,
-                      left: 0,
-                      color: '#FC7270',
-                      marginTop: 5,
-                      fontSize: 12,
-                      letterSpacing: 1,
-                    }}
-                  >
-                    <FormattedMessage id={'errors.required_field'} />
-                  </SimpleText>
-                )}
-                {isCalendarVisible && focusedDay === 'start' && (
-                  <StyledCalendar
-                    setSelectedDay={handleCalendarData}
-                    initialDay={inputsData.startDate}
-                  />
-                )}
-              </View>
-
-              <View style={styles.itemWrapper}>
-                <View style={styles.itemTitle}>
-                  <SimpleText style={styles.itemTextTitle}>
-                    <FormattedMessage id={'dashboard.end_date'} />
-                  </SimpleText>
-                </View>
-                <Pressable
-                  onPress={() => {
-                    setIsCalendarVisible((prev) => !prev);
-                    setFocusedDay('end');
-                  }}
-                  style={{
-                    ...styles.datePickerWrapper,
-                    borderBottomWidth: 1,
-                    borderBottomColor: errors.endDate === 'date_interval' ? '#FC7270' : '#fff',
-                  }}
-                >
-                  {inputsData.endDate && (
-                    <Datepicker
-                      // isFocused={focusedDay === 'end'}
-                      value={inputsData.endDate.dateString}
-                      setValue={(text) => handleDatePickerData(text, 'end')}
-                    />
-                  )}
-
-                  <Image source={calendarIcon} style={styles.calendarIcon} />
-                </Pressable>
-                {errors.endDate && errors.endDate === 'date_interval' ? (
-                  <SimpleText
-                    style={{
-                      position: 'absolute',
-                      top: 68,
-                      left: 0,
-                      color: '#FF6765',
-                      marginTop: 5,
-                      fontSize: 12,
-                      // letterSpacing: 1,
-                    }}
-                  >
-                    <FormattedMessage id={'errors.date_interval'} />
-                  </SimpleText>
-                ) : (
-                  <SimpleText
-                    style={{
-                      position: 'absolute',
-                      top: 68,
-                      left: 0,
-                      color: 'rgba(38, 38, 38, 0.6)',
-                      marginTop: 5,
-                      fontSize: 12,
-                    }}
-                  >
-                    *<FormattedMessage id={'dashboard.max_days'} />
-                  </SimpleText>
-                )}
-                {isCalendarVisible && focusedDay === 'end' && (
-                  <StyledCalendar
-                    setSelectedDay={handleCalendarData}
-                    initialDay={inputsData.endDate}
-                  />
-                )}
-              </View>
-              <View style={{ ...styles.itemWrapper, marginTop: 20 }}>
-                <View style={styles.itemTitle}>
-                  <SimpleText style={styles.itemTextTitle}>
-                    <FormattedMessage id={'dashboard.timezone'} />
-                  </SimpleText>
-                </View>
-                {timezones && inputsData.timezone && (
-                  <ModalDropdown
-                    ref={refTimezone}
-                    options={timezones.map((item) => item.value)}
-                    defaultIndex={0}
-                    defaultValue={inputsData.timezone}
-                    // isFullWidth
-                    animated={false}
-                    onSelect={(index, option) => {
-                      if (errors.timezone) {
-                        setErrors({});
-                      }
-                      setInputsData((prev) => ({ ...prev, timezone: option }));
-                    }}
-                    textStyle={{
-                      fontSize: 16,
-                      fontFamily: 'Mont',
-                      fontWeight: '600',
-                      lineHeight: 16,
-                      paddingRight: 25,
-                    }}
-                    style={{
-                      backgroundColor: '#F4F4F4',
-                      paddingHorizontal: 16,
-                      paddingVertical: 12,
-                      borderRadius: 2,
-                      justifyContent: 'space-between',
-
-                      width: width - 40,
-                    }}
-                    dropdownStyle={{
-                      marginLeft: -16,
-                      marginTop: 14,
-                      paddingLeft: 11,
-                      paddingRight: 2,
-                      width: width - 40,
-                      backgroundColor: '#F4F4F4',
-                      borderWidth: 0,
-                      borderRadius: 2,
-                      height: timezones.length > 6 ? 220 : timezones.length * 40,
-                    }}
-                    dropdownTextStyle={{
-                      fontSize: 16,
-                      lineHeight: 16,
-                      fontWeight: '600',
-                      fontFamily: 'Mont',
-                      backgroundColor: '#F4F4F4',
-                      color: 'rgba(38, 38, 38, 0.50)',
-                    }}
-                    renderRightComponent={() => (
-                      <Image
-                        source={
-                          isTimezoneDropdownOpen
-                            ? require('src/images/arrow_up.png')
-                            : require('src/images/arrow_down.png')
-                        }
-                        style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                      ></Image>
-                    )}
-                    renderRowProps={{ activeOpacity: 1 }}
-                    renderSeparator={() => <></>}
-                    onDropdownWillShow={() => setIsTimezoneDropdownOpen(true)}
-                    onDropdownWillHide={() => setIsTimezoneDropdownOpen(false)}
-                  />
-                )}
-              </View>
-              <View style={{ ...styles.itemWrapper }}>
-                <View style={styles.itemTitle}>
-                  <SimpleText style={styles.itemTextTitle}>
-                    <FormattedMessage id={'dashboard.status'} />
-                  </SimpleText>
-                </View>
-                {statuses && inputsData.status && (
-                  <ModalDropdown
-                    ref={refStatuses}
-                    options={statuses.map((item) => item.value)}
-                    defaultIndex={0}
-                    defaultValue={inputsData.status}
-                    // isFullWidth
-                    animated={false}
-                    onSelect={(index, option) => {
-                      if (errors.status) {
-                        setErrors({});
-                      }
-                      setInputsData((prev) => ({ ...prev, status: option }));
-                    }}
-                    textStyle={{
-                      fontSize: 16,
-                      fontFamily: 'Mont',
-                      fontWeight: '600',
-                      lineHeight: 16,
-                      paddingRight: 25,
-                    }}
-                    style={{
-                      backgroundColor: '#F4F4F4',
-                      paddingHorizontal: 16,
-                      paddingVertical: 12,
-                      borderRadius: 2,
-                      justifyContent: 'space-between',
-
-                      width: width - 40,
-                    }}
-                    dropdownStyle={{
-                      marginLeft: -16,
-                      marginTop: 14,
-                      paddingLeft: 11,
-                      paddingRight: 2,
-                      width: width - 40,
-                      backgroundColor: '#F4F4F4',
-                      borderWidth: 0,
-                      borderRadius: 2,
-                      height: statuses.length > 6 ? 220 : statuses.length * 35,
-                    }}
-                    dropdownTextStyle={{
-                      fontSize: 16,
-                      lineHeight: 16,
-                      fontWeight: '600',
-                      fontFamily: 'Mont',
-                      backgroundColor: '#F4F4F4',
-                      color: 'rgba(38, 38, 38, 0.50)',
-                    }}
-                    renderRightComponent={() => (
-                      <Image
-                        source={
-                          isStatusDropdownOpen
-                            ? require('src/images/arrow_up.png')
-                            : require('src/images/arrow_down.png')
-                        }
-                        style={{ width: 26, height: 26, marginLeft: 'auto' }}
-                      ></Image>
-                    )}
-                    renderRowProps={{ activeOpacity: 1 }}
-                    renderSeparator={() => <></>}
-                    onDropdownWillShow={() => setIsStatusDropdownOpen(true)}
-                    onDropdownWillHide={() => setIsStatusDropdownOpen(false)}
-                  />
-                )}
-              </View>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => navigation.navigate('ClientsGeneralReportsScreen')}
+            style={{ width: 175 }}
+          >
+            <View style={styles.submitBtn}>
+              <SimpleText style={styles.submitBtnText}>
+                <FormattedMessage id={'dashboard.report_options'} />
+              </SimpleText>
             </View>
-            <TouchableOpacity activeOpacity={0.5} onPress={() => handleUpload()}>
-              <SimpleButton
-                text={'dashboard.download'}
-                style={{ width: width - 90, marginHorizontal: 25 }}
-              />
-            </TouchableOpacity>
-          </View>
-
+          </TouchableOpacity>
           {/**********************************************/}
           {/**********************************************/}
           <View>
-            <SimpleText style={{ fontSize: 24, marginBottom: 14 }}>
+            <SimpleText style={{ fontSize: 24 }}>
               <FormattedMessage id={'dashboard.client.balance_history'} />
             </SimpleText>
           </View>
@@ -631,7 +374,7 @@ const ClientsDashboardScreen = (props) => {
               borderBottomWidth: 1,
               borderBottomColor: 'rgba(217, 217, 217, 0.70)',
               backgroundColor: '#F4F4F4',
-              marginTop: 35,
+              marginTop: 25,
               paddingHorizontal: 20,
               marginHorizontal: -20,
             }}
@@ -682,13 +425,13 @@ const styles = StyleSheet.create({
     // marginBottom: 30,
   },
   titleContainer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  title: { /* fontFamily: 'Mont_SB', */ fontSize: 24, lineHeight: 40 },
+  title: { /* fontFamily: 'Mont_SB', */ fontSize: 24, lineHeight: 24 },
   merchantTextTitle: {
     fontSize: 24,
     fontFamily: 'Mont_SB',
   },
   userBalance: {
-    marginBottom: 45,
+    marginBottom: 25,
   },
   userPayInOut: {
     flexDirection: 'row',
@@ -713,29 +456,22 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(217, 217, 217, 0.40)',
   },
   tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center' /* borderWidth: 1 */ },
-  conversionWrapper: { marginBottom: 70 },
-  conversionInputsWrapper: { marginTop: 30, marginBottom: 4 },
-  itemWrapper: { marginBottom: 26 },
-  itemTitle: { marginBottom: 12 },
-  itemTextTitle: { fontSize: 14 },
-  textInput: {
-    backgroundColor: '#F4F4F4',
-    paddingVertical: 11,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    fontFamily: 'Mont',
-  },
-  datePickerWrapper: {
-    height: 40,
-    // width: 150,
-    backgroundColor: '#F4F4F4',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+
+  submitBtn: {
+    height: 44,
+    width: 175,
+    marginTop: 25,
+    marginBottom: 60,
+    borderRadius: 2,
+    backgroundColor: '#0BA39A',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  calendarIcon: { width: 16, height: 16 },
+  submitBtnText: {
+    letterSpacing: 0.48,
+    fontFamily: 'Mont_SB',
+    color: '#fff',
+  },
 });
 
 export default ClientsDashboardScreen;

@@ -20,7 +20,7 @@ const TimeZoneScreen = ({
   isMerchApiKeyAvailable,
 }) => {
   const reportType = route.params.type.value;
-
+  console.log('reportType = route.params.type.value', reportType);
   const defaultPaymentFilter =
     paymentFilter && paymentFilter.find((item) => item.name === 'timezone')
       ? paymentFilter.find((item) => item.name === 'timezone')
