@@ -30,6 +30,7 @@ const MerchantsApiKeyScreen = ({
   filtersDots,
   isMerchApiKeyAvailable,
   confirmReport,
+  clientId,
 }) => {
   const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
   const reportType = route.params.type.value;
@@ -43,11 +44,16 @@ const MerchantsApiKeyScreen = ({
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchants');
-
-        if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
-          setMerchId(merchantObj.filters.id);
-          getMerchApiKeys(merchantObj.filters.id);
+        if (clientId) {
+          setMerchId(clientId);
+          getMerchApiKeys(clientId);
+        } else {
+          let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchants');
+          console.log('1>', genReportPaymentsFilters);
+          if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
+            setMerchId(merchantObj.filters.id);
+            getMerchApiKeys(merchantObj.filters.id);
+          }
         }
         break;
       case 'Transactions':
