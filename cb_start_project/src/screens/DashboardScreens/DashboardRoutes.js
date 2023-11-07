@@ -37,7 +37,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const confirmReport = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     let str = '';
 
     if (reportType === 'Payments') {
@@ -130,6 +130,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
 
       const fr = new FileReader();
 
+      // setIsLoading(false);
       fr.onload = async () => {
         if (Platform.OS === 'ios') {
           const name = report?.data?.name || 'report.xlsx';
@@ -162,8 +163,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           }
         }
       };
+
       fr.readAsDataURL(blob);
-      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       if (error?.response?.status === 404) {
@@ -179,7 +180,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       } else {
         setTimeout(() => {
           showMessage({
-            message: `${error}`,
+            message: `Ooops, something went wrong. Please, try again later.`,
             titleStyle: {
               textAlign: 'center',
             },
@@ -285,6 +286,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             confirmReport={confirmReport}
             balancePeriod={balancePeriod}
             setBalancePeriod={setBalancePeriod}
+            isLoading={isLoading}
           />
         )}
       </DashboardStack.Screen>

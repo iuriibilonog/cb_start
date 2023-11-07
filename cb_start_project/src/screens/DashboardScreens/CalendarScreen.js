@@ -18,6 +18,7 @@ import SimpleText from 'src/components/atoms/SimpleText';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import { FormattedMessage } from 'react-intl';
 import ModalDropdown from 'src/components/molecules/ModalDropdown';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const calendarIcon = require('src/images/calendar_icon.png');
 
@@ -34,6 +35,7 @@ const CalendarScreen = ({
   confirmReport,
   balancePeriod,
   setBalancePeriod,
+  isLoading,
 }) => {
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState();
@@ -123,6 +125,7 @@ const CalendarScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible && (
         <TransactionsFilters
           isActive={'date'}
