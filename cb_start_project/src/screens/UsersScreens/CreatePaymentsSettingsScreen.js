@@ -174,8 +174,13 @@ const CreatePaymentsSettingsScreen = (props) => {
       return;
     }
     let gatheredData = { ...inputsData };
+
     gatheredData.restrictedBrands =
-      selectedRestrictedBrand === 'empty' ? [] : [selectedRestrictedBrand];
+      selectedRestrictedBrand === 'empty'
+        ? []
+        : selectedRestrictedBrand === 'Visa and MasterCard'
+        ? ['Visa', 'MasterCard']
+        : [selectedRestrictedBrand];
     gatheredData.restrictedCountries = gatheredData.restrictedCountries
       ? gatheredData.restrictedCountries.split(',')
       : [];
