@@ -71,7 +71,7 @@ const StatusScreen = ({
         }
         break;
       case 'Transactions':
-        console.log('radioSelect.value', radioSelect.value);
+        
         if (radioSelect.value === 'All') {
           setTransactionFilter('status', {}, true);
         } else {

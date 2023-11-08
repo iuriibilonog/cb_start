@@ -94,7 +94,7 @@ const UsersListScreen = (props) => {
       ).unwrap();
       setSearchUsersData(searchUsers);
     } else {
-      console.log('32-getCurrentPageData');
+      // console.log('32-getCurrentPageData');
       const users = await dispatch(getUsersByPage(currentPage)).unwrap();
       setUsersData(users);
     }
@@ -130,7 +130,7 @@ const UsersListScreen = (props) => {
     } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
       //console.log('52-getUserListData');
       const users = await dispatch(getUsersByPage(1)).unwrap();
-      console.log('users', users);
+
       setUsersData(users);
     } else if (!props.searchUser) {
       //console.log('53-getUserListData');
@@ -143,7 +143,7 @@ const UsersListScreen = (props) => {
   useEffect(() => {
     // console.log('6-usersData');
     if (usersData && usersData.items?.length > 0) {
-      console.log('61-usersData');
+      // console.log('61-usersData');
       setIsLoading(true);
       const pages = Math.ceil(usersData.totalCount / 20);
       setTotalPages(pages);
@@ -162,7 +162,7 @@ const UsersListScreen = (props) => {
   useEffect(() => {
     // console.log('7-data');
     if (data?.length > 0 && props.route.params?.isNewUserCreated) {
-      console.log('71-data');
+      // console.log('71-data');
       delete props.route.params?.isNewUserCreated;
       scrollRef.current?.scrollToOffset({
         offset: 1000,
@@ -198,7 +198,7 @@ const UsersListScreen = (props) => {
   useEffect(() => {
     //console.log('9-searchUsersData');
     if (searchUsersData.length > 0) {
-      console.log('91-searchUsersData');
+      // console.log('91-searchUsersData');
       const pages = Math.ceil(searchUsersData.totalCount / 20);
       setTotalPages(pages);
       if (!incomingUsersData || !isEqual(incomingUsersData, searchUsersData.items)) {

@@ -57,9 +57,9 @@ const CheckRoleMiddleware = () => {
     );
   }
 
-  console.log('userRole', userRole);
+  
 
-  // return <AdminRouting handlePressIconLogOut={handlePressIconLogOut} />;
+ 
 
   switch (userRole) {
     case 1:

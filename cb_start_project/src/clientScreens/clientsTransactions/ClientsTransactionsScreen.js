@@ -71,10 +71,6 @@ const ClientsTransactionsScreen = ({
   }, []);
 
   useEffect(() => {
-    if (data) console.log('data.length', data.length);
-  }, [data]);
-
-  useEffect(() => {
     if (props.searchTxt === '' && !isKeyboardVisible) {
       props.setIsSearchVisible(false);
       Keyboard.dismiss();
