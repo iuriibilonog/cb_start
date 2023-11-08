@@ -337,7 +337,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           />
         )}
       </DashboardStack.Screen>
-
+      {console.log('userInfo.id', userInfo.id)}
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,

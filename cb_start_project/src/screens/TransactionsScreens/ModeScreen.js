@@ -33,6 +33,8 @@ const ModeScreen = ({
   // }, [data]);
 
   useEffect(() => {
+    const isAlreadyChecked = transactionFilter.find((item) => item.name === 'mode');
+    if (radioSelect.value === 'All' && !isAlreadyChecked) return;
     if (radioSelect.value === 'All') {
       setTransactionFilter('mode', {}, true);
       return;

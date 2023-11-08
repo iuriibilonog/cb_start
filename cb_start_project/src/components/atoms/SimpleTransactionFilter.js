@@ -47,6 +47,11 @@ const SimpleTransactionFilter = ({ type, isActive, isInactive, isDot }) => {
       activeImgSource = keyActive;
       inactiveImgSource = keyInactive;
       break;
+    case 'user_key':
+      imgSource = key;
+      activeImgSource = keyActive;
+
+      break;
     case 'merchants':
       imgSource = user;
       activeImgSource = userActive;

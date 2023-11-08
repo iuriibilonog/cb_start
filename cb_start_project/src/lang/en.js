@@ -70,6 +70,7 @@ const lang = {
   'filters.status': 'status',
   'filters.gmt': 'gmt',
   'filters.key': 'Merchant`s api key',
+  'filters.user_key': 'api key',
   'filters.currency': 'currency',
   'filters.mode': 'mode',
 

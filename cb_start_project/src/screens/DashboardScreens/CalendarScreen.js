@@ -16,9 +16,12 @@ import StyledCalendar from 'src/components/molecules/StyledCalendar';
 import Datepicker from 'src/components/atoms/Datepicker';
 import SimpleText from 'src/components/atoms/SimpleText';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import ClientsTransactionsFilters from 'src/components/molecules/ClientsTransactionsFilters';
 import { FormattedMessage } from 'react-intl';
 import ModalDropdown from 'src/components/molecules/ModalDropdown';
 import MainLoader from 'src/components/molecules/MainLoader';
+import { useSelector } from 'react-redux';
+import { getUserRole } from 'src/redux/user/selectors';
 
 const calendarIcon = require('src/images/calendar_icon.png');
 
@@ -43,6 +46,7 @@ const CalendarScreen = ({
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [focusedDay, setFocusedDay] = useState('');
   const reportType = route.params?.type?.value;
+  const userRole = useSelector(getUserRole);
 
   useEffect(() => {
     if (route.params?.isBalancePeriod) {
@@ -125,14 +129,21 @@ const CalendarScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <MainLoader isVisible={isLoading} />
-      {isFiltersVisible && (
-        <TransactionsFilters
-          isActive={'date'}
-          filtersDots={filtersDots}
-          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
-        />
-      )}
+      {/* <MainLoader isVisible={isLoading} /> */}
+      {isFiltersVisible &&
+        (userRole === 3 ? (
+          <TransactionsFilters
+            isActive={'date'}
+            filtersDots={filtersDots}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        ) : (
+          <ClientsTransactionsFilters
+            isActive={'date'}
+            filtersDots={filtersDots}
+            // isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        ))}
       <TouchableWithoutFeedback
         onPress={() => {
           setIsCalendarVisible(false);

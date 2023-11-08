@@ -17,6 +17,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import { getMerchantsApiKeys } from 'src/redux/content/operations';
 import MainLoader from 'src/components/molecules/MainLoader';
+import ClientsTransactionsFilters from 'src/components/molecules/ClientsTransactionsFilters';
+import { getUserRole } from 'src/redux/user/selectors';
 
 const arrowRight = require('src/images/right.png');
 
@@ -40,6 +42,7 @@ const MerchantsApiKeyScreen = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
+  const userRole = useSelector(getUserRole);
 
   useEffect(() => {
     switch (reportType) {
@@ -49,7 +52,7 @@ const MerchantsApiKeyScreen = ({
           getMerchApiKeys(clientId);
         } else {
           let merchantObj = genReportPaymentsFilters.find((item) => item.name === 'merchants');
-          console.log('1>', genReportPaymentsFilters);
+
           if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
             setMerchId(merchantObj.filters.id);
             getMerchApiKeys(merchantObj.filters.id);
@@ -117,14 +120,22 @@ const MerchantsApiKeyScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {console.log('first')}
       <MainLoader isVisible={isLoading} />
-      {isFiltersVisible && (
-        <TransactionsFilters
-          isActive={'key'}
-          filtersDots={filtersDots}
-          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
-        />
-      )}
+      {isFiltersVisible &&
+        (userRole === 3 ? (
+          <TransactionsFilters
+            isActive={'key'}
+            filtersDots={filtersDots}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        ) : (
+          <ClientsTransactionsFilters
+            isActive={'key'}
+            filtersDots={filtersDots}
+            // isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        ))}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           {/* <CheckBoxList

@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, StyleSheet, View } from 'react-native';
 import ClientsDashboardRoutes from 'src/clientScreens/clientsDashboard/ClientsDashboardRoutes';
-import TransactionsRoutes from 'src/screens/TransactionsScreens/TransactionsRoutes';
+import ClientsTransactionsRoutes from 'src/clientScreens/clientsTransactions/ClientsTransactionsRoutes';
 import ClientsApiKeysRoutes from 'src/clientScreens/clientsApiKeys/ClientsApiKeysRoutes';
 
 const ClientsRouting = ({ handlePressIconLogOut }) => {
@@ -56,10 +56,10 @@ const ClientsRouting = ({ handlePressIconLogOut }) => {
             );
           },
         }}
-        name="TransactionsRoutes"
+        name="ClientsTransactionsRoutes"
       >
         {(props) => (
-          <ClientsDashboardRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />
+          <ClientsTransactionsRoutes {...props} handlePressIconLogOut={handlePressIconLogOut} />
         )}
       </MainStack.Screen>
 

@@ -43,6 +43,8 @@ const BanksScreen = ({
   }, [data]);
 
   useEffect(() => {
+    const isAlreadyChecked = transactionFilter.find((item) => item.name === 'banks');
+    if (radioSelect.value === 'All' && !isAlreadyChecked) return;
     if (radioSelect.value === 'All') {
       setTransactionFilter('banks', {}, true);
     } else {

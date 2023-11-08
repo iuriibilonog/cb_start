@@ -5,6 +5,9 @@ import RadioList from 'src/components/molecules/RadioList';
 import { FormattedMessage } from 'react-intl';
 import SimpleText from '../../components/atoms/SimpleText';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import ClientsTransactionsFilters from 'src/components/molecules/ClientsTransactionsFilters';
+import { useSelector } from 'react-redux';
+import { getUserRole } from 'src/redux/user/selectors';
 
 const arrowRight = require('src/images/right.png');
 
@@ -20,7 +23,8 @@ const TimeZoneScreen = ({
   isMerchApiKeyAvailable,
 }) => {
   const reportType = route.params.type.value;
-  console.log('reportType = route.params.type.value', reportType);
+  const userRole = useSelector(getUserRole);
+
   const defaultPaymentFilter =
     paymentFilter && paymentFilter.find((item) => item.name === 'timezone')
       ? paymentFilter.find((item) => item.name === 'timezone')
@@ -82,13 +86,20 @@ const TimeZoneScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && (
-        <TransactionsFilters
-          isActive={'timezone'}
-          filtersDots={filtersDots}
-          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
-        />
-      )}
+      {isFiltersVisible &&
+        (userRole === 3 ? (
+          <TransactionsFilters
+            isActive={'timezone'}
+            filtersDots={filtersDots}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        ) : (
+          <ClientsTransactionsFilters
+            isActive={'timezone'}
+            filtersDots={filtersDots}
+            // isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        ))}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <RadioList

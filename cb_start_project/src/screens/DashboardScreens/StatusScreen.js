@@ -14,6 +14,9 @@ import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from 'src/components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import ClientsTransactionsFilters from 'src/components/molecules/ClientsTransactionsFilters';
+import { useSelector } from 'react-redux';
+import { getUserRole } from 'src/redux/user/selectors';
 
 const arrowRight = require('src/images/right.png');
 
@@ -29,6 +32,7 @@ const StatusScreen = ({
   confirmReport,
 }) => {
   const reportType = route.params.type.value;
+  const userRole = useSelector(getUserRole);
 
   const defaultPaymentFilter =
     paymentFilter && paymentFilter.find((item) => item.name === 'status')
@@ -53,6 +57,10 @@ const StatusScreen = ({
   const navigation = useNavigation();
 
   useEffect(() => {
+    const isAlreadyCheckedTransaction = transactionFilter.find((item) => item.name === 'status');
+    // const isAlreadyCheckedPayment = paymentFilter.find((item) => item.name === 'status');
+    if (radioSelect.value === 'All' && !isAlreadyCheckedTransaction) return;
+
     switch (reportType) {
       case 'Payments':
         if (radioSelect.value === 'All') {
@@ -62,6 +70,7 @@ const StatusScreen = ({
         }
         break;
       case 'Transactions':
+        console.log('radioSelect.value', radioSelect.value);
         if (radioSelect.value === 'All') {
           setTransactionFilter('status', {}, true);
         } else {
@@ -76,13 +85,20 @@ const StatusScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isFiltersVisible && (
-        <TransactionsFilters
-          isActive={'status'}
-          filtersDots={filtersDots}
-          isMerchApiKeyAvailable={isMerchApiKeyAvailable}
-        />
-      )}
+      {isFiltersVisible &&
+        (userRole === 3 ? (
+          <TransactionsFilters
+            isActive={'status'}
+            filtersDots={filtersDots}
+            isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        ) : (
+          <ClientsTransactionsFilters
+            isActive={'status'}
+            filtersDots={filtersDots}
+            // isMerchApiKeyAvailable={isMerchApiKeyAvailable}
+          />
+        ))}
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           {/* <CheckBoxList

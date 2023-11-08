@@ -42,6 +42,8 @@ const CurrencyScreen = ({
   // }, [data]);
 
   useEffect(() => {
+    const isAlreadyChecked = transactionFilter.find((item) => item.name === 'currency');
+    if (radioSelect.value === 'All' && !isAlreadyChecked) return;
     if (radioSelect.value === 'All') {
       setTransactionFilter('currency', {}, true);
     } else {
