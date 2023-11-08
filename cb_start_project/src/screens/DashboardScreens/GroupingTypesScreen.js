@@ -12,6 +12,7 @@ import RadioList from 'src/components/molecules/RadioList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const GroupingTypesScreen = ({
   setTransactionFilter,
@@ -24,12 +25,18 @@ const GroupingTypesScreen = ({
   const getDefaultFilter = transactionFilter?.find((item) => item.name === 'groupingType');
   const defaultTransactionFilter = getDefaultFilter ? getDefaultFilter : { value: 'ApiKey' };
   const [radioSelect, setRadioSelect] = useState(defaultTransactionFilter);
+  const [isLoading, setIsLoading] = useState(false);
 
   const groupingTypes = [{ value: 'ApiKey' }, { value: 'Bank' }, { value: 'All' }];
 
   useEffect(() => {
     setTransactionFilter('groupingType', { value: radioSelect.value });
   }, [radioSelect]);
+
+  const handleConfirmReport = () => {
+    setIsLoading(true);
+    confirmReport();
+  };
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -50,7 +57,7 @@ const GroupingTypesScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={handleConfirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

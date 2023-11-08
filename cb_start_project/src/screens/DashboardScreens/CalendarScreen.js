@@ -40,6 +40,7 @@ const CalendarScreen = ({
   setBalancePeriod,
   isLoading,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const initialDate = new Date().toISOString().slice(0, 10);
   const [selectedStartDay, setSelectedStartDay] = useState();
   const [selectedEndDay, setSelectedEndDay] = useState();
@@ -105,6 +106,7 @@ const CalendarScreen = ({
       setBalancePeriod({ startDate: start, endDate: end });
       navigation.navigate('DashboardScreen');
     } else {
+      setIsLoading(true);
       confirmReport();
     }
     setIsCalendarVisible(false);

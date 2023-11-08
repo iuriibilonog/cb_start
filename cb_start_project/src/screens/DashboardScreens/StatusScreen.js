@@ -17,6 +17,7 @@ import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import ClientsTransactionsFilters from 'src/components/molecules/ClientsTransactionsFilters';
 import { useSelector } from 'react-redux';
 import { getUserRole } from 'src/redux/user/selectors';
+import MainLoader from 'src/components/molecules/MainLoader';
 
 const arrowRight = require('src/images/right.png');
 
@@ -53,7 +54,7 @@ const StatusScreen = ({
     { value: 'processing' },
     { value: 'new' },
   ];
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -82,6 +83,11 @@ const StatusScreen = ({
         break;
     }
   }, [radioSelect]);
+
+  const handleConfirmReport = () => {
+    setIsLoading(true);
+    confirmReport();
+  };
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>

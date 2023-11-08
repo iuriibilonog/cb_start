@@ -20,7 +20,8 @@ import { getReport } from 'src/redux/content/operations';
 import { useDispatch } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
 import ErrorsScreen from 'src/screens/ErrorsScreen/ErrorsScreen';
-import MainLoader from 'src/components/molecules/MainLoader';
+// import MainLoader from 'src/components/molecules/MainLoader';
+import { setLoaderFalseWithError } from 'src/redux/content/operations';
 
 const DashboardStack = createStackNavigator();
 
@@ -38,6 +39,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
 
   const confirmReport = async () => {
     // setIsLoading(true);
+    await dispatch(setLoaderFalseWithError(true));
     let str = '';
 
     if (reportType === 'Payments') {
@@ -135,7 +137,6 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         if (Platform.OS === 'ios') {
           const name = report?.data?.name || 'report.xlsx';
           const fileUri = `${FileSystem.documentDirectory}/${name}`;
-
           await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
             encoding: FileSystem.EncodingType.Base64,
           });
@@ -165,8 +166,11 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       };
 
       fr.readAsDataURL(blob);
+      await dispatch(setLoaderFalseWithError(false));
+      // setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
+      await dispatch(setLoaderFalseWithError(false));
+      // setIsLoading(false);
       if (error?.response?.status === 404) {
         setTimeout(() => {
           showMessage({

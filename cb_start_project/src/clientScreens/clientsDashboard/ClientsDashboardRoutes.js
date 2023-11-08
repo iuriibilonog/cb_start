@@ -10,10 +10,11 @@ import TimeZoneScreen from 'src/screens/DashboardScreens/TimeZoneScreen';
 import MerchantsApiKeyScreen from 'src/screens/DashboardScreens/MerchantsApiKeyScreen';
 import StatusScreen from 'src/screens/DashboardScreens/StatusScreen';
 import { Image, Pressable, Platform } from 'react-native';
-import { getReport } from 'src/redux/content/operations';
+import { getReport, setLoaderFalseWithError } from 'src/redux/content/operations';
 import { getUser } from 'src/redux/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
+
 import ErrorsScreen from 'src/screens/ErrorsScreen/ErrorsScreen';
 
 const DashboardStack = createStackNavigator();
@@ -32,7 +33,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
   const userInfo = useSelector(getUser);
 
   const confirmReport = async () => {
-    setIsLoading(true);
+    await dispatch(setLoaderFalseWithError(true));
+    // setIsLoading(true);
     let str = '';
 
     if (reportType === 'Payments') {
@@ -158,9 +160,11 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         }
       };
       fr.readAsDataURL(blob);
-      setIsLoading(false);
+      await dispatch(setLoaderFalseWithError(false));
+      // setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
+      await dispatch(setLoaderFalseWithError(false));
+      // setIsLoading(false);
       if (error?.response?.status === 404) {
         setTimeout(() => {
           showMessage({
@@ -341,7 +345,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       <DashboardStack.Screen
         options={{
           headerBackTitleVisible: false,
-          headerTitle: 'Merchant"s api key',
+          headerTitle: 'Merchant`s api key',
           headerTitleAlign: 'left',
           headerBackImage: () => (
             <Image
@@ -359,11 +363,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
             {...props}
             clientId={userInfo.id}
             setPaymentsFilter={setPaymentsFilter}
-            setTransactionFilter={setTransactionFilter}
             genReportPaymentsFilters={genReportPaymentsFilters}
-            genReportTransactionFilters={genReportTransactionFilters}
             confirmReport={confirmReport}
-            isClientAccess
           />
         )}
       </DashboardStack.Screen>

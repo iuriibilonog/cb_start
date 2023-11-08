@@ -12,8 +12,9 @@ import { useNavigation } from '@react-navigation/native';
 import CheckBoxList from 'src/components/molecules/CheckBoxList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
+import MainLoader from 'src/components/molecules/MainLoader';
 
-const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter,confirmReport }) => {
+const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter, confirmReport }) => {
   const defaultPaymentFilter =
     paymentFilter && paymentFilter.find((item) => item.name === 'filterColumns')
       ? paymentFilter.find((item) => item.name === 'filterColumns')
@@ -43,7 +44,7 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter,confirmReport })
     { value: 'Profit', code: 'profit' },
     { value: 'Is visited url', code: 'isVisitedUrl' },
   ];
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -57,8 +58,14 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter,confirmReport })
     });
   }, [checkBoxSelect]);
 
+  const handleConfirmReport = () => {
+    setIsLoading(true);
+    confirmReport();
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       <View style={styles.container}>
         <View style={styles.radioBoxContainer}>
           <CheckBoxList
@@ -70,7 +77,7 @@ const FilterColumnsScreen = ({ setPaymentsFilter, paymentFilter,confirmReport })
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={handleConfirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

@@ -92,7 +92,6 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
   ];
 
   useEffect(() => {
-    console.log('UserInfo', userInfo);
     getLedgersByUserId(userInfo.id);
 
     setInputsData((prev) => ({
