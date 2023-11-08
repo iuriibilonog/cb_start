@@ -67,7 +67,8 @@ const ClientsGeneralReportsScreen = ({
     setSelectedId(e);
     switch (e) {
       case 1:
-        navigation.navigate('CalendarScreen', { type: radioSelect });
+        const minDate = new Date(new Date().getTime() - 86400000 * 90).toISOString();
+        navigation.navigate('CalendarScreen', { type: radioSelect, minDate: minDate });
         break;
 
       case 2:
@@ -133,7 +134,7 @@ const ClientsGeneralReportsScreen = ({
                 fontFamily: selectedId === 2 ? 'Mont_SB' : 'Mont',
               }}
             >
-              <FormattedMessage id={'dashboard.merchants_api_key'} />
+              <FormattedMessage id={'api.api_key'} />
             </SimpleText>
             <Image source={arrowRight} style={styles.arrowRight} />
           </TouchableOpacity>

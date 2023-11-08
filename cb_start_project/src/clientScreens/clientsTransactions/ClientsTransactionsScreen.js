@@ -250,13 +250,21 @@ const ClientsTransactionsScreen = ({
         <View
           onStartShouldSetResponder={() => true}
           style={{
-            ...styles.tableRow,
+            marginLeft: 10,
             flexDirection: 'row',
-
+            borderBottomWidth: 1,
+            borderColor: 'rgba(217, 217, 217, 0.70)',
             alignItems: 'center',
           }}
         >
-          <View style={{ ...styles.tableCell, width: width / 3, paddingVertical: 0 }}>
+          <View
+            style={{
+              ...styles.tableCell,
+              width: width / 3,
+              paddingVertical: 0,
+              borderBottomWidth: 0,
+            }}
+          >
             <View style={styles.additDataCell}>
               <SimpleText>ID</SimpleText>
             </View>
@@ -333,7 +341,7 @@ const ClientsTransactionsScreen = ({
             >
               <SimpleText>{item.status}</SimpleText>
             </View>
-            <View style={styles.additDataCellValues}>
+            <View style={{ ...styles.additDataCellValues, borderBottomWidth: 0 }}>
               <SimpleText>{`${item.amount} ${item.currency}`}</SimpleText>
             </View>
           </View>

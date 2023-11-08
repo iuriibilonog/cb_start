@@ -36,6 +36,7 @@ const lang = {
   'dashboard.max_days': 'Max 5 days',
   'dashboard.grouping_type': 'Grouping type',
   'dashboard.client.balance_history': 'Balance history',
+  'dashboard.report_create_warning': '*Up to 90 days tx history available for download',
 
   //===transactions===
   'transactions.transactions': 'Transactions',

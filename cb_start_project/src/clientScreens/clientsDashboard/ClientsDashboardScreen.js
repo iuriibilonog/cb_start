@@ -346,17 +346,23 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
           <SimpleText style={{ ...styles.title }}>
             <FormattedMessage id={'dashboard.generate_report'} />
           </SimpleText>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.navigate('ClientsGeneralReportsScreen')}
-            style={{ width: 175 }}
-          >
-            <View style={styles.submitBtn}>
-              <SimpleText style={styles.submitBtnText}>
-                <FormattedMessage id={'dashboard.report_options'} />
-              </SimpleText>
-            </View>
-          </TouchableOpacity>
+          <View style={{ marginBottom: 60 }}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => navigation.navigate('ClientsGeneralReportsScreen')}
+              style={{ width: 175 }}
+            >
+              <View style={styles.submitBtn}>
+                <SimpleText style={styles.submitBtnText}>
+                  <FormattedMessage id={'dashboard.report_options'} />
+                </SimpleText>
+              </View>
+            </TouchableOpacity>
+            <SimpleText style={{ fontSize: 12, marginTop: 5, color:'grey' }}>
+              <FormattedMessage id={'dashboard.report_create_warning'} />
+            </SimpleText>
+          </View>
+
           {/**********************************************/}
           {/**********************************************/}
           <View>
@@ -459,7 +465,7 @@ const styles = StyleSheet.create({
     height: 44,
     width: 175,
     marginTop: 25,
-    marginBottom: 60,
+
     borderRadius: 2,
     backgroundColor: '#0BA39A',
     alignItems: 'center',

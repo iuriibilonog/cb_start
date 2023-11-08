@@ -199,6 +199,7 @@ const CalendarScreen = ({
           {isCalendarVisible && (
             <StyledCalendar
               setSelectedDay={handleSelectedDay}
+              minDate={route.params.minDate ? route.params.minDate : undefined}
               initialDay={focusedDay === 'start' ? selectedStartDay : selectedEndDay}
             />
           )}
