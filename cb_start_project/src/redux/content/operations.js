@@ -180,6 +180,59 @@ export const getTransactionData = createAsyncThunk(
   }
 );
 
+export const getClientsTransactionsData = createAsyncThunk(
+  'content/getClientsTransactionsData',
+  async ({ transactionData, page = 1, userId, search }, thunkAPI) => {
+    try {
+      let setLink;
+      let timezone;
+      if (transactionData.timezone) {
+        timezone =
+          transactionData.timezone.indexOf('+0') > 0
+            ? 'Europe/London'
+            : transactionData.timezone.indexOf('+1') > 0
+            ? 'Europe/Paris'
+            : transactionData.timezone.indexOf('+2') > 0
+            ? 'Europe/Riga'
+            : transactionData.timezone.indexOf('+3') > 0
+            ? 'Europe/Moscow'
+            : transactionData.timezone.indexOf('+4') > 0
+            ? 'Asia/Baku'
+            : transactionData.timezone.indexOf('+5.5') > 0
+            ? 'Asia/Kolkata'
+            : transactionData.timezone.indexOf('+5') > 0
+            ? 'Asia/Tashkent'
+            : transactionData.timezone.indexOf('+6') > 0
+            ? 'Asia/Omsk'
+            : '';
+
+        transactionData.timezone = timezone;
+      }
+      setLink = JSON.stringify(transactionData);
+
+      setLink = setLink.replace(/:/g, '=').replace(/\,/g, '&').replace(/\"/g, '').slice(1, -1);
+      if (!setLink.includes('endDate')) {
+        const initialDate = new Date().toISOString().slice(0, 10);
+
+        setLink = `startDate=${initialDate}&endDate=${initialDate}&` + setLink;
+      }
+
+      const { data } = await api.get(
+        search
+          ? `${BASE_URL}/api/payments?page=${page}&pageSize=100&userId=${userId}&search=${search}&${setLink}`
+          : `${BASE_URL}/api/payments?page=${page}&pageSize=100&userId=${userId}&${setLink}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const getApiData = createAsyncThunk(
   'content/getApiData',
   async ({ page = 1, searchText }, thunkAPI) => {

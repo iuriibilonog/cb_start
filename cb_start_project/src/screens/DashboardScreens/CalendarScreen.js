@@ -38,7 +38,6 @@ const CalendarScreen = ({
   confirmReport,
   balancePeriod,
   setBalancePeriod,
-  isLoading,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const initialDate = new Date().toISOString().slice(0, 10);
@@ -131,7 +130,7 @@ const CalendarScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {/* <MainLoader isVisible={isLoading} /> */}
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible &&
         (userRole === 3 ? (
           <TransactionsFilters

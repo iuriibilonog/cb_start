@@ -1,8 +1,8 @@
 import React, { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
-import { getTransactionData } from 'src/redux/content/operations';
-import { getTransactionInfo } from 'src/redux/content/selectors';
+import { getTransactionData, getClientsTransactionsData } from 'src/redux/content/operations';
+import { getTransactionInfo, getClientsTransactionInfo } from 'src/redux/content/selectors';
 import {
   StyleSheet,
   View,
@@ -34,10 +34,12 @@ const ClientsTransactionsScreen = ({
   isMerchApiKeyAvailable,
   createTransactionRequestObject,
   isTransactionsWithFilterLoading,
+  clientId,
   ...props
 }) => {
   const dispatch = useDispatch();
-  const transactionInfo = useSelector(getTransactionInfo);
+  const transactionInfo = useSelector(getClientsTransactionInfo);
+
   const [data, setData] = useState(null);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [isAdditDataOpen, setIsAdditDataOpen] = useState(false);
@@ -90,17 +92,19 @@ const ClientsTransactionsScreen = ({
 
       if (props.searchTxt) {
         await dispatch(
-          getTransactionData({
+          getClientsTransactionsData({
             transactionData: transactionRequestObject,
             page: page ? page : currentPage,
+            userid: clientId,
             search: props.searchTxt,
           })
         );
       } else {
         await dispatch(
-          getTransactionData({
+          getClientsTransactionsData({
             transactionData: transactionRequestObject,
             page: page ? page : currentPage,
+            userid: clientId,
           })
         );
       }
@@ -113,6 +117,17 @@ const ClientsTransactionsScreen = ({
       setTotalPages(Math.floor(transactionInfo.totalCount / 100));
       setData(transactionInfo.items);
     }
+    // first {"amount": 320, "apiKey": {"id": 194, "name": "TestApk999",
+    // "user": {"email": "Rest005@jnvkfv.com", "id": 120, "username": "Rest00555"}},
+    // "apiKeyId": 194, "bin": null, "cardHolder": null, "cardNumber": null,
+    // "commission": null, "createdAt": "2023-11-06T13:49:02.141Z",
+    // "currency": "UAH", "customerEmail": null,
+    // "customerFirstName": null, "customerIp": null,
+    // "customerLastName": null, "customerPhone": null,
+    // "id": 417868, "message": "Payment processing", "mode": "payin",
+    // "orderId": "235059b6-a2ea-4750-89cd-62efc361cc43",
+    // "status": "processing", "system": "card", "type":
+    // "card", "updatedAt": "2023-11-06T13:52:31.171Z"}
   }, [transactionInfo]);
 
   const handleExpandRow = (index) => {
@@ -280,13 +295,6 @@ const ClientsTransactionsScreen = ({
                 <FormattedMessage id={'transactions.amount'} />
               </SimpleText>
             </View>
-            {item.transactions.length > 0 && !isDetailsOpen && (
-              <View style={styles.additDataCell}>
-                <SimpleText>
-                  <FormattedMessage id={'common.details'} />
-                </SimpleText>
-              </View>
-            )}
           </View>
           <View
             style={{
@@ -328,148 +336,8 @@ const ClientsTransactionsScreen = ({
             <View style={styles.additDataCellValues}>
               <SimpleText>{`${item.amount} ${item.currency}`}</SimpleText>
             </View>
-            {item.transactions.length > 0 && !isDetailsOpen && (
-              <TouchableOpacity activeOpacity={0.5} onPress={() => setIsDetailsOpen(true)}>
-                <View style={{ ...styles.additDataCellValues, alignItems: 'center' }}>
-                  <SimpleText style={{ fontSize: 25 }}>+</SimpleText>
-                </View>
-              </TouchableOpacity>
-            )}
           </View>
         </View>
-      )}
-      {item.transactions.length > 0 &&
-        isDetailsOpen &&
-        isAdditDataOpen &&
-        item.id === selectedIndex && (
-          <TouchableOpacity
-            onStartShouldSetResponder={() => true}
-            activeOpacity={0.5}
-            onPress={() => setIsDetailsOpen((prev) => !prev)}
-          >
-            <View style={styles.additDataHeader}>
-              <Image source={close} style={{ width: 32, height: 32 }} />
-            </View>
-          </TouchableOpacity>
-        )}
-
-      {isDetailsOpen &&
-        item.id === selectedIndex &&
-        item.transactions.map((transaction, index) => (
-          <View
-            key={index}
-            onStartShouldSetResponder={() => true}
-            style={{
-              ...styles.tableRow,
-              flexDirection: 'row',
-
-              alignItems: 'center',
-
-              marginTop: 5,
-            }}
-          >
-            <View style={{ ...styles.tableCell, width: width / 3, paddingVertical: 0 }}>
-              <View style={styles.additDataCell}>
-                <SimpleText>ID</SimpleText>
-              </View>
-              <View style={styles.additDataCell}>
-                <SimpleText>
-                  <FormattedMessage id={'transactions.bank_payment_id'} />
-                </SimpleText>
-              </View>
-              <View style={styles.additDataCell}>
-                <SimpleText>
-                  <FormattedMessage id={'common.bank'} />
-                </SimpleText>
-              </View>
-              <View style={styles.additDataCell}>
-                <SimpleText>
-                  <FormattedMessage id={'common.date'} />
-                </SimpleText>
-              </View>
-              <View style={styles.additDataCell}>
-                <SimpleText>
-                  <FormattedMessage id={'common.message'} />
-                </SimpleText>
-              </View>
-              <View style={styles.additDataCell}>
-                <SimpleText>
-                  <FormattedMessage id={'transactions.visit_3DS'} />
-                </SimpleText>
-              </View>
-              <View style={styles.additDataCell}>
-                <SimpleText>
-                  <FormattedMessage id={'transactions.status'} />
-                </SimpleText>
-              </View>
-            </View>
-            <View
-              style={{
-                ...styles.tableCellStatus,
-                paddingVertical: 0,
-              }}
-            >
-              <View style={styles.additDataCellValues}>
-                <SimpleText>{transaction.id}</SimpleText>
-              </View>
-              <View style={styles.additDataCellValues}>
-                <SimpleText>{transaction.bankPaymentId}</SimpleText>
-              </View>
-              <View style={styles.additDataCellValues}>
-                <SimpleText>{transaction.paymentMethod.paymentMethod.bank.name}</SimpleText>
-              </View>
-              <View style={styles.additDataCellValues}>
-                <SimpleText>{validTextShow(transaction.updatedAt)}</SimpleText>
-              </View>
-              <View style={styles.additDataCellValues}>
-                <SimpleText>{transaction.message}</SimpleText>
-              </View>
-              <View style={styles.additDataCellValues}>
-                <SimpleText>{transaction.isVisitedUrl ? 'Yes' : 'No'}</SimpleText>
-              </View>
-              <View
-                style={{
-                  ...styles.additDataCellValues,
-                  backgroundColor:
-                    transaction.status === 'approved'
-                      ? '#D2FFA4'
-                      : transaction.status === 'declined'
-                      ? '#FFCCCC'
-                      : '#FDFF96',
-                }}
-              >
-                <SimpleText>{transaction.status}</SimpleText>
-              </View>
-            </View>
-          </View>
-        ))}
-      {isAdditDataOpen && selectedIndex === item.id && (
-        <TouchableOpacity
-          onPress={() => handleCardholderDataShow(item)}
-          activeOpacity={0.5}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 15,
-            borderBottomWidth: 1,
-            borderBottomColor: 'rgba(217, 217, 217, 0.70)',
-            marginBottom: 5,
-          }}
-        >
-          <SimpleText
-            style={{
-              color: '#3D73FF',
-              textDecorationLine: 'underline',
-              // textDecoration: 'underline',
-              // textDecorationStyle: 'underline',
-              //doesn`t work on IOS !!!!
-            }}
-          >
-            <FormattedMessage id={'transactions.cardholder_data'} />
-          </SimpleText>
-          <Image source={card} style={{ width: 24, height: 24, marginLeft: 12 }} />
-        </TouchableOpacity>
       )}
     </>
   );

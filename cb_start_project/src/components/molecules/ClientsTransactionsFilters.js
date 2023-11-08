@@ -47,7 +47,7 @@ const ClientsTransactionsFilters = (props) => {
             })
           );
           // setSelection('key');
-          navigation.navigate('MerchantsApiKeyScreen', { type: { value: 'Payments' } });
+          navigation.navigate('MerchantsApiKeyScreen', { type: { value: 'Transactions' } });
         }}
       >
         <SimpleTransactionFilter

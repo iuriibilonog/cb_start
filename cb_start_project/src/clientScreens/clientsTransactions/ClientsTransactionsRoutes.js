@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
-import { getTransactionData } from 'src/redux/content/operations';
+import { getClientsTransactionsData } from 'src/redux/content/operations';
 import ClientsTransactionsScreen from './ClientsTransactionsScreen';
 
 import CalendarScreen from '../../screens/DashboardScreens/CalendarScreen';
@@ -15,6 +15,8 @@ import { Image, Pressable, TouchableOpacity, View, TextInput } from 'react-nativ
 
 const headerLeft = require('src/images/header_left.png');
 const searchIcon = require('src/images/search_dark.png');
+const profileIcon = require('src/images/profile_icon.png');
+const closeIcon = require('src/images/delete.png');
 
 const TransactionsStack = createStackNavigator();
 const dateNow = new Date().toISOString().slice(0, 10);
@@ -98,17 +100,22 @@ const ClientsTransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
           result[item.name] = item.value;
       }
     });
+
     return result;
   };
-
-  const profileIcon = require('src/images/profile_icon.png');
-  const closeIcon = require('src/images/delete.png');
 
   const confirmTransactionFilters = async () => {
     setIsTransactionsWithFilterLoading(true);
     navigation.navigate('ClientsTransactionsScreen');
     const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
-    await dispatch(getTransactionData({ transactionData: transactionRequestObject, page: 1 }));
+
+    await dispatch(
+      getClientsTransactionsData({
+        transactionData: transactionRequestObject,
+        page: 1,
+        userId: userInfo.id,
+      })
+    );
     setIsTransactionsWithFilterLoading(false);
   };
 
@@ -167,6 +174,7 @@ const ClientsTransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
           <ClientsTransactionsScreen
             {...props}
             searchTxt={search}
+            clientId={userInfo.id}
             setIsSearchVisible={handleHideSearchInput}
             isMerchApiKeyAvailable={isMerchApiKeyAvailable}
             isFiltersVisible={true}

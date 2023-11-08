@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import RadioList from 'src/components/molecules/RadioList';
 import SimpleText from '../../components/atoms/SimpleText';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TransactionsFilters from 'src/components/molecules/TransactionsFilters';
 import { getMerchantsApiKeys } from 'src/redux/content/operations';
 import MainLoader from 'src/components/molecules/MainLoader';
@@ -23,6 +23,7 @@ const MerchantsApiKeyScreen = ({
   confirmReport,
   clientId,
 }) => {
+  const reportType = route.params.type.value;
   const defaultPaymentFilter =
     genReportPaymentsFilters &&
     genReportPaymentsFilters.find((item) => item.name === 'merchantApiKey')
@@ -35,15 +36,15 @@ const MerchantsApiKeyScreen = ({
       : { value: 'All api keys' };
 
   const [radioSelect, setRadioSelect] = useState(
-    reportType === 'Payments'
-      ? defaultPaymentFilter
-      : clientId
-      ? defaultPaymentFilter
-      : defaultTransactionFilter
+    reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
   );
 
+  // const setDefaultSelectedValue = () => {
+  //   if ()
+  // };
+
   // const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
-  const reportType = route.params.type.value;
+
   const dispatch = useDispatch();
   const [data, setData] = useState([{ value: 'All api keys' }]);
   const [merchId, setMerchId] = useState('');
@@ -68,11 +69,16 @@ const MerchantsApiKeyScreen = ({
         }
         break;
       case 'Transactions':
-        merchantObj = genReportTransactionFilters.find((item) => item.name === 'merchants');
+        if (clientId) {
+          setMerchId(clientId);
+          getMerchApiKeys(clientId);
+        } else {
+          merchantObj = genReportTransactionFilters.find((item) => item.name === 'merchants');
 
-        if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
-          setMerchId(merchantObj.filters.id);
-          getMerchApiKeys(merchantObj.filters.id);
+          if (merchantObj?.filters?.value && merchantObj?.filter?.value !== 'All merchants') {
+            setMerchId(merchantObj.filters.id);
+            getMerchApiKeys(merchantObj.filters.id);
+          }
         }
         break;
 
@@ -82,6 +88,13 @@ const MerchantsApiKeyScreen = ({
   }, [genReportPaymentsFilters, genReportTransactionFilters]);
 
   useEffect(() => {
+    const isAlreadyChecked =
+      reportType === 'Transactions'
+        ? genReportTransactionFilters.find((item) => item.name === 'merchantApiKey')
+        : genReportPaymentsFilters.find((item) => item.name === 'status');
+
+    if (radioSelect.value === 'All api keys' && !isAlreadyChecked) return;
+
     switch (reportType) {
       case 'Payments':
         if (radioSelect.value === 'All api keys') {
