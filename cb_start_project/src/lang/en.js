@@ -7,6 +7,7 @@ const lang = {
   'common.log_out_btn_cancel': 'Cancel',
   'common.remember_me': 'Remember me',
   'common.sign_up': 'Sign Up',
+  'common.name': 'Name',
 
   // ================ Secure Screen ===================
   'secure.title_enter': 'Please enter your PIN code',
@@ -77,7 +78,7 @@ const lang = {
 
   //API=======
   'api.api_keys': 'API keys',
-  'api.api_key': 'API key',
+  'api.api_key': 'API Key',
   'api.api_key_name': 'API Key name',
   'api.new_api_key': 'new API Key',
   'api.edit_api': 'Edit API Key name',

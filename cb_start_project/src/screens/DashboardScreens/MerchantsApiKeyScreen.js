@@ -146,7 +146,7 @@ const MerchantsApiKeyScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {console.log('first')}
+      
       <MainLoader isVisible={isLoading} />
       {isFiltersVisible &&
         (userRole === 3 ? (
