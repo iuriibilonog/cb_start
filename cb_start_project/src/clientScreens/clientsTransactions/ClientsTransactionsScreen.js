@@ -71,6 +71,10 @@ const ClientsTransactionsScreen = ({
   }, []);
 
   useEffect(() => {
+    if (data) console.log('data.length', data.length);
+  }, [data]);
+
+  useEffect(() => {
     if (props.searchTxt === '' && !isKeyboardVisible) {
       props.setIsSearchVisible(false);
       Keyboard.dismiss();
@@ -117,17 +121,6 @@ const ClientsTransactionsScreen = ({
       setTotalPages(Math.floor(transactionInfo.totalCount / 100));
       setData(transactionInfo.items);
     }
-    // first {"amount": 320, "apiKey": {"id": 194, "name": "TestApk999",
-    // "user": {"email": "Rest005@jnvkfv.com", "id": 120, "username": "Rest00555"}},
-    // "apiKeyId": 194, "bin": null, "cardHolder": null, "cardNumber": null,
-    // "commission": null, "createdAt": "2023-11-06T13:49:02.141Z",
-    // "currency": "UAH", "customerEmail": null,
-    // "customerFirstName": null, "customerIp": null,
-    // "customerLastName": null, "customerPhone": null,
-    // "id": 417868, "message": "Payment processing", "mode": "payin",
-    // "orderId": "235059b6-a2ea-4750-89cd-62efc361cc43",
-    // "status": "processing", "system": "card", "type":
-    // "card", "updatedAt": "2023-11-06T13:52:31.171Z"}
   }, [transactionInfo]);
 
   const handleExpandRow = (index) => {

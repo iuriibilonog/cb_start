@@ -266,7 +266,7 @@ const ClientsApiKeys = (props) => {
           </View>
           <View style={{ ...styles.tableCell, flex: 1 }}>
             <SimpleText style={styles.headerText}>
-              <FormattedMessage id={'common.user'} />
+              <FormattedMessage id={'common.name'} />
             </SimpleText>
           </View>
         </View>
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     borderBottomColor: 'rgba(217, 217, 217, 0.70)',
   },
-  tableCell: { height: 40, paddingHorizontal: 5, justifyContent: 'center' },
+  tableCell: { height: 40, paddingHorizontal: 0, justifyContent: 'center' },
   actionsCell: {
     flex: 1,
     alignItems: 'center',
@@ -328,16 +328,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   additDataCell: {
-    height: 40,
-    paddingLeft: 5,
+    height: 50,
+    paddingLeft: 0,
     backgroundColor: '#F4F4F4',
     justifyContent: 'center',
   },
   additDataCellValues: {
     flex: 1,
-    height: 40,
-    paddingLeft: 23,
+    height: 50,
+    paddingLeft: 15,
     paddingRight: 10,
+    paddingVertical: 5,
     backgroundColor: '#F4F4F4',
     borderBottomColor: 'rgba(217, 217, 217, 0.40);',
     borderBottomWidth: 1,
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
   },
   additDataLabel: {
     // marginTop: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
     width: '100%',
   },
 });
