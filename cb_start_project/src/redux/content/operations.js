@@ -128,6 +128,41 @@ export const getReport = createAsyncThunk('content/getReport', async (reportData
     }
   }
 });
+
+export const getClientsReport = createAsyncThunk(
+  'content/getClientsReport',
+  async (reportData, thunkAPI) => {
+    const { str, reportType } = reportData;
+
+    if (reportType === 'Payments') {
+      try {
+        const { data } = await api.get(
+          `${BASE_URL}/api/payments/export?${str}&exportFields=createdAt&exportFields=id&exportFields=orderId&exportFields=commission&exportFields=amount&exportFields=currency&exportFields=status&exportFields=mode&exportFields=pan&exportFields=system&exportFields=cardCountry&exportFields=isVisitedUrl&exportFields=methodId`,
+          {
+            withCredentials: true,
+            responseType: 'blob',
+          }
+        );
+
+        return data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+      }
+    } else {
+      try {
+        const { data } = await api.get(`${BASE_URL}/api/transactions/export?${str}`, {
+          withCredentials: true,
+
+          responseType: 'blob',
+        });
+
+        return data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+      }
+    }
+  }
+);
 export const getTransactionData = createAsyncThunk(
   'content/getTransactionData',
   async ({ transactionData, page = 1, search }, thunkAPI) => {

@@ -58,22 +58,27 @@ const StatusScreen = ({
   const navigation = useNavigation();
 
   useEffect(() => {
-    const isAlreadyCheckedTransaction = transactionFilter.find((item) => item.name === 'status');
-    // const isAlreadyCheckedPayment = paymentFilter.find((item) => item.name === 'status');
-    if (radioSelect.value === 'All' && !isAlreadyCheckedTransaction) return;
+    // const isAlreadyCheckedTransaction = transactionFilter.find((item) => item.name === 'status');
+    // // const isAlreadyCheckedPayment = paymentFilter.find((item) => item.name === 'status');
+    // if (radioSelect.value === 'All' && !isAlreadyCheckedTransaction) return;
 
     switch (reportType) {
       case 'Payments':
         if (radioSelect.value === 'All') {
-          setPaymentsFilter('status', {}, true);
+          const isAlreadyChecked = paymentFilter.find((item) => item.name === 'status');
+          if (isAlreadyChecked) {
+            setPaymentsFilter('status', {}, true);
+          }
         } else {
           setPaymentsFilter('status', { filters: radioSelect.value, value: radioSelect.value });
         }
         break;
       case 'Transactions':
-        
         if (radioSelect.value === 'All') {
-          setTransactionFilter('status', {}, true);
+          const isAlreadyChecked = transactionFilter.find((item) => item.name === 'status');
+          if (isAlreadyChecked) {
+            setTransactionFilter('status', {}, true);
+          }
         } else {
           setTransactionFilter('status', { filters: radioSelect.value, value: radioSelect.value });
         }
@@ -91,6 +96,7 @@ const StatusScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible &&
         (userRole === 3 ? (
           <TransactionsFilters
@@ -121,7 +127,7 @@ const StatusScreen = ({
           />
         </View>
 
-        <TouchableOpacity activeOpacity={0.5} onPress={confirmReport} style={{ width: 140 }}>
+        <TouchableOpacity activeOpacity={0.5} onPress={handleConfirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />

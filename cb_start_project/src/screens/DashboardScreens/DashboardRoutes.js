@@ -46,7 +46,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       genReportPaymentsFilters.map((item) => {
         switch (item.name) {
           case 'date':
-            str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
+            str =
+              `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}` + str;
             break;
           case 'timezone':
             str = str + '&' + `timezone=${item.filters.code}`;
@@ -80,7 +81,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       genReportTransactionFilters.map((item) => {
         switch (item.name) {
           case 'date':
-            str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
+            str =
+              `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}` + str;
             break;
           case 'timezone':
             str = str + '&' + `timezone=${item.filters.code}`;
@@ -122,7 +124,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     if (reportType === 'Transactions' && !str.includes('groupingType')) {
       str = str + '&' + 'groupingType=All';
     }
-
+    console.log('REQUEST STRING:', str);
     try {
       const report = await dispatch(getReport({ str, reportType })).unwrap();
 

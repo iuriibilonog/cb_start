@@ -29,11 +29,11 @@ const TimeZoneScreen = ({
   const defaultPaymentFilter =
     paymentFilter && paymentFilter.find((item) => item.name === 'timezone')
       ? paymentFilter.find((item) => item.name === 'timezone')
-      : { value: 'UTC0' };
+      : { value: 'UTC0', code: 'Etc/UTC' };
   const defaultTransactionFilter =
     transactionFilter && transactionFilter.find((item) => item.name === 'timezone')
       ? transactionFilter.find((item) => item.name === 'timezone')
-      : { value: 'UTC0' };
+      : { value: 'UTC0', code: 'Etc/UTC' };
 
   const [radioSelect, setRadioSelect] = useState(
     reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
@@ -44,10 +44,16 @@ const TimeZoneScreen = ({
   useEffect(() => {
     switch (reportType) {
       case 'Payments':
-        setPaymentsFilter('timezone', { filters: radioSelect, value: radioSelect.value });
+        setPaymentsFilter('timezone', {
+          filters: radioSelect.filters ? radioSelect.filters : radioSelect,
+          value: radioSelect.value,
+        });
         break;
       case 'Transactions':
-        setTransactionFilter('timezone', { filters: radioSelect, value: radioSelect.value });
+        setTransactionFilter('timezone', {
+          filters: radioSelect.filters ? radioSelect.filters : radioSelect,
+          value: radioSelect.value,
+        });
         break;
 
       default:
@@ -94,6 +100,7 @@ const TimeZoneScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <MainLoader isVisible={isLoading} />
       {isFiltersVisible &&
         (userRole === 3 ? (
           <TransactionsFilters

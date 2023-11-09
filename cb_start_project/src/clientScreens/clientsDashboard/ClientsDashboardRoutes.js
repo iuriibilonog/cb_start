@@ -10,7 +10,7 @@ import TimeZoneScreen from 'src/screens/DashboardScreens/TimeZoneScreen';
 import MerchantsApiKeyScreen from 'src/screens/DashboardScreens/MerchantsApiKeyScreen';
 import StatusScreen from 'src/screens/DashboardScreens/StatusScreen';
 import { Image, Pressable, Platform } from 'react-native';
-import { getReport, setLoaderFalseWithError } from 'src/redux/content/operations';
+import { getClientsReport, setLoaderFalseWithError } from 'src/redux/content/operations';
 import { getUser } from 'src/redux/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from 'react-native-flash-message';
@@ -36,12 +36,14 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     await dispatch(setLoaderFalseWithError(true));
     // setIsLoading(true);
     let str = '';
-
+    // console.log('reportType', reportType);
+    // console.log('genReportPaymentsFilters', genReportPaymentsFilters);
     if (reportType === 'Payments') {
       genReportPaymentsFilters.map((item) => {
         switch (item.name) {
           case 'date':
-            str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
+            str =
+              `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}` + str;
             break;
           case 'timezone':
             str = str + '&' + `timezone=${item.filters.code}`;
@@ -75,7 +77,8 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       genReportTransactionFilters.map((item) => {
         switch (item.name) {
           case 'date':
-            str = `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}`;
+            str =
+              `startDate=${item.filters.startDate}` + '&' + `endDate=${item.filters.endDate}` + str;
             break;
           case 'timezone':
             str = str + '&' + `timezone=${item.filters.code}`;
@@ -117,9 +120,9 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     if (reportType === 'Transactions' && !str.includes('groupingType')) {
       str = str + '&' + 'groupingType=All';
     }
-
+    console.log('REQUEST STRING:', str);
     try {
-      const report = await dispatch(getReport({ str, reportType })).unwrap();
+      const report = await dispatch(getClientsReport({ str, reportType })).unwrap();
 
       const blob = new Blob([report], {
         type: 'application/json',
