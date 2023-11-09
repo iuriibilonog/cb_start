@@ -114,6 +114,7 @@ const ClientsTransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
         transactionData: transactionRequestObject,
         page: 1,
         userId: userInfo.id,
+        search: search,
       })
     );
     setIsTransactionsWithFilterLoading(false);
