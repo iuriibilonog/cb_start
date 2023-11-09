@@ -107,7 +107,9 @@ const TransactionsRoutes = ({ navigation, handlePressIconLogOut }) => {
     setIsTransactionsWithFilterLoading(true);
     navigation.navigate('TransactionsScreen');
     const transactionRequestObject = createTransactionRequestObject(genReportTransactionFilters);
-    await dispatch(getTransactionData({ transactionData: transactionRequestObject, page: 1 }));
+    await dispatch(
+      getTransactionData({ transactionData: transactionRequestObject, page: 1, search: search })
+    );
     setIsTransactionsWithFilterLoading(false);
   };
 
