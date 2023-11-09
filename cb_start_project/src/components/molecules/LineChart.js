@@ -17,12 +17,7 @@ import { FormattedMessage } from 'react-intl';
 import { LineChart } from 'react-native-gifted-charts';
 import SimpleText from '../atoms/SimpleText';
 
-const SimpleLineChart = ({
-  approvedDataChart = [],
-  declinedDataChart = [],
-  processingDataChart = [],
-  currency,
-}) => {
+const SimpleLineChart = ({ approvedDataChart = [], currency }) => {
   const [aprovedData, setApprovedData] = useState([]);
   const [declinedData, setDeclinedData] = useState([]);
   const [processingData, setProcessingData] = useState([]);
@@ -37,169 +32,151 @@ const SimpleLineChart = ({
   const [yAxisLabelTexts, setYAxisLabelTexts] = useState({});
   const [yAxisOffset, setYAxisOffset] = useState(0);
 
-  // const test = [
-  //   { date: '2023-10-23', currency: 'EUR', sum: 20 },
-  //   { date: '2023-10-24', currency: 'EUR', sum: 23 },
-  //   { date: '2023-10-25', currency: 'EUR', sum: 19 },
-  //   { date: '2023-10-26', currency: 'EUR', sum: 20 },
-  //   { date: '2023-10-27', currency: 'EUR', sum: 21 },
-  // ];
-  // const test2 = [
-  //   { date: '2023-10-23', currency: 'EUR', sum: 1 },
-  //   { date: '2023-10-24', currency: 'EUR', sum: 22 },
-  //   { date: '2023-10-25', currency: 'EUR', sum: 20 },
-  //   { date: '2023-10-26', currency: 'EUR', sum: 3 },
-  //   { date: '2023-10-27', currency: 'EUR', sum: 22 },
-  // ];
-  // const test3 = [
-  //   { date: '2023-10-23', currency: 'EUR', sum: 20 },
-  //   { date: '2023-10-24', currency: 'EUR', sum: 21 },
-  //   { date: '2023-10-25', currency: 'EUR', sum: 20 },
-  //   { date: '2023-10-26', currency: 'EUR', sum: 23 },
-  //   { date: '2023-10-27', currency: 'EUR', sum: 25 },
-  // ];
-
-  const getMaxMinValue = (arr, type) => {
-    let max = arr[0]?.sum || 0;
-    let min = arr[0]?.sum || 0;
-    let conversionTotal = 0;
-    arr.forEach((item) => {
-      if (item.sum > max) max = item.sum;
-      if (item.sum < min) min = item.sum;
-      conversionTotal = conversionTotal + item.sum;
-    });
-    switch (type) {
-      case 'approved':
-        setConversionApproved(conversionTotal);
-        break;
-      case 'declined':
-        setConversionDeclined(conversionTotal);
-        break;
-      case 'processing':
-        setConversionProcessing(conversionTotal);
-        break;
-
-      default:
-        break;
+  const getMaxMinValue = (arr) => {
+    if (!arr || arr.length === 0) {
+      return {
+        approvedMaxMin: { max: 0, min: 0 },
+        declinedMaxMin: { max: 0, min: 0 },
+        processingMaxMin: { max: 0, min: 0 },
+      };
     }
+    let approvedMax = +arr[0]?.approved || 0;
+    let approvedMin = +arr[0]?.approved || 0;
+    let declinedMax = +arr[0]?.declined || 0;
+    let declinedMin = +arr[0]?.declined || 0;
+    let processingMax = +arr[0]?.processing || 0;
+    let processingMin = +arr[0]?.processing || 0;
+    let conversionApprovedTotal = 0;
+    let conversionDeclinedTotal = 0;
+    let conversionProcessingTotal = 0;
+    arr.forEach((item) => {
+      if (+item.approved > approvedMax) approvedMax = +item.approved;
+      if (+item.approved < approvedMin) approvedMin = +item.approved;
+      if (+item.declined > declinedMax) declinedMax = +item.declined;
+      if (+item.declined < declinedMin) declinedMin = +item.declined;
+      if (+item.processing > processingMax) processingMax = +item.processing;
+      if (+item.processing < processingMin) processingMin = +item.processing;
+      conversionApprovedTotal = conversionApprovedTotal + +item.approved;
+      conversionDeclinedTotal = conversionDeclinedTotal + +item.declined;
+      conversionProcessingTotal = conversionProcessingTotal + +item.processing;
+    });
 
-    return { max, min };
+    setConversionApproved(conversionApprovedTotal);
+
+    setConversionDeclined(conversionDeclinedTotal);
+
+    setConversionProcessing(conversionProcessingTotal);
+
+    return {
+      approvedMaxMin: { max: approvedMax, min: approvedMin },
+      declinedMaxMin: { max: declinedMax, min: declinedMin },
+      processingMaxMin: { max: processingMax, min: processingMin },
+    };
   };
 
   useEffect(() => {
-    const approvedMaxMin = getMaxMinValue(approvedDataChart, 'approved');
-    const declinedMaxMin = getMaxMinValue(declinedDataChart, 'declined');
-    const processingMaxMin = getMaxMinValue(processingDataChart, 'processing');
-    // const approvedMaxMin = getMaxMinValue(test, 'approved');
-    // const declinedMaxMin = getMaxMinValue(test2, 'declined');
-    // const processingMaxMin = getMaxMinValue(test3, 'processing');
-    const maxValue = Math.max(approvedMaxMin.max, declinedMaxMin.max, processingMaxMin.max);
-    const minValue = Math.min(approvedMaxMin.min, declinedMaxMin.min, processingMaxMin.min);
-    setMaxChartValue(maxValue);
-    // setMinChartValue(minValue);
+    if (approvedDataChart && approvedDataChart.length > 0) {
+      const { approvedMaxMin, declinedMaxMin, processingMaxMin } =
+        getMaxMinValue(approvedDataChart);
+      const maxValue = Math.max(approvedMaxMin.max, declinedMaxMin.max, processingMaxMin.max);
+      const minValue = Math.min(approvedMaxMin.min, declinedMaxMin.min, processingMaxMin.min);
+      setMaxChartValue(maxValue);
+      let step = maxValue / 10;
 
-    // console.log('maxValue', maxValue);
-    // console.log('minValue', minValue);
-    let step = maxValue / 10;
-
-    let targetStep = Math.floor(minValue / step);
-    const yOffset = minValue - step;
-    setYAxisOffset(yOffset <= 0 ? 0 : yOffset);
-    // console.log('targetStep', targetStep);
-    // console.log('yAxisOffset', yOffset);
-
-    if (maxValue > 999) {
-      let labelsRow = [yOffset <= 0 ? '0k' : (yOffset / 1000).toFixed(1) + 'k'];
-      const stepIfOffset = (maxValue - yOffset) / 8;
-      for (let i = 1; i <= 10; i++) {
-        '' +
-          labelsRow.push(
-            maxValue > 9999
-              ? ((yOffset + stepIfOffset * i) / 1000).toFixed(0) + 'k'
-              : ((yOffset + stepIfOffset * i) / 1000).toFixed(2) + 'k'
-          );
+      // let targetStep = Math.floor(minValue / step);
+      const yOffset = minValue - step;
+      setYAxisOffset(yOffset <= 0 ? 0 : yOffset);
+      if (maxValue > 999) {
+        let labelsRow = [yOffset <= 0 ? '0k' : (yOffset / 1000).toFixed(1) + 'k'];
+        const stepIfOffset = (maxValue - yOffset) / 8;
+        for (let i = 1; i <= 10; i++) {
+          '' +
+            labelsRow.push(
+              maxValue > 9999
+                ? ((yOffset + stepIfOffset * i) / 1000).toFixed(0) + 'k'
+                : ((yOffset + stepIfOffset * i) / 1000).toFixed(2) + 'k'
+            );
+        }
+        setYAxisLabelTexts(labelsRow);
+      } else {
+        let labelsRow = [yOffset <= 0 ? '0' : yOffset.toFixed(1)];
+        const stepIfOffset = (maxValue - yOffset) / 8;
+        for (let i = 1; i <= 10; i++) {
+          labelsRow.push((yOffset + stepIfOffset * i).toFixed(0));
+        }
+        setYAxisLabelTexts(labelsRow);
       }
-      setYAxisLabelTexts(labelsRow);
-    } else {
-      let labelsRow = [yOffset <= 0 ? '0' : yOffset.toFixed(1)];
-      const stepIfOffset = (maxValue - yOffset) / 8;
-      for (let i = 1; i <= 10; i++) {
-        labelsRow.push((yOffset + stepIfOffset * i).toFixed(0));
-      }
-      setYAxisLabelTexts(labelsRow);
+
+      createApprovedDataForChart(approvedDataChart);
     }
+  }, [approvedDataChart]);
 
-    createApprovedDataForChart(approvedDataChart, 'approved');
-    createApprovedDataForChart(declinedDataChart, 'declined');
-    createApprovedDataForChart(processingDataChart, 'processing');
-    // createApprovedDataForChart(test, 'approved');
-    // createApprovedDataForChart(test2, 'declined');
-    // createApprovedDataForChart(test3, 'processing');
-  }, [approvedDataChart, declinedDataChart, processingDataChart]);
-
-  const createApprovedDataForChart = (data, type) => {
-    const lineData = data.map((item) => {
-      const n = new Date(item.date);
-      const options = { month: 'short', day: 'numeric' };
-
-      const dataObj = {
-        value: item.sum,
-        label: new Intl.DateTimeFormat('en-US', options).format(n),
-        labelComponent: () => (
-          <Text
+  const makeDataObj = (item, n, options, type) => {
+    return {
+      value: +item[type],
+      label: new Intl.DateTimeFormat('en-US', options).format(n),
+      labelComponent: () => (
+        <Text
+          style={{
+            fontSize: 12,
+            fontFamily: 'Mont',
+            lineHeight: 15,
+            textAlign: aprovedData.length !== 1 ? 'center' : 'left',
+          }}
+        >
+          {new Intl.DateTimeFormat('en-US', options).format(n)}
+        </Text>
+      ),
+      dataPointLabelComponent: () => {
+        return (
+          <View
             style={{
-              fontSize: 12,
-              fontFamily: 'Mont',
-              lineHeight: 15,
-              textAlign: aprovedData.length !== 1 ? 'center' : 'left',
+              backgroundColor:
+                type === 'approved' ? '#06BBB1' : type === 'declined' ? '#FF5A5A' : '#F2CE4D',
+              opacity: type === 'approved' && !isApprovedActive ? 0 : 1,
+              paddingHorizontal: 5,
+              paddingVertical: 2,
+              borderRadius: 4,
+              marginLeft: 20,
             }}
           >
-            {new Intl.DateTimeFormat('en-US', options).format(n)}
-          </Text>
-        ),
-        dataPointLabelComponent: () => {
-          return (
-            <View
-              style={{
-                backgroundColor:
-                  type === 'approved' ? '#06BBB1' : type === 'declined' ? '#FF5A5A' : '#F2CE4D',
-                opacity: type === 'approved' && !isApprovedActive ? 0 : 1,
-                paddingHorizontal: 5,
-                paddingVertical: 2,
-                borderRadius: 4,
-                marginLeft: 20,
-              }}
-            >
-              <Text style={{ color: 'white' }}>{item.sum}</Text>
-            </View>
-          );
-        },
-      };
+            <Text style={{ color: 'white' }}>{item[type]}</Text>
+          </View>
+        );
+      },
+    };
+  };
 
+  const createApprovedDataForChart = (data) => {
+    const lineApprovedData = data.map((item) => {
+      const n = new Date(item.date);
+      const options = { month: 'short', day: 'numeric' };
+      const dataObj = makeDataObj(item, n, options, 'approved');
+      return dataObj;
+    });
+    const lineDeclinedData = data.map((item) => {
+      const n = new Date(item.date);
+      const options = { month: 'short', day: 'numeric' };
+      const dataObj = makeDataObj(item, n, options, 'declined');
+      return dataObj;
+    });
+    const lineProcessingData = data.map((item) => {
+      const n = new Date(item.date);
+      const options = { month: 'short', day: 'numeric' };
+      const dataObj = makeDataObj(item, n, options, 'processing');
       return dataObj;
     });
 
-    switch (type) {
-      case 'approved':
-        setApprovedData(lineData);
+    setApprovedData(lineApprovedData);
 
-        break;
-      case 'declined':
-        setDeclinedData(lineData);
-        break;
-      case 'processing':
-        setProcessingData(lineData);
-        break;
+    setDeclinedData(lineDeclinedData);
 
-      default:
-        break;
-    }
+    setProcessingData(lineProcessingData);
   };
 
-  useEffect(() => {
-    createApprovedDataForChart(approvedDataChart, 'approved');
-    // createApprovedDataForChart(test, 'approved');
-  }, [isApprovedActive]);
+  // useEffect(() => {
+  //   createApprovedDataForChart(approvedDataChart);
+  // }, [isApprovedActive]);
 
   const handleChangeChartLines = (type) => {
     switch (type) {
@@ -312,16 +289,12 @@ const SimpleLineChart = ({
             data3={isProccesingActive ? processingData : []}
             curved
             hideDataPoints1={!isApprovedActive}
-            // yAxisLabelSuffix={maxChartValue > 999 ? 'k' : ''}
-            // rotateLabel
             showFractionalValues={maxChartValue > 999 && maxChartValue < 9999 ? true : false}
             isAnimated={true}
             height={250}
             showVerticalLines
             width={aprovedData.length !== 1 ? false : Dimensions.get('window').width - 100}
             yAxisLabelTexts={yAxisLabelTexts}
-            // yAxisLabelWidth={100}
-            // yAxisLabelContainerStyle={{ paddingLeft: 5 }}
             yAxisTextStyle={{ marginLeft: -20 }}
             spacing={
               aprovedData.length !== 1
@@ -331,10 +304,6 @@ const SimpleLineChart = ({
             initialSpacing={
               aprovedData.length !== 1 ? 25 : (Dimensions.get('window').width - 80) / 2
             }
-            // initialSpacing={0}
-            // maxValue={maxChartValue + maxChartValue / 8}
-            // yAxisOffset={minChartValue - minChartValue / 8}
-
             maxValue={maxChartValue - yAxisOffset + maxChartValue / 10}
             yAxisOffset={yAxisOffset}
             color1={isApprovedActive ? '#06BBB1' : 'transparent'}

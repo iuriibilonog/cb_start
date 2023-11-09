@@ -142,7 +142,8 @@ const lang = {
   'errors.401': 'Session time has expired, log in again please.',
   'errors.500':
     'Service is unavailable. The server is temporarily unable to process your request, please try again later.',
-
+  'errors.period_90_days': 'Max period is 90 days',
+  'errors.period_in_future': 'Data can not be in the future',
   //actions=====
 
   'actions.to_login': 'To Login',
