@@ -126,6 +126,7 @@ const CalendarScreen = ({
       default:
         break;
     }
+    setIsCalendarVisible(false);
   };
 
   return (
@@ -169,6 +170,16 @@ const CalendarScreen = ({
                     isFocused={focusedDay === 'start' && isCalendarVisible}
                     value={selectedStartDay.dateString}
                     setValue={setSelectedStartDay}
+                    minDateInDays={
+                      route.params.minDateInDays === 0 || route.params.minDateInDays
+                        ? route.params.minDateInDays
+                        : undefined
+                    }
+                    maxDateInDays={
+                      route.params.maxDateInDays === 0 || route.params.maxDateInDays
+                        ? route.params.maxDateInDays
+                        : undefined
+                    }
                   />
                 )}
                 <Image source={calendarIcon} style={styles.calendarIcon} />
@@ -190,6 +201,16 @@ const CalendarScreen = ({
                     isFocused={focusedDay === 'end' && isCalendarVisible}
                     value={selectedEndDay.dateString}
                     setValue={setSelectedEndDay}
+                    minDateInDays={
+                      route.params.minDateInDays === 0 || route.params.minDateInDays
+                        ? route.params.minDateInDays
+                        : undefined
+                    }
+                    maxDateInDays={
+                      route.params.maxDateInDays === 0 || route.params.maxDateInDays
+                        ? route.params.maxDateInDays
+                        : undefined
+                    }
                   />
                 )}
                 <Image source={calendarIcon} style={styles.calendarIcon} />
@@ -200,6 +221,7 @@ const CalendarScreen = ({
             <StyledCalendar
               setSelectedDay={handleSelectedDay}
               minDate={route.params.minDate ? route.params.minDate : undefined}
+              maxDate={route.params.maxDate ? route.params.maxDate : undefined}
               initialDay={focusedDay === 'start' ? selectedStartDay : selectedEndDay}
             />
           )}

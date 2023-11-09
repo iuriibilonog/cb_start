@@ -53,7 +53,7 @@ LocaleConfig.defaultLocale = 'en';
 const leftArrow = require('src/images/left.png');
 const rightArrow = require('src/images/right.png');
 
-const StyledCalendar = ({ initialDay, setSelectedDay, minDate }) => {
+const StyledCalendar = ({ initialDay, setSelectedDay, minDate, maxDate }) => {
   // const [selectedDay, setSelectedDay] = useState(
   //   props.initialDay ? { dateString: props.initialDay } : ''
   // );
@@ -177,6 +177,7 @@ const StyledCalendar = ({ initialDay, setSelectedDay, minDate }) => {
           minDate={minDate ? minDate : undefined}
           // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
           // maxDate={'2023-12-01'}
+          maxDate={maxDate ? maxDate : undefined}
           // Handler which gets executed on day press. Default = undefined
           onDayPress={(day) => {
             // console.log('selected day', day);

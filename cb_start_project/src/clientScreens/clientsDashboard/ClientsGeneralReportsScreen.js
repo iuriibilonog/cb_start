@@ -68,7 +68,14 @@ const ClientsGeneralReportsScreen = ({
     switch (e) {
       case 1:
         const minDate = new Date(new Date().getTime() - 86400000 * 90).toISOString();
-        navigation.navigate('CalendarScreen', { type: radioSelect, minDate: minDate });
+        const maxDate = new Date().toISOString();
+        navigation.navigate('CalendarScreen', {
+          type: radioSelect,
+          minDate,
+          minDateInDays: 90,
+          maxDate,
+          maxDateInDays: 0,
+        });
         break;
 
       case 2:
