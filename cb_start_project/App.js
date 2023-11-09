@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
-
+import * as Updates from 'expo-updates';
 import { store, persistor } from './src/redux/store';
 import * as Font from 'expo-font';
 import navigationHelper from 'src/helpers/navigationHelper';
@@ -21,12 +21,22 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [isAppGetUpdates, setIsAppGetUpdates] = useState(false);
 
   // const routing = useRouting();
 
   useEffect(() => {
     async function prepare() {
       try {
+        const update = await Updates.checkForUpdateAsync();
+
+        if (update.isAvailable) {
+          setIsAppGetUpdates(true);
+          return;
+        } else {
+          setIsAppGetUpdates(false);
+        }
+
         await Font.loadAsync({
           Mont: require('./assets/fonts/Mont_Regular.ttf'), //fontWeight=600
           Mont_SB: require('./assets/fonts/Mont_SemiBold.ttf'), //fontWeight=700
@@ -76,7 +86,7 @@ export default function App() {
             }}
           >
             <AxiosInterceptor>
-              <CheckRoleMiddleware />
+              <CheckRoleMiddleware isAppGetUpdates={isAppGetUpdates} />
               <FlashMessage position="top" />
             </AxiosInterceptor>
           </NavigationContainer>

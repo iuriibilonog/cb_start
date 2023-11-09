@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';

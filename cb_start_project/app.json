@@ -29,6 +29,20 @@
       "eas": {
         "projectId": "0500722d-4e96-4ccf-96f1-14e4bcaf1114"
       }
+    },
+    "plugins": [
+      [
+        "expo-updates",
+        {
+          "username": "iuriibilonog"
+        }
+      ]
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/0500722d-4e96-4ccf-96f1-14e4bcaf1114"
     }
   }
 }

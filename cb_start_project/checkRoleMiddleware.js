@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,8 +8,9 @@ import AdminRouting from './routing';
 import ClientRouting from './clientsRouting';
 import LoginScreen from 'src/screens/LoginScreen';
 import LogOutScreen from 'src/screens/LogOutScreen';
+import UpdateScreen from 'src/screens/UpdateScreens/UpdateScreen';
 
-const CheckRoleMiddleware = () => {
+const CheckRoleMiddleware = ({ isAppGetUpdates }) => {
   // merchant - 1
   // support - 2
   // admin - 3
@@ -27,6 +29,17 @@ const CheckRoleMiddleware = () => {
     setIsShowLogOut(true);
   };
 
+  if (isAppGetUpdates) {
+    return (
+      <AuthStack.Navigator initialRouteName={'UpdateScreen'}>
+        <AuthStack.Screen
+          options={{ headerShown: false }}
+          name="UpdateScreen"
+          component={UpdateScreen}
+        />
+      </AuthStack.Navigator>
+    );
+  }
   if (!isAuth) {
     return (
       <AuthStack.Navigator initialRouteName={'LoginScreen'}>
@@ -56,10 +69,6 @@ const CheckRoleMiddleware = () => {
       </AuthStack.Navigator>
     );
   }
-
-  
-
- 
 
   switch (userRole) {
     case 1:

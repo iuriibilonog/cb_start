@@ -125,6 +125,7 @@ const RegistrationScreen = ({ navigation, setIsAuth }) => {
       >
         <View style={styles.container}>
           <ImageBackground source={logoBack} resizeMode="contain" style={styles.background}>
+            {/* <Text style={{ fontSize: 25, color: '#FFF' }}>Hello</Text> */}
             <Animated.View style={animatedStyles}>
               <FormattedMessage id={'common.email'}>
                 {(msg) => (
