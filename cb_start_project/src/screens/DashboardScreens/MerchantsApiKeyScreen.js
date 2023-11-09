@@ -38,13 +38,6 @@ const MerchantsApiKeyScreen = ({
   const [radioSelect, setRadioSelect] = useState(
     reportType === 'Payments' ? defaultPaymentFilter : defaultTransactionFilter
   );
-
-  // const setDefaultSelectedValue = () => {
-  //   if ()
-  // };
-
-  // const [radioSelect, setRadioSelect] = useState({ value: 'All api keys' });
-
   const dispatch = useDispatch();
   const [data, setData] = useState([{ value: 'All api keys' }]);
   const [merchId, setMerchId] = useState('');
@@ -88,28 +81,34 @@ const MerchantsApiKeyScreen = ({
   }, [genReportPaymentsFilters, genReportTransactionFilters]);
 
   useEffect(() => {
-    const isAlreadyChecked =
-      reportType === 'Transactions'
-        ? genReportTransactionFilters.find((item) => item.name === 'merchantApiKey')
-        : genReportPaymentsFilters.find((item) => item.name === 'status');
-
-    if (radioSelect.value === 'All api keys' && !isAlreadyChecked) return;
-
     switch (reportType) {
       case 'Payments':
         if (radioSelect.value === 'All api keys') {
-          setPaymentsFilter('merchantApiKey', {}, true);
+          const isAlreadyChecked = genReportPaymentsFilters.find(
+            (item) => item.name === 'merchantApiKey'
+          );
+          if (isAlreadyChecked) {
+            setPaymentsFilter('merchantApiKey', {}, true);
+          }
         } else {
-          setPaymentsFilter('merchantApiKey', { filters: radioSelect, value: radioSelect.value });
+          setPaymentsFilter('merchantApiKey', {
+            filters: radioSelect.filters ? radioSelect.filters : radioSelect,
+            value: radioSelect.value,
+          });
         }
 
         break;
       case 'Transactions':
         if (radioSelect.value === 'All api keys') {
-          setTransactionFilter('merchantApiKey', {}, true);
+          const isAlreadyChecked = genReportTransactionFilters.find(
+            (item) => item.name === 'merchantApiKey'
+          );
+          if (isAlreadyChecked) {
+            setTransactionFilter('merchantApiKey', {}, true);
+          }
         } else {
           setTransactionFilter('merchantApiKey', {
-            filters: radioSelect,
+            filters: radioSelect.filters ? radioSelect.filters : radioSelect,
             value: radioSelect.value,
           });
         }
@@ -146,7 +145,6 @@ const MerchantsApiKeyScreen = ({
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-      
       <MainLoader isVisible={isLoading} />
       {isFiltersVisible &&
         (userRole === 3 ? (
@@ -178,11 +176,7 @@ const MerchantsApiKeyScreen = ({
           />
         </View>
 
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => handleConfirmReport()}
-          style={{ width: 140 }}
-        >
+        <TouchableOpacity activeOpacity={0.5} onPress={handleConfirmReport} style={{ width: 140 }}>
           <View style={styles.submitBtn}>
             <SimpleText style={styles.submitBtnText}>
               <FormattedMessage id={'dashboard.download'} />
