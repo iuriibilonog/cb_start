@@ -29,11 +29,10 @@ export default function App() {
     async function prepare() {
       try {
         const update = await Updates.checkForUpdateAsync();
-        console.log('updateCheck');
 
         if (update.isAvailable) {
           setIsAppGetUpdates(true);
-          return;
+          // return;
         } else {
           setIsAppGetUpdates(false);
         }
