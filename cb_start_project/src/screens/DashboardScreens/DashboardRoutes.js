@@ -124,20 +124,19 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     if (reportType === 'Transactions' && !str.includes('groupingType')) {
       str = str + '&' + 'groupingType=All';
     }
-
     try {
       const report = await dispatch(getReport({ str, reportType })).unwrap();
-
       const blob = new Blob([report], {
         type: 'application/json',
       });
 
       const fr = new FileReader();
+      //2023-11-10T09_54_10.041Z
+      const fileName = new Date().toISOString().replace(/:/g, '_');
 
-      // setIsLoading(false);
       fr.onload = async () => {
         if (Platform.OS === 'ios') {
-          const name = report?.data?.name || 'report.xlsx';
+          const name = report?.data?.name || `${fileName}.xlsx`;
           const fileUri = `${FileSystem.documentDirectory}/${name}`;
           await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
             encoding: FileSystem.EncodingType.Base64,
@@ -146,13 +145,12 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         } else {
           const { StorageAccessFramework } = FileSystem;
           const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
-
           if (permissions.granted) {
             let directoryUri = permissions.directoryUri;
-            const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
+            // const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
             await StorageAccessFramework.createFileAsync(
               directoryUri,
-              `${name}`,
+              `${fileName}`,
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
               .then(async (fileUri) => {
@@ -167,12 +165,12 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         }
       };
 
-      fr.readAsDataURL(blob);
       await dispatch(setLoaderFalseWithError(false));
-      // setIsLoading(false);
+      setTimeout(() => {
+        fr.readAsDataURL(blob);
+      }, 100);
     } catch (error) {
       await dispatch(setLoaderFalseWithError(false));
-      // setIsLoading(false);
       if (error?.response?.status === 404) {
         setTimeout(() => {
           showMessage({

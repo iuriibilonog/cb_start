@@ -120,7 +120,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     if (reportType === 'Transactions' && !str.includes('groupingType')) {
       str = str + '&' + 'groupingType=All';
     }
-    console.log('REQUEST STRING:', str);
+    // console.log('REQUEST STRING:', str);
     try {
       const report = await dispatch(getClientsReport({ str, reportType })).unwrap();
 
@@ -129,10 +129,11 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       });
 
       const fr = new FileReader();
+      const fileName = new Date().toISOString().replace(/:/g, '_');
 
       fr.onload = async () => {
         if (Platform.OS === 'ios') {
-          const name = report?.data?.name || 'report.xlsx';
+          const name = report?.data?.name || `${fileName}.xlsx`;
           const fileUri = `${FileSystem.documentDirectory}/${name}`;
 
           await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
@@ -142,13 +143,14 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         } else {
           const { StorageAccessFramework } = FileSystem;
           const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
-
+          console.log('permissions.granted', permissions.granted);
+          // console.log('SLICE', report?.data);
           if (permissions.granted) {
             let directoryUri = permissions.directoryUri;
-            const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
+            // const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
             await StorageAccessFramework.createFileAsync(
               directoryUri,
-              `${name}`,
+              `${fileName}`,
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
               .then(async (fileUri) => {
@@ -162,12 +164,13 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
           }
         }
       };
-      fr.readAsDataURL(blob);
+
       await dispatch(setLoaderFalseWithError(false));
-      // setIsLoading(false);
+      setTimeout(() => {
+        fr.readAsDataURL(blob);
+      }, 100);
     } catch (error) {
       await dispatch(setLoaderFalseWithError(false));
-      // setIsLoading(false);
       if (error?.response?.status === 404) {
         setTimeout(() => {
           showMessage({
