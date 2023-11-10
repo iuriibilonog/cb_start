@@ -129,10 +129,11 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
       });
 
       const fr = new FileReader();
+      const fileName = new Date().toISOString().replace(/:/g, '_');
 
       fr.onload = async () => {
         if (Platform.OS === 'ios') {
-          const name = report?.data?.name || 'report.xlsx';
+          const name = report?.data?.name || `${fileName}.xlsx`;
           const fileUri = `${FileSystem.documentDirectory}/${name}`;
 
           await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], {
@@ -142,13 +143,14 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         } else {
           const { StorageAccessFramework } = FileSystem;
           const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
-
+          console.log('permissions.granted', permissions.granted);
+          // console.log('SLICE', report?.data);
           if (permissions.granted) {
             let directoryUri = permissions.directoryUri;
-            const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
+            // const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
             await StorageAccessFramework.createFileAsync(
               directoryUri,
-              `${name}`,
+              `${fileName}`,
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
               .then(async (fileUri) => {
