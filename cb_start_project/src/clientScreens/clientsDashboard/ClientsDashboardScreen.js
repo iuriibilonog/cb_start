@@ -11,6 +11,7 @@ import {
   ScrollView,
   TextInput,
   TouchableWithoutFeedback,
+  Text,
 } from 'react-native';
 import { getUser } from 'src/redux/user/selectors';
 import { getLedgersData, getBalanceLogs, putBalanceDeposit } from 'src/redux/content/operations';
@@ -245,6 +246,7 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
   return (
     <ScrollView>
       <MainLoader isVisible={isLoading} />
+      <Text>Hello</Text>
       <TouchableWithoutFeedback
         onPress={() => {
           setIsDropdownOpen(false);
@@ -358,7 +360,7 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
                 </SimpleText>
               </View>
             </TouchableOpacity>
-            <SimpleText style={{ fontSize: 12, marginTop: 5, color:'grey' }}>
+            <SimpleText style={{ fontSize: 12, marginTop: 5, color: 'grey' }}>
               <FormattedMessage id={'dashboard.report_create_warning'} />
             </SimpleText>
           </View>

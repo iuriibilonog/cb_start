@@ -26,17 +26,17 @@ export default function App() {
   // const routing = useRouting();
 
   useEffect(() => {
-    const listener = Updates.useUpdateEvents(eventListener);
     async function prepare() {
       try {
-        // const update = await Updates.checkForUpdateAsync();
+        const update = await Updates.checkForUpdateAsync();
+        console.log('updateCheck');
 
-        // if (update.isAvailable) {
-        //   setIsAppGetUpdates(true);
-        //   return;
-        // } else {
-        //   setIsAppGetUpdates(false);
-        // }
+        if (update.isAvailable) {
+          setIsAppGetUpdates(true);
+          return;
+        } else {
+          setIsAppGetUpdates(false);
+        }
 
         await Font.loadAsync({
           Mont: require('./assets/fonts/Mont_Regular.ttf'), //fontWeight=600
@@ -53,18 +53,7 @@ export default function App() {
     }
 
     prepare();
-    return () => {
-      listener.remove();
-    };
   }, []);
-
-  const eventListener = (event) => {
-    if (event.type === Updates.UpdateEventType.NO_UPDATE_AVAILABLE) {
-      setIsAppGetUpdates(false);
-    } else if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
-      setIsAppGetUpdates(true);
-    }
-  };
 
   const locale = 'en';
   let lang = UA;
