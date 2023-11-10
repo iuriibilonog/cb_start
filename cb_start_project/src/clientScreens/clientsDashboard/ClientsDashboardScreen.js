@@ -35,6 +35,7 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
   const [selectedBalanceObject, setSelectedBalanceObject] = useState();
   const [isBalanceDropdownOpen, setIsBalanceDropdownOpen] = useState(false);
   const [balanceLogs, setBalanceLogs] = useState([]);
+  const [initialBalanceLogs, setInitialBalanceLogs] = useState([]);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState();
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
@@ -43,6 +44,9 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
   const [errors, setErrors] = useState({});
   const [isTimezoneDropdownOpen, setIsTimezoneDropdownOpen] = useState(false);
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
+
+  const [isPayinActive, setIsPayinActive] = useState(true);
+  const [isPayoutActive, setIsPayoutActive] = useState(true);
 
   const { width } = Dimensions.get('window');
   const userInfo = useSelector(getUser);
@@ -140,6 +144,7 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
   const getLogs = async (id) => {
     try {
       const logs = await dispatch(getBalanceLogs(id)).unwrap();
+      setInitialBalanceLogs(logs.items);
       setBalanceLogs(logs.items);
     } catch (error) {
       setIsLoading(false);
@@ -155,6 +160,21 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
       console.warn('Error:', error);
     }
   };
+
+  useEffect(() => {
+    if (isPayinActive && isPayoutActive) {
+      setBalanceLogs([...initialBalanceLogs]);
+      return;
+    } else if (!isPayinActive && !isPayoutActive) {
+      setBalanceLogs([]);
+      return;
+    }
+    setBalanceLogs(
+      initialBalanceLogs.filter((item) =>
+        isPayoutActive ? item.diffPayoutAmount : item.diffPayinAmount
+      )
+    );
+  }, [isPayinActive, isPayoutActive]);
 
   const getDate = (createdAt) => {
     createdAt = createdAt.split('T')[0].replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
@@ -194,6 +214,20 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
         timestamp: msec,
       },
     }));
+  };
+
+  const handleChangeHistoryLogs = (type) => {
+    switch (type) {
+      case 'payin':
+        setIsPayinActive((prev) => !prev);
+        break;
+      case 'payout':
+        setIsPayoutActive((prev) => !prev);
+        break;
+
+      default:
+        break;
+    }
   };
 
   const flatListRenderRow = (item, index) => (
@@ -372,30 +406,34 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
               <FormattedMessage id={'dashboard.client.balance_history'} />
             </SimpleText>
           </View>
-          <View style={{ marginTop: 25 , flexDirection:'row', justifyContent:'space-around'}}>
-            <View style={styles.barTitleWrapper}>
-              <View
-                style={{
-                  ...styles.marker,
-                  backgroundColor: 'rgba(255, 199, 0, 0.35)',
-                }}
-              ></View>
-              <SimpleText style={{}}>
-                <FormattedMessage id={'users.payin'} />
-              </SimpleText>
-            </View>
+          <View style={{ marginTop: 25, flexDirection: 'row', justifyContent: 'space-around' }}>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => handleChangeHistoryLogs('payin')}>
+              <View style={{ ...styles.barTitleWrapper, opacity: isPayinActive ? 1 : 0.3 }}>
+                <View
+                  style={{
+                    ...styles.marker,
+                    backgroundColor: 'rgba(255, 199, 0, 0.35)',
+                  }}
+                />
+                <SimpleText style={{}}>
+                  <FormattedMessage id={'users.payin'} />
+                </SimpleText>
+              </View>
+            </TouchableOpacity>
 
-            <View style={styles.barTitleWrapper}>
-              <View
-                style={{
-                  ...styles.marker,
-                  backgroundColor: 'rgba(11, 163, 154, 0.35)',
-                }}
-              ></View>
-              <SimpleText style={{}}>
-                <FormattedMessage id={'users.payout'} />
-              </SimpleText>
-            </View>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => handleChangeHistoryLogs('payout')}>
+              <View style={{ ...styles.barTitleWrapper, opacity: isPayoutActive ? 1 : 0.3 }}>
+                <View
+                  style={{
+                    ...styles.marker,
+                    backgroundColor: 'rgba(11, 163, 154, 0.35)',
+                  }}
+                />
+                <SimpleText style={{}}>
+                  <FormattedMessage id={'users.payout'} />
+                </SimpleText>
+              </View>
+            </TouchableOpacity>
           </View>
           <View
             style={{
