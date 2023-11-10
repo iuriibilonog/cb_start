@@ -28,15 +28,15 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        const update = await Updates.checkForUpdateAsync();
-        console.log('updateCheck');
+        //   const update = await Updates.checkForUpdateAsync();
+        //   console.log('updateCheck');
 
-        if (update.isAvailable) {
-          setIsAppGetUpdates(true);
-          return;
-        } else {
-          setIsAppGetUpdates(false);
-        }
+        //   if (update.isAvailable) {
+        //     setIsAppGetUpdates(true);
+        //     return;
+        //   } else {
+        //     setIsAppGetUpdates(false);
+        //   }
 
         await Font.loadAsync({
           Mont: require('./assets/fonts/Mont_Regular.ttf'), //fontWeight=600

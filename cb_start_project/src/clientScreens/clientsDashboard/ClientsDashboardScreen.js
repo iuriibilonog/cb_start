@@ -372,7 +372,31 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
               <FormattedMessage id={'dashboard.client.balance_history'} />
             </SimpleText>
           </View>
+          <View style={{ marginTop: 25 , flexDirection:'row', justifyContent:'space-around'}}>
+            <View style={styles.barTitleWrapper}>
+              <View
+                style={{
+                  ...styles.marker,
+                  backgroundColor: 'rgba(255, 199, 0, 0.35)',
+                }}
+              ></View>
+              <SimpleText style={{}}>
+                <FormattedMessage id={'users.payin'} />
+              </SimpleText>
+            </View>
 
+            <View style={styles.barTitleWrapper}>
+              <View
+                style={{
+                  ...styles.marker,
+                  backgroundColor: 'rgba(11, 163, 154, 0.35)',
+                }}
+              ></View>
+              <SimpleText style={{}}>
+                <FormattedMessage id={'users.payout'} />
+              </SimpleText>
+            </View>
+          </View>
           <View
             style={{
               height: 50,
@@ -380,7 +404,7 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
               borderBottomWidth: 1,
               borderBottomColor: 'rgba(217, 217, 217, 0.70)',
               backgroundColor: '#F4F4F4',
-              marginTop: 25,
+              marginTop: 10,
               paddingHorizontal: 20,
               marginHorizontal: -20,
             }}
@@ -477,6 +501,18 @@ const styles = StyleSheet.create({
     letterSpacing: 0.48,
     fontFamily: 'Mont_SB',
     color: '#fff',
+  },
+  barTitleWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginBottom: 5,
+  },
+  marker: {
+    width: 12,
+    height: 12,
+    borderRadius: 12,
+    marginRight: 7,
   },
 });
 
