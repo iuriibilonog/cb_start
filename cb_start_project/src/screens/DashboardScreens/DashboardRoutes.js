@@ -124,7 +124,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     if (reportType === 'Transactions' && !str.includes('groupingType')) {
       str = str + '&' + 'groupingType=All';
     }
-    console.log('REQUEST STRING:', str);
+    // console.log('REQUEST STRING:', str);
     try {
       const report = await dispatch(getReport({ str, reportType })).unwrap();
 
@@ -149,7 +149,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
 
           if (permissions.granted) {
             let directoryUri = permissions.directoryUri;
-            const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
+            const name = /* report?.data?.name.slice(0, -5) || */ 'report.xlsx';
             await StorageAccessFramework.createFileAsync(
               directoryUri,
               `${name}`,
@@ -167,12 +167,12 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         }
       };
 
-      fr.readAsDataURL(blob);
       await dispatch(setLoaderFalseWithError(false));
-      // setIsLoading(false);
+      setTimeout(() => {
+        fr.readAsDataURL(blob);
+      }, 100);
     } catch (error) {
       await dispatch(setLoaderFalseWithError(false));
-      // setIsLoading(false);
       if (error?.response?.status === 404) {
         setTimeout(() => {
           showMessage({
