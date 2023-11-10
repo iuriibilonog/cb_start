@@ -28,21 +28,19 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        //   const update = await Updates.checkForUpdateAsync();
-        //   console.log('updateCheck');
-
-        //   if (update.isAvailable) {
-        //     setIsAppGetUpdates(true);
-        //     return;
-        //   } else {
-        //     setIsAppGetUpdates(false);
-        //   }
-
         await Font.loadAsync({
           Mont: require('./assets/fonts/Mont_Regular.ttf'), //fontWeight=600
           Mont_SB: require('./assets/fonts/Mont_SemiBold.ttf'), //fontWeight=700
           Mont_B: require('./assets/fonts/Mont_Bold.ttf'), //fontWeight=800
         });
+
+        const update = await Updates.checkForUpdateAsync();
+
+        if (update.isAvailable) {
+          setIsAppGetUpdates(true);
+        } else {
+          setIsAppGetUpdates(false);
+        }
 
         await new Promise((resolve) => setTimeout(resolve, 3000));
       } catch (e) {
