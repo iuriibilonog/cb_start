@@ -124,7 +124,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
     if (reportType === 'Transactions' && !str.includes('groupingType')) {
       str = str + '&' + 'groupingType=All';
     }
-    console.log('REQUEST STRING:', str);
+
     try {
       const report = await dispatch(getReport({ str, reportType })).unwrap();
 
