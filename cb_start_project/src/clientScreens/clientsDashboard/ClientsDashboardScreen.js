@@ -11,7 +11,6 @@ import {
   ScrollView,
   TextInput,
   TouchableWithoutFeedback,
-  Text,
 } from 'react-native';
 import { getUser } from 'src/redux/user/selectors';
 import { getLedgersData, getBalanceLogs, putBalanceDeposit } from 'src/redux/content/operations';
@@ -246,7 +245,7 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
   return (
     <ScrollView>
       <MainLoader isVisible={isLoading} />
-      <Text>Hello</Text>
+
       <TouchableWithoutFeedback
         onPress={() => {
           setIsDropdownOpen(false);
@@ -372,7 +371,7 @@ const ClientsDashboardScreen = ({ navigation, ...props }) => {
               <FormattedMessage id={'dashboard.client.balance_history'} />
             </SimpleText>
           </View>
-          <View style={{ marginTop: 25 , flexDirection:'row', justifyContent:'space-around'}}>
+          <View style={{ marginTop: 25, flexDirection: 'row', justifyContent: 'space-around' }}>
             <View style={styles.barTitleWrapper}>
               <View
                 style={{
