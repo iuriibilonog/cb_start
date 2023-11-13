@@ -91,10 +91,12 @@ const styles = StyleSheet.create({
   confirm: {
     marginTop: 120,
     width: 282,
-    paddingVertical: 12,
+    paddingVertical: 16,
 
     backgroundColor: '#FC7270',
     borderRadius: 2,
+    borderWidth: 1,
+    borderColor: '#fff',
   },
   cancel: {
     marginTop: 30,

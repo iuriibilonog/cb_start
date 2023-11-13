@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -15,17 +15,28 @@ import { IntlProvider } from 'react-intl';
 import UA from 'src/lang/ua.json';
 import EN from 'src/lang/en.js';
 import CheckRoleMiddleware from './checkRoleMiddleware';
-import { Routing } from './routing';
+import { AppState } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [isAppGetUpdates, setIsAppGetUpdates] = useState(false);
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   // const routing = useRouting();
 
   useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        console.log('App has come to the foreground!');
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log('AppState', appState.current);
+    });
     async function prepare() {
       try {
         await Font.loadAsync({
@@ -51,6 +62,9 @@ export default function App() {
     }
 
     prepare();
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   const locale = 'en';

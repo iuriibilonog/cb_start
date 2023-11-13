@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getApiData } from 'src/redux/content/operations';
@@ -20,10 +22,11 @@ import { FormattedMessage } from 'react-intl';
 import Pagination from 'src/components/molecules/Pagination';
 import { useNavigation } from '@react-navigation/native';
 import MainLoader from 'src/components/molecules/MainLoader';
-import { useState, useEffect } from 'react';
+import { showMessage } from 'react-native-flash-message';
 
 const arrowDown = require('src/images/arrow_down_small.png');
 const arrowUp = require('src/images/arrow_up.png');
+const copy = require('src/images/copy.png');
 
 const ClientsApiKeys = (props) => {
   const dispatch = useDispatch();
@@ -103,6 +106,17 @@ const ClientsApiKeys = (props) => {
       setIsLoading(false);
     }
     Keyboard.dismiss();
+  };
+
+  const copyToClipboard = async (dataToCopy, type) => {
+    await Clipboard.setStringAsync(dataToCopy.toString());
+    showMessage({
+      message: `${type} successfully copied`,
+      titleStyle: {
+        textAlign: 'center',
+      },
+      type: 'success',
+    });
   };
 
   const flatListRenderModule = (item, index) => (
@@ -194,7 +208,12 @@ const ClientsApiKeys = (props) => {
               }}
             >
               <View style={styles.additDataCellValues}>
-                <SimpleText>{item.id}</SimpleText>
+                <View style={styles.copyWrapper}>
+                  <SimpleText>{item.id}</SimpleText>
+                  <TouchableOpacity onPress={() => copyToClipboard(item.id, 'Api Id')}>
+                    <Image source={copy} style={styles.copyIcon} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
@@ -229,10 +248,20 @@ const ClientsApiKeys = (props) => {
               }}
             >
               <View style={styles.additDataCellValues}>
-                <SimpleText>{item.apiKey}</SimpleText>
+                <View style={styles.copyWrapper}>
+                  <SimpleText>{item.apiKey}</SimpleText>
+                  <TouchableOpacity onPress={() => copyToClipboard(item.apiKey, 'Api Key')}>
+                    <Image source={copy} style={styles.copyIcon} />
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{ ...styles.additDataCellValues }}>
-                <SimpleText>{item.apiSecret}</SimpleText>
+              <View style={styles.additDataCellValues}>
+                <View style={styles.copyWrapper}>
+                  <SimpleText style={{ width: width / 2.5 }}>{item.apiSecret}</SimpleText>
+                  <TouchableOpacity onPress={() => copyToClipboard(item.apiSecret, 'Api Secret')}>
+                    <Image source={copy} style={styles.copyIcon} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
@@ -354,6 +383,12 @@ const styles = StyleSheet.create({
     // marginTop: 10,
     // marginBottom: 10,
     width: '100%',
+  },
+  copyWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 

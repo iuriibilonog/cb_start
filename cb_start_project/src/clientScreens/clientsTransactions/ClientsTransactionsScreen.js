@@ -196,7 +196,7 @@ const ClientsTransactionsScreen = ({
                 fontFamily: isAdditDataOpen && selectedIndex === item.id ? 'Mont_SB' : 'Mont',
               }}
             >
-              {item.amount}
+              {item.amount ? item.amount + '.00' : '0.00'}
             </SimpleText>
           </View>
           <View style={{ ...styles.tableCell, width: 70 }}>
@@ -331,7 +331,9 @@ const ClientsTransactionsScreen = ({
               <SimpleText>{item.status}</SimpleText>
             </View>
             <View style={{ ...styles.additDataCellValues, borderBottomWidth: 0 }}>
-              <SimpleText>{`${item.amount} ${item.currency}`}</SimpleText>
+              <SimpleText>{`${item.amount ? item.amount + '.00' : '0.00'} ${
+                item.currency
+              }`}</SimpleText>
             </View>
           </View>
         </View>
