@@ -112,7 +112,6 @@ const UsersListScreen = (props) => {
       const page = Math.ceil((usersData.totalCount - 1) / 20);
       page === currentPage ? getCurrentPageData() : setCurrentPage(page);
     } else {
-      console.log('43-props');
       getUserListData(1);
     }
   }, [props]);
@@ -125,7 +124,7 @@ const UsersListScreen = (props) => {
       const searchUsers = await dispatch(
         getSearchUsers({ page: page ? page : currentPage, searchText: props.searchUser })
       ).unwrap();
-      console.log('searchUsers', searchUsers);
+
       setSearchUsersData(searchUsers);
     } else if ((props.route.params && props.route.params.isRefresh) || props.route.params) {
       //console.log('52-getUserListData');

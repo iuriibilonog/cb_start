@@ -34,9 +34,7 @@ const Datepicker = (props) => {
       // console.log('---', moment(['2023', '10', '11']).diff(moment(['2023', '10', '9']), 'days'));
       // console.log('+++', moment(['2023', '10', '9']).diff(moment(['2023', '10', '15']), 'days'));
       setFormatError(false);
-      console.log('difference', difference);
-      console.log('maxDateInDays', maxDateInDays);
-      console.log('minDateInDays', minDateInDays);
+      
       if (
         (maxDateInDays === 0 || maxDateInDays) &&
         difference < 0 &&

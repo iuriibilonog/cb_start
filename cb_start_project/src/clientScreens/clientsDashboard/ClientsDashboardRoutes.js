@@ -143,8 +143,7 @@ const DashboardRoutes = ({ handlePressIconLogOut }) => {
         } else {
           const { StorageAccessFramework } = FileSystem;
           const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
-          console.log('permissions.granted', permissions.granted);
-          // console.log('SLICE', report?.data);
+          
           if (permissions.granted) {
             let directoryUri = permissions.directoryUri;
             // const name = report?.data?.name.slice(0, -5) || 'report.xlsx';
