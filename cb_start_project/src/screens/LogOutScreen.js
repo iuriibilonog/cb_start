@@ -18,8 +18,7 @@ import {
   Vibration,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userLogout } from 'src/redux/user/operations';
 import { getUser, getRefresh, getToken } from '../redux/user/selectors';
 import SimpleText from '../components/atoms/SimpleText';
@@ -34,12 +33,9 @@ const LogOutScreen = ({ setIsShowLogOut, navigation, setIsAuth }) => {
   const handleLogoutSubmit = () => {
     try {
       dispatch(userLogout({ email: user.email, refreshToken: refresh }));
-      // setIsAuth(false);
     } catch (error) {
       console.warn((err) => 'Error:', err);
     }
-
-    // setIsShowLogOut(false);
   };
 
   const handleLogoutCansel = () => {
