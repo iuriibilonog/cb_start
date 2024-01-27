@@ -19,7 +19,10 @@
       }
     },
     "production": {
-      "channel": "production"
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://dev.cashbulls.io"
+      }
     }
   },
   "submit": {
